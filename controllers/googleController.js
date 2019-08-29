@@ -5,7 +5,7 @@ exports.reviewRatings = function getGoogleReviewRating(req, res) {
         var content = JSON.parse(body);
         if (!content.error_message) {
             res.send({
-                count: content.result.user_ratings_total,
+                text: content.result.user_ratings_total + " Google Reviews",
                 rating: content.result.rating,
                 url: content.result.url
             });
