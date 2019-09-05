@@ -1,12 +1,5 @@
 const request = require('request');
-/*
-data-title="Vergessen Sie nicht Ihren Rundumschutz"
-data-checkbox-label="Schutzpaket Premium für nur mtl. 9,95 € aktivieren"
-data-details-text="Alle Details zum Tarif"
-data-details-uri="http://www.example.com"
-data-information-sheet-text="Produktinformationsblatt"
-data-information-sheet-uri="http://www.example.com">
-*/
+
 exports.policies = function getPolicies(req, res) {
     // request parameter variabel setzen können
     const options = {
@@ -15,30 +8,22 @@ exports.policies = function getPolicies(req, res) {
             "Accept": "application/json",
             "Authorization": "12345"
         }
-    }
+    };
+
     request(options, (error, response, body) => {
-        var content = JSON.parse(body);
-        if (!content.error_message) {
-            const payload = content.payload[0];
-            // response in eigenes (einfacheres) JSON parsen
-            res.set({
-                "Accept": "application/json",
-                "Authorization": "12345"
-            })
-            res.send({
-                title: "Vergessen Sie nicht Ihren Rundumschutz",
-                benefits: payload.advantages,
-                checkboxLabel: `Schutzpaket Premium für nur mtl. ${payload.price} ${payload.price_currency} aktivieren`,
-                informationSheetText: "Produktinformationsblatt",
-                informationSheetUri: payload.documents.document_link,
-                detailsText: "Alle Details zum Tarif",
-                detailsUri: payload.url
-            });
-        } else {
-            res.send(body);
-        }
+        const content = JSON.parse(body);
+        const payload = content.payload[0];
+        res.send({
+            title: "Vergessen Sie nicht Ihren Rundumschutz",
+            advantages: payload.advantages,
+            checkboxLabel: `Schutzpaket Premium für nur mtl. ${payload.price} ${payload.price_currency} aktivieren`,
+            infoSheetText: "Produktinformationsblatt",
+            infoSheetUri: payload.documents[0].document_link,
+            detailsText: "Alle Details zum Tarif",
+            detailsUri: payload.url
+        });
     });
-}
+};
 /*
 "payload": [
     {
