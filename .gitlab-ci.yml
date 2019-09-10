@@ -23,7 +23,7 @@ build:
 
 staging:
   type: deploy
-  stage: staging
+  stage: deploy
   image: ruby:latest
   script:
     - apt-get update -qy
