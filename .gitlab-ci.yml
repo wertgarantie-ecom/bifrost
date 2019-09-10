@@ -29,7 +29,7 @@ staging:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=midgard-bff --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=midgard-bff --api-key=$HEROKU_STAGING_API_KEY
   only:
     - master
 
