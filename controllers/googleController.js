@@ -7,7 +7,7 @@ exports.reviewRatings = function getGoogleReviewRating(req, res) {
             res.send({
                 text: content.result.user_ratings_total + " Google Reviews",
                 rating: content.result.rating,
-                url: content.result.url
+                uri: content.result.url
             });
         } else {
             res.send(body);

@@ -20,6 +20,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
+
+app.use('/healthcheck', require('express-healthcheck')());
+
 app.use('/wertgarantie/', wertgarantieRoutes);
 
 // catch 404 and forward to error handler

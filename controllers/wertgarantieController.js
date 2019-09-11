@@ -2,6 +2,11 @@ const request = require('request');
 
 exports.policies = function getPolicies(req, res) {
     // request parameter variabel setzen können
+    // if (!(req.query.deviceId && req.query.devicePrice)) {
+    //     return new Error("Invalid or missing query parameters")
+    // }
+    // const baseUrl = "http://localhost:3001/api/v1/product-offers";
+
     const options = {
         //TODO parse query params and set correct id and price, date should be now
         url: "http://localhost:3001/api/v1/product-offers?device_class=04854bfa-1a02-4b44-b981-46f7ead8bb7e&device_purchase_price=800&device_purchase_date=2018-09-01",
