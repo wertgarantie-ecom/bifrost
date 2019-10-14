@@ -5,5 +5,6 @@ var wertgarantieController = require("../controllers/wertgarantieController.js")
 
 router.get("/rating", googleController.reviewRatings);
 router.get("/policies", wertgarantieController.policies);
+router.get("/dummyPolicies", wertgarantieController.dummyPolicies);
 
 module.exports = router;
