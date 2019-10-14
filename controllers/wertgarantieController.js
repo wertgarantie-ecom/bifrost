@@ -3,6 +3,7 @@ const request = require('request');
 exports.dummyPolicies = function getDummyPolicies(req, res) {
     // request parameter variabel setzen können
     const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
+    console.log("calling: " + heimdallUri);
     const options = {
         //TODO parse query params and set correct id and price, date should be now
         url: heimdallUri + "/api/v1/dummy-product-offers?device_class=04854bfa-1a02-4b44-b981-46f7ead8bb7e&device_purchase_price=800&device_purchase_date=2018-09-01",
@@ -53,6 +54,7 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
 exports.policies = function getPolicies(req, res) {
     // request parameter variabel setzen können
     const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
+    console.log("calling: " + heimdallUri);
     const options = {
         //TODO parse query params and set correct id and price, date should be now
         url: heimdallUri + "/api/v1/product-offers?device_class=04854bfa-1a02-4b44-b981-46f7ead8bb7e&device_purchase_price=800&device_purchase_date=2018-09-01",
