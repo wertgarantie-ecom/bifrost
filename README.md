@@ -1,1 +1,1 @@
-[![Heroku](https://heroku-badge.herokuapp.com/?app=midgard-bff&root=healthcheck)](https://midgard-bff.herokuapp.com)
+[![Heroku](https://heroku-badge.herokuapp.com/?app=wertgarantie-bifrost&root=healthcheck)](https://wertgarantie-bifrost.herokuapp.com)
