@@ -1,2 +1,3 @@
 environment.sh filter=git-crypt diff=git-crypt
+postman/globals.json filter=git-crypt diff=git-crypt
 .gitattributes !filter !diff
