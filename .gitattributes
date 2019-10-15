@@ -1,2 +1,2 @@
 environment.sh filter=git-crypt diff=git-crypt
-postman/ filter=git-crypt diff=git-crypt
+postman/* filter=git-crypt diff=git-crypt
