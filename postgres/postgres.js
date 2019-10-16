@@ -1,7 +1,9 @@
 const { Pool } = require('pg');
 
+console.log(process.env.POSTGRES_URI);
+
 const pool = new Pool({
-    connectionString: process.env.POSTGRES_UR || "postgresql://admin:nimda@localhost:5432/bifrost"
+    connectionString: process.env.POSTGRES_URI
 });
 
 function query(text, params, callback) {

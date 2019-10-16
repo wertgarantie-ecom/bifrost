@@ -1,10 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var googleController = require("../controllers/googleController.js");
-var wertgarantieController = require("../controllers/wertgarantieController.js");
+var policyController = require("../controllers/policyController.js");
+var shoppingCartController = require("../controllers/shoppingCartController.js");
 
 router.get("/rating", googleController.reviewRatings);
-router.get("/policies", wertgarantieController.policies);
-router.get("/dummyPolicies", wertgarantieController.dummyPolicies);
+
+router.get("/policies", policyController.policies);
+router.get("/dummyPolicies", policyController.dummyPolicies);
+
+router.get("/shoppingCart", shoppingCartController.shoppingCart);
+router.post("/shoppingCart", shoppingCartController.addProductToShoppingCart);
 
 module.exports = router;

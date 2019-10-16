@@ -16,7 +16,8 @@
     "morgan": "~1.9.1",
     "pg": "^7.12.1",
     "pug": "^2.0.4",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
