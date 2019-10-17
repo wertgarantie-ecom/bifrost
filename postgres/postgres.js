@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-    connectionString: process.env.POSTGRES_URI
+    connectionString: process.env.DATABASE_URL
 });
 
 function query(text, params, callback) {
