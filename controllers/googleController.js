@@ -5,7 +5,7 @@ const googleApiKey = process.env.GOOGLE_API_KEY;
 exports.reviewRatings = function getGoogleReviewRating(req, res) {
     postgres.query('Select now()', (err, res) => {
         console.log(err);
-        console.log(res.rows[0].now);
+        console.log(res);
     });
 
     if (!googleApiKey) {
