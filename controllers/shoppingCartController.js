@@ -67,7 +67,7 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
 }
 
 
-exports.shoppingCart = function showShoppingCarts(req, res) {
+exports.showShoppingCart = function showShoppingCarts(req, res) {
     
 }
 

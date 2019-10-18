@@ -9,7 +9,7 @@ router.get("/rating", googleController.reviewRatings);
 router.get("/policies", policyController.policies);
 router.get("/dummyPolicies", policyController.dummyPolicies);
 
-router.get("/shoppingCart", shoppingCartController.shoppingCart);
+router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.post("/shoppingCart", shoppingCartController.addProductToShoppingCart);
 
 module.exports = router;
