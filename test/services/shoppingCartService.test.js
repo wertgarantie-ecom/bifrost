@@ -1,5 +1,5 @@
 const addProductToShoppingCart = require('../../src/services/shoppingCartService').addProductToShoppingCart;
-const ValidationError = require('Joi').ValidationError;
+const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
 
 function validProduct() {
