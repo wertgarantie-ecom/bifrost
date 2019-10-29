@@ -16,13 +16,13 @@ exports.reviewRatings = function getGoogleReviewRating(req, res) {
         const googleRatingUri = 'https://maps.googleapis.com/maps/api/place/details/json?key=' + googleApiKey + '&placeid=ChIJ3_c1mbZ0sEcR98FkiQ6jCVo';
         const cachedContent = myCache.get(googleRatingUri);
         if (cachedContent) {
-            console.log("send cached content")
+            console.log("send cached content");
             sendResponse(res, cachedContent);
         } else {
             request(googleRatingUri, (error, response, body) => {
                 var content = JSON.parse(body);
                 myCache.set(googleRatingUri, content);
-                console.log("send fetched content from google")
+                console.log("send fetched content from google");
                 sendResponse(res, content);
             });
         }
