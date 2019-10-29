@@ -4,6 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const dotenv = require('dotenv');
+
+const resolvedPath = path.resolve(__dirname, '../config/' + process.env.ENVIRONMENT + '.env');
+console.log(resolvedPath);
+dotenv.config({ path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 
