@@ -15,7 +15,7 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:latest
 
-      # Specify service dependencies here if necessary
+      # Specify services dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
@@ -32,7 +32,10 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: npm install
+      - run: sudo apt-get update
+      - run: sudo apt-get install git-crypt
+      - run: git-crypt unlock <(echo $GIT_CRYPT_SECRET | base64 --decode)
+      - run: npm install-test
 
       - save_cache:
           paths:

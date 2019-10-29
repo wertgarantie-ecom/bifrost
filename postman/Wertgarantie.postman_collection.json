@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "514be6c8-f117-49ae-99b4-178124d00381",
+		"_postman_id": "6d8bc06c-9691-4ec3-8ee1-416528ead646",
 		"name": "Wertgarantie",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
@@ -46,15 +46,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{host}}/products",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{host}}/products"
 					},
 					"response": []
 				},
@@ -69,17 +61,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{host}}/auth/client/{{wg-clientId}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"auth",
-								"client",
-								"{{wg-clientId}}"
-							]
-						}
+						"url": "{{host}}/auth/client/{{wg-clientId}}"
 					},
 					"response": []
 				},
@@ -99,15 +81,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{host}}/products",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{host}}/products"
 					},
 					"response": []
 				},
@@ -180,8 +154,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Bifröst BFF",
@@ -191,15 +164,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{host}}/rating",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"rating"
-							]
-						}
+						"url": "{{host}}/rating"
 					},
 					"response": []
 				},
@@ -256,20 +221,58 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "add selected product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"productId\": 12,\n\t\"deviceClass\": \"17fd707a-f9c0-11e9-9694-cf549fcf64e2\",\n\t\"devicePrice\": 45.0,\n\t\"deviceCurrency\": \"EUR\"\n}"
+						},
+						"url": "{{host}}/shoppingCart/f1eea02c-f9bd-11e9-a37a-b3513bff18fd"
+					},
+					"response": []
+				},
+				{
+					"name": "show all shopping carts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{host}}/shoppingCart"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"auth": {
 		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{wg-bearer-token}}",
-				"type": "string"
-			}
-		]
+		"bearer": {
+			"token": "{{wg-bearer-token}}"
+		}
 	},
 	"event": [
 		{

@@ -1,12 +1,7 @@
 const request = require('request');
-const postgres = require('../postgres/postgres');
 const googleApiKey = process.env.GOOGLE_API_KEY;
 
 exports.reviewRatings = function getGoogleReviewRating(req, res) {
-    postgres.query('Select now()', (err, res) => {
-        console.log(err);
-        console.log(res);
-    });
 
     if (!googleApiKey) {
         console.log("Google API key not set");
