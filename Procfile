@@ -1,1 +1,0 @@
-web: git-crypt unlock <(echo $GPG_PRIVATE_KEY | base64 --decode) && npm start

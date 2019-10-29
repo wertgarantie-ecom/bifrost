@@ -1,1 +1,1 @@
-process.env.ENVIRONMENT = 'local';
+process.env.ENVIRONMENT = 'test';

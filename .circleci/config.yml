@@ -34,7 +34,6 @@ jobs:
 
       - run: sudo apt-get update
       - run: sudo apt-get install git-crypt
-      - run: git-crypt unlock <(echo $GIT_CRYPT_SECRET | base64 --decode)
       - run: npm install-test
 
       - save_cache:
