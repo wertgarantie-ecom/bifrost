@@ -10,6 +10,6 @@ router.get("/policies", policyController.policies);
 router.get("/dummyPolicies", policyController.dummyPolicies);
 
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
-router.post("/shoppingCart", shoppingCartController.addProductToShoppingCart);
+router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
 
 module.exports = router;

@@ -4,10 +4,10 @@ const uuid = require('uuid');
 
 function validProduct() {
     return {
-        id: 1234,
-        class: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        price: 12.0,
-        currency: "EUR"
+        productId: 1234,
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        devicePrice: 12.0,
+        deviceCurrency: "EUR"
     }
 }
 
@@ -22,10 +22,10 @@ test("new created shopping cart should have given clientId", () => {
 
 test("should add product to existing shopping cart", () => {
     const includedProduct = {
-        id: 4543545,
-        class: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        price: 12.0,
-        currency: "EUR",
+        productId: 4543545,
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        devicePrice: 12.0,
+        deviceCurrency: "EUR",
     };
     const validShoppingCart = {
         clientId: "430fc03e-f99c-11e9-a13b-83c858d3a184",
@@ -44,9 +44,9 @@ test("should validate if given cart has proper structure", () => {
 
 test("should validate if given product has proper structure", () => {
     let invalidProduct = {
-        product_id: "1234",
-        device_class: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        device_purchase_currency: "EUR",
+        productId: "1234",
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        deviceCurrency: "EUR",
     };
     expect(() => {
         addProductToShoppingCart(undefined, invalidProduct).products
@@ -62,11 +62,10 @@ test("should validate if product was given", () => {
 
 test("should reject product with different clientId", () => {
     const productWithDifferentClientId = {
-        id: 1234,
-        class: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        price: 12.0,
-        currency: "EUR",
-        clientId: "430fc03e-f99c-11e9-a13b-83c858d3a184"
+        productId: 1234,
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        devicePrice: 12.0,
+        deviceCurrency: "EUR"
     };
 
     const shoppingCart = {
@@ -79,13 +78,13 @@ test("should reject product with different clientId", () => {
     }).toThrow(ValidationError);
 });
 
-test("should filter out duplicate products", () => {
+test("should allow duplicate products", () => {
     let clientId = uuid();
     const validShoppingCart = {
         clientId: clientId,
         products: [validProduct()]
     };
-    expect(addProductToShoppingCart(validShoppingCart, validProduct(), clientId).products).toEqual([validProduct()]);
+    expect(addProductToShoppingCart(validShoppingCart, validProduct(), clientId).products).toEqual([validProduct(), validProduct()]);
 });
 
 

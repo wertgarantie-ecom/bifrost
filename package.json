@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "jest",
     "start": "node ./bin/www",
     "start-dev": ". ./environment_local.sh && nodemon ./bin/www",
     "start-staging": "HEIMDALL_URI=https://midgard-heimdall-mock.herokuapp.com nodemon ./bin/www"
@@ -15,7 +16,6 @@
     "express-healthcheck": "^0.1.0",
     "http-errors": "~1.6.3",
     "joi": "^14.3.1",
-    "lodash": "^4.17.15",
     "morgan": "~1.9.1",
     "pug": "^2.0.4",
     "request": "^2.88.0",
