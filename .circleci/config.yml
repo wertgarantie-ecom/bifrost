@@ -32,7 +32,9 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: npm install-test
+      - run:
+        - git-crypt unlock <(echo $GIT_CRYPT_SECRET | base64 --decode)
+        - npm install-test
 
       - save_cache:
           paths:
