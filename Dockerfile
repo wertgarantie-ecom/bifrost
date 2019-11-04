@@ -12,5 +12,5 @@ COPY . /app/
 
 EXPOSE 3000
 
-ENV ENVIRONMENT=local
+ENV NODE_ENV=local
 CMD npm start

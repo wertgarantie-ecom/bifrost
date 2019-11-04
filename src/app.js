@@ -5,8 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const sslRedirect = require('heroku-ssl-redirect');
 
-const resolvedPath = path.resolve(__dirname, '../config/' + process.env.ENVIRONMENT + '.env');
+const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 console.log(resolvedPath);
 dotenv.config({path: resolvedPath});
 
@@ -23,6 +24,8 @@ app.use(cookieParser(signSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
+app.use(sslRedirect(['prod']));
+
 app.options('*', cors());
 app.use('/healthcheck', require('express-healthcheck')());
 
