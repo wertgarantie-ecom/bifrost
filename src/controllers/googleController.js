@@ -32,9 +32,10 @@ exports.reviewRatings = function getGoogleReviewRating(req, res) {
 function sendResponse(res, content) {
     if (!content.error_message) {
         res.send({
-            text: content.result.user_ratings_total + " Google Reviews",
+            ratingsTotal: content.result.user_ratings_total,
+            text: "Google Reviews",
             rating: content.result.rating,
-            uri: content.result.url
+            uri: "https://www.google.com/maps/place/WERTGARANTIE+AG/@52.3691835,9.7394476,17z/data=!3m1!4b1!4m7!3m6!1s0x0:0x5a09a30e8964c1f7!8m2!3d52.3691835!4d9.7416363!9m1!1b1"
         });
     } else {
         res.send(content);
