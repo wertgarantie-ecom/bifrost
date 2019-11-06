@@ -1,12 +1,14 @@
 const request = require('request');
+const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
+const service = require('../services/policyService.js');
 
 exports.dummyPolicies = function getDummyPolicies(req, res) {
-    // request parameter variabel setzen können
-    const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
-    console.log("calling: " + heimdallUri);
+    let date = new Date();
     const options = {
         //TODO parse query params and set correct id and price, date should be now
-        url: heimdallUri + "/api/v1/dummy-product-offers?device_class=04854bfa-1a02-4b44-b981-46f7ead8bb7e&device_purchase_price=800&device_purchase_date=2018-09-01",
+        url: heimdallUri + "/api/v1/dummy-product-offers?device_class=" + req.query.deviceClass + 
+            "&device_purchase_price=" + req.query.devicePrice +
+            "&device_purchase_date=" + date.toLocaleDateString(),
         headers: {
             "Accept": "application/json",
             "Authorization": "12345"
@@ -16,7 +18,9 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
     request(options, (error, response, body) => {
         const content = JSON.parse(body);
         let products = [];
-        content.payload.forEach(payload => {
+        let imageLinks = service.getRandomImageLinkForDeviceClass(req.query.deviceClass, content.payload.length);
+
+        content.payload.forEach((payload, idx) => {
             if (payload.payment === "Monat") {
                 payload.payment = "monatl.";
             } else if (payload.payment === "Jahr") {
@@ -41,7 +45,8 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
                 currency: payload.price_currency,
                 priceFormatted: payload.price_formatted,
                 tax: payload.price_tax,
-                taxFormatted: "(inkl. " + payload.price_tax + payload.price_currency + " VerSt**)"
+                taxFormatted: "(inkl. " + payload.price_tax + payload.price_currency + " VerSt**)",
+                imageLink: imageLinks[idx]
             });
         });
         res.send({
@@ -53,7 +58,6 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
 
 exports.policies = function getPolicies(req, res) {
     // request parameter variabel setzen können
-    const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
     console.log("calling: " + heimdallUri);
     const options = {
         //TODO parse query params and set correct id and price, date should be now
