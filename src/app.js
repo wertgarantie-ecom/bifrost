@@ -8,7 +8,6 @@ const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
-console.log(resolvedPath);
 dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
@@ -24,9 +23,10 @@ app.use(cookieParser(signSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
+app.options('*', cors());
+
 app.use(sslRedirect(['prod']));
 
-app.options('*', cors());
 app.use('/healthcheck', require('express-healthcheck')());
 
 app.use('/wertgarantie/', wertgarantieRoutes);

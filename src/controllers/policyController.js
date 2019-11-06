@@ -49,6 +49,7 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
                 imageLink: imageLinks[idx]
             });
         });
+        console.log(res);
         res.send({
             title: "Vergessen Sie nicht Ihren Rundumschutz",
             products: products

@@ -1,5 +1,12 @@
 const Joi = require('joi');
 
+const productSchema = Joi.object({
+    productId: Joi.number().integer().required(),
+    deviceClass: Joi.string().guid().required(),
+    devicePrice: Joi.number().required(),
+    deviceCurrency: Joi.string().required()
+});
+
 exports.addProductToShoppingCart = function addProductToShoppingCart(existingCart, productToAdd, clientId) {
     Joi.assert(clientId, Joi.string().guid().required().error(new Error("client id is required")));
     Joi.assert(existingCart, cartSchema(clientId));
@@ -9,14 +16,6 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(existingCar
     shoppingCart.products.push(productToAdd);
     return shoppingCart;
 };
-
-const productSchema = Joi.object({
-    productId: Joi.number().integer().required(),
-    deviceClass: Joi.string().guid().required(),
-    devicePrice: Joi.number().required(),
-    deviceCurrency: Joi.string().required()
-});
-
 
 function cartSchema(clientId) {
     return Joi.object({
