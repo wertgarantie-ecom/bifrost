@@ -26,25 +26,27 @@ const productImageMapping = {
     ]
 }
 
+exports.getRandomImageLinksForDeviceClass = function getRandomImageLinksForDeviceClass(deviceClass, productCount) {
+    return this.getRandomImageLinkForDeviceClass(productImageMapping, deviceClass, productCount);
+}
 
-exports.getRandomImageLinkForDeviceClass = function getRandomImageLinkForDeviceClass(deviceClass, productCount) {
-    let numberOfImages = productImageMapping[deviceClass].length;
-    // resultSet
-    let images = [];
+exports.getRandomImageLinkForDeviceClass = function getRandomImageLinkForDeviceClass(productImagesMap, deviceClass, productCount) {
+    if (!productImagesMap[deviceClass]) {
+        throw new Error("No images for device class '" + deviceClass + "' found. The given device class is unknown.");
+    }
+    let availableImages = [...productImagesMap[deviceClass]];
+    if (availableImages.length === 0) {
+        throw new Error("There are no images for device class '" + deviceClass + "' found. Contact component developers to set images or provide your own");
+    }
+    let selectedProductImages = [];
 
-    // already used image idices
-    let usedImages = [];
-    for (var i = 0; i < productCount; i++) {
-        var random;
-        do {
-            random = Math.floor(Math.random() * numberOfImages);
-        } while (usedImages.includes(random))
-
-        if (productCount >= numberOfImages) {
-            usedImages.push(random);
+    while (selectedProductImages.length < productCount) {
+        if (availableImages.length === 0) {
+            availableImages = [...productImagesMap[deviceClass]];
         }
-        images.push(productImageMapping[deviceClass][random]);
+        let random = Math.floor(Math.random() * availableImages.length);
+        selectedProductImages.push(availableImages.splice(random, 1)[0]);
     }
 
-    return images;
+    return selectedProductImages;
 }

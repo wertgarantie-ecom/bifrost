@@ -10,10 +10,10 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
         productId: req.body.productId,
         deviceClass: req.body.deviceClass,
         devicePrice: req.body.devicePrice,
-        deviceCurrency: req.body.deviceCurrency,
+        deviceCurrency: req.body.deviceCurrency
     }, clientId);
     res.cookie(clientId, shoppingCart, {signed: true});
-    res.send(200);
+    res.sendStatus(200);
 };
 
 /**

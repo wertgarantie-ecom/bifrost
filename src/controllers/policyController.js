@@ -2,7 +2,7 @@ const request = require('request');
 const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
 const service = require('../services/policyService.js');
 
-exports.dummyPolicies = function getDummyPolicies(req, res) {
+exports.dummyPolicies = function getDummyPolicies(req, res, next) {
     let date = new Date();
     const options = {
         //TODO parse query params and set correct id and price, date should be now
@@ -18,8 +18,12 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
     request(options, (error, response, body) => {
         const content = JSON.parse(body);
         let products = [];
-        let imageLinks = service.getRandomImageLinkForDeviceClass(req.query.deviceClass, content.payload.length);
-
+        let imageLinks = [];
+        try {
+            imageLinks = service.getRandomImageLinksForDeviceClass(req.query.deviceClass, content.payload.length)
+        } catch (e) {
+            return next(e);
+        }
         content.payload.forEach((payload, idx) => {
             if (payload.payment === "Monat") {
                 payload.payment = "monatl.";
@@ -49,7 +53,6 @@ exports.dummyPolicies = function getDummyPolicies(req, res) {
                 imageLink: imageLinks[idx]
             });
         });
-        console.log(res);
         res.send({
             title: "Vergessen Sie nicht Ihren Rundumschutz",
             products: products
