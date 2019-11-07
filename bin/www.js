@@ -5,7 +5,7 @@
  */
 
 var app = require('../src/app');
-var debug = require('debug')('midgard:server');
+var debug = require('debug')('bifrost:server');
 var http = require('http');
 
 /**
