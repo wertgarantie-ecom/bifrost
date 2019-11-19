@@ -6,20 +6,24 @@ const service = require('../services/shoppingCartService');
 exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     const clientId = req.params.clientId;
     console.log("clientId: " + clientId);
-    const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], {
+    const cartData = {
         productId: req.body.productId,
         deviceClass: req.body.deviceClass,
         devicePrice: req.body.devicePrice,
         deviceCurrency: req.body.deviceCurrency
-    }, clientId);
+    }
+    const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], cartData, clientId);
     res.cookie(clientId, shoppingCart, {signed: true});
-    res.sendStatus(200);
+    res.status(200).send(shoppingCart);
 };
 
 /**
  * Display current shopping cart.
  */
 exports.showShoppingCart = function showShoppingCart(req, res) {
-    res.send(req.signedCookies);
+    const signedCookie = req.signedCookies;
+    console.log(req.headers)
+    console.log(signedCookie);
+    res.send(signedCookie);
 };
 

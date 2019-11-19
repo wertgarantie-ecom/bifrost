@@ -22,8 +22,20 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser(signSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cors());
-app.options('*', cors());
+const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:3000'];
+app.use(cors({
+    origin: function(origin, callback) {
+        if(!origin) return callback(null, true);
+
+        if(allowedOrigins.indexOf(origin) === -1){
+          var msg = 'The CORS policy for this site does not ' +
+                    'allow access from the specified Origin.';
+          return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+}));
 
 app.use(sslRedirect(['prod']));
 
