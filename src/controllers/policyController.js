@@ -4,6 +4,7 @@ const service = require('../services/policyService.js');
 
 exports.dummyPolicies = function getDummyPolicies(req, res, next) {
     let date = new Date();
+    console.log(res);
     const options = {
         //TODO parse query params and set correct id and price, date should be now
         url: heimdallUri + "/api/v1/dummy-product-offers?device_class=" + req.query.deviceClass + 

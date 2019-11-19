@@ -22,24 +22,23 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser(signSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const allowedOrigins = ['http://127.0.0.1:5500', 'http://localhost:3000'];
-app.use(cors({
-    origin: function(origin, callback) {
-        if(!origin) return callback(null, true);
+var corsOptions = {
+    origin: true,
+    credentials: true 
+}
 
-        if(allowedOrigins.indexOf(origin) === -1){
-          var msg = 'The CORS policy for this site does not ' +
-                    'allow access from the specified Origin.';
-          return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    },
-    credentials: true
-}));
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(sslRedirect(['prod']));
 
 app.use('/healthcheck', require('express-healthcheck')());
+
+// app.use(function (req, res, next) {
+//     res.header('Allow-Origin', req.headers.origin);
+//     res.header('Access-Control-Allow-Origin', req.headers.origin);
+//     next();
+// });
 
 app.use('/wertgarantie/', wertgarantieRoutes);
 
