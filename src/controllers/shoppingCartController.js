@@ -5,15 +5,17 @@ const service = require('../services/shoppingCartService');
  */
 exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     const clientId = req.params.clientId;
-    console.log("clientId: " + clientId);
-    const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], {
+    const cartData = {
         productId: req.body.productId,
         deviceClass: req.body.deviceClass,
         devicePrice: req.body.devicePrice,
         deviceCurrency: req.body.deviceCurrency
-    }, clientId);
-    res.cookie(clientId, shoppingCart, {signed: true});
-    res.sendStatus(200);
+    }
+    const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], cartData, clientId);
+    res.cookie(clientId, shoppingCart, {
+        signed: true,
+    });
+    res.status(200).send(shoppingCart);
 };
 
 /**

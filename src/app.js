@@ -22,12 +22,23 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser(signSecret));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(cors());
-app.options('*', cors());
+var corsOptions = {
+    origin: true,
+    credentials: true 
+}
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(sslRedirect(['prod']));
 
 app.use('/healthcheck', require('express-healthcheck')());
+
+// app.use(function (req, res, next) {
+//     res.header('Allow-Origin', req.headers.origin);
+//     res.header('Access-Control-Allow-Origin', req.headers.origin);
+//     next();
+// });
 
 app.use('/wertgarantie/', wertgarantieRoutes);
 
