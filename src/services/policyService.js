@@ -24,8 +24,8 @@ const productImageMapping = {
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"
     ],
-    // Datenstick
-    "bike": [
+    // Bike
+    "6bdd2d93-45d0-49e1-8a0c-98eb80342222": [
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/eBike-HP.jpeg",
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/utah-mountain-biking-bike-biking-71104.jpeg"
     ]

@@ -14,7 +14,7 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     }
     const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], cartData, clientId);
     res.cookie(clientId, shoppingCart, {
-        signed: true,
+        signed: true
     });
     res.status(200).send(shoppingCart);
 };
