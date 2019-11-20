@@ -9,7 +9,8 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
         productId: req.body.productId,
         deviceClass: req.body.deviceClass,
         devicePrice: req.body.devicePrice,
-        deviceCurrency: req.body.deviceCurrency
+        deviceCurrency: req.body.deviceCurrency,
+        shopProductName: req.body.shopProductName
     }
     const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], cartData, clientId);
     res.cookie(clientId, shoppingCart, {

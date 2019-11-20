@@ -34,12 +34,6 @@ app.use(sslRedirect(['prod']));
 
 app.use('/healthcheck', require('express-healthcheck')());
 
-// app.use(function (req, res, next) {
-//     res.header('Allow-Origin', req.headers.origin);
-//     res.header('Access-Control-Allow-Origin', req.headers.origin);
-//     next();
-// });
-
 app.use('/wertgarantie/', wertgarantieRoutes);
 
 // catch 404 and forward to error handler

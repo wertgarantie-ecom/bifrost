@@ -7,7 +7,8 @@ test('should return cookie with selected product', async () => {
             "productId": 12,
             "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
             "devicePrice": 45.0,
-            "deviceCurrency": "EUR"
+            "deviceCurrency": "EUR",
+            "shopProductName": "Phone X"
         })
         .expect(200)
         .expect('Set-Cookie', /clientId/)

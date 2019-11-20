@@ -7,7 +7,8 @@ function validProduct() {
         productId: 1234,
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
-        deviceCurrency: "EUR"
+        deviceCurrency: "EUR",
+        shopProductName: "Phone X"
     }
 }
 
@@ -26,6 +27,7 @@ test("should add product to existing shopping cart", () => {
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
         deviceCurrency: "EUR",
+        shopProductName: "Phone X"
     };
     const validShoppingCart = {
         clientId: "430fc03e-f99c-11e9-a13b-83c858d3a184",
@@ -65,7 +67,8 @@ test("should reject product with different clientId", () => {
         productId: 1234,
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
-        deviceCurrency: "EUR"
+        deviceCurrency: "EUR",
+        shopProductName: "Phone X"
     };
 
     const shoppingCart = {

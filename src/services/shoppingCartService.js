@@ -4,7 +4,8 @@ const productSchema = Joi.object({
     productId: Joi.number().integer().required(),
     deviceClass: Joi.string().guid().required(),
     devicePrice: Joi.number().required(),
-    deviceCurrency: Joi.string().required()
+    deviceCurrency: Joi.string().required(),
+    shopProductName: Joi.string().required()
 });
 
 exports.addProductToShoppingCart = function addProductToShoppingCart(existingCart, productToAdd, clientId) {
