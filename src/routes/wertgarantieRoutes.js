@@ -8,8 +8,10 @@ router.get("/rating", googleController.reviewRatings);
 
 router.get("/policies", policyController.policies);
 router.get("/dummyPolicies", policyController.dummyPolicies);
+router.get("/product", policyController.getProduct);
 
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
+router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
 
 module.exports = router;

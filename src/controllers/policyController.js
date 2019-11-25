@@ -25,33 +25,8 @@ exports.dummyPolicies = function getDummyPolicies(req, res, next) {
             return next(e);
         }
         content.payload.forEach((payload, idx) => {
-            if (payload.payment === "Monat") {
-                payload.payment = "monatl.";
-            } else if (payload.payment === "Jahr") {
-                payload.payment = "jährl.";
-            } else {
-                payload.payment = "pro " + payload.payment;
-            }
-
-            const advantages = payload.advantages.concat(payload.services);
-            products.push({
-                id: payload.id,
-                name: payload.name,
-                top_3: payload.top_3,
-                advantages: advantages,
-                excludedAdvantages: payload.excluded_advantages,
-                infoSheetText: payload.documents[0].document_title,
-                infoSheetUri: payload.documents[0].document_link,
-                detailsDocText: payload.documents[1].document_title,
-                detailsDocUri: payload.documents[1].document_link,
-                paymentInterval: payload.payment,
-                price: payload.price,
-                currency: payload.price_currency,
-                priceFormatted: payload.price_formatted,
-                tax: payload.price_tax,
-                taxFormatted: "(inkl. " + payload.price_tax + payload.price_currency + " VerSt**)",
-                imageLink: imageLinks[idx]
-            });
+            const product = service.convertPayloadToProduct(payload, imageLinks[idx]);
+            products.push(product);
         });
         res.send({
             title: "Vergessen Sie nicht Ihren Rundumschutz",
@@ -98,4 +73,27 @@ exports.policies = function getPolicies(req, res) {
     });
 };
 
-
+exports.getProduct = function getProduct(req, res, next) {
+    const options = {
+        //TODO parse query params and set correct id and price, date should be now
+        url: heimdallUri + "/api/v1/dummy-product?device_class=" + req.query.deviceClass + 
+            "&product_id=" + req.query.productId,
+        headers: {
+            "Accept": "application/json",
+            "Authorization": "12345"
+        }
+    };
+    request(options, (error, response, body) => {
+        if (response.statusCode !== 200) {
+            res.status(response.statusCode).send(response.body);
+        }
+        const payload = JSON.parse(body);
+        let imageLink;
+        try {
+            imageLink = service.getRandomImageLinksForDeviceClass(req.query.deviceClass, 1)
+        } catch (e) {
+            return next(e);
+        }
+        res.send(service.convertPayloadToProduct(payload, imageLink));
+    });
+}

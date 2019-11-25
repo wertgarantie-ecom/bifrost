@@ -55,3 +55,33 @@ exports.getRandomImageLinkForDeviceClass = function getRandomImageLinkForDeviceC
 
     return selectedProductImages;
 }
+
+exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imageLink) {
+    if (payload.payment === "Monat") {
+        payload.payment = "monatl.";
+    } else if (payload.payment === "Jahr") {
+        payload.payment = "jährl.";
+    } else {
+        payload.payment = "pro " + payload.payment;
+    }
+
+    const advantages = payload.advantages.concat(payload.services);
+    return {
+        id: payload.id,
+        name: payload.name,
+        top_3: payload.top_3,
+        advantages: advantages,
+        excludedAdvantages: payload.excluded_advantages,
+        infoSheetText: payload.documents[0].document_title,
+        infoSheetUri: payload.documents[0].document_link,
+        detailsDocText: payload.documents[1].document_title,
+        detailsDocUri: payload.documents[1].document_link,
+        paymentInterval: payload.payment,
+        price: payload.price,
+        currency: payload.price_currency,
+        priceFormatted: payload.price_formatted,
+        tax: payload.price_tax,
+        taxFormatted: "(inkl. " + payload.price_tax + payload.price_currency + " VerSt**)",
+        imageLink: imageLink
+    }
+}
