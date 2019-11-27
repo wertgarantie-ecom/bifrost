@@ -13,5 +13,6 @@ router.get("/product", policyController.getProduct);
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
+router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
 
 module.exports = router;

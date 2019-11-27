@@ -16,8 +16,6 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     res.cookie(clientId, shoppingCart, {
         signed: true
     });
-    console.log("Set shopping cart cookie:");
-    console.log(shoppingCart);
     res.status(200).send(shoppingCart);
 }
 
@@ -25,12 +23,32 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
  * Display current shopping cart.
  */
 exports.showShoppingCart = function showShoppingCart(req, res) {
-    console.log("return shopping cart: ");
-    console.log(req.signedCookies);
     res.send(req.signedCookies);
 }
 
 exports.getShoppingCartForClientId = function getShoppingCartForClientId(req, res) {
     const products = req.signedCookies[req.params.clientId];
     res.status(200).send(products);
+}
+
+exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(req, res) {
+    var shoppingCart = req.signedCookies[req.params.clientId];
+    var products = shoppingCart.products;
+    var orderToBeDeleted = req.body.orderId;
+    for( var i = 0; i < products.length; i++){ 
+        if ( products[i].orderId == orderToBeDeleted) {
+            products.splice(i, 1); 
+          i--;
+        }
+    }
+
+    if (products.length === 0) {
+        res.clearCookie(req.params.clientId);
+    } else {
+        res.cookie(req.params.clientId, shoppingCart, {
+            signed: true
+        });
+    }
+
+    res.status(200).send(shoppingCart);
 }

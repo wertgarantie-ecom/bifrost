@@ -1,14 +1,17 @@
 const Joi = require('joi');
+const uuid = require('uuid');
 
 const productSchema = Joi.object({
     productId: Joi.number().integer().required(),
     deviceClass: Joi.string().guid().required(),
     devicePrice: Joi.number().required(),
     deviceCurrency: Joi.string().required(),
-    shopProductName: Joi.string().required()
+    shopProductName: Joi.string().required(),
+    orderId: Joi.string().guid().required()
 });
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(existingCart, productToAdd, clientId) {
+exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId) {
+    productToAdd.orderId = orderId;
     Joi.assert(clientId, Joi.string().guid().required().error(new Error("client id is required")));
     Joi.assert(existingCart, cartSchema(clientId));
     Joi.assert(productToAdd, productSchema.required());
@@ -17,6 +20,11 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(existingCar
     shoppingCart.products.push(productToAdd);
     return shoppingCart;
 };
+
+exports.addProductToShoppingCart = function addProductToShoppingCart(existingCart, productToAdd, clientId) {
+    const orderId = uuid();
+    return this.addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId);
+}
 
 function cartSchema(clientId) {
     return Joi.object({
