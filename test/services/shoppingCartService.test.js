@@ -1,4 +1,5 @@
 const addProductToShoppingCartWithOrderId = require('../../src/services/shoppingCartService').addProductToShoppingCartWithOrderId;
+const shoppingCartService = require('../../src/services/shoppingCartService');
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
 
@@ -91,5 +92,59 @@ test("should allow duplicate products", () => {
     };
     expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct(), validProduct()]);
 });
+
+test("should confirm valid shopping cart", () => {
+    let clientId = uuid();
+    const validShoppingCart = {
+        clientId: clientId,
+        products: [validProduct()],
+        confirmed: false
+    };
+    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(validShoppingCart, clientId);
+
+    expect(confirmedShoppingCart.confirmed).toEqual(true);
+});
+
+test("should check validity of shopping cart on confirmation", () => {
+    let clientId = uuid();
+    const invalidShoppingCart = {
+        clientId: clientId,
+        products: [validProduct()],
+        confirmed: 12
+    };
+    expect(() => shoppingCartService.confirmShoppingCart(invalidShoppingCart, clientId)).toThrow(ValidationError);
+});
+
+test("should unconfirm valid shopping cart", () => {
+    let clientId = uuid();
+    const validShoppingCart = {
+        clientId: clientId,
+        products: [validProduct()],
+        confirmed: false
+    };
+    const confirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(validShoppingCart, clientId);
+
+    expect(confirmedShoppingCart.confirmed).toEqual(false);
+});
+
+test("should check validity of shopping cart on removing confirmation", () => {
+    let clientId = uuid();
+    const invalidShoppingCart = {
+        clientId: clientId,
+        products: [validProduct()],
+        confirmed: 12
+    };
+    expect(() => shoppingCartService.unconfirmShoppingCart(invalidShoppingCart, clientId)).toThrow(ValidationError);
+});
+
+test("should throw error if undefined shopping cart is given to confirmation", () => {
+    expect(() => shoppingCartService.unconfirmShoppingCart(undefined, uuid())).toThrow(ValidationError);
+});
+
+test("should throw error if null shopping cart is given to confirmation", () => {
+    expect(() => shoppingCartService.unconfirmShoppingCart(null, uuid())).toThrow(ValidationError);
+});
+
+
 
 
