@@ -18,6 +18,7 @@ exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartW
 
     const shoppingCart = existingCart || newShoppingCart(clientId);
     shoppingCart.products.push(productToAdd);
+    shoppingCart.confirmed = false;
     return shoppingCart;
 };
 

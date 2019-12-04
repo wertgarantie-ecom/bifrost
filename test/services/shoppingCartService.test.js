@@ -146,5 +146,22 @@ test("should throw error if null shopping cart is given to confirmation", () => 
 });
 
 
+test("added product should always reject confirmation", () => {
+    const includedProduct = {
+        productId: 4543545,
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        devicePrice: 12.0,
+        deviceCurrency: "EUR",
+        shopProductName: "Phone X",
+        orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163"
+    };
+    const validShoppingCart = {
+        clientId: "430fc03e-f99c-11e9-a13b-83c858d3a184",
+        products: [includedProduct]
+    };
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "430fc03e-f99c-11e9-a13b-83c858d3a184", "9fd47b8a-f984-11e9-adcf-afabcc521083").confirmed).toEqual(false);
+});
+
+
 
 

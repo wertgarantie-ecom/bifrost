@@ -50,7 +50,7 @@ exports.showShoppingCart = function showShoppingCart(req, res) {
 };
 
 exports.getShoppingCartForClientId = function getShoppingCartForClientId(req, res) {
-    const products = req.signedCookies[req.params.clientId];
+    const products = req.signedCookies[req.params.clientId] || {};
     res.status(200).send(products);
 };
 
