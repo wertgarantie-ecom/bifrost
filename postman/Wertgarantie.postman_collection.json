@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "29c549ec-0c6d-4360-a35e-09fb135d3018",
+		"_postman_id": "6d8bc06c-9691-4ec3-8ee1-416528ead646",
 		"name": "Wertgarantie",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
@@ -46,15 +46,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{host}}/products",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{host}}/api/v1/products"
 					},
 					"response": []
 				},
@@ -69,17 +61,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{host}}/auth/client/{{wg-clientId}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"auth",
-								"client",
-								"{{wg-clientId}}"
-							]
-						}
+						"url": "{{host}}/api/v1/auth/client/{{wg-clientId}}"
 					},
 					"response": []
 				},
@@ -99,15 +81,7 @@
 								"type": "text"
 							}
 						],
-						"url": {
-							"raw": "{{host}}/products",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"products"
-							]
-						}
+						"url": "{{host}}/api/v1/products"
 					},
 					"response": []
 				},
@@ -123,11 +97,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/products/:product_id/device-classes",
+							"raw": "{{host}}/api/v1/products/:product_id/device-classes",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"products",
 								":product_id",
 								"device-classes"
@@ -154,17 +130,19 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/product-offers?device_class=1dfd4549-9bdc-4285-9047-e5088272dade&device_purchase_price=450&device_purchase_date=2019-09-19",
+							"raw": "{{host}}/api/v1/product-offers?device_class=bb3a615d-e92f-4d24-a4cc-22f8a87fc544&device_purchase_price=450&device_purchase_date=2019-09-19",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"product-offers"
 							],
 							"query": [
 								{
 									"key": "device_class",
-									"value": "1dfd4549-9bdc-4285-9047-e5088272dade",
+									"value": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
 									"description": "class ID for smartphones"
 								},
 								{
@@ -179,9 +157,38 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "checkout product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"productId\": {{productId}},\n\t\"customer_company\": \"INNOQ\",\n\t\"customer_salutation\": \"Herr\",\n\t\"customer_firstname\": \"Max\",\n\t\"customer_lastname\": \"Mustermann\",\n\t\"customer_street\": \"Unter den Linden\",\n\t\"customer_zip\": \"52345\",\n\t\"customer_city\": \"Köln\",\n\t\"customer_country\": \"Deutschland\",\n\t\"customer_email\": \"max.mustermann1234@test.com\",\n\t\"device_manufacturer\": \"Apple Inc\",\n\t\"device_model\": \"IPhone X\",\n\t\"device_class\": \"bb3a615d-e92f-4d24-a4cc-22f8a87fc544\",\n\t\"device_purchase_price\": 12.5,\n\t\"device_purchase_date\": \"2019-12-04\",\n\t\"device_condition\": 1,\n\t\"payment_type\": \"bank_transfer\",\n\t\"terms_and_conditions_accepted\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/api/v1/products/{{productId}}/checkout"
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Bifröst BFF",
@@ -191,15 +198,7 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "{{host}}/rating",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"rating"
-							]
-						}
+						"url": "{{host}}/rating"
 					},
 					"response": []
 				},
@@ -209,7 +208,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/policies?devicePrice=1000&deviceClass=1dfd4549-9bdc-4285-9047-e5088272dade",
+							"raw": "{{host}}/policies?devicePrice=1000&deviceId=12345",
 							"host": [
 								"{{host}}"
 							],
@@ -222,8 +221,8 @@
 									"value": "1000"
 								},
 								{
-									"key": "deviceClass",
-									"value": "1dfd4549-9bdc-4285-9047-e5088272dade"
+									"key": "deviceId",
+									"value": "12345"
 								}
 							]
 						}
@@ -236,7 +235,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/dummyPolicies?devicePrice=1000&deviceClass=1dfd4549-9bdc-4285-9047-e5088272dade",
+							"raw": "{{host}}/dummyPolicies?devicePrice=1000&deviceId=12345",
 							"host": [
 								"{{host}}"
 							],
@@ -249,8 +248,8 @@
 									"value": "1000"
 								},
 								{
-									"key": "deviceClass",
-									"value": "1dfd4549-9bdc-4285-9047-e5088272dade"
+									"key": "deviceId",
+									"value": "12345"
 								}
 							]
 						}
@@ -271,18 +270,9 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"productId\": 12,\n\t\"deviceClass\": \"1dfd4549-9bdc-4285-9047-e5088272dade\"\n\t\"devicePrice\": 45.0,\n\t\"deviceCurrency\": \"EUR\"\n}"
+							"raw": "{\n\t\"productId\": 12,\n\t\"deviceClass\": \"17fd707a-f9c0-11e9-9694-cf549fcf64e2\",\n\t\"devicePrice\": 45.0,\n\t\"deviceCurrency\": \"EUR\"\n}"
 						},
-						"url": {
-							"raw": "{{host}}/shoppingCart/f1eea02c-f9bd-11e9-a37a-b3513bff18fd",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"shoppingCart",
-								"f1eea02c-f9bd-11e9-a37a-b3513bff18fd"
-							]
-						}
+						"url": "{{host}}/shoppingCart/f1eea02c-f9bd-11e9-a37a-b3513bff18fd"
 					},
 					"response": []
 				},
@@ -305,31 +295,18 @@
 							"mode": "raw",
 							"raw": ""
 						},
-						"url": {
-							"raw": "{{host}}/shoppingCart",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"shoppingCart"
-							]
-						}
+						"url": "{{host}}/shoppingCart"
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"auth": {
 		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{wg-bearer-token}}",
-				"type": "string"
-			}
-		]
+		"bearer": {
+			"token": "{{wg-bearer-token}}"
+		}
 	},
 	"event": [
 		{
@@ -352,6 +329,5 @@
 				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
