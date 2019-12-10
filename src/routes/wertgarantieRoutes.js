@@ -1,20 +1,22 @@
-var express = require('express');
-var router = express.Router();
-var googleController = require("../controllers/googleController.js");
-var policyController = require("../controllers/policyController.js");
-var shoppingCartController = require("../controllers/shoppingCartController.js");
-
-router.get("/rating", googleController.reviewRatings);
+const express = require('express');
+const bodyParser = require('body-parser');
+const router = express.Router();
+const googleController = require("../controllers/googleController.js");
+const policyController = require("../controllers/policyController.js");
+const shoppingCartController = require("../controllers/shoppingCartController.js");
+const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
+const validate = require('express-jsonschema').validate;
 
 router.get("/policies", policyController.policies);
 router.get("/dummyPolicies", policyController.dummyPolicies);
 router.get("/product", policyController.getProduct);
+router.use("/shoppingCarts/current/checkout", validate({body: checkoutSchema}));
 
 /**
  * TODO:
- * PUT /shop/:clientId/shoppingCarts/:shoppingCartId/confirmation => add confirmation
- * DELETE /shoppingCarts/:shoppingCartId/confirmation => remove confirmation
- * POST /shoppingCarts/ => create new shoppingCart
+ * PUT /shops/:clientId/shoppingCarts/:shoppingCartId/confirmation => add confirmation
+ * DELETE /shops/:clientId/shoppingCarts/:shoppingCartId/confirmation => remove confirmation
+ * POST /shops/:clientId/shoppingCarts/ => create new shopping cart
  * DELETE /shoppingCarts/:shoppingCartId => delete shoppingCart
  * POST /shoppingCarts/:shoppingCartId/products => add product to shopping cart
  * DELETE /shoppingCarts/:shoppingCartId/products/productId => remove product from shopping cart
@@ -26,5 +28,6 @@ router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppi
 router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
 router.put("/shoppingCart/:clientId/confirmation", shoppingCartController.confirmShoppingCart);
 router.delete("/shoppingCart/:clientId/confirmation", shoppingCartController.unconfirmShoppingCart);
+router.post("/shoppingCarts/:clientId/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
 
 module.exports = router;

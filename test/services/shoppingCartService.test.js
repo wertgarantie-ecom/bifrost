@@ -162,6 +162,120 @@ test("added product should always reject confirmation", () => {
     expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "430fc03e-f99c-11e9-a13b-83c858d3a184", "9fd47b8a-f984-11e9-adcf-afabcc521083").confirmed).toEqual(false);
 });
 
+test("shopping cart checkout should checkout wertgarantie product if referenced shop product was also purchased", async () => {
+    const wertgarantieShoppingCart = {
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        products: [
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            }
+        ],
+        confirmed: false
+    };
 
+    const shopShoppingCart = {
+        pruchasedProducts: [
+            {
+                price: "1200.93",
+                manufacturer: "Apple Inc",
+                deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                model: "IPhone X",
+                productId: "1"
+            }
+        ],
+        customer: validCustomer(),
+        secretClientId: "myShopSecretClientId"
+    };
 
+    const mockClient = jest.fn(() => {
+        return {success: true};
+    });
+    const result = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient, new Date(2019, 5, 1, 8, 34, 34, 345));
 
+    expect(mockClient.mock.calls[0][0].data).toEqual({
+        productId: "2",
+        customer_company: 'INNOQ',
+        customer_salutation: 'Herr',
+        customer_firstname: 'Max',
+        customer_lastname: 'Mustermann',
+        customer_street: 'Unter den Linden',
+        customer_zip: '52345',
+        customer_city: 'Köln',
+        customer_country: 'Deutschland',
+        customer_email: 'max.mustermann1234@test.com',
+        device_manufacturer: 'Apple Inc',
+        device_model: 'IPhone X',
+        device_class: 'bb3a615d-e92f-4d24-a4cc-22f8a87fc544',
+        device_purchase_price: 1200.93,
+        device_purchase_date: "2019-06-01",
+        device_condition: 1,
+        payment_type: 'bank_transfer',
+        terms_and_conditions_accepted: true
+    });
+    await expect(result).resolves.toEqual({success: true});
+});
+
+test("on checkout call shop price differs from wertgarantie price", () => {
+    const wertgarantieShoppingCart = {
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        products: [
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            }
+        ],
+        confirmed: false
+    };
+
+    const shopShoppingCart = {
+        pruchasedProducts: [
+            {
+                price: "1200.93",
+                manufacturer: "Apple Inc",
+                deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                model: "IPhone X",
+                productId: "1"
+            }
+        ],
+        customer: validCustomer(),
+        secretClientId: "myShopSecretClientId"
+    };
+
+    const mockClient = jest.fn(() => {
+        throw new Error("you should never call me");
+    });
+    const result = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient);
+
+    expect(result).toEqual({
+        purchase: [
+            {
+                wertgarantieProductId: "2",
+                success: false,
+                message: "invalid price"
+            }
+        ]
+    });
+});
+
+function validCustomer() {
+    return {
+        company: "INNOQ",
+        salutation: "Herr",
+        firstname: "Max",
+        lastname: "Mustermann",
+        street: "Unter den Linden",
+        zip: "52345",
+        city: "Köln",
+        country: "Deutschland",
+        email: "max.mustermann1234@test.com"
+    }
+}
