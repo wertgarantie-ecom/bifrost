@@ -2,6 +2,7 @@ const addProductToShoppingCartWithOrderId = require('../../src/services/shopping
 const shoppingCartService = require('../../src/services/shoppingCartService');
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
+const axios = require('axios');
 
 function validProduct() {
     return {
@@ -175,15 +176,15 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: false
+        confirmed: true
     };
 
     const shopShoppingCart = {
-        pruchasedProducts: [
+        purchasedProducts: [
             {
-                price: "1200.93",
+                price: "1000",
                 manufacturer: "Apple Inc",
-                deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 model: "IPhone X",
                 productId: "1"
             }
@@ -193,7 +194,15 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     };
 
     const mockClient = jest.fn(() => {
-        return {success: true};
+        return {
+            'body': '{' + 
+                '"payload": {' + 
+                    '"contract_number": "28850277",' + 
+                    '"transaction_number": "28850279",' + 
+                    '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' + 
+                '}' + 
+            '}'
+        }
     });
     const result = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient, new Date(2019, 5, 1, 8, 34, 34, 345));
 
@@ -210,17 +219,30 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         customer_email: 'max.mustermann1234@test.com',
         device_manufacturer: 'Apple Inc',
         device_model: 'IPhone X',
-        device_class: 'bb3a615d-e92f-4d24-a4cc-22f8a87fc544',
-        device_purchase_price: 1200.93,
+        device_class: '6bdd2d93-45d0-49e1-8a0c-98eb80342222',
+        device_purchase_price: 1000,
         device_purchase_date: "2019-06-01",
         device_condition: 1,
         payment_type: 'bank_transfer',
         terms_and_conditions_accepted: true
     });
-    await expect(result).resolves.toEqual({success: true});
+    const resolvedResult = await Promise.resolve(result);
+    await expect(resolvedResult).toEqual({
+        "purchases": [
+            {
+                "wertgarantieProductId": "2",
+                "shopProductId": "1",
+                "success": true,
+                "message": "successfully transmitted insurance proposal",
+                "contract_number": "28850277",
+                "transaction_number": "28850279",
+                "activation_code": undefined
+            }
+        ]
+    });
 });
 
-test("on checkout call shop price differs from wertgarantie price", () => {
+test("on checkout call shop price differs from wertgarantie price", async () => {
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         products: [
@@ -233,11 +255,11 @@ test("on checkout call shop price differs from wertgarantie price", () => {
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: false
+        confirmed: true
     };
 
     const shopShoppingCart = {
-        pruchasedProducts: [
+        purchasedProducts: [
             {
                 price: "1200.93",
                 manufacturer: "Apple Inc",
@@ -254,16 +276,95 @@ test("on checkout call shop price differs from wertgarantie price", () => {
         throw new Error("you should never call me");
     });
     const result = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient);
-
-    expect(result).toEqual({
-        purchase: [
+    await expect(result).resolves.toEqual({
+        purchases: [
             {
                 wertgarantieProductId: "2",
+                shopProductId: "1",
                 success: false,
-                message: "invalid price"
+                message: "couldn't find matching product in shop cart"
             }
         ]
     });
+});
+
+test("checkout call to heimdall fails", async () => {
+    const wertgarantieShoppingCart = {
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        products: [
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            }
+        ],
+        confirmed: true
+    };
+
+    const shopShoppingCart = {
+        purchasedProducts: [
+            {
+                price: "1000",
+                manufacturer: "Apple Inc",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                model: "IPhone X",
+                productId: "1"
+            }
+        ],
+        customer: validCustomer(),
+        secretClientId: "myShopSecretClientId"
+    };
+
+    const mockClient = jest.fn(() => {
+        axios({
+            method: 'post',
+            url: 'url',
+            data: 'data'
+        });
+    });
+
+    const resultPromise = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient);
+    const result = await Promise.resolve(resultPromise);
+    expect(result.purchases.length).toEqual(1);
+    expect(result.purchases[0].message).toEqual("Failed to transmit insurance proposal. Call to Heimdall threw an error");
+});
+
+test("checkout call executed without confirmation", async () => {
+    const wertgarantieShoppingCart = {
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        products: [
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            }
+        ],
+        confirmed: false
+    };
+
+    const shopShoppingCart = {
+        purchasedProducts: [
+            {
+                price: "1000",
+                manufacturer: "Apple Inc",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                model: "IPhone X",
+                productId: "1"
+            }
+        ],
+        customer: validCustomer(),
+        secretClientId: "myShopSecretClientId"
+    };
+
+    const result = await shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart);
+    expect(result.purchases[0].message).toEqual("Insurance proposal was not transmitted. Purchase was not confirmed by the user.");
+    expect(result.purchases[0].success).toBe(false);
 });
 
 function validCustomer() {
