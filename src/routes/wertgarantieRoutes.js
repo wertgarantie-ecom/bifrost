@@ -7,6 +7,7 @@ const shoppingCartController = require("../controllers/shoppingCartController.js
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
 
+router.get("/rating", googleController.reviewRatings);
 router.get("/policies", policyController.policies);
 router.get("/dummyPolicies", policyController.dummyPolicies);
 router.get("/product", policyController.getProduct);
