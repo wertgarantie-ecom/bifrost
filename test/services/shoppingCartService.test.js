@@ -332,6 +332,167 @@ test("checkout call to heimdall fails", async () => {
     expect(result.purchases[0].message).toEqual("Failed to transmit insurance proposal. Call to Heimdall threw an error");
 });
 
+test("checkout call with multiple products", async () => {
+    const mockClient = jest.fn(() => {
+        return {
+            'body': '{' +
+                '"payload": {' +
+                        '"contract_number": "28850277",' +
+                        '"transaction_number": "28850279",' +
+                        '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' +
+                    '}' +
+                '}'
+        }
+    });
+    const wertgarantieShoppingCart = {
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        products: [
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            },
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            }
+        ],
+        confirmed: true
+    };
+
+    const shopShoppingCart = {
+        purchasedProducts: [
+            {
+                price: "1000",
+                manufacturer: "Pegasus",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                model: "Super Bike 3000",
+                productId: "1"
+            },
+            {
+                price: "1000",
+                manufacturer: "Pegasus",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                model: "Super Bike 3000",
+                productId: "1"
+            }
+        ],
+        customer: validCustomer(),
+        secretClientId: "myShopSecretClientId"
+    };
+
+    const resultPromise = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient);
+    const result = await Promise.resolve(resultPromise);
+    await expect(result).toEqual({
+        "purchases": [
+            {
+                "wertgarantieProductId": "2",
+                "shopProductId": "1",
+                "success": true,
+                "message": "successfully transmitted insurance proposal",
+                "contract_number": "28850277",
+                "transaction_number": "28850279",
+                "activation_code": undefined
+            },
+            {
+                "wertgarantieProductId": "2",
+                "shopProductId": "1",
+                "success": true,
+                "message": "successfully transmitted insurance proposal",
+                "contract_number": "28850277",
+                "transaction_number": "28850279",
+                "activation_code": undefined
+            }
+        ]
+    });
+});
+
+test("checkout call with multiple products where one is not found in shop cart", async () => {
+    const mockClient = jest.fn(() => {
+        return {
+            'body': '{' +
+                '"payload": {' +
+                    '"contract_number": "28850277",' +
+                    '"transaction_number": "28850279",' +
+                    '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' +
+                '}' +
+            '}'
+        }
+    });
+    const wertgarantieShoppingCart = {
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        products: [
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "1",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1000",
+                shopProductName: "Super Bike",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            },
+            {
+                wertgarantieProductId: "2",
+                shopProductId: "2",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                devicePrice: "1200",
+                shopProductName: "Super Bike 3000",
+                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            }
+        ],
+        confirmed: true
+    };
+
+    const shopShoppingCart = {
+        purchasedProducts: [
+            {
+                price: "1000",
+                manufacturer: "Pegasus",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                model: "Super Bike 3000",
+                productId: "1"
+            },
+            {
+                price: "1000",
+                manufacturer: "Pegasus",
+                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                model: "Super Bike 3000",
+                productId: "1"
+            }
+        ],
+        customer: validCustomer(),
+        secretClientId: "myShopSecretClientId"
+    };
+
+    const resultPromise = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient);
+    const result = await Promise.resolve(resultPromise);
+    await expect(result).toEqual({
+        "purchases": [
+            {
+                "wertgarantieProductId": "2",
+                "shopProductId": "2",
+                "success": false,
+                "message": "couldn't find matching product in shop cart"
+            },
+            {
+                "wertgarantieProductId": "2",
+                "shopProductId": "1",
+                "success": true,
+                "message": "successfully transmitted insurance proposal",
+                "contract_number": "28850277",
+                "transaction_number": "28850279",
+                "activation_code": undefined
+            }
+        ]
+    });
+});
+
 test("checkout call executed without confirmation", async () => {
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
