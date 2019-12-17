@@ -195,13 +195,13 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
 
     const mockClient = jest.fn(() => {
         return {
-            'body': '{' + 
-                '"payload": {' + 
-                    '"contract_number": "28850277",' + 
-                    '"transaction_number": "28850279",' + 
-                    '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' + 
-                '}' + 
-            '}'
+            'body': '{' +
+                '"payload": {' +
+                '"contract_number": "28850277",' +
+                '"transaction_number": "28850279",' +
+                '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' +
+                '}' +
+                '}'
         }
     });
     const result = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient, new Date(2019, 5, 1, 8, 34, 34, 345));
@@ -276,7 +276,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         throw new Error("you should never call me");
     });
     const result = shoppingCartService.checkoutShoppingCart(shopShoppingCart, wertgarantieShoppingCart, mockClient);
-    await expect(result).resolves.toEqual({
+    await result.then(data => expect(data).toEqual({
         purchases: [
             {
                 wertgarantieProductId: "2",
@@ -285,7 +285,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 message: "couldn't find matching product in shop cart"
             }
         ]
-    });
+    }));
 });
 
 test("checkout call to heimdall fails", async () => {

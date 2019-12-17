@@ -43,32 +43,34 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(shopCart, wertgarantieCart, client = axios, date = new Date()) {
-    const result = {
-        purchases: []
-    };
+function checkConfirmation(wertgarantieCart, result) {
     if (!wertgarantieCart.confirmed) {
         result.purchases.push({
             success: false,
             message: "Insurance proposal was not transmitted. Purchase was not confirmed by the user."
-        })
-        return result;
+        });
+        return false;
+    } else {
+        return true;
     }
-    const shopCartProducts = shopCart.purchasedProducts;
-    const wertgarantieProduct = wertgarantieCart.products[0];
+}
 
-    const indexToSplice = findIndex(shopCartProducts, wertgarantieProduct);
+function findMatchingShopProduct(shopCartProducts, wertgarantieProduct, result) {
+    const shopProductIndex = findIndex(shopCartProducts, wertgarantieProduct);
 
-    if (indexToSplice === -1) {
+    if (shopProductIndex === -1) {
         result.purchases.push({
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
             shopProductId: wertgarantieProduct.shopProductId,
             success: false,
             message: "couldn't find matching product in shop cart"
-        })
-        return result;
-    } 
-    const matchingShopProduct = shopCartProducts.splice(indexToSplice, 1)[0];
+        });
+        return undefined;
+    }
+    return shopCartProducts.splice(shopProductIndex, 1)[0];
+}
+
+async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, shopCart, matchingShopProduct, date, result, client) {
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, shopCart, matchingShopProduct, date);
     try {
         const response = await sendWertgarantieProductCheckout(client, requestBody);
@@ -83,23 +85,41 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(shopCart, wer
             activation_code: responseBody.payload.activation_code
         };
         result.purchases.push(purchase);
-        return result;
     } catch (e) {
         result.purchases.push({
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
             shopProductId: wertgarantieProduct.shopProductId,
             success: false,
             message: "Failed to transmit insurance proposal. Call to Heimdall threw an error"
-        })
+        });
+    }
+}
+
+exports.checkoutShoppingCart = async function checkoutShoppingCart(shopCart, wertgarantieCart, client = axios, date = new Date()) {
+    const result = {
+        purchases: []
+    };
+
+    if (!checkConfirmation(wertgarantieCart, result)) {
         return result;
     }
+
+    await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
+        const matchingShopProduct = findMatchingShopProduct(shopCart.purchasedProducts, wertgarantieProduct, result);
+        if (matchingShopProduct) {
+            return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, shopCart, matchingShopProduct, date, result, client);
+        } else {
+            return Promise.resolve();
+        }
+    }));
+
+    return result;
 };
 
 function findIndex(shopCartProducts, wertgarantieProduct) {
-    const index = _.findIndex(shopCartProducts, shopProduct => shopProduct.productId === wertgarantieProduct.shopProductId 
-        && shopProduct.price === wertgarantieProduct.devicePrice 
+    return _.findIndex(shopCartProducts, shopProduct => shopProduct.productId === wertgarantieProduct.shopProductId
+        && shopProduct.price === wertgarantieProduct.devicePrice
         && shopProduct.deviceClass === wertgarantieProduct.deviceClass);
-    return index;
 }
 
 function formateDate(date) {
@@ -130,12 +150,11 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, shopCart, matchingShop
 }
 
 async function sendWertgarantieProductCheckout(client, data) {
-    const response = await client({
+    return await client({
         method: 'post',
         url: 'url',
         data: data
     });
-    return response;
 }
 
 function validateShoppingCart(shoppingCart, clientId, isRequired = false) {
