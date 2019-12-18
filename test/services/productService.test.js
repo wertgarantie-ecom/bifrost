@@ -36,3 +36,24 @@ test("should throw an error when no images are set for given device class", () =
     expect(getErrorForDeviceClassWithoutImages)
         .toThrowError(/There are no images for device class/);
 });
+
+test("should return correct diff array", () => {
+    const advantages1 = ["advantage1, advantage2, advantage3"];
+    const allAdvantages = [
+        {
+            special_advantages: [],
+            services: [],
+            advantages: ["advantage1, advantage2, advantage3"],
+        },
+        {
+            special_advantages: ["special_advantage"],
+            services: ["service"],
+            advantages: ["advantage1, advantage2, advantage3", "advantage4"],
+        }
+    ];
+
+
+    const advantagesDiff = service.getExcludedAdvantages(advantages1, allAdvantages);
+
+    expect(advantagesDiff).toContain("special_advantage", "service", "advantage4");
+})

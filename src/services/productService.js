@@ -59,7 +59,7 @@ exports.getRandomImageLinkForDeviceClass = function getRandomImageLinkForDeviceC
     return selectedProductImages;
 };
 
-exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imageLink) {
+exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imageLink, allProductOffers) {
     if (payload.payment === "Monat") {
         payload.payment = "monatl.";
     } else if (payload.payment === "Jahr") {
@@ -68,13 +68,16 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
         payload.payment = "pro " + payload.payment;
     }
 
-    const advantages = payload.advantages.concat(payload.services);
+    const advantages = payload.special_advantages.concat(payload.services, payload.advantages);
+    const excludedAdvantages = getExcludedAdvantages(advantages, allProductOffers);
+    console.log(excludedAdvantages);
+    const top3 = advantages.splice(0, 3);
     return {
         id: payload.id,
         name: payload.name,
-        top_3: [],
+        top_3: top3,
         advantages: advantages,
-        excludedAdvantages: [],
+        excludedAdvantages: excludedAdvantages || [],
         infoSheetText: payload.documents[0].document_title,
         infoSheetUri: payload.documents[0].document_link,
         detailsDocText: payload.documents[1].document_title,
@@ -89,22 +92,36 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
     }
 };
 
+exports.getExcludedAdvantages = function getExcludedAdvantages(advantages, allProductOffers) {
+    const advantagesSet = new Set(advantages)
+    var allAdvantages = [];
+    allProductOffers.forEach(payload => {
+        allAdvantages = allAdvantages.concat(payload.special_advantages, payload.services, payload.advantages);
+    })
+    return Array.from(new Set(allAdvantages.filter(adv => !advantagesSet.has(adv))));
+}
+
 exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice) {
     let date = new Date();
-    url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
+    const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +
         "&device_purchase_date=" + date.toLocaleDateString();
     const options = {
         headers: {'Accept': 'application/json', "Authorization": "12345"}
     };
     const response = await axios.get(url, options);
-
-    const products = [];
     const content = response.data;
+
+    if (!content.payload) {
+        var error =  new Error("No products have been defined for provided device class: " + deviceClass);
+        error.status = 400;
+        throw error;
+    }
+    const products = [];
     let imageLinks = [];
     imageLinks = this.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length);
     content.payload.forEach((payload, idx) => {
-        const product = this.convertPayloadToProduct(payload, imageLinks[idx]);
+        const product = this.convertPayloadToProduct(payload, imageLinks[idx], content.payload);
         products.push(product);
     });
     return products;

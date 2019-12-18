@@ -1,5 +1,3 @@
-const request = require('request');
-const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
 const service = require('../services/productService.js');
 
 exports.getProducts = async function getProducts(req, res, next) {
