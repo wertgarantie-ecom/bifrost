@@ -98,7 +98,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, sh
 exports.checkoutShoppingCart = async function checkoutShoppingCart(shopCart, wertgarantieCart, client = axios, date = new Date()) {
     const result = {
         purchases: []
-    };
+    }
 
     if (!checkConfirmation(wertgarantieCart, result)) {
         return result;

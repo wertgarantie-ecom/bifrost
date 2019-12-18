@@ -1,16 +1,22 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const router = express.Router();
 const googleController = require("../controllers/googleController.js");
-const policyController = require("../controllers/policyController.js");
+const productController = require("../controllers/productController.js");
 const shoppingCartController = require("../controllers/shoppingCartController.js");
+const confirmationController = require("../controllers/confirmationController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
 
 router.get("/rating", googleController.reviewRatings);
-router.get("/policies", policyController.policies);
-router.get("/dummyPolicies", policyController.dummyPolicies);
-router.get("/product", policyController.getProduct);
+
+// selection component
+router.get("/components/selection-popup", productController.getProducts);
+
+// for confirmation component:
+router.get("/components/confirmation", confirmationController.getConfirmationComponentData)
+
+
+router.get("/product", productController.getDummyMockProduct);
 router.use("/shoppingCarts/current/checkout", validate({body: checkoutSchema}));
 
 /**

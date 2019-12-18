@@ -79,6 +79,9 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(r
 exports.checkoutCurrentShoppingCart = function checkoutCurrentShoppingCart(req, res) {
     const shoppingCart = req.signedCookie[req.params.clientId];
     const checkoutRequest = req.body;
-    service.checkoutShoppingCart(checkoutRequest, shoppingCart);
+    const checkoutResult = service.checkoutShoppingCart(checkoutRequest, shoppingCart);
+
+
+    
     res.send("Hello no validation");
 };

@@ -1,3 +1,6 @@
+const request = require('request');
+const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
+
 const productImageMapping = {
     // Smartphone
     "1dfd4549-9bdc-4285-9047-e5088272dade": [
@@ -85,3 +88,36 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
         imageLink: imageLink
     }
 }
+
+exports.getProductOffers = function getProductOffers(deviceClass, devicePrice) {
+    let date = new Date();
+    const options = {
+        //TODO parse query params and set correct id and price, date should be now
+        url: heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass + 
+            "&device_purchase_price=" + devicePrice +
+            "&device_purchase_date=" + date.toLocaleDateString(),
+        headers: {
+            "Accept": "application/json",
+            "Authorization": "12345"
+        }
+    };
+
+    const products = [];
+    request(options, (error, response, body) => {
+        const content = JSON.parse(body);
+        let imageLinks = [];
+        imageLinks = this.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length)
+        content.payload.forEach((payload, idx) => {
+            const product = this.convertPayloadToProduct(payload, imageLinks[idx]);
+            products.push(product);
+        });
+        console.log("----------------------------CONTENT----------------------------")
+        console.log(products);
+    });
+    console.log("----------------------------from Service----------------------------")
+    console.log(products);
+    return products;
+}
+
+
+
