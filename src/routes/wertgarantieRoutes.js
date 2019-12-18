@@ -7,28 +7,14 @@ const confirmationController = require("../controllers/confirmationController.js
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
 
+// components
 router.get("/rating", googleController.reviewRatings);
-
-// selection component
 router.get("/components/selection-popup", productController.getProducts);
+router.get("/components/confirmation", confirmationController.getConfirmationComponentData);
 
-// for confirmation component:
-router.get("/components/confirmation", confirmationController.getConfirmationComponentData)
-
-
-router.get("/product", productController.getDummyMockProduct);
+// shop api
 router.use("/shoppingCarts/current/checkout", validate({body: checkoutSchema}));
 
-/**
- * TODO:
- * PUT /shops/:clientId/shoppingCarts/:shoppingCartId/confirmation => add confirmation
- * DELETE /shops/:clientId/shoppingCarts/:shoppingCartId/confirmation => remove confirmation
- * POST /shops/:clientId/shoppingCarts/ => create new shopping cart
- * DELETE /shoppingCarts/:shoppingCartId => delete shoppingCart
- * POST /shoppingCarts/:shoppingCartId/products => add product to shopping cart
- * DELETE /shoppingCarts/:shoppingCartId/products/productId => remove product from shopping cart
- * GET /users/current/shoppingCarts/ => get all shopping carts for the current user
- */
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);

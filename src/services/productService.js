@@ -1,4 +1,4 @@
-const request = require('request');
+const axios = require('axios');
 const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
 
 const productImageMapping = {
@@ -32,11 +32,11 @@ const productImageMapping = {
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/eBike-HP.jpeg",
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/utah-mountain-biking-bike-biking-71104.jpeg"
     ]
-}
+};
 
 exports.getRandomImageLinksForDeviceClass = function getRandomImageLinksForDeviceClass(deviceClass, productCount) {
     return this.getRandomImageLinkForDeviceClass(productImageMapping, deviceClass, productCount);
-}
+};
 
 exports.getRandomImageLinkForDeviceClass = function getRandomImageLinkForDeviceClass(productImagesMap, deviceClass, productCount) {
     if (!productImagesMap[deviceClass]) {
@@ -57,7 +57,7 @@ exports.getRandomImageLinkForDeviceClass = function getRandomImageLinkForDeviceC
     }
 
     return selectedProductImages;
-}
+};
 
 exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imageLink) {
     if (payload.payment === "Monat") {
@@ -72,9 +72,9 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
     return {
         id: payload.id,
         name: payload.name,
-        top_3: payload.top_3,
+        top_3: [],
         advantages: advantages,
-        excludedAdvantages: payload.excluded_advantages,
+        excludedAdvantages: [],
         infoSheetText: payload.documents[0].document_title,
         infoSheetUri: payload.documents[0].document_link,
         detailsDocText: payload.documents[1].document_title,
@@ -87,37 +87,28 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
         taxFormatted: "(inkl. " + payload.price_tax + payload.price_currency + " VerSt**)",
         imageLink: imageLink
     }
-}
+};
 
-exports.getProductOffers = function getProductOffers(deviceClass, devicePrice) {
+exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice) {
     let date = new Date();
+    url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
+        "&device_purchase_price=" + devicePrice +
+        "&device_purchase_date=" + date.toLocaleDateString();
     const options = {
-        //TODO parse query params and set correct id and price, date should be now
-        url: heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass + 
-            "&device_purchase_price=" + devicePrice +
-            "&device_purchase_date=" + date.toLocaleDateString(),
-        headers: {
-            "Accept": "application/json",
-            "Authorization": "12345"
-        }
+        headers: {'Accept': 'application/json', "Authorization": "12345"}
     };
+    const response = await axios.get(url, options);
 
     const products = [];
-    request(options, (error, response, body) => {
-        const content = JSON.parse(body);
-        let imageLinks = [];
-        imageLinks = this.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length)
-        content.payload.forEach((payload, idx) => {
-            const product = this.convertPayloadToProduct(payload, imageLinks[idx]);
-            products.push(product);
-        });
-        console.log("----------------------------CONTENT----------------------------")
-        console.log(products);
+    const content = response.data;
+    let imageLinks = [];
+    imageLinks = this.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length);
+    content.payload.forEach((payload, idx) => {
+        const product = this.convertPayloadToProduct(payload, imageLinks[idx]);
+        products.push(product);
     });
-    console.log("----------------------------from Service----------------------------")
-    console.log(products);
     return products;
-}
+};
 
 
 
