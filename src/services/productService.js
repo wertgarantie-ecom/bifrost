@@ -101,7 +101,8 @@ exports.getExcludedAdvantages = function getExcludedAdvantages(advantages, allPr
     return Array.from(new Set(allAdvantages.filter(adv => !advantagesSet.has(adv))));
 }
 
-exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice) {
+exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId) { 
+    // clientId wird noch nciht benutzt. Brauchen wir aber, sobald wir gegen Heimdall gehen und ein neues bearer token für die abfrage benötigen
     let date = new Date();
     const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +

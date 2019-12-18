@@ -56,4 +56,5 @@ test("should return correct diff array", () => {
     const advantagesDiff = service.getExcludedAdvantages(advantages1, allAdvantages);
 
     expect(advantagesDiff).toContain("special_advantage", "service", "advantage4");
+    expect(advantagesDiff).not.toContain("advantage1, advantage2, advantage3");
 })
