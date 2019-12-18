@@ -69,7 +69,7 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
     }
 
     const advantages = payload.special_advantages.concat(payload.services, payload.advantages);
-    const excludedAdvantages = getExcludedAdvantages(advantages, allProductOffers);
+    const excludedAdvantages = this.getExcludedAdvantages(advantages, allProductOffers);
     console.log(excludedAdvantages);
     const top3 = advantages.splice(0, 3);
     return {
