@@ -70,7 +70,6 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
 
     const advantages = payload.special_advantages.concat(payload.services, payload.advantages);
     const excludedAdvantages = this.getExcludedAdvantages(advantages, allProductOffers);
-    console.log(excludedAdvantages);
     const top3 = advantages.splice(0, 3);
     return {
         id: payload.id,
@@ -93,15 +92,15 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
 };
 
 exports.getExcludedAdvantages = function getExcludedAdvantages(advantages, allProductOffers) {
-    const advantagesSet = new Set(advantages)
+    const advantagesSet = new Set(advantages);
     var allAdvantages = [];
     allProductOffers.forEach(payload => {
         allAdvantages = allAdvantages.concat(payload.special_advantages, payload.services, payload.advantages);
-    })
+    });
     return Array.from(new Set(allAdvantages.filter(adv => !advantagesSet.has(adv))));
-}
+};
 
-exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId) { 
+exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId, client = axios) {
     // clientId wird noch nciht benutzt. Brauchen wir aber, sobald wir gegen Heimdall gehen und ein neues bearer token für die abfrage benötigen
     let date = new Date();
     const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
@@ -110,11 +109,11 @@ exports.getProductOffers = async function getProductOffers(deviceClass, devicePr
     const options = {
         headers: {'Accept': 'application/json', "Authorization": "12345"}
     };
-    const response = await axios.get(url, options);
+    const response = await client.get(url, options);
     const content = response.data;
 
     if (!content.payload) {
-        var error =  new Error("No products have been defined for provided device class: " + deviceClass);
+        var error = new Error("No products have been defined for provided device class: " + deviceClass);
         error.status = 400;
         throw error;
     }
