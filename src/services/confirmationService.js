@@ -7,11 +7,6 @@ exports.prepareConfirmationData = function prepareConfirmationData(clientId, sho
         confirmed: shoppingCart.confirmed,
         title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmatioHeader: "Bitte bestätige noch kurz:",
-        confirmationTextGeneral: `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${result.avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
-                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich 
-                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
-                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 
-                                    meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`,
         products: []
     };
     shoppingCart.products.forEach(async product => {
@@ -19,7 +14,7 @@ exports.prepareConfirmationData = function prepareConfirmationData(clientId, sho
         // ODER
         // 2. (Optimierung) Alle angefragten Heimdall-Produkte in unserer DB speichern
         const productOffers = await productClient.getProductOffers(product.deviceClass, product.devicePrice, clientId);
-        const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === product.productId);
+        const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === product.wertgarantieProductId);
         if (productIndex !== -1) {
             const matchingOffer = productOffers[productIndex];
             result.avbHref = findAvbHref(matchingOffer);
