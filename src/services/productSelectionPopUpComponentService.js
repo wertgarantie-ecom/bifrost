@@ -1,6 +1,5 @@
-const axios = require('axios');
-const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
 const productImageService = require('./productImageService');
+const heimdallClient = require("./heimdallClient");
 
 exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imageLink, allProductOffers) {
     if (payload.payment === "Monat") {
@@ -17,7 +16,7 @@ exports.convertPayloadToProduct = function convertPayloadToProduct(payload, imag
     return {
         id: payload.id,
         name: payload.name,
-        top_3: top3,
+        top3: top3,
         advantages: advantages,
         excludedAdvantages: excludedAdvantages || [],
         infoSheetText: payload.documents[0].document_title,
@@ -43,23 +42,9 @@ exports.getExcludedAdvantages = function getExcludedAdvantages(advantages, allPr
     return Array.from(new Set(allAdvantages.filter(adv => !advantagesSet.has(adv))));
 };
 
-exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId, client = axios, imageService = productImageService) {
-    // clientId wird noch nciht benutzt. Brauchen wir aber, sobald wir gegen Heimdall gehen und ein neues bearer token für die abfrage benötigen
+exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId, heimdallClient = heimdallClient, imageService = productImageService) {
     let date = new Date();
-    const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
-        "&device_purchase_price=" + devicePrice +
-        "&device_purchase_date=" + date.toLocaleDateString();
-    const options = {
-        headers: {'Accept': 'application/json', "Authorization": "12345"}
-    };
-    const response = await client.get(url, options);
-    const content = response.data;
-
-    if (!content.payload) {
-        var error = new Error("No products have been defined for provided device class: " + deviceClass);
-        error.status = 400;
-        throw error;
-    }
+    const content = await heimdallClient.getProductOffers(clientId, deviceClass, devicePrice);
     const products = [];
     let imageLinks = [];
     imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length);
@@ -69,6 +54,3 @@ exports.getProductOffers = async function getProductOffers(deviceClass, devicePr
     });
     return products;
 };
-
-
-

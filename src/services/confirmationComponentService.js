@@ -1,7 +1,7 @@
-const productService = require('./productService.js');
+const heimdallClient = require('./heimdallClient.js');
 const _ = require('lodash');
 
-exports.prepareConfirmationData = function prepareConfirmationData(clientId, shoppingCart, productClient = productService) {
+exports.prepareConfirmationData = function prepareConfirmationData(clientId, shoppingCart, heimdallClient = heimdallClient) {
     const result = {
         signedShoppingCart: shoppingCart, // cookie mit signatur, damit die confirmation component das ins input feld schieben kann (TODO)
         confirmed: shoppingCart.confirmed,
@@ -9,15 +9,16 @@ exports.prepareConfirmationData = function prepareConfirmationData(clientId, sho
         confirmatioHeader: "Bitte bestätige noch kurz:",
         products: []
     };
+    let avbHref;
     shoppingCart.products.forEach(async product => {
         // 1. product-offers pro selektiertem Produkt ziehen und productId filtern
         // ODER
         // 2. (Optimierung) Alle angefragten Heimdall-Produkte in unserer DB speichern
-        const productOffers = await productClient.getProductOffers(product.deviceClass, product.devicePrice, clientId);
+        const productOffers = await heimdallClient.getProductOffers(product.deviceClass, product.devicePrice, clientId);
         const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === product.wertgarantieProductId);
         if (productIndex !== -1) {
             const matchingOffer = productOffers[productIndex];
-            result.avbHref = findAvbHref(matchingOffer);
+            avbHref = findAvbHref(matchingOffer);
             result.products.push({
                 paymentInterval: matchingOffer.paymentInterval,
                 price: matchingOffer.priceFormatted,
@@ -32,7 +33,7 @@ exports.prepareConfirmationData = function prepareConfirmationData(clientId, sho
         }
     });
 
-    result.confirmationTextGeneral = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${result.avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
+    result.confirmationTextGeneral = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
                                     Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich 
                                     zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
                                     einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 

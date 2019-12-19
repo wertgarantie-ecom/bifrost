@@ -1,4 +1,4 @@
-const service = require('../services/confirmationService.js');
+const service = require('../services/confirmationComponentService.js');
 
 exports.getConfirmationComponentData = function getConfirmationComponentData(req, res) {
     const clientId = req.query.clientId;

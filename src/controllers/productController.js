@@ -1,4 +1,4 @@
-const service = require('../services/productService.js');
+const service = require('../services/productSelectionPopUpComponentService.js');
 
 exports.getProducts = async function getProducts(req, res, next) {
     try {

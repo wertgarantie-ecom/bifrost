@@ -1,4 +1,4 @@
-const service = require('../../src/services/productService');
+const service = require('../../src/services/productSelectionPopUpComponentService');
 const heimdallTestProducts = require("./heimdallTestProducts").heimdallTestProducts;
 
 test("should return correct diff array", () => {
@@ -25,15 +25,13 @@ test("should return correct diff array", () => {
 
 
 test("should return proper product response", async () => {
-    const heimdallMock = {
-        get: () => Promise.resolve({
-            data: heimdallTestProducts
-        })
+    const heimdallClientMock = {
+        getProductOffers: () => Promise.resolve(heimdallTestProducts)
     };
     const productImagesServiceMock = {
         getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
     };
-    const result = await service.getProductOffers("1dfd4549-9bdc-4285-9047-e5088272dade", "devicePrice", "clientId", heimdallMock, productImagesServiceMock);
+    const result = await service.getProductOffers("1dfd4549-9bdc-4285-9047-e5088272dade", "devicePrice", "clientId", heimdallClientMock, productImagesServiceMock);
     const expectedResult = [{
         advantages: ["Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
         currency: "€",
@@ -50,7 +48,7 @@ test("should return proper product response", async () => {
         priceFormatted: "ab 5,00 €",
         tax: "0,80",
         taxFormatted: "(inkl. 0,80€ VerSt**)",
-        top_3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"]
+        top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"]
     }, {
         advantages: ["einfacher Diebstahl", "Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz", "Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
         currency: "€",
@@ -67,7 +65,7 @@ test("should return proper product response", async () => {
         priceFormatted: "ab 6,95 €",
         tax: "1,11",
         taxFormatted: "(inkl. 1,11€ VerSt**)",
-        top_3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
+        top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
     }];
     console.log(result);
     expect(result).toEqual(expectedResult);
