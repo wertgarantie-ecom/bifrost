@@ -1,27 +1,6 @@
 const service = require('../../src/services/productSelectionPopUpComponentService');
 const heimdallTestProducts = require("./heimdallTestProducts").heimdallTestProducts;
 
-test("should return correct diff array", () => {
-    const advantages1 = ["advantage1, advantage2, advantage3"];
-    const allAdvantages = [
-        {
-            special_advantages: [],
-            services: [],
-            advantages: ["advantage1, advantage2, advantage3"],
-        },
-        {
-            special_advantages: ["special_advantage"],
-            services: ["service"],
-            advantages: ["advantage1, advantage2, advantage3", "advantage4"],
-        }
-    ];
-
-
-    const advantagesDiff = service.getExcludedAdvantages(advantages1, allAdvantages);
-
-    expect(advantagesDiff).toContain("special_advantage", "service", "advantage4");
-    expect(advantagesDiff).not.toContain("advantage1, advantage2, advantage3");
-});
 
 
 test("should return proper product response", async () => {

@@ -2,7 +2,7 @@ const service = require('../../src/services/confirmationComponentService');
 const heimdallTestData = require("./heimdallTestProducts").heimdallTestProducts;
 
 const heimdallClientMock = {
-    getProductOffers: () => heimdallTestData
+    getProductOffers: async () => heimdallTestData
 };
 
 const testShoppingCart = {
@@ -64,8 +64,8 @@ const expectedResponse = {
             productTitle: 'Premium',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
             productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/928e51ef-d92f-4aa4-ba42-61d1e100af2f',
-            productInformationSheetText: 'Rechtsdokumente',
-            productBackgroundImageLink: 'imageLink2',
+            productInformationSheetText: "Produktinformationsblatt",
+            productBackgroundImageLink: "https://stage-api.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81",
             shopProductShortName: 'Super Bike'
         },
         {
@@ -75,17 +75,16 @@ const expectedResponse = {
             productTitle: 'Basis',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
             productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5',
-            productInformationSheetText: 'Rechtsdokumente',
+            productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink1',
             shopProductShortName: 'Super Bike'
         }
     ],
-    confirmationTextGeneral: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://www.mydocument.de">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
+    confirmationTextGeneral: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href=\\"https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b\\">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
         '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
         '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
         '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +
         '                                    meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.',
-    avbHref: "http://www.mydocument.de"
 };
 
 

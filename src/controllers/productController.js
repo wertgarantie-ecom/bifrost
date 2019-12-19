@@ -11,4 +11,3 @@ exports.getProducts = async function getProducts(req, res, next) {
         next(e);
     }
 };
-

@@ -1,6 +1,6 @@
 const productImageService = require('./productImageService');
 const defaultHeimdallClient = require("./heimdallClient");
-const productService = require("./productService");
+const productService = require("./heimdallProductOfferService");
 
 exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId, heimdallClient = defaultHeimdallClient, imageService = productImageService) {
     const content = await heimdallClient.getProductOffers(clientId, deviceClass, devicePrice);
@@ -15,9 +15,10 @@ exports.getProductOffers = async function getProductOffers(deviceClass, devicePr
 };
 
 function convertPayloadToSelectionPopUpProduct(heimdallProductOffer, imageLink, allProductOffers) {
-    heimdallProductOffer.payment = productService.getPaymentInterval(heimdallProductOffer);
+    const product = productService.fromProductOffer(heimdallProductOffer);
+    heimdallProductOffer.payment = product.getPaymentInterval();
 
-    const advantageCategories = productService.getAdvantageCategories(heimdallProductOffer, allProductOffers);
+    const advantageCategories = product.getAdvantageCategories(allProductOffers);
     return {
         id: heimdallProductOffer.id,
         name: heimdallProductOffer.name,
@@ -33,7 +34,7 @@ function convertPayloadToSelectionPopUpProduct(heimdallProductOffer, imageLink, 
         currency: heimdallProductOffer.price_currency,
         priceFormatted: heimdallProductOffer.price_formatted,
         tax: heimdallProductOffer.price_tax,
-        taxFormatted: productService.getIncludedTaxFormatted(heimdallProductOffer),
+        taxFormatted: product.getIncludedTaxFormatted(),
         imageLink: imageLink
     }
 }
