@@ -1,7 +1,7 @@
 const axios = require('axios');
 const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
 
-exports.getProductOffers = async function getProductOffers(clientId, deviceClass, devicePrice, date, client = axios) {
+exports.getProductOffers = async function getProductOffers(clientId, deviceClass, devicePrice, date = new Date(), client = axios) {
     const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +
         "&device_purchase_date=" + date.toLocaleDateString();

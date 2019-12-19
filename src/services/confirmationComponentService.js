@@ -1,7 +1,9 @@
-const heimdallClient = require('./heimdallClient.js');
+const client = require('./heimdallClient');
+const productService = require('./productService');
+const productImageService = require('./productImageService');
 const _ = require('lodash');
 
-exports.prepareConfirmationData = function prepareConfirmationData(clientId, shoppingCart, heimdallClient = heimdallClient) {
+exports.prepareConfirmationData = function prepareConfirmationData(clientId, shoppingCart, heimdallClient = client) {
     const result = {
         signedShoppingCart: shoppingCart, // cookie mit signatur, damit die confirmation component das ins input feld schieben kann (TODO)
         confirmed: shoppingCart.confirmed,
@@ -11,23 +13,25 @@ exports.prepareConfirmationData = function prepareConfirmationData(clientId, sho
     };
     let avbHref;
     shoppingCart.products.forEach(async product => {
+        const imageLink = productImageService.getRandomImageLinksForDeviceClass(product.deviceClass, 1)[0];
         // 1. product-offers pro selektiertem Produkt ziehen und productId filtern
         // ODER
         // 2. (Optimierung) Alle angefragten Heimdall-Produkte in unserer DB speichern
-        const productOffers = await heimdallClient.getProductOffers(product.deviceClass, product.devicePrice, clientId);
+        const productOffers = await heimdallClient.getProductOffers(clientId, product.deviceClass, product.devicePrice);
         const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === product.wertgarantieProductId);
         if (productIndex !== -1) {
             const matchingOffer = productOffers[productIndex];
             avbHref = findAvbHref(matchingOffer);
+            const advantageCategories = productService.getAdvantageCategories(matchingOffer, productOffers);
             result.products.push({
-                paymentInterval: matchingOffer.paymentInterval,
-                price: matchingOffer.priceFormatted,
-                includedTax: matchingOffer.taxFormatted,
+                paymentInterval: productService.getPaymentInterval(matchingOffer),
+                price: matchingOffer.price_formatted,
+                includedTax: productService.getIncludedTaxFormatted(matchingOffer),
                 productTitle: matchingOffer.name,
-                top3: matchingOffer.top_3,
-                productInformationSheetUri: matchingOffer.infoSheetUri,
-                productInformationSheetText: matchingOffer.infoSheetText,
-                productBackgroundImageLink: matchingOffer.imageLink,
+                top3: advantageCategories.top3,
+                productInformationSheetUri: productService.getProductInformationSheetUri(matchingOffer),
+                productInformationSheetText: productService.getProductInformationSheetText(matchingOffer),
+                productBackgroundImageLink: imageLink,
                 shopProductShortName: product.shopProductName
             });
         }
