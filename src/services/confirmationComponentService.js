@@ -1,10 +1,10 @@
-const client = require('./heimdallClient');
+const defaultHeimdallClient = require('./heimdallClient');
 const productOfferService = require('./heimdallProductOfferService');
 const documentType = require('./heimdallProductOfferService').documentType;
-const productImageService = require('./productImageService');
+const defaultProductImageService = require('./productImageService');
 const _ = require('lodash');
 
-exports.prepareConfirmationData = async function prepareConfirmationData(clientId, shoppingCart, heimdallClient = client) {
+exports.prepareConfirmationData = async function prepareConfirmationData(clientId, shoppingCart, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
     const result = {
         signedShoppingCart: shoppingCart,
         confirmed: shoppingCart.confirmed,
@@ -32,7 +32,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
                 productInformationSheetUri: productInformationSheet.uri,
                 productInformationSheetText: productInformationSheet.title,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(wertgarantieProduct.deviceClass, 1)[0],
-                shopProductShortName: shopProduct.shopProductName
+                shopProductShortName: wertgarantieProduct.shopProductName
             };
         }
 

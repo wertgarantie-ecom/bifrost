@@ -5,6 +5,10 @@ const heimdallClientMock = {
     getProductOffers: async () => heimdallTestData
 };
 
+const productImageServiceMock = {
+    getRandomImageLinksForDeviceClass: () => ["imageLink"]
+}
+
 const testShoppingCart = {
     clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     signature: "signature",
@@ -63,9 +67,9 @@ const expectedResponse = {
             includedTax: '(inkl. 1,11€ VerSt**)',
             productTitle: 'Premium',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
-            productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/928e51ef-d92f-4aa4-ba42-61d1e100af2f',
+            productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81',
             productInformationSheetText: "Produktinformationsblatt",
-            productBackgroundImageLink: "https://stage-api.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81",
+            productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike'
         },
         {
@@ -74,13 +78,13 @@ const expectedResponse = {
             includedTax: '(inkl. 0,80€ VerSt**)',
             productTitle: 'Basis',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
-            productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5',
+            productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448',
             productInformationSheetText: "Produktinformationsblatt",
-            productBackgroundImageLink: 'imageLink1',
+            productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike'
         }
     ],
-    confirmationTextGeneral: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href=\\"https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b\\">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
+    confirmationTextGeneral: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
         '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
         '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
         '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +
@@ -89,6 +93,6 @@ const expectedResponse = {
 
 
 test("should return proper confirmation component data for one product", async () => {
-    const confirmationData = await service.prepareConfirmationData("clientId", testShoppingCart, heimdallClientMock);
+    const confirmationData = await service.prepareConfirmationData("clientId", testShoppingCart, heimdallClientMock, productImageServiceMock);
     expect(confirmationData).toEqual(expectedResponse);
 });
