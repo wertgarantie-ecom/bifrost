@@ -6,7 +6,7 @@ const axios = require('axios');
 
 function validProduct() {
     return {
-        productId: 1234,
+        wertgarantieProductId: 1234,
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
         deviceCurrency: "EUR",
@@ -26,7 +26,7 @@ test("new created shopping cart should have given clientId", () => {
 
 test("should add product to existing shopping cart", () => {
     const includedProduct = {
-        productId: 4543545,
+        wertgarantieProductId: 4543545,
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
         deviceCurrency: "EUR",
@@ -50,7 +50,7 @@ test("should validate if given cart has proper structure", () => {
 
 test("should validate if given product has proper structure", () => {
     let invalidProduct = {
-        productId: "1234",
+        wertgarantieProductId: "1234",
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         deviceCurrency: "EUR",
     };
@@ -68,7 +68,7 @@ test("should validate if product was given", () => {
 
 test("should reject product with different clientId", () => {
     const productWithDifferentClientId = {
-        productId: 1234,
+        wertgarantieProductId: 1234,
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
         deviceCurrency: "EUR",
@@ -149,7 +149,7 @@ test("should throw error if null shopping cart is given to confirmation", () => 
 
 test("added product should always reject confirmation", () => {
     const includedProduct = {
-        productId: 4543545,
+        wertgarantieProductId: 4543545,
         deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
         devicePrice: 12.0,
         deviceCurrency: "EUR",

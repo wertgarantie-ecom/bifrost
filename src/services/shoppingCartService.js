@@ -5,7 +5,7 @@ const axios = require('axios');
 const moment = require('moment');
 
 const productSchema = Joi.object({
-    productId: Joi.number().integer().required(),
+    wertgarantieProductId: Joi.number().integer().required(),
     deviceClass: Joi.string().guid().required(),
     devicePrice: Joi.number().required(),
     deviceCurrency: Joi.string().required(),

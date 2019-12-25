@@ -6,7 +6,7 @@ const service = require('../services/shoppingCartService');
 exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     const clientId = req.params.clientId;
     const cartData = {
-        productId: req.body.productId,
+        wertgarantieProductId: parseInt(req.body.productId),
         deviceClass: req.body.deviceClass,
         devicePrice: req.body.devicePrice,
         deviceCurrency: req.body.deviceCurrency,
