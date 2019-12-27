@@ -36,6 +36,10 @@ const testShoppingCart = {
 const expectedResponse = {
     shoppingCartInputString: "{\"shoppingCart\":{\"clientId\":\"5209d6ea-1a6e-11ea-9f8d-778f0ad9137f\",\"signature\":\"signature\",\"products\":[{\"wertgarantieProductId\":4,\"shopProductId\":\"1\",\"deviceClass\":\"6bdd2d93-45d0-49e1-8a0c-98eb80342222\",\"devicePrice\":\"1000\",\"shopProductName\":\"Super Bike\",\"orderId\":\"18ff0413-bcfd-48f8-b003-04b57762067a\"},{\"wertgarantieProductId\":1,\"shopProductId\":\"1\",\"deviceClass\":\"6bdd2d93-45d0-49e1-8a0c-98eb80342222\",\"devicePrice\":\"1000\",\"shopProductName\":\"Super Bike\",\"orderId\":\"18ff0413-bcfd-48f8-b003-04b57762067a\"}],\"confirmed\":true},\"signature\":\"SlFyfEdoCz7Lw2AIA6/J2hoUt156Kk7opVMFOWkwldU=\"}",
     confirmed: true,
+    includedOrderIds: [
+        "18ff0413-bcfd-48f8-b003-04b57762067a",
+        "18ff0413-bcfd-48f8-b003-04b57762067a"
+    ],
     title: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
     confirmationHeader: 'Bitte bestätige noch kurz:',
     products: [
@@ -48,7 +52,8 @@ const expectedResponse = {
             productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81',
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
-            shopProductShortName: 'Super Bike'
+            shopProductShortName: 'Super Bike',
+            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         },
         {
             paymentInterval: 'monatl.',
@@ -59,7 +64,8 @@ const expectedResponse = {
             productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448',
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
-            shopProductShortName: 'Super Bike'
+            shopProductShortName: 'Super Bike',
+            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         }
     ],
     confirmationTextGeneral: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +

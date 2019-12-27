@@ -13,7 +13,8 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
         confirmed: shoppingCart.confirmed,
         title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmationHeader: "Bitte bestätige noch kurz:",
-        products: []
+        products: [],
+        includedOrderIds: []
     };
 
     let avbHref;
@@ -22,6 +23,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
         const wertgarantieProduct = shoppingCart.products[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, clientId, heimdallClient, productImageService);
         result.products.push(confirmationProductData.product);
+        result.includedOrderIds.push(confirmationProductData.product.orderId);
         avbHref = confirmationProductData.avbHref;
     }
 
@@ -52,7 +54,8 @@ async function getConfirmationProductData(wertgarantieProduct, clientId, heimdal
                 productInformationSheetUri: productInformationSheet.uri,
                 productInformationSheetText: productInformationSheet.title,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(wertgarantieProduct.deviceClass, 1)[0],
-                shopProductShortName: wertgarantieProduct.shopProductName
+                shopProductShortName: wertgarantieProduct.shopProductName,
+                orderId: wertgarantieProduct.orderId
             },
             avbHref: heimdallProduct.getDocument(documentType.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri
         };

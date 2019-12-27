@@ -178,3 +178,13 @@ function newShoppingCart(clientId) {
         "confirmed": false
     };
 }
+
+exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(orderId, shoppingCart) {
+    for (var i = 0; i < shoppingCart.products.length; i++) {
+        if (shoppingCart.products[i].orderId === orderId) {
+            shoppingCart.products.splice(i, 1);
+            i--;
+        }
+    }
+    return shoppingCart;
+}
