@@ -16,8 +16,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
         confirmed: shoppingCart.confirmed,
         title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmationHeader: "Bitte bestätige noch kurz:",
-        products: [],
-        includedOrderIds: []
+        products: []
     };
 
     let avbHref;
@@ -26,7 +25,6 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
         const wertgarantieProduct = shoppingCart.products[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, clientId, heimdallClient, productImageService);
         result.products.push(confirmationProductData.product);
-        result.includedOrderIds.push(confirmationProductData.product.orderId);
         avbHref = confirmationProductData.avbHref;
     }
 
