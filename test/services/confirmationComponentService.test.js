@@ -36,10 +36,6 @@ const testShoppingCart = {
 const expectedResponse = {
     shoppingCartInputString: "{\"shoppingCart\":{\"clientId\":\"5209d6ea-1a6e-11ea-9f8d-778f0ad9137f\",\"signature\":\"signature\",\"products\":[{\"wertgarantieProductId\":4,\"shopProductId\":\"1\",\"deviceClass\":\"6bdd2d93-45d0-49e1-8a0c-98eb80342222\",\"devicePrice\":\"1000\",\"shopProductName\":\"Super Bike\",\"orderId\":\"18ff0413-bcfd-48f8-b003-04b57762067a\"},{\"wertgarantieProductId\":1,\"shopProductId\":\"1\",\"deviceClass\":\"6bdd2d93-45d0-49e1-8a0c-98eb80342222\",\"devicePrice\":\"1000\",\"shopProductName\":\"Super Bike\",\"orderId\":\"18ff0413-bcfd-48f8-b003-04b57762067a\"}],\"confirmed\":true},\"signature\":\"SlFyfEdoCz7Lw2AIA6/J2hoUt156Kk7opVMFOWkwldU=\"}",
     confirmed: true,
-    includedOrderIds: [
-        "18ff0413-bcfd-48f8-b003-04b57762067a",
-        "18ff0413-bcfd-48f8-b003-04b57762067a"
-    ],
     title: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
     confirmationHeader: 'Bitte bestätige noch kurz:',
     products: [
