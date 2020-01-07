@@ -6,9 +6,12 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     const shoppingCart = req.signedCookies[clientId];
 
     const result = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
-
-    res.status(200).send(result);
-}
+    if (result) {
+        res.status(200).send(result);
+    } else {
+        return res.sendStatus(204);
+    }
+};
 
 exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res) {
     const clientId = req.body.clientId;
@@ -23,7 +26,7 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
     }
     const response = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
     res.status(200).send(response);
-}
+};
 
 exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
     const clientId = req.body.clientId;

@@ -6,7 +6,7 @@ test('should handle valid confirm cart request', async () => {
     const clientId = uuid();
     return request(app)
         .put("/wertgarantie/components/confirmation")
-        .send( {clientId: clientId })
+        .send({clientId: clientId})
         .set('Accept', 'application/json')
         .expect(400)
 });
@@ -18,7 +18,7 @@ describe('should handle shopping cart confirmation', function () {
 
     it('confirm shopping cart', function (done) {
         agent.put('/wertgarantie/components/confirmation')
-            .send( {clientId: clientId })
+            .send({clientId: clientId})
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -42,14 +42,14 @@ describe('should handle shopping cart confirmation rejection', function () {
 
     it('confirm shopping cart', function (done) {
         agent.put('/wertgarantie/components/confirmation')
-            .send( {clientId: clientId })
+            .send({clientId: clientId})
             .set('Accept', 'application/json')
             .expect(200, done);
     });
 
     it('unconfirm shopping cart', function (done) {
         agent.delete('/wertgarantie/components/confirmation')
-            .send( {clientId: clientId })
+            .send({clientId: clientId})
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -64,6 +64,14 @@ describe('should handle shopping cart confirmation rejection', function () {
             })
             .expect(200, done);
     })
+});
+
+describe('should return 400 on missing shopping cart cookie', function () {
+    const agent = request.agent(app);
+    it('get shopping cart data', function (done) {
+        agent.get('/wertgarantie/components/confirmation?clientId=' + 12)
+            .expect(204, done);
+    });
 });
 
 function createShoppingCart(agent, clientId) {

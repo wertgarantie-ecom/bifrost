@@ -7,6 +7,9 @@ const _ = require('lodash');
 const SIGN_SECRET = process.env.COOKIE_SIGN_SECRET || "localSignSecret";
 
 exports.prepareConfirmationData = async function prepareConfirmationData(clientId, shoppingCart, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
+    if (!shoppingCart) {
+        return undefined;
+    }
     const shoppingCartWithSignature = signService.signShoppingCart(shoppingCart, SIGN_SECRET);
     const result = {
         shoppingCartInputString: shoppingCartWithSignature,

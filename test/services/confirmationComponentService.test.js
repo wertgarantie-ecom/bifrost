@@ -80,3 +80,8 @@ test("should return proper confirmation component data for one product", async (
     const confirmationData = await service.prepareConfirmationData("clientId", testShoppingCart, heimdallClientMock, productImageServiceMock);
     expect(confirmationData).toEqual(expectedResponse);
 });
+
+test("should return undefined if no shopping cart is given", async () => {
+    const result = await service.prepareConfirmationData("clientId", undefined);
+    expect(result).toEqual(undefined);
+});
