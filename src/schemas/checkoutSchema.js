@@ -2,14 +2,14 @@ module.exports.checkoutSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
     properties: {
-        pruchasedProducts: {
+        purchasedProducts: {
             type: "array",
             items: [
                 {
                     type: "object",
                     properties: {
                         price: {
-                            type: "string"
+                            type: "integer"
                         },
                         manufacturer: {
                             type: "string"
@@ -20,7 +20,7 @@ module.exports.checkoutSchema = {
                         model: {
                             type: "string"
                         },
-                        productid: {
+                        productId: {
                             type: "string"
                         }
                     },
@@ -29,14 +29,14 @@ module.exports.checkoutSchema = {
                         "manufacturer",
                         "deviceClass",
                         "model",
-                        "productid"
+                        "productId"
                     ]
                 },
                 {
                     type: "object",
                     properties: {
                         price: {
-                            type: "string"
+                            type: "integer"
                         },
                         manufacturer: {
                             type: "string"
@@ -106,10 +106,14 @@ module.exports.checkoutSchema = {
         },
         secretClientId: {
             type: "string"
+        },
+        wertgarantieShoppingCart: {
+            type: "string",
+            required: true
         }
     },
     required: [
-        "pruchasedProducts",
+        "purchasedProducts",
         "customer",
         "secretClientId"
     ]

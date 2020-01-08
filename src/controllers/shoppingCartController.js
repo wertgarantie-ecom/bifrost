@@ -52,9 +52,10 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(r
 };
 
 exports.checkoutCurrentShoppingCart = function checkoutCurrentShoppingCart(req, res) {
-    const shoppingCart = req.signedCookie[req.params.clientId];
+    // const shoppingCart = req.signedCookie[req.params.clientId]; --> haben wir nicht. Call kommt vom Shop
     const checkoutRequest = req.body;
-    const checkoutResult = service.checkoutShoppingCart(checkoutRequest, shoppingCart);
+
+    // const checkoutResult = service.checkoutShoppingCart(checkoutRequest, );
 
 
     

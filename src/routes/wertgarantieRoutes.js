@@ -16,12 +16,11 @@ router.delete("/components/confirmation", confirmationController.unconfirmShoppi
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
 
 // shop api
-router.use("/shoppingCarts/current/checkout", validate({body: checkoutSchema}));
+router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
 
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
 router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
-router.post("/shoppingCarts/:clientId/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
 
 module.exports = router;
