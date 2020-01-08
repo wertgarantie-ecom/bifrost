@@ -1,20 +1,26 @@
 const CryptoJS = require("crypto-js");
+const SIGN_SECRET = process.env.SIGN_SECRET;
 
-function signObject(object, secret) {
+function signObject(object, secret = SIGN_SECRET) {
     const stringRepresentation = JSON.stringify(object);
     return CryptoJS.HmacSHA256(stringRepresentation, secret).toString((CryptoJS.enc.Base64));
 }
 
-exports.verifyObject = function verifyObject(object, signature, secret) {
+function verifyObject(object, signature, secret = SIGN_SECRET) {
     return signature === signObject(object, secret);
-};
+}
 
-exports.signShoppingCart = function signShoppingCart(shoppingCart, secret) {
+exports.signShoppingCart = function signShoppingCart(shoppingCart, secret = SIGN_SECRET) {
     const signature = signObject(shoppingCart, secret);
-    return JSON.stringify({
+    return {
         shoppingCart: shoppingCart,
         signature: signature
-    });
+    };
+}
+
+exports.verifyShoppingCart = function verifyShoppingCart(signedShoppingCart, secret = SIGN_SECRET) {
+    return verifyObject(signedShoppingCart.shoppingCart, signedShoppingCart.signature, secret);
 }
 
 exports.signObject = signObject;
+exports.verifyObject = verifyObject;

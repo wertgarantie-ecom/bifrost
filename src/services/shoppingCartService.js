@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const _ = require('lodash');
 const axios = require('axios');
 const moment = require('moment');
+const signatureService = require('./signatureService');
 
 const productSchema = Joi.object({
     wertgarantieProductId: Joi.number().integer().required(),
@@ -44,7 +45,7 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
 };
 
 function checkConfirmation(wertgarantieCart, result) {
-    if (!wertgarantieCart.confirmed) {
+    if (!wertgarantieCart.shoppingCart.confirmed) {
         result.purchases.push({
             success: false,
             message: "Insurance proposal was not transmitted. Purchase was not confirmed by the user."
@@ -99,7 +100,7 @@ const clients = [
     {
         name: "bikeShop",
         secrets: ["bikesecret1"],
-        publicClientIds: ["bikeclientId1"]
+        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
     },
     {
         name: "handyShop",
@@ -112,18 +113,25 @@ function findClientForSecret(secret) {
     return _.find(clients, (client) => client.secrets.includes(secret));
 }
 
-// secret validieren
-// secret zu clientId mappen
 // wertgarantieShoppingCart validieren (signatur prüfen, schauen ob clientId gleich ist)
 // diff zwischen wertgarantieSHoppingCart und shop basket machen
 // checkout für jedes valide Produkt an Heimdall schicken
 // speichern
 // response rausgeben
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedProducts, customer, wertgarantieCart, clientSecret, httpClient = axios, date = new Date()) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, clientSecret, httpClient = axios, date = new Date()) {
     const client = findClientForSecret(clientSecret);
     if (!client) {
         throw new InvalidClientSecretError("No client available for given secret: " + clientSecret);
     }
+
+    if (!client.publicClientIds.includes(wertgarantieCart.shoppingCart.clientId)) {
+        throw new InvalidPublicClientIdError("The client ID of Wertgarantie's shopping cart is invalid: " + wertgarantieCart.shoppingCart.clientId);
+    }
+
+    if (!signatureService.verifyShoppingCart(wertgarantieCart)) {
+        throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
+    }
+
     const result = {
         purchases: []
     };
@@ -132,8 +140,8 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedProd
         return result;
     }
 
-    await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
-        const matchingShopProduct = findMatchingShopProduct(purchasedProducts, wertgarantieProduct, result);
+    await Promise.all(wertgarantieCart.shoppingCart.products.map(wertgarantieProduct => {
+        const matchingShopProduct = findMatchingShopProduct(purchasedShopProducts, wertgarantieProduct, result);
         if (matchingShopProduct) {
             return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, result, httpClient);
         } else {
@@ -225,4 +233,22 @@ class InvalidClientSecretError extends Error {
     }
 }
 
+class InvalidPublicClientIdError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
+
+class InvalidWertgarantieCartSignatureError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
+
 exports.InvalidClientSecretError = InvalidClientSecretError;
+exports.InvalidPublicClientIdError = InvalidPublicClientIdError;
+exports.InvalidWertgarantieCartSignatureError = InvalidWertgarantieCartSignatureError;

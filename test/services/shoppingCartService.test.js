@@ -1,6 +1,9 @@
 const addProductToShoppingCartWithOrderId = require('../../src/services/shoppingCartService').addProductToShoppingCartWithOrderId;
 const shoppingCartService = require('../../src/services/shoppingCartService');
+const signatureService = require('../../src/services/signatureService');
 const InvalidClientSecretError = require('../../src/services/shoppingCartService').InvalidClientSecretError;
+const InvalidPublicClientIdError = require('../../src/services/shoppingCartService').InvalidPublicClientIdError;
+const InvalidWertgarantieCartSignatureError = require('../../src/services/shoppingCartService').InvalidWertgarantieCartSignatureError;
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
 const axios = require('axios');
@@ -16,8 +19,21 @@ function validProduct() {
     }
 }
 
+const includedProduct = {
+    wertgarantieProductId: 4543545,
+    deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+    devicePrice: 12.0,
+    deviceCurrency: "EUR",
+    shopProductName: "Phone X",
+    orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163"
+};
+const validShoppingCart = {
+    clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+    products: [includedProduct]
+};
+
 test("should create and fill new shopping cart if no cart is given", () => {
-    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), "430fc03e-f99c-11e9-a13b-83c858d3a184", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct()]);
 });
 
 test("new created shopping cart should have given clientId", () => {
@@ -26,19 +42,7 @@ test("new created shopping cart should have given clientId", () => {
 });
 
 test("should add product to existing shopping cart", () => {
-    const includedProduct = {
-        wertgarantieProductId: 4543545,
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 12.0,
-        deviceCurrency: "EUR",
-        shopProductName: "Phone X",
-        orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163"
-    };
-    const validShoppingCart = {
-        clientId: "430fc03e-f99c-11e9-a13b-83c858d3a184",
-        products: [includedProduct]
-    };
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "430fc03e-f99c-11e9-a13b-83c858d3a184", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([includedProduct, validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([includedProduct, validProduct()]);
 });
 
 test("should validate if given cart has proper structure", () => {
@@ -149,19 +153,7 @@ test("should throw error if null shopping cart is given to confirmation", () => 
 
 
 test("added product should always reject confirmation", () => {
-    const includedProduct = {
-        wertgarantieProductId: 4543545,
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 12.0,
-        deviceCurrency: "EUR",
-        shopProductName: "Phone X",
-        orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163"
-    };
-    const validShoppingCart = {
-        clientId: "430fc03e-f99c-11e9-a13b-83c858d3a184",
-        products: [includedProduct]
-    };
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "430fc03e-f99c-11e9-a13b-83c858d3a184", "9fd47b8a-f984-11e9-adcf-afabcc521083").confirmed).toEqual(false);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").confirmed).toEqual(false);
 });
 
 test("shopping cart checkout should checkout wertgarantie product if referenced shop product was also purchased", async () => {
@@ -203,7 +195,10 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
                 '}'
         }
     });
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, wertgarantieShoppingCart, secretClientId, mockClient, new Date(2019, 5, 1, 8, 34, 34, 345));
+
+    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, new Date(2019, 5, 1, 8, 34, 34, 345));
 
     expect(mockClient.mock.calls[0][0].data).toEqual({
         productId: "2",
@@ -272,7 +267,10 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     const mockClient = jest.fn(() => {
         throw new Error("you should never call me");
     });
-    const result = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, wertgarantieShoppingCart, secretClientId, mockClient);
+
+    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+
+    const result = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
     await result.then(data => expect(data).toEqual({
         purchases: [
             {
@@ -321,7 +319,9 @@ test("checkout call to heimdall fails", async () => {
         });
     });
 
-    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, wertgarantieShoppingCart, secretClientId, mockClient);
+    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+
+    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
     const result = await Promise.resolve(resultPromise);
     expect(result.purchases.length).toEqual(1);
     expect(result.purchases[0].message).toEqual("Failed to transmit insurance proposal. Call to Heimdall threw an error");
@@ -381,7 +381,9 @@ test("checkout call with multiple products", async () => {
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, wertgarantieShoppingCart, secretClientId, mockClient);
+    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+
+    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
     const result = await Promise.resolve(resultPromise);
     await expect(result).toEqual({
         "purchases": [
@@ -461,7 +463,9 @@ test("checkout call with multiple products where one is not found in shop cart",
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, wertgarantieShoppingCart, secretClientId, mockClient);
+    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+
+    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
     const result = await Promise.resolve(resultPromise);
     await expect(result).toEqual({
         "purchases": [
@@ -500,6 +504,8 @@ test("checkout call executed without confirmation", async () => {
         confirmed: false
     };
 
+    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+
     const purchasedProducts = [
         {
             price: "1000",
@@ -512,7 +518,7 @@ test("checkout call executed without confirmation", async () => {
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, wertgarantieShoppingCart, secretClientId);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId);
     expect(result.purchases[0].message).toEqual("Insurance proposal was not transmitted. Purchase was not confirmed by the user.");
     expect(result.purchases[0].success).toBe(false);
 });
@@ -523,6 +529,31 @@ test("checkout call should reject invalid client secret", async () => {
         expect.fail();
     } catch (e) {
         expect(e).toBeInstanceOf(InvalidClientSecretError);
+    }
+});
+
+test("checkout call should reject invalid public client id", async () => {
+    try {
+        const wertgarantieCart = {
+            shoppingCart: {
+                clientId: "invalidClientId"
+            }
+        }
+        await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
+        expect.fail();
+    } catch (e) {
+        expect(e).toBeInstanceOf(InvalidPublicClientIdError);
+    }
+});
+
+test("checkout call should reject invalid signature in wertgarantie cart", async () => {
+    try {
+        var wertgarantieCart = signatureService.signShoppingCart(validShoppingCart)
+        wertgarantieCart.shoppingCart.products[0].devicePrice = 1.0;
+        await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
+        expect.fail();
+    } catch (e) {
+        expect(e).toBeInstanceOf(InvalidWertgarantieCartSignatureError);
     }
 });
 

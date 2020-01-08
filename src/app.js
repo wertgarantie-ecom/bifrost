@@ -15,7 +15,7 @@ const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 
 const app = express();
 
-const signSecret = process.env.COOKIE_SIGN_SECRET;
+const signSecret = process.env.SIGN_SECRET;
 
 app.use(logger('dev'));
 app.use(express.json());

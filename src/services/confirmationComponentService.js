@@ -4,7 +4,7 @@ const documentType = require('./heimdallProductOfferService').documentType;
 const defaultProductImageService = require('./productImageService');
 const signService = require('./signatureService');
 const _ = require('lodash');
-const SIGN_SECRET = process.env.COOKIE_SIGN_SECRET || "localSignSecret";
+const SIGN_SECRET = process.env.SIGN_SECRET || "localSignSecret";
 
 exports.prepareConfirmationData = async function prepareConfirmationData(clientId, shoppingCart, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
     if (!shoppingCart) {
@@ -12,7 +12,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
     }
     const shoppingCartWithSignature = signService.signShoppingCart(shoppingCart, SIGN_SECRET);
     const result = {
-        shoppingCartInputString: shoppingCartWithSignature,
+        shoppingCartInputString: JSON.stringify(shoppingCartWithSignature),
         confirmed: shoppingCart.confirmed,
         title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmationHeader: "Bitte bestätige noch kurz:",
