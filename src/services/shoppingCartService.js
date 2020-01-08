@@ -70,8 +70,8 @@ function findMatchingShopProduct(shopCartProducts, wertgarantieProduct, result) 
     return shopCartProducts.splice(shopProductIndex, 1)[0];
 }
 
-async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, shopCart, matchingShopProduct, date, result, client) {
-    const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, shopCart, matchingShopProduct, date);
+async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, result, client) {
+    const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
     try {
         const response = await sendWertgarantieProductCheckout(client, requestBody);
         const responseBody = await JSON.parse(response.body);
@@ -95,19 +95,47 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, sh
     }
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(shopCart, wertgarantieCart, client = axios, date = new Date()) {
+const clients = [
+    {
+        name: "bikeShop",
+        secrets: ["bikesecret1"],
+        publicClientIds: ["bikeclientId1"]
+    },
+    {
+        name: "handyShop",
+        secrets: ["handysecret1"],
+        publicClientIds: ["bikeclientId1"]
+    }
+];
+
+function findClientForSecret(secret) {
+    return _.find(clients, (client) => client.secrets.includes(secret));
+}
+
+// secret validieren
+// secret zu clientId mappen
+// wertgarantieShoppingCart validieren (signatur prüfen, schauen ob clientId gleich ist)
+// diff zwischen wertgarantieSHoppingCart und shop basket machen
+// checkout für jedes valide Produkt an Heimdall schicken
+// speichern
+// response rausgeben
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedProducts, customer, wertgarantieCart, clientSecret, httpClient = axios, date = new Date()) {
+    const client = findClientForSecret(clientSecret);
+    if (!client) {
+        throw new InvalidClientSecretError("No client available for given secret: " + clientSecret);
+    }
     const result = {
         purchases: []
-    }
+    };
 
     if (!checkConfirmation(wertgarantieCart, result)) {
         return result;
     }
 
     await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
-        const matchingShopProduct = findMatchingShopProduct(shopCart.purchasedProducts, wertgarantieProduct, result);
+        const matchingShopProduct = findMatchingShopProduct(purchasedProducts, wertgarantieProduct, result);
         if (matchingShopProduct) {
-            return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, shopCart, matchingShopProduct, date, result, client);
+            return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, result, httpClient);
         } else {
             return Promise.resolve();
         }
@@ -126,18 +154,18 @@ function formateDate(date) {
     return moment(date).format("YYYY-MM-DD");
 }
 
-function prepareHeimdallCheckoutData(wertgarantieProduct, shopCart, matchingShopProduct, date) {
+function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date) {
     return {
         productId: wertgarantieProduct.wertgarantieProductId,
-        customer_company: shopCart.customer.company,
-        customer_salutation: shopCart.customer.salutation,
-        customer_firstname: shopCart.customer.firstname,
-        customer_lastname: shopCart.customer.lastname,
-        customer_street: shopCart.customer.street,
-        customer_zip: shopCart.customer.zip,
-        customer_city: shopCart.customer.city,
-        customer_country: shopCart.customer.country,
-        customer_email: shopCart.customer.email,
+        customer_company: customer.company,
+        customer_salutation: customer.salutation,
+        customer_firstname: customer.firstname,
+        customer_lastname: customer.lastname,
+        customer_street: customer.street,
+        customer_zip: customer.zip,
+        customer_city: customer.city,
+        customer_country: customer.country,
+        customer_email: customer.email,
         device_manufacturer: matchingShopProduct.manufacturer,
         device_model: matchingShopProduct.model,
         device_class: matchingShopProduct.deviceClass,
@@ -187,4 +215,14 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(o
         }
     }
     return shoppingCart;
+};
+
+class InvalidClientSecretError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this, this.constructor);
+    }
 }
+
+exports.InvalidClientSecretError = InvalidClientSecretError;
