@@ -8,7 +8,7 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     const cartData = {
         wertgarantieProductId: parseInt(req.body.productId),
         deviceClass: req.body.deviceClass,
-        devicePrice: req.body.devicePrice,
+        devicePrice: parseInt(req.body.devicePrice),
         deviceCurrency: req.body.deviceCurrency,
         shopProductName: req.body.shopProductName
     };
@@ -51,8 +51,11 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(r
     res.status(200).send(shoppingCart);
 };
 
-exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res) {
-    const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, JSON.parse(req.body.wertgarantieShoppingCart), req.body.secretClientId);
-
-    res.status(200).send(result);
+exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
+    try {
+        const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, JSON.parse(req.body.wertgarantieShoppingCart), req.body.secretClientId);
+        res.status(200).send(result);
+    } catch (error) {
+        next(error);
+    }
 };

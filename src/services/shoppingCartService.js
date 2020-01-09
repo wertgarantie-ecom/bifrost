@@ -4,6 +4,30 @@ const _ = require('lodash');
 const axios = require('axios');
 const moment = require('moment');
 const signatureService = require('./signatureService');
+const AxiosLogger = require('axios-logger');
+
+const instance = axios.create();
+instance.interceptors.request.use((request) => {
+    return AxiosLogger.requestLogger(request, {
+        dateFormat: 'HH:MM:ss',
+        status: true,
+        header: true,
+    });
+}, (error) => {
+    return AxiosLogger.errorLogger(error);
+});
+
+instance.interceptors.response.use((response) => {
+    return AxiosLogger.responseLogger(response, {
+        dateFormat: 'HH:MM:ss',
+        status: true,
+        header: true,
+    });
+}, (error) => {
+    return AxiosLogger.errorLogger(error);
+});
+
+// instance.interceptors.response.use(AxiosLogger.responseLogger, AxiosLogger.errorLogger);
 
 const productSchema = Joi.object({
     wertgarantieProductId: Joi.number().integer().required(),
@@ -101,7 +125,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
             },
             shopProduct: matchingShopProduct,
             success: false,
-            heimdallError: e,
+            heimdallError: e.response.data,
             message: "Failed to transmit insurance proposal. Call to Heimdall threw an error"
         });
     }
@@ -126,7 +150,7 @@ function findClientForSecret(secret) {
 
 // speichern
 // response rausgeben
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, clientSecret, httpClient = axios, date = new Date()) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, clientSecret, httpClient = instance, date = new Date()) {
     const client = findClientForSecret(clientSecret);
     const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
     if (!client) {
@@ -200,7 +224,12 @@ async function sendWertgarantieProductCheckout(client, data) {
     return await client({
         method: 'post',
         url: heimdallCheckoutUrl,
-        data: data
+        data: data,
+        withCredentials: true,
+        headers: {
+            "Authorization": "12345",
+            'Content-Type': 'application/json'
+        }
     });
 }
 

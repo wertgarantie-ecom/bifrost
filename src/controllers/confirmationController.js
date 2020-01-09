@@ -1,5 +1,6 @@
 const confirmationService = require('../services/confirmationComponentService');
 const shoppingCartService = require('../services/shoppingCartService');
+const signatureService = require('../services/signatureService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res) {
     const clientId = req.query.clientId;
@@ -46,5 +47,6 @@ function sendShoppingCart(res, shoppingCart) {
     res.cookie(shoppingCart.clientId, shoppingCart, {
         signed: true
     });
-    res.status(200).send(shoppingCart);
+    const signedShoppingCart = signatureService.signShoppingCart(shoppingCart);
+    res.status(200).send(JSON.stringify(signedShoppingCart));
 }
