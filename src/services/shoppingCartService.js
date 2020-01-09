@@ -69,7 +69,7 @@ function findMatchingShopProduct(shopCartProducts, wertgarantieProduct, result) 
             },
             availableShopProducts: shopCartProducts || [],
             success: false,
-            message: "couldn't find matching product in shop cart for wertgarantie product" 
+            message: "couldn't find matching product in shop cart for wertgarantie product"
         });
         return undefined;
     }
@@ -80,7 +80,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
     try {
         const response = await sendWertgarantieProductCheckout(client, requestBody);
-        const responseBody = await JSON.parse(response.body);
+        const responseBody = response.data;
         const purchase = {
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
             shopProductId: wertgarantieProduct.shopProductId,
@@ -93,9 +93,15 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
         result.purchases.push(purchase);
     } catch (e) {
         result.purchases.push({
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            shopProductId: wertgarantieProduct.shopProductId,
+            wertgarantieProduct: {
+                deviceClass: wertgarantieProduct.deviceClass,
+                productId: wertgarantieProduct.wertgarantieProductId,
+                devicePrice: wertgarantieProduct.devicePrice,
+                model: wertgarantieProduct.shopProductName
+            },
+            shopProduct: matchingShopProduct,
             success: false,
+            heimdallError: e,
             message: "Failed to transmit insurance proposal. Call to Heimdall threw an error"
         });
     }
@@ -190,9 +196,10 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
 }
 
 async function sendWertgarantieProductCheckout(client, data) {
+    const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + data.productId + "/checkout";
     return await client({
         method: 'post',
-        url: 'url',
+        url: heimdallCheckoutUrl,
         data: data
     });
 }

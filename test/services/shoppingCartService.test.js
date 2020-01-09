@@ -162,10 +162,9 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         products: [
             {
                 wertgarantieProductId: "2",
-                shopProductId: "1",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "1000",
-                shopProductName: "Super Bike",
+                shopProductName: "IPhone X",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
@@ -186,13 +185,13 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
 
     const mockClient = jest.fn(() => {
         return {
-            'body': '{' +
-                '"payload": {' +
-                '"contract_number": "28850277",' +
-                '"transaction_number": "28850279",' +
-                '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' +
-                '}' +
-                '}'
+            data: {
+                payload: {
+                    contract_number: "28850277",
+                    transaction_number: "28850279",
+                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+                }
+            }
         }
     });
 
@@ -225,7 +224,6 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         "purchases": [
             {
                 "wertgarantieProductId": "2",
-                "shopProductId": "1",
                 "success": true,
                 "message": "successfully transmitted insurance proposal",
                 "contract_number": "28850277",
@@ -242,10 +240,9 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         products: [
             {
                 wertgarantieProductId: "2",
-                shopProductId: "1",
-                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
                 devicePrice: "1000",
-                shopProductName: "Super Bike",
+                shopProductName: "IPhone X",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
@@ -258,7 +255,6 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
             manufacturer: "Apple Inc",
             deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
             model: "IPhone X",
-            productId: "1"
         }
     ];
     const customer = validCustomer();
@@ -270,17 +266,29 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
-    await result.then(data => expect(data).toEqual({
-        purchases: [
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
+    expect(result).toEqual({
+        "purchases": [
             {
-                wertgarantieProductId: "2",
-                shopProductId: "1",
-                success: false,
-                message: "couldn't find matching product in shop cart"
+                "wertgarantieProduct": {
+                    "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                    "productId": "2",
+                    "devicePrice": "1000",
+                    "model": "IPhone X"
+                },
+                "availableShopProducts": [
+                    {
+                        "price": "1200.93",
+                        "manufacturer": "Apple Inc",
+                        "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                        "model": "IPhone X",
+                    }
+                ],
+                "success": false,
+                "message": "couldn't find matching product in shop cart for wertgarantie product"
             }
         ]
-    }));
+    });
 });
 
 test("checkout call to heimdall fails", async () => {
@@ -289,10 +297,9 @@ test("checkout call to heimdall fails", async () => {
         products: [
             {
                 wertgarantieProductId: "2",
-                shopProductId: "1",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "1000",
-                shopProductName: "Super Bike",
+                shopProductName: "IPhone X",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
@@ -330,13 +337,13 @@ test("checkout call to heimdall fails", async () => {
 test("checkout call with multiple products", async () => {
     const mockClient = jest.fn(() => {
         return {
-            'body': '{' +
-                '"payload": {' +
-                '"contract_number": "28850277",' +
-                '"transaction_number": "28850279",' +
-                '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' +
-                '}' +
-                '}'
+            data: {
+                payload: {
+                    contract_number: "28850277",
+                    transaction_number: "28850279",
+                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+                }
+            }
         }
     });
     const wertgarantieShoppingCart = {
@@ -344,18 +351,16 @@ test("checkout call with multiple products", async () => {
         products: [
             {
                 wertgarantieProductId: "2",
-                shopProductId: "1",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "1000",
-                shopProductName: "Super Bike",
+                shopProductName: "Super Bike 3000",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             },
             {
                 wertgarantieProductId: "2",
-                shopProductId: "1",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "1000",
-                shopProductName: "Super Bike",
+                shopProductName: "Super Bike 3000",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
@@ -368,14 +373,12 @@ test("checkout call with multiple products", async () => {
             manufacturer: "Pegasus",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "Super Bike 3000",
-            productId: "1"
         },
         {
             price: "1000",
             manufacturer: "Pegasus",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "Super Bike 3000",
-            productId: "1"
         }
     ];
     const customer = validCustomer();
@@ -389,7 +392,6 @@ test("checkout call with multiple products", async () => {
         "purchases": [
             {
                 "wertgarantieProductId": "2",
-                "shopProductId": "1",
                 "success": true,
                 "message": "successfully transmitted insurance proposal",
                 "contract_number": "28850277",
@@ -398,7 +400,6 @@ test("checkout call with multiple products", async () => {
             },
             {
                 "wertgarantieProductId": "2",
-                "shopProductId": "1",
                 "success": true,
                 "message": "successfully transmitted insurance proposal",
                 "contract_number": "28850277",
@@ -412,13 +413,13 @@ test("checkout call with multiple products", async () => {
 test("checkout call with multiple products where one is not found in shop cart", async () => {
     const mockClient = jest.fn(() => {
         return {
-            'body': '{' +
-                '"payload": {' +
-                '"contract_number": "28850277",' +
-                '"transaction_number": "28850279",' +
-                '"message": "Der Versicherungsantrag wurde erfolgreich übermittelt."' +
-                '}' +
-                '}'
+            data: {
+                payload: {
+                    contract_number: "28850277",
+                    transaction_number: "28850279",
+                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+                }
+            }
         }
     });
     const wertgarantieShoppingCart = {
@@ -426,15 +427,13 @@ test("checkout call with multiple products where one is not found in shop cart",
         products: [
             {
                 wertgarantieProductId: "2",
-                shopProductId: "1",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "1000",
-                shopProductName: "Super Bike",
+                shopProductName: "Super Bike 3000",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             },
             {
                 wertgarantieProductId: "2",
-                shopProductId: "2",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "1200",
                 shopProductName: "Super Bike 3000",
@@ -450,14 +449,12 @@ test("checkout call with multiple products where one is not found in shop cart",
             manufacturer: "Pegasus",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "Super Bike 3000",
-            productId: "1"
         },
         {
             price: "1000",
             manufacturer: "Pegasus",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "Super Bike 3000",
-            productId: "1"
         }
     ];
     const customer = validCustomer();
@@ -467,25 +464,36 @@ test("checkout call with multiple products where one is not found in shop cart",
 
     const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
     const result = await Promise.resolve(resultPromise);
-    await expect(result).toEqual({
-        "purchases": [
-            {
-                "wertgarantieProductId": "2",
-                "shopProductId": "2",
-                "success": false,
-                "message": "couldn't find matching product in shop cart"
-            },
-            {
-                "wertgarantieProductId": "2",
-                "shopProductId": "1",
-                "success": true,
-                "message": "successfully transmitted insurance proposal",
-                "contract_number": "28850277",
-                "transaction_number": "28850279",
-                "activation_code": undefined
-            }
-        ]
-    });
+    await expect(result).toEqual(
+        {
+            "purchases": [
+                {
+                    "wertgarantieProduct": {
+                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "productId": "2",
+                        "devicePrice": "1200",
+                        "model": "Super Bike 3000"
+                    },
+                    "availableShopProducts": [
+                        {
+                            "price": "1000",
+                            "manufacturer": "Pegasus",
+                            "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                            "model": "Super Bike 3000"
+                        }
+                    ],
+                    "success": false,
+                    "message": "couldn't find matching product in shop cart for wertgarantie product"
+                },
+                {
+                    "wertgarantieProductId": "2",
+                    "success": true,
+                    "message": "successfully transmitted insurance proposal",
+                    "contract_number": "28850277",
+                    "transaction_number": "28850279"
+                }
+            ]
+        });
 });
 
 test("checkout call executed without confirmation", async () => {
@@ -525,7 +533,7 @@ test("checkout call executed without confirmation", async () => {
 
 test("checkout call should reject invalid client secret", async () => {
     try {
-        await shoppingCartService.checkoutShoppingCart(undefined, undefined, undefined, "invalid");
+        await shoppingCartService.checkoutShoppingCart(undefined, undefined, {}, "invalid");
         expect.fail();
     } catch (e) {
         expect(e).toBeInstanceOf(InvalidClientSecretError);
@@ -538,7 +546,7 @@ test("checkout call should reject invalid public client id", async () => {
             shoppingCart: {
                 clientId: "invalidClientId"
             }
-        }
+        };
         await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
         expect.fail();
     } catch (e) {
@@ -548,7 +556,7 @@ test("checkout call should reject invalid public client id", async () => {
 
 test("checkout call should reject invalid signature in wertgarantie cart", async () => {
     try {
-        var wertgarantieCart = signatureService.signShoppingCart(validShoppingCart)
+        var wertgarantieCart = signatureService.signShoppingCart(validShoppingCart);
         wertgarantieCart.shoppingCart.products[0].devicePrice = 1.0;
         await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
         expect.fail();

@@ -1,6 +1,7 @@
 const request = require('supertest');
 const uuid = require('uuid');
 const app = require('../../src/app');
+const nock = require("nock");
 
 test('should return cookie with selected product', async () => {
     return request(app).post('/wertgarantie/shoppingCart/43446A56-3546-416D-B942-1262CA0526FB')
@@ -62,6 +63,19 @@ describe('should be able to retrieve cookies', function () {
 });
 
 test("should checkout shopping cart", async () => {
+    const wertgarantieProductId = `10`;
+
+    nock(process.env.HEIMDALL_URI)
+        .post("/api/v1/products/" + wertgarantieProductId + "/checkout")
+        .reply(200, {
+            payload: {
+                contract_number: "1234",
+                transaction_number: "28850277",
+                activation_code: "4db56dacfbhce",
+                message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+            }
+        });
+
     return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
         .send({
             purchasedProducts: [{
@@ -86,7 +100,7 @@ test("should checkout shopping cart", async () => {
                   "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
                   "products": [
                     {
-                      "wertgarantieProductId": 10,
+                      "wertgarantieProductId": ${wertgarantieProductId},
                       "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                       "devicePrice": 139999,
                       "deviceCurrency": "EUR",
@@ -101,7 +115,16 @@ test("should checkout shopping cart", async () => {
             secretClientId: "bikesecret1"
         })
         .expect(200)
-        .then(response => {
-            console.log(JSON.stringify(response.body, null, 2));
-        });
+        .expect({
+            "purchases": [
+                {
+                    "wertgarantieProductId": 10,
+                    "success": true,
+                    "message": "successfully transmitted insurance proposal",
+                    "contract_number": "1234",
+                    "transaction_number": "28850277",
+                    "activation_code": "4db56dacfbhce"
+                }
+            ]
+        })
 });
