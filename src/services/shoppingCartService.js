@@ -45,7 +45,7 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
 };
 
 function checkConfirmation(wertgarantieCart, result) {
-    if (!wertgarantieCart.shoppingCart.confirmed) {
+    if (!wertgarantieCart.confirmed) {
         result.purchases.push({
             success: false,
             message: "Insurance proposal was not transmitted. Purchase was not confirmed by the user."
@@ -61,10 +61,15 @@ function findMatchingShopProduct(shopCartProducts, wertgarantieProduct, result) 
 
     if (shopProductIndex === -1) {
         result.purchases.push({
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            shopProductId: wertgarantieProduct.shopProductId,
+            wertgarantieProduct: {
+                deviceClass: wertgarantieProduct.deviceClass,
+                productId: wertgarantieProduct.wertgarantieProductId,
+                devicePrice: wertgarantieProduct.devicePrice,
+                model: wertgarantieProduct.shopProductName
+            },
+            availableShopProducts: shopCartProducts || [],
             success: false,
-            message: "couldn't find matching product in shop cart"
+            message: "couldn't find matching product in shop cart for wertgarantie product" 
         });
         return undefined;
     }
@@ -113,22 +118,18 @@ function findClientForSecret(secret) {
     return _.find(clients, (client) => client.secrets.includes(secret));
 }
 
-// wertgarantieShoppingCart validieren (signatur prüfen, schauen ob clientId gleich ist)
-// diff zwischen wertgarantieSHoppingCart und shop basket machen
-// checkout für jedes valide Produkt an Heimdall schicken
 // speichern
 // response rausgeben
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, clientSecret, httpClient = axios, date = new Date()) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, clientSecret, httpClient = axios, date = new Date()) {
     const client = findClientForSecret(clientSecret);
+    const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
     if (!client) {
         throw new InvalidClientSecretError("No client available for given secret: " + clientSecret);
     }
-
-    if (!client.publicClientIds.includes(wertgarantieCart.shoppingCart.clientId)) {
-        throw new InvalidPublicClientIdError("The client ID of Wertgarantie's shopping cart is invalid: " + wertgarantieCart.shoppingCart.clientId);
+    if (!client.publicClientIds.includes(wertgarantieCart.clientId)) {
+        throw new InvalidPublicClientIdError("The client ID of Wertgarantie's shopping cart is invalid: " + wertgarantieCart.clientId);
     }
-
-    if (!signatureService.verifyShoppingCart(wertgarantieCart)) {
+    if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
         throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
     }
 
@@ -140,7 +141,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
         return result;
     }
 
-    await Promise.all(wertgarantieCart.shoppingCart.products.map(wertgarantieProduct => {
+    await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
         const matchingShopProduct = findMatchingShopProduct(purchasedShopProducts, wertgarantieProduct, result);
         if (matchingShopProduct) {
             return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, result, httpClient);
@@ -149,16 +150,19 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
         }
     }));
 
+    // speichern (in DB)
+
+
     return result;
 };
 
 function findIndex(shopCartProducts, wertgarantieProduct) {
-    return _.findIndex(shopCartProducts, shopProduct => shopProduct.productId === wertgarantieProduct.shopProductId
+    return _.findIndex(shopCartProducts, shopProduct => shopProduct.model === wertgarantieProduct.shopProductName
         && shopProduct.price === wertgarantieProduct.devicePrice
         && shopProduct.deviceClass === wertgarantieProduct.deviceClass);
 }
 
-function formateDate(date) {
+function formatDate(date) {
     return moment(date).format("YYYY-MM-DD");
 }
 
@@ -178,7 +182,7 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         device_model: matchingShopProduct.model,
         device_class: matchingShopProduct.deviceClass,
         device_purchase_price: parseFloat(matchingShopProduct.price),
-        device_purchase_date: formateDate(date),
+        device_purchase_date: formatDate(date),
         device_condition: 1,
         payment_type: "bank_transfer",
         terms_and_conditions_accepted: true

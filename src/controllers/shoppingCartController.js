@@ -51,8 +51,8 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(r
     res.status(200).send(shoppingCart);
 };
 
-exports.checkoutCurrentShoppingCart = function checkoutCurrentShoppingCart(req, res) {
-    const checkoutRequest = req.body;
+exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res) {
+    const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, JSON.parse(req.body.wertgarantieShoppingCart), req.body.secretClientId);
 
-    res.send("Hello no validation");
+    res.status(200).send(result);
 };

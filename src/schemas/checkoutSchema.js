@@ -19,17 +19,13 @@ module.exports.checkoutSchema = {
                         },
                         model: {
                             type: "string"
-                        },
-                        productId: {
-                            type: "string"
                         }
                     },
                     required: [
                         "price",
                         "manufacturer",
                         "deviceClass",
-                        "model",
-                        "productId"
+                        "model"
                     ]
                 },
                 {
