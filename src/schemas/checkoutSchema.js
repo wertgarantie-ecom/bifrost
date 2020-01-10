@@ -27,33 +27,6 @@ module.exports.checkoutSchema = {
                         "deviceClass",
                         "model"
                     ]
-                },
-                {
-                    type: "object",
-                    properties: {
-                        price: {
-                            type: "integer"
-                        },
-                        manufacturer: {
-                            type: "string"
-                        },
-                        class: {
-                            type: "string"
-                        },
-                        model: {
-                            type: "string"
-                        },
-                        productId: {
-                            type: "string"
-                        }
-                    },
-                    required: [
-                        "price",
-                        "manufacturer",
-                        "class",
-                        "model",
-                        "productId"
-                    ]
                 }
             ]
         },
