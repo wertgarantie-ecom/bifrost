@@ -6,7 +6,6 @@ const InvalidPublicClientIdError = require('../../src/services/shoppingCartServi
 const InvalidWertgarantieCartSignatureError = require('../../src/services/shoppingCartService').InvalidWertgarantieCartSignatureError;
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
-const axios = require('axios');
 
 function validProduct() {
     return {
@@ -291,7 +290,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     });
 });
 
-test("checkout call to heimdall fails", async () => {
+test("failing heimdall checkout call should be handled gracefully", async () => {
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         products: [
@@ -319,11 +318,11 @@ test("checkout call to heimdall fails", async () => {
     const secretClientId = "bikesecret1";
 
     const mockClient = jest.fn(() => {
-        axios({
-            method: 'post',
-            url: 'url',
-            data: 'data'
-        });
+        const error = new Error("dummy error");
+        error.response = {
+            data: "failing call"
+        };
+        throw error;
     });
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
@@ -333,6 +332,7 @@ test("checkout call to heimdall fails", async () => {
     expect(result.purchases.length).toEqual(1);
     expect(result.purchases[0].message).toEqual("Failed to transmit insurance proposal. Call to Heimdall threw an error");
 });
+
 
 test("checkout call with multiple products", async () => {
     const mockClient = jest.fn(() => {
