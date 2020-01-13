@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 app.options('*', cors(corsOptions));
-app.use(sslRedirect(['prod']));
+app.use(sslRedirect(['prod', 'dev', 'staging']));
 
 app.use('/healthcheck', require('express-healthcheck')());
 
