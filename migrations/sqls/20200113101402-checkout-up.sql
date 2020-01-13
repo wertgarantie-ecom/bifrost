@@ -7,16 +7,16 @@ CREATE TABLE IF NOT EXISTS checkout (
 );
 
 CREATE TABLE IF NOT EXISTS purchase (
-    purchaseId SERIAL PRIMARY KEY,
-    sessionId UUID NOT NULL,
-    wertgarantieProductId INTEGER NOT NULL,
-    deviceClass UUID NOT NULL,
-    devicePrice INTEGER NOT NULL,
-    success BOOLEAN NOT NULL,
-    message TEXT NOT NULL,
-    shopProduct TEXT NOT NULL,
-    contractNumber INTEGER,
-    transactionNumber INTEGER,
-    activationCode TEXT,
-    CONSTRAINT checkout_sessionId FOREIGN KEY (sessionId) REFERENCES checkout (sessionId)
-);
+      purchaseId SERIAL PRIMARY KEY,
+      sessionId UUID NOT NULL,
+      wertgarantieProductId INTEGER NOT NULL,
+      deviceClass UUID NOT NULL,
+      devicePrice INTEGER NOT NULL,
+      success BOOLEAN NOT NULL,
+      message TEXT NOT NULL,
+      shopProduct TEXT NOT NULL,
+      contractNumber INTEGER,
+      transactionNumber INTEGER,
+      activationCode TEXT,
+      CONSTRAINT checkout_sessionId FOREIGN KEY (sessionId) REFERENCES checkout (sessionId)
+  );
