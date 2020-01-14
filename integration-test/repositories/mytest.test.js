@@ -1,16 +1,7 @@
 const pool = require('../../src/postgres').pool;
-describe('User tests', () => {
+describe('Postgres Tests', () => {
 
-    beforeAll(async () => {
-    });
-
-    afterAll(async () => {
-        /* stop Postgres contrainer */
-        await pool.end();
-    });
-
-
-    test('User must be created', async () => {
+    test('get simple now() from postgres', async () => {
         const response = await pool.query('SELECT NOW()');
         console.log(response);
     });
