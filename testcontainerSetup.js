@@ -1,7 +1,6 @@
-const { GenericContainer } = require("testcontainers");
-const { Pool } = require('pg').native;
-// const DBMigrate = require("db-migrate");
-process.env.DATABASE_URL
+const {GenericContainer} = require("testcontainers");
+const {Pool} = require('pg');
+const DBMigrate = require('db-migrate');
 
 module.exports = async () => {
     const container = await new GenericContainer("postgres")
@@ -9,40 +8,31 @@ module.exports = async () => {
         .withEnv('POSTGRES_PASSWORD', 'bifrost')
         .withExposedPorts(5432)
         .start();
-    process.env.DATABASE_URL = `postgresql://admin:bifrost@localhost:${container.getMappedPort(5432)}`;
 
 
     const pool = new Pool({
         user: 'admin',
         host: 'localhost',
+        database: "postgres",
         password: 'bifrost',
         port: container.getMappedPort(5432),
-        connectionTimeoutMillis: 10000
     });
 
-    // pool.on('error', error => {
-    //     console.error('error event on pool (%s)', error);
-    // });
-
-    console.log("Pool.connect(): ")
+    console.log("Pool.connect(): ");
     try {
-        const client = await pool.connect()
-        await client.query('SELECT NOW()')
+        const client = await pool.connect();
+        await client.query('CREATE DATABASE bifrost');
+        console.log("created database bifrost");
     } catch (e) {
-        console.error(e);
+        console.error("Error: " + e);
     }
 
+    process.env.DATABASE_URL = `postgresql://admin:bifrost@localhost:${container.getMappedPort(5432)}/bifrost`;
+    const bifrostMigrate = DBMigrate.getInstance(true);
 
-
-    // await dbmigrateBlank.createDatabase('bifrost');
-
-    // // \c bifrost
-    // console.log("Getting new DB instance and switch to 'bifrost' database");
-    // process.env.DATABASE_URL = `postgresql://admin:bifrost@localhost:${container.getMappedPort(5432)}/bifrost`;
-    // const bifrostMigrate = DBMigrate.getInstance(true);
-
-    // await bifrostMigrate.reset();
-    // await bifrostMigrate.up();
+    await bifrostMigrate.reset();
+    await bifrostMigrate.up();
 
     global.__POSTGRES__ = container;
+    global.__POSTGRES_PORT__ = container.getMappedPort(5432);
 };

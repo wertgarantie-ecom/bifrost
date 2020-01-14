@@ -3,6 +3,6 @@ describe('Postgres Tests', () => {
 
     test('get simple now() from postgres', async () => {
         const response = await pool.query('SELECT NOW()');
-        console.log(response);
+        console.log(response.rows);
     });
 });
