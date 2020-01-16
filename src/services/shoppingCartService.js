@@ -228,7 +228,7 @@ function cartSchema(clientId) {
 
 function newShoppingCart(clientId) {
     return {
-        "sessionId": "ea535e09-45e7-4eeb-8bc5-c01d2ad54f77",
+        "sessionId": uuid(),
         "clientId": clientId,
         "products": [],
         "confirmed": false

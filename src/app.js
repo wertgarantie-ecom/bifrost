@@ -12,6 +12,7 @@ const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV
 dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
+const validateSessionId = require('./routes/sessionIdValidator').validateSessionId;
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 
 app.use('/healthcheck', require('express-healthcheck')());
 
+app.use('/wertgarantie/', validateSessionId);
 app.use('/wertgarantie/', wertgarantieRoutes);
 
 // catch 404 and forward to error handler
