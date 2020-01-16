@@ -1,0 +1,5 @@
+Insert into checkout (sessionid, clientid, timestamp, traceid) VALUES ('eceb6820-c37e-4203-80a4-e9d90e74906b', 'f5b518e1-a3df-40ea-96c1-3299eae9b476', now(), 'be5727d5-1d73-40f8-a2c2-e2bc9679f416');
+INSERT INTO purchase (sessionid, wertgarantieproductid, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, activationcode) 
+	VALUES ('eceb6820-c37e-4203-80a4-e9d90e74906b', 10, '205b3ffa-db7c-432c-9b69-deb225a938fa', 139999, true, 'successfully purchased', 'Testprodukt', 12345, 54321, '1a5s8df4a56');
+	INSERT INTO purchase (sessionid, wertgarantieproductid, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, activationcode) 
+	VALUES ('eceb6820-c37e-4203-80a4-e9d90e74906b', 12, '205b3ffa-db7c-432c-9b69-deb225a938fa', 139999, true, 'successfully purchased', 'Testprodukt', 12346, 54322, '1a5s8df4a57');

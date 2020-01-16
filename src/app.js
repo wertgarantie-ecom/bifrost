@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var corsOptions = {
     origin: true,
-    credentials: true 
+    credentials: true
 };
 
 app.use(bodyParser.json());
@@ -45,24 +45,19 @@ app.use(function (req, res, next) {
 
 app.use(function (err, req, res, next) {
     if (err.name === 'JsonSchemaValidation') {
-        console.log(err.message);
-        res.status(400);
-
-        const responseData = {
+        err.status(400);
+        err.details = {
             receivedBody: req.body,
             validations: err.validations
         };
-
-        res.json(responseData);
-    } else {
-        // pass error to next error middleware handler
-        next(err);
-    }
-});
-
-app.use(function (err, req, res, next) {
-    if (err.name === 'ValidationError') {
+    } else if (err.name === 'ValidationError') {
         err.status = 400;
+    } else if (err.name === 'HeimdallConnectionError') {
+        err.status = 502;
+        err.details = err.message;
+    } else if (err.name === 'HeimdallClientError') {
+        err.status = 400;
+        err.details = err.message;
     }
     console.error(err);
     res.status(err.status || 500).json({errors: err.details});

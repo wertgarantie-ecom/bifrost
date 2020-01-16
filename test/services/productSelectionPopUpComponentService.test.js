@@ -2,7 +2,6 @@ const service = require('../../src/services/productSelectionPopUpComponentServic
 const heimdallTestProducts = require("./heimdallTestProducts").heimdallTestProducts;
 
 
-
 test("should return proper product response", async () => {
     const heimdallClientMock = {
         getProductOffers: () => Promise.resolve(heimdallTestProducts)
@@ -46,6 +45,5 @@ test("should return proper product response", async () => {
         taxFormatted: "(inkl. 1,11€ VerSt**)",
         top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
     }];
-    console.log(result);
     expect(result).toEqual(expectedResult);
 });

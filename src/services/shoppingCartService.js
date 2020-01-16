@@ -5,6 +5,7 @@ const axios = require('axios');
 const moment = require('moment');
 const signatureService = require('./signatureService');
 const AxiosLogger = require('axios-logger');
+const checkoutRepository = require('../repositories/CheckoutRepository');
 
 const instance = axios.create();
 instance.interceptors.request.use((request) => {
@@ -68,66 +69,34 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
     return clone;
 };
 
-function checkConfirmation(wertgarantieCart, result) {
-    if (!wertgarantieCart.confirmed) {
-        result.purchases.push({
-            success: false,
-            message: "Insurance proposal was not transmitted. Purchase was not confirmed by the user."
-        });
-        return false;
-    } else {
-        return true;
-    }
-}
-
-function findMatchingShopProduct(shopCartProducts, wertgarantieProduct, result) {
-    const shopProductIndex = findIndex(shopCartProducts, wertgarantieProduct);
-
-    if (shopProductIndex === -1) {
-        result.purchases.push({
-            wertgarantieProduct: {
-                deviceClass: wertgarantieProduct.deviceClass,
-                productId: wertgarantieProduct.wertgarantieProductId,
-                devicePrice: wertgarantieProduct.devicePrice,
-                model: wertgarantieProduct.shopProductName
-            },
-            availableShopProducts: shopCartProducts || [],
-            success: false,
-            message: "couldn't find matching product in shop cart for wertgarantie product"
-        });
-        return undefined;
-    }
-    return shopCartProducts.splice(shopProductIndex, 1)[0];
-}
-
-async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, result, client) {
+async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, client, idGenerator) {
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
     try {
         const response = await sendWertgarantieProductCheckout(client, requestBody);
+        // check Heimdall API ob im Fehlerfall was anderes zurück kommt
         const responseBody = response.data;
-        const purchase = {
+        return {
+            id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            shopProductId: wertgarantieProduct.shopProductId,
+            deviceClass: wertgarantieProduct.deviceClass,
+            devicePrice: wertgarantieProduct.devicePrice,
             success: true,
             message: "successfully transmitted insurance proposal",
-            contract_number: responseBody.payload.contract_number,
-            transaction_number: responseBody.payload.transaction_number,
-            activation_code: responseBody.payload.activation_code
+            shopProduct: wertgarantieProduct.shopProductName,
+            contractNumber: responseBody.payload.contract_number,
+            transactionNumber: responseBody.payload.transaction_number,
+            activationCode: responseBody.payload.activation_code
         };
-        result.purchases.push(purchase);
     } catch (e) {
-        result.purchases.push({
-            wertgarantieProduct: {
-                deviceClass: wertgarantieProduct.deviceClass,
-                productId: wertgarantieProduct.wertgarantieProductId,
-                devicePrice: wertgarantieProduct.devicePrice,
-                model: wertgarantieProduct.shopProductName
-            },
-            shopProduct: matchingShopProduct,
+        return {
+            id: idGenerator(),
+            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+            deviceClass: wertgarantieProduct.deviceClass,
+            devicePrice: wertgarantieProduct.devicePrice,
             success: false,
-            heimdallError: e.response.data,
-            message: "Failed to transmit insurance proposal. Call to Heimdall threw an error"
-        });
+            message: e.response.data,
+            shopProduct: wertgarantieProduct.shopProductName
+        };
     }
 }
 
@@ -148,9 +117,7 @@ function findClientForSecret(secret) {
     return _.find(clients, (client) => client.secrets.includes(secret));
 }
 
-// speichern
-// response rausgeben
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, clientSecret, httpClient = instance, date = new Date()) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, clientSecret, httpClient = instance, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
     const client = findClientForSecret(clientSecret);
     const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
     if (!client) {
@@ -162,28 +129,39 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
         throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
     }
-
-    const result = {
-        purchases: []
-    };
-
-    if (!checkConfirmation(wertgarantieCart, result)) {
-        return result;
+    if (!wertgarantieCart.confirmed) {
+        throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
 
-    await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
-        const matchingShopProduct = findMatchingShopProduct(purchasedShopProducts, wertgarantieProduct, result);
-        if (matchingShopProduct) {
-            return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, result, httpClient);
-        } else {
-            return Promise.resolve();
+    const purchaseResults = await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
+        const shopProductIndex = findIndex(purchasedShopProducts, wertgarantieProduct);
+        if (shopProductIndex === -1) {
+            return {
+                id: idGenerator(),
+                wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+                deviceClass: wertgarantieProduct.deviceClass,
+                devicePrice: wertgarantieProduct.devicePrice,
+                success: false,
+                message: "couldn't find matching product in shop cart for wertgarantie product",
+                shopProduct: wertgarantieProduct.shopProductName,
+                availableShopProducts: purchasedShopProducts || []
+            };
         }
+        const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
+        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, httpClient, idGenerator);
     }));
 
-    // speichern (in DB)
 
+    const checkoutData = {
+        sessionId: wertgarantieCart.sessionId,
+        traceId: "563e6720-5f07-42ad-99c3-a5104797f083",
+        clientId: wertgarantieCart.clientId,
+        purchases: [...purchaseResults]
+    };
 
-    return result;
+    await repository.persist(checkoutData);
+
+    return checkoutData;
 };
 
 function findIndex(shopCartProducts, wertgarantieProduct) {
@@ -241,6 +219,7 @@ function validateShoppingCart(shoppingCart, clientId, isRequired = false) {
 
 function cartSchema(clientId) {
     return Joi.object({
+        sessionId: Joi.string().guid(),
         clientId: Joi.string().guid().valid(clientId).error(new Error("clientId of product and cart must match")).required(),
         products: Joi.array().items(productSchema).required(),
         confirmed: Joi.boolean()
@@ -249,6 +228,7 @@ function cartSchema(clientId) {
 
 function newShoppingCart(clientId) {
     return {
+        "sessionId": "ea535e09-45e7-4eeb-8bc5-c01d2ad54f77",
         "clientId": clientId,
         "products": [],
         "confirmed": false
@@ -289,6 +269,15 @@ class InvalidWertgarantieCartSignatureError extends Error {
     }
 }
 
+class UnconfirmedShoppingCartError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = this.constructor.name;
+        Error.captureStackTrace(this, this.constructor);
+    }
+}
+
 exports.InvalidClientSecretError = InvalidClientSecretError;
 exports.InvalidPublicClientIdError = InvalidPublicClientIdError;
 exports.InvalidWertgarantieCartSignatureError = InvalidWertgarantieCartSignatureError;
+exports.UnconfirmedShoppingCartError = UnconfirmedShoppingCartError;

@@ -27,7 +27,6 @@ describe('should handle shopping cart confirmation', function () {
         agent.get('/wertgarantie/shoppingCart/')
             .expect(function (res) {
                 if (res.body[clientId].confirmed !== true) {
-                    console.log(res.body);
                     throw new Error("shopping cart not confirmed!")
                 }
             })

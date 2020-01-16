@@ -1,5 +1,6 @@
 orbs:
   heroku: circleci/heroku@0.0.8
+  node: circleci/node@1.1
 version: 2.1
 workflows:
   version: 2
@@ -11,33 +12,18 @@ workflows:
             - build
 jobs:
   build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:latest
-
-      # Specify services dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+    machine: true
     steps:
       - checkout
+      - node/install:
+          node-version: 12.13.1
+          npm-version: 6.13.6
+          install-yarn: false
+      - node/with-cache:
+          steps:
+            - run: npm install
+      - run: npm run test-all
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: npm install-test
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
   deploy:
     executor: heroku/default # Uses the basic buildpack-deps image, which has the prerequisites for installing heroku's CLI.
     steps:

@@ -4,6 +4,7 @@ const signatureService = require('../../src/services/signatureService');
 const InvalidClientSecretError = require('../../src/services/shoppingCartService').InvalidClientSecretError;
 const InvalidPublicClientIdError = require('../../src/services/shoppingCartService').InvalidPublicClientIdError;
 const InvalidWertgarantieCartSignatureError = require('../../src/services/shoppingCartService').InvalidWertgarantieCartSignatureError;
+const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartService').UnconfirmedShoppingCartError;
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
 
@@ -157,6 +158,7 @@ test("added product should always reject confirmation", () => {
 
 test("shopping cart checkout should checkout wertgarantie product if referenced shop product was also purchased", async () => {
     const wertgarantieShoppingCart = {
+        sessionId: "0644a4ba-a44f-45b2-b914-622b5648b205",
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         products: [
             {
@@ -196,7 +198,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, new Date(2019, 5, 1, 8, 34, 34, 345));
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), new Date(2019, 5, 1, 8, 34, 34, 345), mockRepository);
 
     expect(mockClient.mock.calls[0][0].data).toEqual({
         productId: "2",
@@ -218,23 +220,30 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         payment_type: 'bank_transfer',
         terms_and_conditions_accepted: true
     });
-    const resolvedResult = await Promise.resolve(result);
-    await expect(resolvedResult).toEqual({
-        "purchases": [
-            {
-                "wertgarantieProductId": "2",
-                "success": true,
-                "message": "successfully transmitted insurance proposal",
-                "contract_number": "28850277",
-                "transaction_number": "28850279",
-                "activation_code": undefined
-            }
-        ]
-    });
+    await expect(result).toEqual(
+        {
+            "sessionId": "0644a4ba-a44f-45b2-b914-622b5648b205",
+            "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
+            "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+            "purchases": [
+                {
+                    "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
+                    "wertgarantieProductId": "2",
+                    "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    "devicePrice": "1000",
+                    "success": true,
+                    "message": "successfully transmitted insurance proposal",
+                    "shopProduct": "IPhone X",
+                    "contractNumber": "28850277",
+                    "transactionNumber": "28850279"
+                }
+            ]
+        });
 });
 
 test("on checkout call shop price differs from wertgarantie price", async () => {
     const wertgarantieShoppingCart = {
+        sessionId: "619f7fda-d77e-4be1-b73c-db145402bcab",
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         products: [
             {
@@ -265,30 +274,36 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), undefined, mockRepository);
     expect(result).toEqual({
+        "sessionId": "619f7fda-d77e-4be1-b73c-db145402bcab",
+        "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
+        "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         "purchases": [
             {
-                "wertgarantieProduct": {
-                    "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
-                    "productId": "2",
-                    "devicePrice": "1000",
-                    "model": "IPhone X"
-                },
+                "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
+                "wertgarantieProductId": "2",
+                "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                "devicePrice": "1000",
+                "success": false,
+                "message": "couldn't find matching product in shop cart for wertgarantie product",
+                "shopProduct": "IPhone X",
                 "availableShopProducts": [
                     {
                         "price": "1200.93",
                         "manufacturer": "Apple Inc",
                         "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
-                        "model": "IPhone X",
+                        "model": "IPhone X"
                     }
-                ],
-                "success": false,
-                "message": "couldn't find matching product in shop cart for wertgarantie product"
+                ]
             }
         ]
     });
 });
+
+const mockRepository = {
+    persist: () => undefined
+};
 
 test("failing heimdall checkout call should be handled gracefully", async () => {
     const wertgarantieShoppingCart = {
@@ -327,10 +342,9 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
-    const result = await Promise.resolve(resultPromise);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, undefined, undefined, mockRepository);
     expect(result.purchases.length).toEqual(1);
-    expect(result.purchases[0].message).toEqual("Failed to transmit insurance proposal. Call to Heimdall threw an error");
+    expect(result.purchases[0].message).toEqual("failing call");
 });
 
 
@@ -347,6 +361,7 @@ test("checkout call with multiple products", async () => {
         }
     });
     const wertgarantieShoppingCart = {
+        sessionId: "a367f1d9-9eeb-46b7-ba09-397e5a7e1ecc",
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         products: [
             {
@@ -386,29 +401,41 @@ test("checkout call with multiple products", async () => {
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
-    const result = await Promise.resolve(resultPromise);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
     await expect(result).toEqual({
+        "sessionId": "a367f1d9-9eeb-46b7-ba09-397e5a7e1ecc",
+        "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
+        "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         "purchases": [
             {
+                "id": "a409e32a-053d-406c-b8c5-016bbab413dc",
                 "wertgarantieProductId": "2",
+                "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                "devicePrice": "1000",
                 "success": true,
                 "message": "successfully transmitted insurance proposal",
-                "contract_number": "28850277",
-                "transaction_number": "28850279",
-                "activation_code": undefined
+                "shopProduct": "Super Bike 3000",
+                "contractNumber": "28850277",
+                "transactionNumber": "28850279"
             },
             {
+                "id": "37347358-1fc1-4840-992a-5d30bac1641d",
                 "wertgarantieProductId": "2",
+                "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                "devicePrice": "1000",
                 "success": true,
                 "message": "successfully transmitted insurance proposal",
-                "contract_number": "28850277",
-                "transaction_number": "28850279",
-                "activation_code": undefined
+                "shopProduct": "Super Bike 3000",
+                "contractNumber": "28850277",
+                "transactionNumber": "28850279"
             }
         ]
     });
 });
+
+function generateIds(ids) {
+    return () => ids.pop();
+}
 
 test("checkout call with multiple products where one is not found in shop cart", async () => {
     const mockClient = jest.fn(() => {
@@ -424,6 +451,7 @@ test("checkout call with multiple products where one is not found in shop cart",
     });
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        sessionId: "d5d6e839-cf3c-433f-8159-9ed648fc2240",
         products: [
             {
                 wertgarantieProductId: "2",
@@ -462,18 +490,32 @@ test("checkout call with multiple products where one is not found in shop cart",
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const resultPromise = shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient);
-    const result = await Promise.resolve(resultPromise);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
     await expect(result).toEqual(
         {
+            "sessionId": "d5d6e839-cf3c-433f-8159-9ed648fc2240",
+            "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
+            "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
             "purchases": [
                 {
-                    "wertgarantieProduct": {
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                        "productId": "2",
-                        "devicePrice": "1200",
-                        "model": "Super Bike 3000"
-                    },
+                    "id": "37347358-1fc1-4840-992a-5d30bac1641d",
+                    "wertgarantieProductId": "2",
+                    "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    "devicePrice": "1000",
+                    "success": true,
+                    "message": "successfully transmitted insurance proposal",
+                    "shopProduct": "Super Bike 3000",
+                    "contractNumber": "28850277",
+                    "transactionNumber": "28850279"
+                },
+                {
+                    "id": "a409e32a-053d-406c-b8c5-016bbab413dc",
+                    "wertgarantieProductId": "2",
+                    "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    "devicePrice": "1200",
+                    "success": false,
+                    "message": "couldn't find matching product in shop cart for wertgarantie product",
+                    "shopProduct": "Super Bike 3000",
                     "availableShopProducts": [
                         {
                             "price": "1000",
@@ -481,16 +523,7 @@ test("checkout call with multiple products where one is not found in shop cart",
                             "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                             "model": "Super Bike 3000"
                         }
-                    ],
-                    "success": false,
-                    "message": "couldn't find matching product in shop cart for wertgarantie product"
-                },
-                {
-                    "wertgarantieProductId": "2",
-                    "success": true,
-                    "message": "successfully transmitted insurance proposal",
-                    "contract_number": "28850277",
-                    "transaction_number": "28850279"
+                    ]
                 }
             ]
         });
@@ -526,9 +559,12 @@ test("checkout call executed without confirmation", async () => {
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId);
-    expect(result.purchases[0].message).toEqual("Insurance proposal was not transmitted. Purchase was not confirmed by the user.");
-    expect(result.purchases[0].success).toBe(false);
+    try {
+        await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId);
+        expect.fail();
+    } catch (e) {
+        expect(e).toBeInstanceOf(UnconfirmedShoppingCartError);
+    }
 });
 
 test("checkout call should reject invalid client secret", async () => {
