@@ -1,5 +1,11 @@
 {
-  "dev": {},
+  "defaultEnv": "local",
+  "local": {
+    "driver": "pg",
+    "user": "admin",
+    "password": "bifrost",
+    "host": "localhost"
+  },
   "sql-file": true
 }
 

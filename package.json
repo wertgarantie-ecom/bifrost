@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "jest",
-    "setup-local-db": "NODE_ENV=local db-migrate db:create bifrost && npm run migrate-up",
+    "setup-local-db": "NODE_ENV=local db-migrate db:drop bifrost; db-migrate db:create bifrost && npm run migrate-up",
     "integration-test": "jest -c jest.config.integration.js",
     "test-all": "npm run test && npm run integration-test",
     "prestart": "npm run migrate-up",
