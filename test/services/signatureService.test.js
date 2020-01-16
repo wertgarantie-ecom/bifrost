@@ -148,24 +148,3 @@ test("verify shoppingCart", () => {
     expect(result).toBe(true);
 });
 
-test("get signature for string", () => {
-    const signedShoppingCart = `{
-        "shoppingCart": {
-          "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-          "products": [
-            {
-              "wertgarantieProductId": 10,
-              "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-              "devicePrice": 139999,
-              "deviceCurrency": "EUR",
-              "shopProductName": "SuperBike 3000",
-              "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
-            }
-          ],
-          "confirmed": true
-        },
-        "signature": "9S1OpUjp3BVZpRQM8Lkuvz5nFYwuDVetIKrPVg5yQOo="
-      }`;
-    const shoppingCart = JSON.parse(signedShoppingCart).shoppingCart;
-    console.log(JSON.stringify(signShoppingCart(shoppingCart), null, 2));
-})

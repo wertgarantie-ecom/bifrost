@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS checkout (
 );
 
 CREATE TABLE IF NOT EXISTS purchase (
-      purchaseId SERIAL PRIMARY KEY,
+      id UUID PRIMARY KEY,
       sessionId UUID NOT NULL,
       wertgarantieProductId INTEGER NOT NULL,
       deviceClass UUID NOT NULL,

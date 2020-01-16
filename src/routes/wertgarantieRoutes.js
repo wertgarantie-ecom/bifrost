@@ -4,6 +4,7 @@ const googleController = require("../controllers/googleController.js");
 const productController = require("../controllers/productController.js");
 const shoppingCartController = require("../controllers/shoppingCartController.js");
 const confirmationController = require("../controllers/confirmationController.js");
+const purchaseController = require("../controllers/purchaseController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
 
@@ -17,6 +18,9 @@ router.delete("/components/confirmation/product", confirmationController.removeP
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
+
+// purchases
+router.get("/purchases/:sessionId", purchaseController.findPurchaseById);
 
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
