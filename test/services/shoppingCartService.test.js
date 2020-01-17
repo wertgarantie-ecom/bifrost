@@ -184,23 +184,24 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const mockClient = jest.fn(() => {
-        return {
-            data: {
+
+    const mockHeimdallClient = {
+        sendWertgarantieProductCheckout: jest.fn(() => {
+            return {
                 payload: {
                     contract_number: "28850277",
                     transaction_number: "28850279",
                     message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
                 }
             }
-        }
-    });
+        })
+    };
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), new Date(2019, 5, 1, 8, 34, 34, 345), mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), new Date(2019, 5, 1, 8, 34, 34, 345), mockRepository);
 
-    expect(mockClient.mock.calls[0][0].data).toEqual({
+    expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][0]).toEqual({
         productId: "2",
         customer_company: 'INNOQ',
         customer_salutation: 'Herr',
@@ -220,6 +221,8 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         payment_type: 'bank_transfer',
         terms_and_conditions_accepted: true
     });
+    expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][1]).toEqual(secretClientId);
+
     await expect(result).toEqual(
         {
             "sessionId": "0644a4ba-a44f-45b2-b914-622b5648b205",

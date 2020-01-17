@@ -51,7 +51,6 @@ exports.getProductOffers = async function getProductOffers(clientId, deviceClass
     const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +
         "&device_purchase_date=" + date.toLocaleDateString();
-    const secretClientId = clientId //mapping von public auf secret fehlt noch
     const bearerToken = await getBearerToken(secretClientId, client);
     const options = {
         headers: {'Accept': 'application/json', "Authorization": bearerToken}
@@ -80,17 +79,34 @@ exports.getProductOffers = async function getProductOffers(clientId, deviceClass
 exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(data, secretClientId, client = instance) {
     const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + data.productId + "/checkout";
     const bearerToken = await getBearerToken(secretClientId, client);
-    return await client({
-        method: 'post',
-        url: heimdallCheckoutUrl,
-        data: data,
-        withCredentials: true,
-        headers: {
-            "Authorization": "12345",
-            "Content-Type": bearerToken
+    try {
+        const request = {
+            method: 'post',
+            url: heimdallCheckoutUrl,
+            data: data,
+            withCredentials: true,
+            headers: {
+                "Authorization": bearerToken,
+                "Content-Type": "application/json"
+            }
+        };
+        const response = await client(request);
+        responsePayload = response.data;
+    } catch (e) {
+        if (e.response) {
+            throw new HeimdallClientError(`Could not checkout wertgarantie product: ${JSON.stringify(data)}. Heimdall responded with: ${JSON.stringify(e.response.data)}`);
+        } else {
+            throw new HeimdallConnectionError(`could not connect to heimdall: ${request}`);
         }
-    });
-}
+    }
+
+    if (!responsePayload) {
+        const error = new Error("No products have been defined for provided device class: " + deviceClass);
+        error.status = 400;
+        throw error;
+    }
+    return responsePayload;
+};
 
 
 class HeimdallConnectionError extends Error {

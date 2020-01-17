@@ -48,9 +48,7 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
 async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, secretClientId) {
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
     try {
-        const response = await heimdallClient.sendWertgarantieProductCheckout(requestBody, secretClientId);
-        // check Heimdall API ob im Fehlerfall was anderes zurück kommt
-        const responseBody = response.data;
+        const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, secretClientId);
         return {
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
@@ -70,7 +68,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
             deviceClass: wertgarantieProduct.deviceClass,
             devicePrice: wertgarantieProduct.devicePrice,
             success: false,
-            message: e.response.data,
+            message: e.message,
             shopProduct: wertgarantieProduct.shopProductName
         };
     }

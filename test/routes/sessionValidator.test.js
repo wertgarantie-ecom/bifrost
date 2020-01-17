@@ -21,17 +21,17 @@ test("should remove cookies for successful insurance purchases", async () => {
                 "confirmed": false
             }
         }
-    }
+    };
 
     const mockRepository = {
         findBySessionId: jest.fn(() => true)
-    }
+    };
 
     const mockResponse = {
         clearCookie: jest.fn(() => {
             
         })
-    }
+    };
     await sessionIdValidator.validateSessionId(mockRequest, mockResponse, () => {}, mockRepository);
     expect(mockResponse.clearCookie).toBeCalled();
     expect(mockRequest.signedCookies).toEqual({});
