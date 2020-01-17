@@ -1,34 +1,10 @@
 const Joi = require('joi');
 const uuid = require('uuid');
 const _ = require('lodash');
-const axios = require('axios');
 const moment = require('moment');
 const signatureService = require('./signatureService');
-const AxiosLogger = require('axios-logger');
 const checkoutRepository = require('../repositories/CheckoutRepository');
-
-const instance = axios.create();
-instance.interceptors.request.use((request) => {
-    return AxiosLogger.requestLogger(request, {
-        dateFormat: 'HH:MM:ss',
-        status: true,
-        header: true,
-    });
-}, (error) => {
-    return AxiosLogger.errorLogger(error);
-});
-
-instance.interceptors.response.use((response) => {
-    return AxiosLogger.responseLogger(response, {
-        dateFormat: 'HH:MM:ss',
-        status: true,
-        header: true,
-    });
-}, (error) => {
-    return AxiosLogger.errorLogger(error);
-});
-
-// instance.interceptors.response.use(AxiosLogger.responseLogger, AxiosLogger.errorLogger);
+const defaultHeimdallClient = require('../services/heimdallClient');
 
 const productSchema = Joi.object({
     wertgarantieProductId: Joi.number().integer().required(),
@@ -69,10 +45,10 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
     return clone;
 };
 
-async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, client, idGenerator) {
+async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, secretClientId) {
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
     try {
-        const response = await sendWertgarantieProductCheckout(client, requestBody);
+        const response = await heimdallClient.sendWertgarantieProductCheckout(requestBody, secretClientId);
         // check Heimdall API ob im Fehlerfall was anderes zurück kommt
         const responseBody = response.data;
         return {
@@ -117,11 +93,11 @@ function findClientForSecret(secret) {
     return _.find(clients, (client) => client.secrets.includes(secret));
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, clientSecret, httpClient = instance, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
-    const client = findClientForSecret(clientSecret);
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
+    const client = findClientForSecret(secretClientId);
     const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
     if (!client) {
-        throw new InvalidClientSecretError("No client available for given secret: " + clientSecret);
+        throw new InvalidClientSecretError("No client available for given secret: " + secretClientId);
     }
     if (!client.publicClientIds.includes(wertgarantieCart.clientId)) {
         throw new InvalidPublicClientIdError("The client ID of Wertgarantie's shopping cart is invalid: " + wertgarantieCart.clientId);
@@ -148,7 +124,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, httpClient, idGenerator);
+        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, secretClientId);
     }));
 
 
@@ -195,20 +171,6 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         payment_type: "bank_transfer",
         terms_and_conditions_accepted: true
     }
-}
-
-async function sendWertgarantieProductCheckout(client, data) {
-    const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + data.productId + "/checkout";
-    return await client({
-        method: 'post',
-        url: heimdallCheckoutUrl,
-        data: data,
-        withCredentials: true,
-        headers: {
-            "Authorization": "12345",
-            'Content-Type': 'application/json'
-        }
-    });
 }
 
 function validateShoppingCart(shoppingCart, clientId, isRequired = false) {
