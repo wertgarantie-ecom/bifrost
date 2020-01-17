@@ -8,6 +8,20 @@ const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartSer
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
 
+const mockHeimdallClientSuccess = () => {
+    return {
+        sendWertgarantieProductCheckout: jest.fn(() => {
+            return {
+                payload: {
+                    contract_number: "28850277",
+                    transaction_number: "28850279",
+                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+                }
+            }
+        })
+    }
+};
+
 function validProduct() {
     return {
         wertgarantieProductId: 1234,
@@ -184,21 +198,8 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-
-    const mockHeimdallClient = {
-        sendWertgarantieProductCheckout: jest.fn(() => {
-            return {
-                payload: {
-                    contract_number: "28850277",
-                    transaction_number: "28850279",
-                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
-                }
-            }
-        })
-    };
-
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
+    const mockHeimdallClient = mockHeimdallClientSuccess();
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), new Date(2019, 5, 1, 8, 34, 34, 345), mockRepository);
 
     expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][0]).toEqual({
@@ -335,34 +336,32 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const mockClient = jest.fn(() => {
-        const error = new Error("dummy error");
-        error.response = {
-            data: "failing call"
-        };
-        throw error;
-    });
+    const mockHeimdallClient = {
+        sendWertgarantieProductCheckout: jest.fn(() => {
+            throw new Error("failing call");
+        })
+    };
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, undefined, undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, undefined, undefined, mockRepository);
     expect(result.purchases.length).toEqual(1);
     expect(result.purchases[0].message).toEqual("failing call");
 });
 
 
 test("checkout call with multiple products", async () => {
-    const mockClient = jest.fn(() => {
-        return {
-            data: {
+    const mockHeimdallClient = {
+        sendWertgarantieProductCheckout: jest.fn(() => {
+            return {
                 payload: {
                     contract_number: "28850277",
                     transaction_number: "28850279",
                     message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
                 }
             }
-        }
-    });
+        })
+    };
     const wertgarantieShoppingCart = {
         sessionId: "a367f1d9-9eeb-46b7-ba09-397e5a7e1ecc",
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
@@ -404,7 +403,7 @@ test("checkout call with multiple products", async () => {
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
     await expect(result).toEqual({
         "sessionId": "a367f1d9-9eeb-46b7-ba09-397e5a7e1ecc",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
@@ -441,17 +440,7 @@ function generateIds(ids) {
 }
 
 test("checkout call with multiple products where one is not found in shop cart", async () => {
-    const mockClient = jest.fn(() => {
-        return {
-            data: {
-                payload: {
-                    contract_number: "28850277",
-                    transaction_number: "28850279",
-                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
-                }
-            }
-        }
-    });
+    
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         sessionId: "d5d6e839-cf3c-433f-8159-9ed648fc2240",
@@ -492,8 +481,9 @@ test("checkout call with multiple products where one is not found in shop cart",
     const secretClientId = "bikesecret1";
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
+    const mockHeimdallClient = mockHeimdallClientSuccess();
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
     await expect(result).toEqual(
         {
             "sessionId": "d5d6e839-cf3c-433f-8159-9ed648fc2240",

@@ -24,90 +24,71 @@ instance.interceptors.response.use((response) => {
 });
 
 async function getBearerToken(clientId, client) {
-    const url = heimdallUri + "/api/v1/auth/client/" + clientId;
-    const options = {
-        headers: {'Accept': 'application/json'}
-    };
-    let responsePayload;
-    try {
-        const response = await client.get(url, options);
-        responsePayload = response.data;
-    } catch (e) {
-        if (e.response) {
-            throw new HeimdallClientError(`Could not retrieve bearer token from heimdall for client id: ${clientId}`);
-        } else {
-            throw new HeimdallConnectionError(`could not conntect to heimdall GET ${url} with options: ${JSON.stringify(options)}. Error message: ${e.message}`);
+    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + clientId;
+    const request = {
+        method: 'get',
+        url: heimdallAuthUrl,
+        withCredentials: true,
+        headers: {
+            "Content-Type": "application/json"
         }
-    }
-    if (!responsePayload.payload.access_Token) {
-        const error = new Error(`Could not retrieve bearer token from heimdall for client id: ${clientId}`);
-        error.status = 400;
-        throw error;
-    }
-    return responsePayload.payload.access_Token;
+    };
+    return sendHeimdallRequest(request, client)
 }
 
-exports.getProductOffers = async function getProductOffers(clientId, deviceClass, devicePrice, date = new Date(), client = axios) {
-    const url = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
+exports.getProductOffers = async function getProductOffers(secretClientId, deviceClass, devicePrice, date = new Date(), client = axios) {
+    const heimdallProductOffersUrl = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +
         "&device_purchase_date=" + date.toLocaleDateString();
     const bearerToken = await getBearerToken(secretClientId, client);
-    const options = {
-        headers: {'Accept': 'application/json', "Authorization": bearerToken}
-    };
-    let responsePayload;
-    try {
-        const response = await client.get(url, options);
-        responsePayload = response.data;
-    } catch (e) {
-        if (e.response) {
-            throw new HeimdallClientError(`could not get product offers for provided arguments: deviceClass: ${deviceClass}, devicePrice: ${devicePrice}`);
-        } else {
-            throw new HeimdallConnectionError(`could not conntect to heimdall GET ${url} with options: ${JSON.stringify(options)}. Error message: ${e.message}`);
+    const request = {
+        method: 'get',
+        url: heimdallProductOffersUrl,
+        withCredentials: true,
+        headers: {
+            "Authorization": bearerToken,
+            "Content-Type": "application/json"
         }
-    }
-
-    if (!responsePayload) {
-        const error = new Error("No products have been defined for provided device class: " + deviceClass);
-        error.status = 400;
-        throw error;
-    }
-    return responsePayload;
+    };
+    return sendHeimdallRequest(request, client);
 };
-
 
 exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(data, secretClientId, client = instance) {
     const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + data.productId + "/checkout";
     const bearerToken = await getBearerToken(secretClientId, client);
+    const request = {
+        method: 'post',
+        url: heimdallCheckoutUrl,
+        data: data,
+        withCredentials: true,
+        headers: {
+            "Authorization": bearerToken,
+            "Content-Type": "application/json"
+        }
+    };
+    return sendHeimdallRequest(request, client)
+};
+
+async function sendHeimdallRequest(request, client) {
+    let responsePayload;
     try {
-        const request = {
-            method: 'post',
-            url: heimdallCheckoutUrl,
-            data: data,
-            withCredentials: true,
-            headers: {
-                "Authorization": bearerToken,
-                "Content-Type": "application/json"
-            }
-        };
         const response = await client(request);
         responsePayload = response.data;
     } catch (e) {
         if (e.response) {
-            throw new HeimdallClientError(`Could not checkout wertgarantie product: ${JSON.stringify(data)}. Heimdall responded with: ${JSON.stringify(e.response.data)}`);
+            throw new HeimdallClientError(`Heimdall could not process the following request: ${JSON.stringify(request)}. Heimdall responded with: ${JSON.stringify(e.response.data)}`);
         } else {
             throw new HeimdallConnectionError(`could not connect to heimdall: ${request}`);
         }
     }
 
     if (!responsePayload) {
-        const error = new Error("No products have been defined for provided device class: " + deviceClass);
+        const error = new Error("Unexpected empty response from Heimdall.");
         error.status = 400;
         throw error;
     }
     return responsePayload;
-};
-
+}
 
 class HeimdallConnectionError extends Error {
     constructor(message) {
