@@ -1,8 +1,6 @@
 const addProductToShoppingCartWithOrderId = require('../../src/services/shoppingCartService').addProductToShoppingCartWithOrderId;
 const shoppingCartService = require('../../src/services/shoppingCartService');
 const signatureService = require('../../src/services/signatureService');
-const InvalidClientSecretError = require('../../src/services/shoppingCartService').InvalidClientSecretError;
-const InvalidPublicClientIdError = require('../../src/services/shoppingCartService').InvalidPublicClientIdError;
 const InvalidWertgarantieCartSignatureError = require('../../src/services/shoppingCartService').InvalidWertgarantieCartSignatureError;
 const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartService').UnconfirmedShoppingCartError;
 const ValidationError = require('joi').ValidationError;
@@ -197,7 +195,11 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     ];
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
-
+    const client = {
+            "name": "bikeShop", 
+            "publicClientIds": ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"], 
+            "secrets": ["bikesecret1"]
+        };
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), new Date(2019, 5, 1, 8, 34, 34, 345), mockRepository);
@@ -222,7 +224,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         payment_type: 'bank_transfer',
         terms_and_conditions_accepted: true
     });
-    expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][1]).toEqual(secretClientId);
+    expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][1]).toEqual(client);
 
     await expect(result).toEqual(
         {
@@ -557,29 +559,6 @@ test("checkout call executed without confirmation", async () => {
         expect.fail();
     } catch (e) {
         expect(e).toBeInstanceOf(UnconfirmedShoppingCartError);
-    }
-});
-
-test("checkout call should reject invalid client secret", async () => {
-    try {
-        await shoppingCartService.checkoutShoppingCart(undefined, undefined, {}, "invalid");
-        expect.fail();
-    } catch (e) {
-        expect(e).toBeInstanceOf(InvalidClientSecretError);
-    }
-});
-
-test("checkout call should reject invalid public client id", async () => {
-    try {
-        const wertgarantieCart = {
-            shoppingCart: {
-                clientId: "invalidClientId"
-            }
-        };
-        await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
-        expect.fail();
-    } catch (e) {
-        expect(e).toBeInstanceOf(InvalidPublicClientIdError);
     }
 });
 

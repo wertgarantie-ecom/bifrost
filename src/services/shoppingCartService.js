@@ -5,6 +5,7 @@ const moment = require('moment');
 const signatureService = require('./signatureService');
 const checkoutRepository = require('../repositories/CheckoutRepository');
 const defaultHeimdallClient = require('../services/heimdallClient');
+const clientService = require('../services/clientService');
 
 const productSchema = Joi.object({
     wertgarantieProductId: Joi.number().integer().required(),
@@ -45,10 +46,10 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, cli
     return clone;
 };
 
-async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, secretClientId) {
+async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, client) {
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
     try {
-        const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, secretClientId);
+        const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, client);
         return {
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
@@ -74,32 +75,9 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     }
 }
 
-const clients = [
-    {
-        name: "bikeShop",
-        secrets: ["bikesecret1"],
-        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
-    },
-    {
-        name: "handyShop",
-        secrets: ["handysecret1"],
-        publicClientIds: ["bikeclientId1"]
-    }
-];
-
-function findClientForSecret(secret) {
-    return _.find(clients, (client) => client.secrets.includes(secret));
-}
-
 exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
-    const client = findClientForSecret(secretClientId);
+    const client = clientService.findClientForSecret(secretClientId);
     const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
-    if (!client) {
-        throw new InvalidClientSecretError("No client available for given secret: " + secretClientId);
-    }
-    if (!client.publicClientIds.includes(wertgarantieCart.clientId)) {
-        throw new InvalidPublicClientIdError("The client ID of Wertgarantie's shopping cart is invalid: " + wertgarantieCart.clientId);
-    }
     if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
         throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
     }
@@ -122,7 +100,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, secretClientId);
+        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, client);
     }));
 
 
@@ -205,14 +183,6 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(o
     return shoppingCart;
 };
 
-class InvalidClientSecretError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = this.constructor.name;
-        Error.captureStackTrace(this, this.constructor);
-    }
-}
-
 class InvalidPublicClientIdError extends Error {
     constructor(message) {
         super(message);
@@ -237,7 +207,6 @@ class UnconfirmedShoppingCartError extends Error {
     }
 }
 
-exports.InvalidClientSecretError = InvalidClientSecretError;
 exports.InvalidPublicClientIdError = InvalidPublicClientIdError;
 exports.InvalidWertgarantieCartSignatureError = InvalidWertgarantieCartSignatureError;
 exports.UnconfirmedShoppingCartError = UnconfirmedShoppingCartError;

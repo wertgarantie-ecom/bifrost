@@ -1,9 +1,11 @@
 const productImageService = require('./productImageService');
 const defaultHeimdallClient = require("./heimdallClient");
 const productService = require("./heimdallProductOfferService");
+const clientService = require('../services/clientService');
 
 exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId, heimdallClient = defaultHeimdallClient, imageService = productImageService) {
-    const content = await heimdallClient.getProductOffers(clientId, deviceClass, devicePrice);
+    const client = clientService.findClientForPublicClientId(clientId);
+    const content = await heimdallClient.getProductOffers(client, deviceClass, devicePrice);
     const products = [];
     let imageLinks = [];
     imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length);

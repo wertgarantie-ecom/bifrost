@@ -64,6 +64,14 @@ describe("Checkout Shopping Cart", () => {
         const wertgarantieProductId = `10`;
 
         nock(process.env.HEIMDALL_URI)
+            .get("/api/v1/auth/client/bikesecret1")
+            .reply(200, {
+                payload: {
+                    access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
+                }
+            })
+
+        nock(process.env.HEIMDALL_URI)
             .post("/api/v1/products/" + wertgarantieProductId + "/checkout")
             .reply(200, {
                 payload: {
@@ -115,6 +123,8 @@ describe("Checkout Shopping Cart", () => {
             })
             .expect(200)
             .expect((result) => {
+                console.log(JSON.stringify(result.body, null, 2));
+                console.log(JSON.stringify(result.body.purchases[0].message, null, 2));
                 const body = result.body;
                 const purchase = body.purchases[0];
                 expect(body.sessionId).toEqual("7578f388-d79f-40e4-a969-50f9748f2c22");

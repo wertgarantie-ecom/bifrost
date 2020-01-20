@@ -6,6 +6,11 @@ const unknownDeviceClassResponse = require('./heimdallResponses').unknownDeviceC
 
 test('should return proper product data', async () => {
     const date = new Date().toLocaleDateString();
+
+    nock(process.env.HEIMDALL_URI)
+        .get("/api/v1/auth/client/5209d6ea-1a6e-11ea-9f8d-778f0ad9137f")
+        
+
     nock(process.env.HEIMDALL_URI)
         .get("/api/v1/product-offers?device_class=fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d&device_purchase_price=1200&device_purchase_date=" + date)
         .reply(200, getProductOffersResponse);
@@ -14,7 +19,8 @@ test('should return proper product data', async () => {
     return await request(app).get('/wertgarantie/components/selection-popup').query({
         deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
         devicePrice: 1200,
-        productId: 11
+        productId: 11,
+        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"
     })
         .expect(function (res) {
             if (res.status !== expectedStatusCode) {

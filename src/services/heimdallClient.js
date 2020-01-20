@@ -23,8 +23,8 @@ instance.interceptors.response.use((response) => {
     return AxiosLogger.errorLogger(error);
 });
 
-async function getBearerToken(clientId, client) {
-    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + clientId;
+async function getBearerToken(client, hpptClient) {
+    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + client.secrets[0];
     const request = {
         method: 'get',
         url: heimdallAuthUrl,
@@ -33,14 +33,14 @@ async function getBearerToken(clientId, client) {
             "Content-Type": "application/json"
         }
     };
-    return sendHeimdallRequest(request, client)
+    return sendHeimdallRequest(request, hpptClient)
 }
 
-exports.getProductOffers = async function getProductOffers(secretClientId, deviceClass, devicePrice, date = new Date(), client = axios) {
+exports.getProductOffers = async function getProductOffers(client, deviceClass, devicePrice, date = new Date(), httpClient = axios) {
     const heimdallProductOffersUrl = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +
         "&device_purchase_date=" + date.toLocaleDateString();
-    const bearerToken = await getBearerToken(secretClientId, client);
+    const bearerToken = await getBearerToken(client, httpClient);
     const request = {
         method: 'get',
         url: heimdallProductOffersUrl,
@@ -50,12 +50,12 @@ exports.getProductOffers = async function getProductOffers(secretClientId, devic
             "Content-Type": "application/json"
         }
     };
-    return sendHeimdallRequest(request, client);
+    return sendHeimdallRequest(request, httpClient);
 };
 
-exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(data, secretClientId, client = instance) {
+exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(data, client, httpClient = instance) {
     const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + data.productId + "/checkout";
-    const bearerToken = await getBearerToken(secretClientId, client);
+    const bearerToken = await getBearerToken(client, httpClient);
     const request = {
         method: 'post',
         url: heimdallCheckoutUrl,
@@ -66,7 +66,7 @@ exports.sendWertgarantieProductCheckout = async function sendWertgarantieProduct
             "Content-Type": "application/json"
         }
     };
-    return sendHeimdallRequest(request, client)
+    return sendHeimdallRequest(request, httpClient)
 };
 
 async function sendHeimdallRequest(request, client) {
