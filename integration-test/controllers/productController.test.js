@@ -9,6 +9,11 @@ test('should return proper product data', async () => {
 
     nock(process.env.HEIMDALL_URI)
         .get("/api/v1/auth/client/5209d6ea-1a6e-11ea-9f8d-778f0ad9137f")
+        .reply(200, {
+            payload: {
+                access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
+            }
+        });
         
 
     nock(process.env.HEIMDALL_URI)
@@ -66,11 +71,19 @@ test('should return proper product data', async () => {
 });
 
 test('should throw error if device class does not exist', async () => {
-    const date = new Date().toLocaleDateString();
+    nock(process.env.HEIMDALL_URI)
+        .get("/api/v1/auth/client/5209d6ea-1a6e-11ea-9f8d-778f0ad9137f")
+        .reply(200, {
+            payload: {
+                access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
+            }
+        });
+
     nock(process.env.HEIMDALL_URI)
         .get("/api/v1/product-offers?device_class=fda71hf6-4ff8-4579-9cc0-0a3ccb8d6f2e&device_purchase_price=1200&device_purchase_date=" + date)
         .reply(400, unknownDeviceClassResponse);
-
+        
+    const date = new Date().toLocaleDateString();
     const expectedStatusCode = 400;
     return await request(app).get('/wertgarantie/components/selection-popup').query({
         deviceClass: "fda71hf6-4ff8-4579-9cc0-0a3ccb8d6f2e",
