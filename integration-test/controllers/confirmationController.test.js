@@ -1,6 +1,9 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const uuid = require('uuid');
+const nock = require('nock');
+const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
+
 
 test('should handle valid confirm cart request', async () => {
     const clientId = uuid();
@@ -65,11 +68,37 @@ describe('should handle shopping cart confirmation rejection', function () {
     })
 });
 
-describe('should return 400 on missing shopping cart cookie', function () {
+describe('should return 204 on missing shopping cart cookie', function () {
     const agent = request.agent(app);
     it('get shopping cart data', function (done) {
         agent.get('/wertgarantie/components/confirmation?clientId=' + 12)
             .expect(204, done);
+    });
+});
+
+describe("should return valid confirmation data", function () {
+    const clientId = "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f";
+    const agent = request.agent(app);
+
+    nock(process.env.HEIMDALL_URI)
+        .get("/api/v1/auth/client/bikesecret1")
+        .reply(200, {
+            payload: {
+                access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
+            }
+        });
+
+    nock(process.env.HEIMDALL_URI)
+        .get("/api/v1/product-offers?device_class=17fd707a-f9c0-11e9-9694-cf549fcf64e2&device_purchase_price=45&device_purchase_date=" + new Date().toLocaleDateString())
+        .reply(200, getProductOffersResponse);
+
+    createShoppingCart(agent, clientId);
+
+    it('get shopping cart data', function (done) {
+        agent.get('/wertgarantie/components/confirmation?clientId=' + clientId, function (req, res) {
+            req.cookie(clientId,)
+        })
+            .expect(200, done);
     });
 });
 
