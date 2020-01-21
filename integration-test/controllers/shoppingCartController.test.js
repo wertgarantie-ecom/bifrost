@@ -162,3 +162,24 @@ describe("Checkout Shopping Cart", () => {
             });
     });
 });
+
+test("should reject empty wertgarantieShoppingCart", (done) => {
+    return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        .send({
+            purchasedProducts: [],
+            customer: {
+                company: "INNOQ",
+                salutation: "Herr",
+                firstname: "Max",
+                lastname: "Mustermann",
+                street: "Unter den Linden",
+                zip: "52345",
+                city: "Köln",
+                country: "Deutschland",
+                email: "max.mustermann1234@test.com"
+            },
+            secretClientId: "bikesecret1",
+            wertgarantieShoppingCart: ""
+        })
+        .expect(200, done);
+});
