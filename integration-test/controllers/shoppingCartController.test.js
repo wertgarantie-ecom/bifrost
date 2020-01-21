@@ -69,7 +69,7 @@ describe("Checkout Shopping Cart", () => {
                 payload: {
                     access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
                 }
-            })
+            });
 
         nock(process.env.HEIMDALL_URI)
             .post("/api/v1/products/" + wertgarantieProductId + "/checkout")

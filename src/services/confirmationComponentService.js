@@ -3,10 +3,11 @@ const productOfferService = require('./heimdallProductOfferService');
 const documentType = require('./heimdallProductOfferService').documentType;
 const defaultProductImageService = require('./productImageService');
 const signService = require('./signatureService');
+const clientService = require('./clientService');
 const _ = require('lodash');
 const SIGN_SECRET = process.env.SIGN_SECRET || "localSignSecret";
 
-exports.prepareConfirmationData = async function prepareConfirmationData(clientId, shoppingCart, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
+exports.prepareConfirmationData = async function prepareConfirmationData(publicClientId, shoppingCart, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
     if (!shoppingCart) {
         return undefined;
     }
@@ -20,10 +21,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
     };
 
     let avbHref;
-
+    const client = clientService.findClientForPublicClientId(publicClientId);
     for (var i = 0; i < shoppingCart.products.length; i++) {
         const wertgarantieProduct = shoppingCart.products[i];
-        const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, clientId, heimdallClient, productImageService);
+        const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, heimdallClient, productImageService);
         result.products.push(confirmationProductData.product);
         avbHref = confirmationProductData.avbHref;
     }
@@ -36,8 +37,8 @@ exports.prepareConfirmationData = async function prepareConfirmationData(clientI
     return result;
 };
 
-async function getConfirmationProductData(wertgarantieProduct, clientId, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
-    const productOffersResponse = await heimdallClient.getProductOffers(clientId, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice);
+async function getConfirmationProductData(wertgarantieProduct, client, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
+    const productOffersResponse = await heimdallClient.getProductOffers(client, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice);
     const productOffers = productOffersResponse.payload;
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
     if (productIndex !== -1) {

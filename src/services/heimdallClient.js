@@ -78,7 +78,7 @@ async function sendHeimdallRequest(request, client) {
         if (e.response) {
             throw new HeimdallClientError(`Heimdall could not process the following request: ${JSON.stringify(request)}. Heimdall responded with: ${JSON.stringify(e.response.data)}`);
         } else {
-            throw new HeimdallConnectionError(`could not connect to heimdall: ${request}`);
+            throw new HeimdallConnectionError(`could not connect to heimdall: ${JSON.stringify(request)}`);
         }
     }
 
