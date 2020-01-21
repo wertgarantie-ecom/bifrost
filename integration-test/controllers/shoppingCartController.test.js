@@ -163,7 +163,7 @@ describe("Checkout Shopping Cart", () => {
     });
 });
 
-test("should reject empty wertgarantieShoppingCart", (done) => {
+test("should handle empty wertgarantieShoppingCart with info message", (done) => {
     return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
         .send({
             purchasedProducts: [],
@@ -181,5 +181,29 @@ test("should reject empty wertgarantieShoppingCart", (done) => {
             secretClientId: "bikesecret1",
             wertgarantieShoppingCart: ""
         })
-        .expect(200, done);
+        .expect(200)
+        .expect({
+            message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.` 
+        }, done);
+});
+
+test("should handle invalid JSON in wertgarantieShoppingCart with status 400", (done) => {
+    return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        .send({
+            purchasedProducts: [],
+            customer: {
+                company: "INNOQ",
+                salutation: "Herr",
+                firstname: "Max",
+                lastname: "Mustermann",
+                street: "Unter den Linden",
+                zip: "52345",
+                city: "Köln",
+                country: "Deutschland",
+                email: "max.mustermann1234@test.com"
+            },
+            secretClientId: "bikesecret1",
+            wertgarantieShoppingCart: "{'name': 'Alex'"
+        })
+        .expect(400, done)
 });
