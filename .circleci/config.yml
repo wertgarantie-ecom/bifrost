@@ -24,10 +24,19 @@ jobs:
             - run: npm install
       - run: npm run test-all
 
-  deploy:
-    executor: heroku/default # Uses the basic buildpack-deps image, which has the prerequisites for installing heroku's CLI.
+  deploy-dev:
+    executor: heroku/default
     steps:
       - checkout
-      - heroku/install # Runs the heroku install command, if necessary.
-      - heroku/deploy-via-git: # Deploys branch to Heroku via git push.
-          only-branch: master # If you specify an only-branch, the deploy will not occur for any other branch.
+      - heroku/install
+      - heroku/deploy-via-git:
+          only-branch: master
+          app-name: wertgarantie-bifrost-dev
+  deploy-staging:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          only-branch: master
+          app-name: wertgarantie-bifrost-staging
