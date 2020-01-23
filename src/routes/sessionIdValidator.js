@@ -14,4 +14,4 @@ exports.validateSessionId = async function validateSessionId(req, res, next, rep
         }
     }));
     next();
-}
+};

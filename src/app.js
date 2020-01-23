@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
 
+const gitInfoController = require('./controllers/gitInfoController');
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 const validateSessionId = require('./routes/sessionIdValidator').validateSessionId;
 
@@ -36,7 +37,7 @@ app.options('*', cors(corsOptions));
 app.use(sslRedirect(['prod', 'dev', 'staging']));
 
 app.use('/healthcheck', require('express-healthcheck')());
-
+app.use('/git', gitInfoController);
 app.use('/wertgarantie/', validateSessionId);
 app.use('/wertgarantie/', wertgarantieRoutes);
 
