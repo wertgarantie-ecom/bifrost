@@ -7,9 +7,12 @@ workflows:
   heroku_deploy:
     jobs:
       - build
-      - deploy:
+      - deploy-dev:
           requires:
             - build
+      - deploy-staging:
+          requires:
+            - deploy-dev
 jobs:
   build:
     machine: true
