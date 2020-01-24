@@ -15,7 +15,6 @@ const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 const validateSessionId = require('./routes/sessionIdValidator').validateSessionId;
 
 const app = express();
-
 const signSecret = process.env.SIGN_SECRET;
 
 app.use(logger('dev'));

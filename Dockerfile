@@ -1,16 +1,14 @@
-FROM node:10
+FROM node:latest
 
 RUN apt-get update && apt-get install -y git-crypt
 
-WORKDIR /app/
-
-COPY package*.json /app/
-
+RUN mkdir -p /app/bifrost
+WORKDIR /app/bifrost/
+COPY package*.json /app/bifrost/
 RUN npm install
 
-COPY . /app/
+COPY . /app/bifrost/
 
 EXPOSE 3000
 
-ENV NODE_ENV=local
-CMD npm start
+CMD npm run start-docker-compose

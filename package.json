@@ -11,6 +11,10 @@
     "integration-test": "jest -c jest.config.integration.js",
     "test-all": "npm run test && npm run integration-test",
     "setup-local-db": "NODE_ENV=local db-migrate db:drop bifrost; db-migrate db:create bifrost && npm run migrate-up",
+    "prestart-dev": "NODE_ENV=dev npm run migrate-up",
+    "start-dev": "NODE_ENV=dev nodemon ./bin/www",
+    "prestart-docker-compose": "npm run migrate-up",
+    "start-docker-compose": "nodemon ./bin/www",
     "migrate-create": "db-migrate create",
     "migrate-up": "dotenv -e ./config/${NODE_ENV}.env db-migrate up",
     "migrate-down": "dotenv -e ./config/${NODE_ENV}.env db-migrate down"
@@ -52,6 +56,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0",
     "nock": "^11.7.2",
+    "nodemon": "^2.0.2",
     "supertest": "^4.0.2"
   },
   "jest": {
