@@ -9,38 +9,45 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: bifrost
       POSTGRES_DB: bifrost
-
-  bifrost:
-    build: ./
-    environment: 
-      - NODE_ENV=local
-    depends_on:
-      - bifrost-postgres
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./:/app/bifrost
-      - /app/bifrost/node_modules
-  
+        
   heimdall-mock:
     build: ../heimdall-mock/
     environment: 
       - NODE_ENV=local
     ports:
       - "3001:3000"
+    volumes:
+      - ../heimdall-mock:/app/heimdall-mock
+      - /app/heimdall-mock/node_modules
 
-  demo-shop:
-    build: ../demo-shop/
+  bifrost:
+    build: ./
     environment: 
-      - NODE_ENV=local
+      - NODE_ENV=dockerlocal
+    depends_on:
+      - bifrost-postgres
+      - heimdall-mock
     ports:
-      - "3002:3000"
-
+      - "3000:3000"
+    volumes:
+      - ./:/app/bifrost
+      - /app/bifrost/node_modules
+      
   components-liveserve:
     build: ../bifrost-components/
     ports:
       - "3334:3333"
-    # volumes:
-    #   - ../bifrost-components/packages/:/app/components-liveserve/
-    
-    
+    volumes:
+      - ../bifrost-components/:/app/components-liveserve/
+
+  demo-shop:
+    build: ../demo-shop/
+    environment: 
+      - NODE_ENV=dockerlocal
+    ports:
+      - "3002:3000"
+    depends_on:
+      - components-liveserve
+    volumes:
+      - ../demo-shop:/app/demoshop
+      - /app/demoshop/node_modules
