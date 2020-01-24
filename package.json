@@ -40,8 +40,7 @@
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "testcontainers": "^2.2.0",
-    "uuid": "^3.3.3",
-    "git-rev-promises": "^1.1.0"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "axios-logger": "^2.3.0",
