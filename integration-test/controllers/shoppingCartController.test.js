@@ -1,6 +1,8 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const nock = require("nock");
+const testhelper = require('../helper/testhelper');
+const signatureService = require('../../src/services/signatureService');
 
 test('should return cookie with selected product', async (done) => {
     await request(app).post('/wertgarantie/shoppingCart/43446A56-3546-416D-B942-1262CA0526FB')
@@ -60,11 +62,13 @@ describe('should be able to retrieve cookies', function () {
 });
 
 describe("Checkout Shopping Cart", () => {
-    test("should checkout shopping cart", () => {
+    let clientData;
+    test("should checkout shopping cart", async () => {
+        clientData = await testhelper.createDefaultClient();
         const wertgarantieProductId = `10`;
 
         nock(process.env.HEIMDALL_URI)
-            .get("/api/v1/auth/client/bikesecret1")
+            .get("/api/v1/auth/client/" + clientData.secrets[0])
             .reply(200, {
                 payload: {
                     access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
@@ -82,6 +86,23 @@ describe("Checkout Shopping Cart", () => {
                 }
             });
 
+        const wertgarantieShoppingCart = 
+            {
+                "sessionId": "7578f388-d79f-40e4-a969-50f9748f2c22",
+                "clientId": clientData.id,
+                "products": [
+                    {
+                        "wertgarantieProductId": wertgarantieProductId,
+                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "devicePrice": 139999,
+                        "deviceCurrency": "EUR",
+                        "shopProductName": "SuperBike 3000",
+                        "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
+                    }
+                ],
+                "confirmed": true
+            };
+        const signedShoppingCart = signatureService.signShoppingCart(wertgarantieShoppingCart, clientData.secrets[0]);
         return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
@@ -101,25 +122,8 @@ describe("Checkout Shopping Cart", () => {
                     country: "Deutschland",
                     email: "max.mustermann1234@test.com"
                 },
-                wertgarantieShoppingCart: `{
-                    "shoppingCart": {
-                      "sessionId": "7578f388-d79f-40e4-a969-50f9748f2c22",
-                      "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-                      "products": [
-                        {
-                          "wertgarantieProductId": ${wertgarantieProductId},
-                          "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                          "devicePrice": 139999,
-                          "deviceCurrency": "EUR",
-                          "shopProductName": "SuperBike 3000",
-                          "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
-                        }
-                      ],
-                      "confirmed": true
-                    },
-                    "signature": "1jO75iRQJCE9L5hXwqcj7RWM7dbRa7mGTVwVsETIcJA="
-                  }`,
-                secretClientId: "bikesecret1"
+                wertgarantieShoppingCart: signedShoppingCart,
+                secretClientId: clientData.secrets[0]
             })
             .expect(200)
             .expect((result) => {
@@ -128,7 +132,7 @@ describe("Checkout Shopping Cart", () => {
                 const body = result.body;
                 const purchase = body.purchases[0];
                 expect(body.sessionId).toEqual("7578f388-d79f-40e4-a969-50f9748f2c22");
-                expect(body.clientId).toEqual("5209d6ea-1a6e-11ea-9f8d-778f0ad9137f");
+                expect(body.clientId).toEqual(clientData.id);
                 expect(purchase.wertgarantieProductId).toEqual(10);
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
                 expect(purchase.devicePrice).toEqual(139999);
@@ -149,7 +153,7 @@ describe("Checkout Shopping Cart", () => {
                 const body = result.body;
                 const purchase = body.purchases[0];
                 expect(body.sessionId).toEqual("7578f388-d79f-40e4-a969-50f9748f2c22");
-                expect(body.clientId).toEqual("5209d6ea-1a6e-11ea-9f8d-778f0ad9137f");
+                expect(body.clientId).toEqual(clientData.id);
                 expect(purchase.wertgarantieProductId).toEqual(10);
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
                 expect(purchase.devicePrice).toEqual(139999);

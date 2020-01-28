@@ -3,6 +3,7 @@ const app = require('../../src/app');
 const uuid = require('uuid');
 const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
+const testhelper = require('../helper/testhelper');
 
 
 test('should handle valid confirm cart request', async () => {
@@ -76,12 +77,12 @@ describe('should return 204 on missing shopping cart cookie', function () {
     });
 });
 
-describe("should return valid confirmation data", function () {
-    const clientId = "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f";
+describe("should return valid confirmation data", async function () {
+    const clientData = await testhelper.createDefaultClient();
     const agent = request.agent(app);
 
     nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/auth/client/bikesecret1")
+        .get("/api/v1/auth/client/" + clientData.secrets[0])
         .reply(200, {
             payload: {
                 access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
@@ -92,11 +93,11 @@ describe("should return valid confirmation data", function () {
         .get("/api/v1/product-offers?device_class=17fd707a-f9c0-11e9-9694-cf549fcf64e2&device_purchase_price=45&device_purchase_date=" + new Date().toLocaleDateString())
         .reply(200, getProductOffersResponse);
 
-    createShoppingCart(agent, clientId);
+    createShoppingCart(agent, clientData.publicClientIds[0]);
 
     it('get shopping cart data', function (done) {
-        agent.get('/wertgarantie/components/confirmation?clientId=' + clientId, function (req, res) {
-            req.cookie(clientId,)
+        agent.get('/wertgarantie/components/confirmation?clientId=' + clientData.publicClientIds[0], function (req, res) {
+            req.cookie(clientData.publicClientIds[0])
         })
             .expect(200, done);
     });

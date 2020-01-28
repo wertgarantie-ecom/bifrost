@@ -3,12 +3,13 @@ const app = require('../../src/app');
 const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
 const unknownDeviceClassResponse = require('./heimdallResponses').unknownDeviceClassResponse;
-
+const testhelper = require('../helper/testhelper');
 test('should return proper product data', async () => {
+    const clientData = await testhelper.createDefaultClient();
     const date = new Date().toLocaleDateString();
 
     nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/auth/client/bikesecret1")
+        .get("/api/v1/auth/client/" + clientData.secrets[0])
         .reply(200, {
             payload: {
                 access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
