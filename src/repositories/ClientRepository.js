@@ -1,4 +1,5 @@
 const Pool = require("../postgres").Pool;
+const _ = require('lodash');
 
 const clients = [
     {
@@ -42,7 +43,7 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
         }));
         await Promise.all(clientData.publicClientIds.map(clientId => {
             const insertPublicId = {
-                name: 'insert-client-secrets',
+                name: 'insert-client-public-ids',
                 text: 'INSERT INTO ClientPublicId (publicid, clientid)' +
                     'VALUES ($1, $2);',
                 values: [
@@ -59,7 +60,7 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
     } finally {
         client.release();
     }
-}
+};
 // read
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
@@ -85,7 +86,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
 
 function toClientData(row) {
     return {
-        clientId: row.id,
+        id: row.id,
         name: row.name,
         secrets: [],
         publicClientIds: []
@@ -93,19 +94,16 @@ function toClientData(row) {
 }
 
 function toSecrets(rows) {
-    return rows.map(row => {
-        return {
-            secret: row.secret,
-            clientId: row.clientId
-        }
-    });
+    return _.reduce(rows, (results, row) => {
+        results.push(row.secret);
+        return results
+    }, []);
 }
 
 function toPublicClientIds(rows) {
     return rows.map(row => {
         return {
-            publicId: row.publicid,
-            clientId: row.clientId
+            publicId: row.publicid
         }
     });
 }
