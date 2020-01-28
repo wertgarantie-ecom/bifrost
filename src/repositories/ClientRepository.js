@@ -66,10 +66,11 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: 'SELECT c.*, cs.*, cp.* FROM client c ' +
-            'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
-            'INNER JOIN clientpublicid cp on c.id = cp.clientid ' +
-            'WHERE cs.secret = $1',
+        text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' + 
+        'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
+        'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
+        'WHERE c.id = (SELECT clientid from clientsecret ' +
+        'WHERE secret = $1);',
         values: [secret]
     });
     if (result.rowCount > 0) {
@@ -94,18 +95,11 @@ function toClientData(row) {
 }
 
 function toSecrets(rows) {
-    return _.reduce(rows, (results, row) => {
-        results.push(row.secret);
-        return results
-    }, []);
+    return _.reduce(rows, (results, row) => results.add(row.secret), new Set());
 }
 
 function toPublicClientIds(rows) {
-    return rows.map(row => {
-        return {
-            publicId: row.publicid
-        }
-    });
+    return _.reduce(rows, (results, row) => results.add(row.publicid), new Set());
 }
 
 exports.findClientForPublicClientId = function findClientForPublicClientId(publicClientId) {
