@@ -3,7 +3,8 @@ const app = require('../../src/app');
 const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
 const unknownDeviceClassResponse = require('./heimdallResponses').unknownDeviceClassResponse;
-const testhelper = require('../helper/testhelper');
+const testhelper = require('../helper/fixtureHelper');
+
 test('should return proper product data', async () => {
     const clientData = await testhelper.createDefaultClient();
     const date = new Date().toLocaleDateString();
@@ -15,7 +16,7 @@ test('should return proper product data', async () => {
                 access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
             }
         });
-        
+
 
     nock(process.env.HEIMDALL_URI)
         .get("/api/v1/product-offers?device_class=fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d&device_purchase_price=1200&device_purchase_date=" + date)
@@ -26,7 +27,7 @@ test('should return proper product data', async () => {
         deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
         devicePrice: 1200,
         productId: 11,
-        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"
+        clientId: clientData.publicClientIds[0] + "",
     })
         .expect(function (res) {
             if (res.status !== expectedStatusCode) {
@@ -91,11 +92,11 @@ test('should throw error if device class does not exist', async () => {
         devicePrice: 1200,
         productId: 11
     })
-    .expect(function (res) {
-        if (res.status !== expectedStatusCode) {
-            console.log(JSON.stringify(res.body, null, 2));
-        }
-    })
-    .expect(expectedStatusCode)
-    .expect(400)
+        .expect(function (res) {
+            if (res.status !== expectedStatusCode) {
+                console.log(JSON.stringify(res.body, null, 2));
+            }
+        })
+        .expect(expectedStatusCode)
+        .expect(400)
 });

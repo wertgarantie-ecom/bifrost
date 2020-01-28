@@ -46,7 +46,7 @@ app.use(function (req, res, next) {
 
 app.use(function (err, req, res, next) {
     if (err.name === 'JsonSchemaValidation') {
-        err.status(400);
+        err.status = 400;
         err.details = {
             receivedBody: req.body,
             validations: err.validations
@@ -57,6 +57,9 @@ app.use(function (err, req, res, next) {
         err.status = 502;
         err.details = err.message;
     } else if (err.name === 'HeimdallClientError') {
+        err.status = 400;
+        err.details = err.message;
+    } else if (err.name === 'InvalidClientIdError'){
         err.status = 400;
         err.details = err.message;
     }

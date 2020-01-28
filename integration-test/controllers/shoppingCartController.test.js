@@ -1,8 +1,9 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const nock = require("nock");
-const testhelper = require('../helper/testhelper');
+const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/services/signatureService');
+const uuid = require('uuid');
 
 test('should return cookie with selected product', async (done) => {
     await request(app).post('/wertgarantie/shoppingCart/43446A56-3546-416D-B942-1262CA0526FB')
@@ -63,10 +64,27 @@ describe('should be able to retrieve cookies', function () {
 
 describe("Checkout Shopping Cart", () => {
     let clientData;
+    const sessionId = uuid();
+
     test("should checkout shopping cart", async () => {
         clientData = await testhelper.createDefaultClient();
         const wertgarantieProductId = `10`;
-
+        const wertgarantieShoppingCart =
+            {
+                "sessionId": sessionId + "",
+                "clientId": clientData.id,
+                "products": [
+                    {
+                        "wertgarantieProductId": wertgarantieProductId,
+                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "devicePrice": 139999,
+                        "deviceCurrency": "EUR",
+                        "shopProductName": "SuperBike 3000",
+                        "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
+                    }
+                ],
+                "confirmed": true
+            };
         nock(process.env.HEIMDALL_URI)
             .get("/api/v1/auth/client/" + clientData.secrets[0])
             .reply(200, {
@@ -86,23 +104,7 @@ describe("Checkout Shopping Cart", () => {
                 }
             });
 
-        const wertgarantieShoppingCart = 
-            {
-                "sessionId": "7578f388-d79f-40e4-a969-50f9748f2c22",
-                "clientId": clientData.id,
-                "products": [
-                    {
-                        "wertgarantieProductId": wertgarantieProductId,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                        "devicePrice": 139999,
-                        "deviceCurrency": "EUR",
-                        "shopProductName": "SuperBike 3000",
-                        "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
-                    }
-                ],
-                "confirmed": true
-            };
-        const signedShoppingCart = signatureService.signShoppingCart(wertgarantieShoppingCart, clientData.secrets[0]);
+        const signedShoppingCart = JSON.stringify(signatureService.signShoppingCart(wertgarantieShoppingCart));
         return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
@@ -131,9 +133,9 @@ describe("Checkout Shopping Cart", () => {
                 console.log(JSON.stringify(result.body.purchases[0].message, null, 2));
                 const body = result.body;
                 const purchase = body.purchases[0];
-                expect(body.sessionId).toEqual("7578f388-d79f-40e4-a969-50f9748f2c22");
+                expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
                 expect(body.clientId).toEqual(clientData.id);
-                expect(purchase.wertgarantieProductId).toEqual(10);
+                expect(purchase.wertgarantieProductId).toEqual("10");
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
                 expect(purchase.devicePrice).toEqual(139999);
                 expect(purchase.success).toBe(true);
@@ -147,12 +149,12 @@ describe("Checkout Shopping Cart", () => {
     });
 
     test("should find checkout data by session id", () => {
-        return request(app).get("/wertgarantie/purchases/7578f388-d79f-40e4-a969-50f9748f2c22")
+        return request(app).get("/wertgarantie/purchases/" + sessionId)
             .expect(200)
             .expect((result) => {
                 const body = result.body;
                 const purchase = body.purchases[0];
-                expect(body.sessionId).toEqual("7578f388-d79f-40e4-a969-50f9748f2c22");
+                expect(body.sessionId).toEqual(sessionId);
                 expect(body.clientId).toEqual(clientData.id);
                 expect(purchase.wertgarantieProductId).toEqual(10);
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
@@ -187,7 +189,7 @@ test("should handle empty wertgarantieShoppingCart with info message", (done) =>
         })
         .expect(200)
         .expect({
-            message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.` 
+            message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.`
         }, done);
 });
 

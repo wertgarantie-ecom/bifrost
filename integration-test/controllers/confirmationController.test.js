@@ -3,7 +3,7 @@ const app = require('../../src/app');
 const uuid = require('uuid');
 const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
-const testhelper = require('../helper/testhelper');
+const testhelper = require('../helper/fixtureHelper');
 
 
 test('should handle valid confirm cart request', async () => {
@@ -77,21 +77,24 @@ describe('should return 204 on missing shopping cart cookie', function () {
     });
 });
 
-describe("should return valid confirmation data", async function () {
-    const clientData = await testhelper.createDefaultClient();
+describe("should return valid confirmation data", function () {
+    let clientData;
     const agent = request.agent(app);
 
-    nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/auth/client/" + clientData.secrets[0])
-        .reply(200, {
-            payload: {
-                access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
-            }
-        });
+    it('setup test data', async () => {
+        clientData = await testhelper.createDefaultClient();
+        nock(process.env.HEIMDALL_URI)
+            .get("/api/v1/auth/client/" + clientData.secrets[0])
+            .reply(200, {
+                payload: {
+                    access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
+                }
+            });
 
-    nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/product-offers?device_class=17fd707a-f9c0-11e9-9694-cf549fcf64e2&device_purchase_price=45&device_purchase_date=" + new Date().toLocaleDateString())
-        .reply(200, getProductOffersResponse);
+        nock(process.env.HEIMDALL_URI)
+            .get("/api/v1/product-offers?device_class=17fd707a-f9c0-11e9-9694-cf549fcf64e2&device_purchase_price=45&device_purchase_date=" + new Date().toLocaleDateString())
+            .reply(200, getProductOffersResponse);
+    });
 
     createShoppingCart(agent, clientData.publicClientIds[0]);
 
