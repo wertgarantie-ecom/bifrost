@@ -152,5 +152,3 @@ function toPublicClientIds(rows) {
     return _.reduce(rows, (results, row) => results.add(row.publicid), new Set());
 }
 
-
-// delete

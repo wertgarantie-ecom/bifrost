@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const repository = require('../repositories/ClientRepository');
 
 const clients = [
     {
@@ -13,16 +14,16 @@ const clients = [
     }
 ];
 
-exports.findClientForSecret = function findClientForSecret(secret) {
-    const client = _.find(clients, (client) => client.secrets.includes(secret));
+exports.findClientForSecret = async function findClientForSecret(secret) {
+    const client = await repository.findClientForSecret(secret);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified secret.`)
     }
     return client;
 };
 
-exports.findClientForPublicClientId = function findClientForPublicClientId(publicClientId) {
-    const client = _.find(clients, (client) => client.publicClientIds.includes(publicClientId));
+exports.findClientForPublicClientId = async function findClientForPublicClientId(publicClientId) {
+    const client = await repository.findClientForPublicClientId(publicClientId);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified client ID: ${publicClientId}`);
     }

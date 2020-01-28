@@ -4,7 +4,7 @@ const productService = require("./heimdallProductOfferService");
 const clientService = require('../services/clientService');
 
 exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientId, heimdallClient = defaultHeimdallClient, imageService = productImageService) {
-    const client = clientService.findClientForPublicClientId(clientId);
+    const client = await clientService.findClientForPublicClientId(clientId);
     const content = await heimdallClient.getProductOffers(client, deviceClass, devicePrice);
     const products = [];
     let imageLinks = [];

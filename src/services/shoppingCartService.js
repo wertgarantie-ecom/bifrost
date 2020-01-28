@@ -76,7 +76,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
 }
 
 exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
-    const client = clientService.findClientForSecret(secretClientId);
+    const client = await clientService.findClientForSecret(secretClientId);
     const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
     if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
         throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
