@@ -93,7 +93,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
 exports.findClientForPublicClientId = async function findClientForPublicClientId(clientPublicId) {
     const pool = Pool.getInstance();
     const result = await pool.query({
-        name: 'find-by-client-secret',
+        name: 'find-by-client-public-id',
         text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' +
             'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
             'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
@@ -108,22 +108,31 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     }
 };
 
-exports.deleteClientById = async function deleteClientById(clientId) {
+exports.findClientById = async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
-        name: 'delete-by-id',
+        name: 'find-by-id',
         text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' +
             'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
             'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
-            'WHERE c.id = (SELECT clientid from clientpublicid ' +
-            'WHERE publicid = $1);',
-        values: [clientPublicId]
+            'WHERE c.id = $1;',
+        values: [id]
     });
     if (result.rowCount > 0) {
         return toClient(result);
     } else {
         return undefined;
     }
+};
+
+exports.deleteClientById = async function deleteClientById(id) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'delete-by-id',
+        text: 'DELETE FROM client where client.id = $1',
+        values: [id]
+    });
+    return result.rowCount > 0;
 };
 
 function toClientData(row) {
