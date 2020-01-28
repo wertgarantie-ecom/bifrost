@@ -1,18 +1,6 @@
 const _ = require('lodash');
 const repository = require('../repositories/ClientRepository');
 
-const clients = [
-    {
-        name: "bikeShop",
-        secrets: ["bikesecret1"],
-        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
-    },
-    {
-        name: "handyShop",
-        secrets: ["handysecret1"],
-        publicClientIds: ["bikeclientId1"]
-    }
-];
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const client = await repository.findClientForSecret(secret);

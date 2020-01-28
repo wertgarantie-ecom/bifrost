@@ -20,6 +20,20 @@ const mockHeimdallClientSuccess = () => {
     }
 };
 
+
+const clientData =
+    {
+        name: "bikeShop",
+        secrets: ["bikesecret1"],
+        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
+    };
+
+function mockClientService(clientData) {
+    return {
+        findClientForSecret: jest.fn(() => clientData)
+    }
+}
+
 function validProduct() {
     return {
         wertgarantieProductId: 1234,
@@ -196,13 +210,22 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
     const client = {
-            "name": "bikeShop", 
-            "publicClientIds": ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"], 
-            "secrets": ["bikesecret1"]
-        };
+        "name": "bikeShop",
+        "publicClientIds": ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"],
+        "secrets": ["bikesecret1"]
+    };
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), new Date(2019, 5, 1, 8, 34, 34, 345), mockRepository);
+    const clientService = mockClientService(client);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
+        customer,
+        signedWertgarantieCart,
+        secretClientId,
+        mockHeimdallClient,
+        generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
+        new Date(2019, 5, 1, 8, 34, 34, 345),
+        mockRepository,
+        clientService);
 
     expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][0]).toEqual({
         productId: "2",
@@ -280,7 +303,16 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockClient, generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]), undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
+        customer,
+        signedWertgarantieCart,
+        secretClientId,
+        mockClient,
+        generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
+        undefined,
+        mockRepository,
+        mockClientService(clientData));
+
     expect(result).toEqual({
         "sessionId": "619f7fda-d77e-4be1-b73c-db145402bcab",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
@@ -346,7 +378,16 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, undefined, undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
+        customer,
+        signedWertgarantieCart,
+        secretClientId,
+        mockHeimdallClient,
+        undefined,
+        undefined,
+        mockRepository,
+        mockClientService(clientData));
+
     expect(result.purchases.length).toEqual(1);
     expect(result.purchases[0].message).toEqual("failing call");
 });
@@ -405,7 +446,15 @@ test("checkout call with multiple products", async () => {
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
+        customer,
+        signedWertgarantieCart,
+        secretClientId,
+        mockHeimdallClient,
+        generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
+        undefined,
+        mockRepository,
+        mockClientService(clientData));
     await expect(result).toEqual({
         "sessionId": "a367f1d9-9eeb-46b7-ba09-397e5a7e1ecc",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
@@ -442,7 +491,7 @@ function generateIds(ids) {
 }
 
 test("checkout call with multiple products where one is not found in shop cart", async () => {
-    
+
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         sessionId: "d5d6e839-cf3c-433f-8159-9ed648fc2240",
@@ -485,7 +534,15 @@ test("checkout call with multiple products where one is not found in shop cart",
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
 
-    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId, mockHeimdallClient, generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]), undefined, mockRepository);
+    const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
+        customer,
+        signedWertgarantieCart,
+        secretClientId,
+        mockHeimdallClient,
+        generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
+        undefined,
+        mockRepository,
+        mockClientService(clientData));
     await expect(result).toEqual(
         {
             "sessionId": "d5d6e839-cf3c-433f-8159-9ed648fc2240",
