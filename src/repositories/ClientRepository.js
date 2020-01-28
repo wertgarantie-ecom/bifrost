@@ -61,25 +61,66 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
         client.release();
     }
 };
+
+function toClient(result) {
+    const clientData = toClientData(result.rows[0]);
+    const secrets = toSecrets(result.rows);
+    const publicClientIds = toPublicClientIds(result.rows);
+    clientData.secrets.push(...secrets);
+    clientData.publicClientIds.push(...publicClientIds);
+    return clientData;
+}
+
 // read
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' + 
-        'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
-        'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
-        'WHERE c.id = (SELECT clientid from clientsecret ' +
-        'WHERE secret = $1);',
+        text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' +
+            'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
+            'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
+            'WHERE c.id = (SELECT clientid from clientsecret ' +
+            'WHERE secret = $1);',
         values: [secret]
     });
     if (result.rowCount > 0) {
-        const clientData = toClientData(result.rows[0]);
-        const secrets = toSecrets(result.rows);
-        const publicClientIds = toPublicClientIds(result.rows);
-        clientData.secrets.push(...secrets);
-        clientData.publicClientIds.push(...publicClientIds);
-        return clientData;
+        return toClient(result);
+    } else {
+        return undefined;
+    }
+};
+
+exports.findClientForPublicClientId = async function findClientForPublicClientId(clientPublicId) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'find-by-client-secret',
+        text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' +
+            'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
+            'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
+            'WHERE c.id = (SELECT clientid from clientpublicid ' +
+            'WHERE publicid = $1);',
+        values: [clientPublicId]
+    });
+    if (result.rowCount > 0) {
+        return toClient(result);
+    } else {
+        return undefined;
+    }
+};
+
+exports.deleteClientById = async function deleteClientById(clientId) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'delete-by-id',
+        text: 'SELECT c.id, c.name, cs.secret, cp.publicid FROM client c ' +
+            'INNER JOIN clientsecret cs on c.id = cs.clientid ' +
+            'INNER JOIN clientpublicid cp on c.id = cp.clientid  ' +
+            'WHERE c.id = (SELECT clientid from clientpublicid ' +
+            'WHERE publicid = $1);',
+        values: [clientPublicId]
+    });
+    if (result.rowCount > 0) {
+        return toClient(result);
     } else {
         return undefined;
     }
@@ -102,20 +143,5 @@ function toPublicClientIds(rows) {
     return _.reduce(rows, (results, row) => results.add(row.publicid), new Set());
 }
 
-exports.findClientForPublicClientId = function findClientForPublicClientId(publicClientId) {
-    const client = _.find(clients, (client) => client.publicClientIds.includes(publicClientId));
-    if (!client) {
-        throw new InvalidClientIdError(`Could not find Client for specified client ID: ${publicClientId}`);
-    }
-    return client;
-};
-
-class InvalidClientIdError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = this.constructor.name;
-        Error.captureStackTrace(this, this.constructor);
-    }
-}
 
 // delete
