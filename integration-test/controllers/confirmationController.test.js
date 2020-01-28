@@ -5,7 +5,6 @@ const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
 const testhelper = require('../helper/fixtureHelper');
 
-
 test('should handle valid confirm cart request', async () => {
     const clientId = uuid();
     return request(app)
@@ -96,13 +95,23 @@ describe("should return valid confirmation data", function () {
             .reply(200, getProductOffersResponse);
     });
 
-    createShoppingCart(agent, clientData.publicClientIds[0]);
+    it('create valid shopping cart', function (done) {
+        agent.post('/wertgarantie/shoppingCart/' + clientData.publicClientIds[0])
+            .send({
+                "productId": 12,
+                "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
+                "devicePrice": 45.0,
+                "deviceCurrency": "EUR",
+                "shopProductName": "Phone X"
+            })
+            .expect('Set-Cookie', /products/, done);
+    });
 
     it('get shopping cart data', function (done) {
         agent.get('/wertgarantie/components/confirmation?clientId=' + clientData.publicClientIds[0], function (req, res) {
             req.cookie(clientData.publicClientIds[0])
         })
-            .expect(200, done);
+        .expect(200, done);
     });
 });
 
