@@ -19,7 +19,7 @@ exports.findClientForSecret = function findClientForSecret(secret) {
         throw new InvalidClientIdError(`Could not find Client for specified secret.`)
     }
     return client;
-}
+};
 
 exports.findClientForPublicClientId = function findClientForPublicClientId(publicClientId) {
     const client = _.find(clients, (client) => client.publicClientIds.includes(publicClientId));
@@ -27,7 +27,7 @@ exports.findClientForPublicClientId = function findClientForPublicClientId(publi
         throw new InvalidClientIdError(`Could not find Client for specified client ID: ${publicClientId}`);
     }
     return client;
-}
+};
 
 class InvalidClientIdError extends Error {
     constructor(message) {
