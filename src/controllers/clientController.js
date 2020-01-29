@@ -6,7 +6,6 @@ exports.addNewClient = async function addNewClient(req, res, next) {
         const result = await clientService.addNewClient(requestBody);
         res.status(200).send(result);
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };
@@ -26,7 +25,7 @@ exports.getAllClients = async function getAllClients(req, res) {
 };
 
 exports.deleteClient = async function deleteClient(req, res) {
-    const idToDelete = req.body.clientId;
+    const idToDelete = req.body.id;
     const isDeleted = await clientService.deleteClientById(idToDelete); // if not deleted, exception is thrown
     res.status(200).send({
         id: idToDelete,
