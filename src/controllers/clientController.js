@@ -9,21 +9,21 @@ exports.addNewClient = async function addNewClient(req, res, next) {
         console.log(error);
         next(error);
     }
-}
+};
 
 exports.getAllClients = async function getAllClients(req, res) {
     const clients = await clientService.findAllClients();
     if (clients) {
         const result = {
-            clients: clients 
-        }
+            clients: clients
+        };
         res.status(200).send(result);
     } else {
         res.status(204).send({
             message: "No clients found in database"
         })
     }
-}
+};
 
 exports.deleteClient = async function deleteClient(req, res) {
     const idToDelete = req.body.clientId;
@@ -32,4 +32,4 @@ exports.deleteClient = async function deleteClient(req, res) {
         id: idToDelete,
         deleted: isDeleted
     });
-}
+};

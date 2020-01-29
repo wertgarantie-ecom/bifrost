@@ -108,4 +108,4 @@ module.exports.getProductOffersResponse = {
 module.exports.unknownDeviceClassResponse = {
     "status": 404,
     "message": "Ressource nicht gefunden"
-}
+};

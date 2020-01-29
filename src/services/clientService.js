@@ -23,11 +23,11 @@ exports.deleteClientById = async function deleteClientById(clientId) { // techni
         throw new InvalidClientIdError(`Could not delete client with technical id ${clientId}`);
     }
     return isDeleted
-}
+};
 
 exports.findAllClients = async function findAllClients() {
     return await repository.findAllClients();
-}
+};
 
 exports.addNewClient = async function addNewClient(requestBody) {
     const clientData = {
@@ -35,10 +35,9 @@ exports.addNewClient = async function addNewClient(requestBody) {
         name: requestBody.name,
         secrets: requestBody.secrets,
         publicClientIds: requestBody.publicClientIds
-    }
-    const newClient = await repository.persistClientSettings(clientData);
-    return newClient;
-}
+    };
+    return await repository.persistClientSettings(clientData);
+};
 
 class InvalidClientIdError extends Error {
     constructor(message) {
