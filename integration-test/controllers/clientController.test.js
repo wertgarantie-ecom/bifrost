@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../src/app');
 const uuid = require('uuid');
+const _ = require('lodash');
 
 describe('should add new client with valid data', () => {
     const validData = {
@@ -38,10 +39,8 @@ describe('should add new client with valid data', () => {
             .expect(200)
             .then(response => {
                 const {clients} = response.body;
-                expect(clients.length).toBe(1);
-                expect(clients[0].name).toEqual(validData.name);
-                expect(clients[0].secrets).toEqual(validData.secrets.sort());
-                expect(clients[0].publicClientIds).toEqual(validData.publicClientIds.sort());
+                const createdClient = _.find(clients, {id: validData.id});
+                expect(createdClient).toBeDefined()
             })
     });
 
