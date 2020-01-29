@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6d8bc06c-9691-4ec3-8ee1-416528ead646",
+		"_postman_id": "a15da661-4b4b-4405-aecc-7a5b45b8e3e4",
 		"name": "Wertgarantie",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -188,11 +188,108 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Bifröst BFF",
 			"item": [
+				{
+					"name": "client config",
+					"item": [
+						{
+							"name": "delete client configuration",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": {
+										"password": "bifrost",
+										"username": "bifrost"
+									}
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": "{{host}}/clients/0a4ac10c-ae80-4875-aff8-294b857419bd"
+							},
+							"response": []
+						},
+						{
+							"name": "show configuration of all clients",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": {
+										"password": "{{password}}",
+										"username": "{{user}}"
+									}
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": "{{host}}/clients"
+							},
+							"response": []
+						},
+						{
+							"name": "add client configuration",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": {
+										"password": "bifrost",
+										"username": "bifrost"
+									}
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"testclient\",\n    \"secrets\": [\n        \"9aaa5e84-342f-489d-8f2f-3d770205aa43\"\n    ],\n    \"publicClientIds\": [\n        \"764ff071-4c69-4625-b3be-10f7e6515f84\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/clients/"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
 				{
 					"name": "GET wg google rating",
 					"request": {
@@ -299,7 +396,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"auth": {
@@ -329,5 +427,6 @@
 				]
 			}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

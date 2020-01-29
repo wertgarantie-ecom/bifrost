@@ -1,4 +1,5 @@
 postman/globals.json filter=git-crypt diff=git-crypt
 config/*.env filter=git-crypt diff=git-crypt
 config/test.env !filter !diff
+postman/*environment.json filter=git-crypt diff=git-crypt
 .gitattributes !filter !diff
