@@ -17,7 +17,7 @@ describe('should add new client with valid data', () => {
     };
     it('should add new client', async () => {
         return await request(app)
-            .post("/wertgarantie/client")
+            .post("/wertgarantie/clients")
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .set('Accept', 'application/json')
             .send(validData)
@@ -33,7 +33,7 @@ describe('should add new client with valid data', () => {
 
     it('should find all clients', async () => {
         return await request(app)
-            .get("/wertgarantie/client")
+            .get("/wertgarantie/clients")
             .set('Accept', 'application/json')
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .expect(200)
@@ -46,10 +46,9 @@ describe('should add new client with valid data', () => {
 
     it('should delete client', async () => {
         return await request(app)
-            .delete("/wertgarantie/client")
+            .delete(`/wertgarantie/clients/${validData.id}`)
             .set('Accept', 'application/json')
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
-            .send({id: validData.id})
             .expect(200)
             .expect({
                 id: validData.id,
@@ -72,7 +71,7 @@ describe('should handle duplicate constraint exception', () => {
     };
     it('add new client', async () => {
         return await request(app)
-            .post("/wertgarantie/client")
+            .post("/wertgarantie/clients")
             .set('Accept', 'application/json')
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .send(validData)
@@ -88,7 +87,7 @@ describe('should handle duplicate constraint exception', () => {
 
     it('throw exception when trying to add same client data again', async () => {
         return await request(app)
-            .post("/wertgarantie/client")
+            .post("/wertgarantie/clients")
             .set('Accept', 'application/json')
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .send(validData)

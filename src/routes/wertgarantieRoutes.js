@@ -39,8 +39,8 @@ const basicAuthUsers = {
 basicAuthUsers.users[user] = password;
 
 // client settings
-router.post("/client", basicAuth(basicAuthUsers), clientController.addNewClient);
-router.get("/client", basicAuth(basicAuthUsers), clientController.getAllClients);
-router.delete("/client", basicAuth(basicAuthUsers), clientController.deleteClient);
+router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
+router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients);
+router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.deleteClient);
 
 module.exports = router;
