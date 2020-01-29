@@ -1,6 +1,5 @@
-const _ = require('lodash');
 const repository = require('../repositories/ClientRepository');
-
+const uuid = require('uuid');
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const client = await repository.findClientForSecret(secret);
@@ -17,6 +16,29 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     }
     return client;
 };
+
+exports.deleteClientById = async function deleteClientById(clientId) { // technical clientId
+    const isDeleted = await repository.deleteClientById(clientId);
+    if (!isDeleted) {
+        throw new InvalidClientIdError(`Could not delete client with technical id ${clientId}`);
+    }
+    return isDeleted
+}
+
+exports.findAllClients = async function findAllClients() {
+    return await repository.findAllClients();
+}
+
+exports.addNewClient = async function addNewClient(requestBody) {
+    const clientData = {
+        id: uuid(),
+        name: requestBody.name,
+        secrets: requestBody.secrets,
+        publicClientIds: requestBody.publicClientIds
+    }
+    const newClient = await repository.persistClientSettings(clientData);
+    return newClient;
+}
 
 class InvalidClientIdError extends Error {
     constructor(message) {

@@ -5,6 +5,7 @@ const productController = require("../controllers/productController.js");
 const shoppingCartController = require("../controllers/shoppingCartController.js");
 const confirmationController = require("../controllers/confirmationController.js");
 const purchaseController = require("../controllers/purchaseController.js");
+const clientController = require("../controllers/clientController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
 
@@ -22,9 +23,15 @@ router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}),
 // purchases
 router.get("/purchases/:sessionId", purchaseController.findPurchaseById);
 
+// shopping cart
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
 router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
+
+// client settings
+router.post("/client", clientController.addNewClient);
+router.get("/client", clientController.getAllClients);
+router.delete("/client", clientController.deleteClient);
 
 module.exports = router;

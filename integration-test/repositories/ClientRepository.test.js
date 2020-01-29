@@ -6,12 +6,13 @@ describe("should find persisted client properties by given secret", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        secrets: [uuid() + "", uuid() + ""],
-        publicClientIds: [uuid() + "", uuid() + ""]
+        secrets: [uuid() + "", uuid() + ""].sort(),
+        publicClientIds: [uuid() + "", uuid() + ""].sort()
     };
 
     test("should persist valid client data", async () => {
-        await clientRepository.persistClientSettings(clientData);
+        const persistResult = await clientRepository.persistClientSettings(clientData);
+        expect(persistResult).toEqual(clientData);
     });
 
     test("should find persisted client data by given secret", async () => {
@@ -33,7 +34,7 @@ describe("should find persisted client properties by given public client id", ()
         await clientRepository.persistClientSettings(clientData);
     });
 
-    test("should find persisted client data by given secret", async () => {
+    test("should find persisted client data by given public id", async () => {
         const client = await clientRepository.findClientForPublicClientId(clientData.publicClientIds[0]);
         expect(client).toEqual(clientData);
     })
@@ -44,8 +45,8 @@ describe("should delete client data for client id", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        secrets: [uuid() + "", uuid() + ""],
-        publicClientIds: [uuid() + "", uuid() + ""]
+        secrets: [uuid() + "", uuid() + ""].sort(),
+        publicClientIds: [uuid() + "", uuid() + ""].sort()
     };
 
     test("should persist valid client data", async () => {

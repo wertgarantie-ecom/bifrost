@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     if (err.name === 'JsonSchemaValidation') {
         err.status = 400;
-        err.details = {
+        err.message = {
             receivedBody: req.body,
             validations: err.validations
         };
@@ -55,16 +55,18 @@ app.use(function (err, req, res, next) {
         err.status = 400;
     } else if (err.name === 'HeimdallConnectionError') {
         err.status = 502;
-        err.details = err.message;
     } else if (err.name === 'HeimdallClientError') {
         err.status = 400;
-        err.details = err.message;
     } else if (err.name === 'InvalidClientIdError'){
         err.status = 400;
-        err.details = err.message;
+    } else if (err.name === 'InvalidClientData') {
+        err.status = 400;
     }
     console.error(err);
-    res.status(err.status || 500).json({errors: err.details});
+    res.status(err.status || 500).json({
+        error: err.name,
+        message: err.message
+    });
 });
 
 module.exports = app;
