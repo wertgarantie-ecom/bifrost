@@ -5,7 +5,7 @@ const moment = require('moment');
 const signatureService = require('./signatureService');
 const checkoutRepository = require('../repositories/CheckoutRepository');
 const defaultHeimdallClient = require('../services/heimdallClient');
-const clientService = require('../services/clientService');
+const defaultClientService = require('../services/clientService');
 
 const productSchema = Joi.object({
     wertgarantieProductId: Joi.number().integer().required(),
@@ -75,8 +75,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     }
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
-    const client = clientService.findClientForSecret(secretClientId);
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
     const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
     if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
         throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
@@ -84,6 +83,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     if (!wertgarantieCart.confirmed) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
+    const client = await clientService.findClientForSecret(secretClientId);
 
     const purchaseResults = await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
         const shopProductIndex = findIndex(purchasedShopProducts, wertgarantieProduct);

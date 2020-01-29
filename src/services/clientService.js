@@ -1,33 +1,43 @@
-const _ = require('lodash');
+const repository = require('../repositories/ClientRepository');
+const uuid = require('uuid');
 
-const clients = [
-    {
-        name: "bikeShop",
-        secrets: ["bikesecret1"],
-        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
-    },
-    {
-        name: "handyShop",
-        secrets: ["handysecret1"],
-        publicClientIds: ["bikeclientId1"]
-    }
-];
-
-exports.findClientForSecret = function findClientForSecret(secret) {
-    const client = _.find(clients, (client) => client.secrets.includes(secret));
+exports.findClientForSecret = async function findClientForSecret(secret) {
+    const client = await repository.findClientForSecret(secret);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified secret.`)
     }
     return client;
-}
+};
 
-exports.findClientForPublicClientId = function findClientForPublicClientId(publicClientId) {
-    const client = _.find(clients, (client) => client.publicClientIds.includes(publicClientId));
+exports.findClientForPublicClientId = async function findClientForPublicClientId(publicClientId) {
+    const client = await repository.findClientForPublicClientId(publicClientId);
     if (!client) {
-        throw new InvalidClientIdError(`Could not find Client for specified client ID: ${publicClientId}`);
+        throw new InvalidClientIdError(`Could not find Client for specified public client ID: ${publicClientId}`);
     }
     return client;
-}
+};
+
+exports.deleteClientById = async function deleteClientById(clientId) { // technical clientId
+    const isDeleted = await repository.deleteClientById(clientId);
+    if (!isDeleted) {
+        throw new InvalidClientIdError(`Could not delete client with technical id ${clientId}`);
+    }
+    return isDeleted
+};
+
+exports.findAllClients = async function findAllClients() {
+    return await repository.findAllClients();
+};
+
+exports.addNewClient = async function addNewClient(requestBody) {
+    const clientData = {
+        id: uuid(),
+        name: requestBody.name,
+        secrets: requestBody.secrets,
+        publicClientIds: requestBody.publicClientIds
+    };
+    return await repository.persistClientSettings(clientData);
+};
 
 class InvalidClientIdError extends Error {
     constructor(message) {

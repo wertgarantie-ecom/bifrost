@@ -16,11 +16,11 @@ exports.signShoppingCart = function signShoppingCart(shoppingCart, secret = SIGN
         shoppingCart: shoppingCart,
         signature: signature
     };
-}
+};
 
 exports.verifyShoppingCart = function verifyShoppingCart(signedShoppingCart, secret = SIGN_SECRET) {
     return verifyObject(signedShoppingCart.shoppingCart, signedShoppingCart.signature, secret);
-}
+};
 
 exports.signObject = signObject;
 exports.verifyObject = verifyObject;

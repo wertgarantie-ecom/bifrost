@@ -5,8 +5,10 @@ const productController = require("../controllers/productController.js");
 const shoppingCartController = require("../controllers/shoppingCartController.js");
 const confirmationController = require("../controllers/confirmationController.js");
 const purchaseController = require("../controllers/purchaseController.js");
+const clientController = require("../controllers/clientController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
+const basicAuth = require('express-basic-auth');
 
 // components
 router.get("/rating", googleController.reviewRatings);
@@ -22,9 +24,23 @@ router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}),
 // purchases
 router.get("/purchases/:sessionId", purchaseController.findPurchaseById);
 
+// shopping cart
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
 router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
+
+const user = process.env.BASIC_AUTH_USER;
+const password = process.env.BASIC_AUTH_PASSWORD;
+const basicAuthUsers = {
+    users: {
+    }
+};
+basicAuthUsers.users[user] = password;
+
+// client settings
+router.post("/client", basicAuth(basicAuthUsers), clientController.addNewClient);
+router.get("/client", basicAuth(basicAuthUsers), clientController.getAllClients);
+router.delete("/client", basicAuth(basicAuthUsers), clientController.deleteClient);
 
 module.exports = router;

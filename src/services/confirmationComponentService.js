@@ -3,11 +3,15 @@ const productOfferService = require('./heimdallProductOfferService');
 const documentType = require('./heimdallProductOfferService').documentType;
 const defaultProductImageService = require('./productImageService');
 const signService = require('./signatureService');
-const clientService = require('./clientService');
+const defaultClientService = require('./clientService');
 const _ = require('lodash');
 const SIGN_SECRET = process.env.SIGN_SECRET || "localSignSecret";
 
-exports.prepareConfirmationData = async function prepareConfirmationData(publicClientId, shoppingCart, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
+exports.prepareConfirmationData = async function prepareConfirmationData(publicClientId,
+                                                                         shoppingCart,
+                                                                         heimdallClient = defaultHeimdallClient,
+                                                                         productImageService = defaultProductImageService,
+                                                                         clientService = defaultClientService) {
     if (!shoppingCart) {
         return undefined;
     }
@@ -21,7 +25,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(publicC
     };
 
     let avbHref;
-    const client = clientService.findClientForPublicClientId(publicClientId);
+    const client = await clientService.findClientForPublicClientId(publicClientId);
     for (var i = 0; i < shoppingCart.products.length; i++) {
         const wertgarantieProduct = shoppingCart.products[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, heimdallClient, productImageService);

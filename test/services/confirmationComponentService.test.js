@@ -9,6 +9,19 @@ const productImageServiceMock = {
     getRandomImageLinksForDeviceClass: () => ["imageLink"]
 };
 
+const clientData =
+    {
+        name: "bikeShop",
+        secrets: ["bikesecret1"],
+        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
+    };
+
+function mockClientService(clientData) {
+    return {
+        findClientForPublicClientId: jest.fn(() => clientData)
+    }
+}
+
 const testShoppingCart = {
     clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     signature: "signature",
@@ -73,7 +86,11 @@ const expectedResponse = {
 
 
 test("should return proper confirmation component data for one product", async () => {
-    const confirmationData = await service.prepareConfirmationData("5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", testShoppingCart, heimdallClientMock, productImageServiceMock);
+    const confirmationData = await service.prepareConfirmationData("5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        testShoppingCart,
+        heimdallClientMock,
+        productImageServiceMock,
+        mockClientService(clientData));
     expect(confirmationData).toEqual(expectedResponse);
 });
 

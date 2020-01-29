@@ -1,6 +1,18 @@
 const service = require('../../src/services/productSelectionPopUpComponentService');
 const heimdallTestProducts = require("./heimdallTestProducts").heimdallTestProducts;
 
+const clientData =
+    {
+        name: "bikeShop",
+        secrets: ["bikesecret1"],
+        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
+    };
+
+function mockClientService(clientData) {
+    return {
+        findClientForPublicClientId: jest.fn(() => clientData)
+    }
+}
 
 test("should return proper product response", async () => {
     const heimdallClientMock = {
@@ -9,7 +21,12 @@ test("should return proper product response", async () => {
     const productImagesServiceMock = {
         getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
     };
-    const result = await service.getProductOffers("1dfd4549-9bdc-4285-9047-e5088272dade", "devicePrice", "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", heimdallClientMock, productImagesServiceMock);
+    const result = await service.getProductOffers("1dfd4549-9bdc-4285-9047-e5088272dade",
+        "devicePrice",
+        "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        heimdallClientMock,
+        productImagesServiceMock,
+        mockClientService(clientData));
     const expectedResult = [{
         advantages: ["Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
         currency: "€",
