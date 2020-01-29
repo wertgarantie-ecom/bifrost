@@ -200,13 +200,6 @@
 						{
 							"name": "delete client configuration",
 							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": {
-										"password": "bifrost",
-										"username": "bifrost"
-									}
-								},
 								"method": "DELETE",
 								"header": [
 									{
@@ -230,13 +223,6 @@
 								"disableBodyPruning": true
 							},
 							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": {
-										"password": "{{password}}",
-										"username": "{{user}}"
-									}
-								},
 								"method": "GET",
 								"header": [
 									{
@@ -257,13 +243,6 @@
 						{
 							"name": "add client configuration",
 							"request": {
-								"auth": {
-									"type": "basic",
-									"basic": {
-										"password": "bifrost",
-										"username": "bifrost"
-									}
-								},
 								"method": "POST",
 								"header": [
 									{
@@ -275,7 +254,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"testclient\",\n    \"secrets\": [\n        \"9aaa5e84-342f-489d-8f2f-3d770205aa43\"\n    ],\n    \"publicClientIds\": [\n        \"764ff071-4c69-4625-b3be-10f7e6515f84\"\n    ]\n}",
+									"raw": "{\n    \"name\": \"bikeShop\",\n    \"secrets\": [\n        \"bikesecret1\"\n    ],\n    \"publicClientIds\": [\n        \"5209d6ea-1a6e-11ea-9f8d-778f0ad9137f\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -285,6 +264,35 @@
 								"url": "{{host}}/clients/"
 							},
 							"response": []
+						}
+					],
+					"auth": {
+						"type": "basic",
+						"basic": {
+							"password": "{{password}}",
+							"username": "{{user}}"
+						}
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0b2ded2a-c5be-4210-8170-9425818868c2",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "2e12c8c2-0d55-4efe-906a-5134f9bffc2a",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					],
 					"protocolProfileBehavior": {},
