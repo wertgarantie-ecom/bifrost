@@ -17,12 +17,13 @@ describe('should add new client with valid data', () => {
     it('should add new client', async () => {
         return await request(app)
             .post("/wertgarantie/client")
-            .send(validData)
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .set('Accept', 'application/json')
+            .send(validData)
             .expect(200)
             .then(response => {
                 const {id, name, secrets, publicClientIds} = response.body;
-                validData.id = id
+                validData.id = id;
                 expect(validData.name).toEqual(name);
                 expect(validData.secrets.sort()).toEqual(secrets);
                 expect(validData.publicClientIds.sort()).toEqual(publicClientIds);
@@ -33,6 +34,7 @@ describe('should add new client with valid data', () => {
         return await request(app)
             .get("/wertgarantie/client")
             .set('Accept', 'application/json')
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .expect(200)
             .then(response => {
                 const {clients} = response.body;
@@ -46,8 +48,9 @@ describe('should add new client with valid data', () => {
     it('should delete client', async () => {
         return await request(app)
             .delete("/wertgarantie/client")
-            .send({id: validData.id})
             .set('Accept', 'application/json')
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+            .send({id: validData.id})
             .expect(200)
             .expect({
                 id: validData.id,
@@ -71,12 +74,13 @@ describe('should handle duplicate constraint exception', () => {
     it('add new client', async () => {
         return await request(app)
             .post("/wertgarantie/client")
-            .send(validData)
             .set('Accept', 'application/json')
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+            .send(validData)
             .expect(200)
             .then(response => {
                 const {id, name, secrets, publicClientIds} = response.body;
-                validData.id = id
+                validData.id = id;
                 expect(validData.name).toEqual(name);
                 expect(validData.secrets.sort()).toEqual(secrets);
                 expect(validData.publicClientIds.sort()).toEqual(publicClientIds);
@@ -86,12 +90,13 @@ describe('should handle duplicate constraint exception', () => {
     it('throw exception when trying to add same client data again', async () => {
         return await request(app)
             .post("/wertgarantie/client")
-            .send(validData)
             .set('Accept', 'application/json')
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+            .send(validData)
             .expect(400)
             .expect({
                 "error": "InvalidClientData",
                 "message": "duplicate key value violates unique constraint \"clientsecret_pkey\""
             });
     });
-})
+});
