@@ -10,25 +10,56 @@ exports.addNewClient = async function addNewClient(req, res, next) {
     }
 };
 
-exports.getAllClients = async function getAllClients(req, res) {
-    const clients = await clientService.findAllClients();
-    if (clients) {
-        const result = {
-            clients: clients
-        };
-        res.status(200).send(result);
-    } else {
-        res.status(204).send({
-            message: "No clients found in database"
-        })
+exports.getAllClients = async function getAllClients(req, res, next) {
+    const publicClientId = req.query.publicClientId;
+    let clients;
+    try {
+        if (publicClientId) {
+            clients = await clientService.findClientForPublicClientId(publicClientId);
+        } else {
+            clients = await clientService.findAllClients();
+        }
+        if (clients) {
+            const result = {
+                clients: clients
+            };
+            res.status(200).send(result);
+        } else {
+            res.status(204).send({
+                message: "No clients found in database"
+            })
+        }
+    } catch (e) {
+        next(e);
     }
 };
 
-exports.deleteClient = async function deleteClient(req, res) {
+exports.getClientById = async function getClientById(req, res, next) {
+    const id = req.params.clientId;
+    try {
+        const client = await clientService.findClientById(id);
+        if (client) {
+            res.status(200).send(client);
+        } else {
+            res.status(204).send({
+                message: `No client found for id ${id}`
+            })
+        }
+    } catch (e) {
+        next(e);
+    }
+};
+
+
+exports.deleteClient = async function deleteClient(req, res, next) {
     const idToDelete = req.params.clientId;
-    const isDeleted = await clientService.deleteClientById(idToDelete); // if not deleted, exception is thrown
-    res.status(200).send({
-        id: idToDelete,
-        deleted: isDeleted
-    });
+    try {
+        const isDeleted = await clientService.deleteClientById(idToDelete); // if not deleted, exception is thrown
+        res.status(200).send({
+            id: idToDelete,
+            deleted: isDeleted
+        });
+    } catch (e) {
+        next(e);
+    }
 };

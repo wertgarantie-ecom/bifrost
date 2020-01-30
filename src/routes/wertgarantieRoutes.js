@@ -33,14 +33,14 @@ router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFro
 const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;
 const basicAuthUsers = {
-    users: {
-    }
+    users: {}
 };
 basicAuthUsers.users[user] = password;
 
 // client settings
 router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
 router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients);
+router.get("/clients/:clientId", basicAuth(basicAuthUsers), clientController.getClientById);
 router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.deleteClient);
 
 module.exports = router;

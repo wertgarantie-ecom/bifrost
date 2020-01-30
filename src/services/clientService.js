@@ -1,6 +1,14 @@
 const repository = require('../repositories/ClientRepository');
 const uuid = require('uuid');
 
+exports.findClientById = async function findClientById(id) {
+    const client = await repository.findClientById(id);
+    if (!client) {
+        throw new InvalidClientIdError(`Could not find Client for specified ID: ${id}`);
+    }
+    return client;
+};
+
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const client = await repository.findClientForSecret(secret);
     if (!client) {
