@@ -4,10 +4,10 @@ const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
 const unknownDeviceClassResponse = require('./heimdallResponses').unknownDeviceClassResponse;
 const testhelper = require('../helper/fixtureHelper');
+const dateformat = require('dateformat');
 
 test('should return proper product data', async () => {
     const clientData = await testhelper.createDefaultClient();
-    const date = new Date().toLocaleDateString();
 
     nock(process.env.HEIMDALL_URI)
         .get("/api/v1/auth/client/" + clientData.secrets[0])
@@ -16,10 +16,8 @@ test('should return proper product data', async () => {
                 access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
             }
         });
-
-
     nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/product-offers?device_class=fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d&device_purchase_price=1200&device_purchase_date=" + date)
+        .get("/api/v1/product-offers?device_class=fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d&device_purchase_price=1200&device_purchase_date=" + dateformat(new Date(), 'yyyy-mm-dd'))
         .reply(200, getProductOffersResponse);
 
     const expectedStatusCode = 200;
