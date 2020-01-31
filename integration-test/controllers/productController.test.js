@@ -25,7 +25,7 @@ test('should return proper product data', async () => {
     const expectedStatusCode = 200;
     return await request(app).get('/wertgarantie/components/selection-popup').query({
         deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
-        devicePrice: 1200,
+        devicePrice: 120000,
         productId: 11,
         clientId: clientData.publicClientIds[0] + "",
     })
