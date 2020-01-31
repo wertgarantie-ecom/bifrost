@@ -1,6 +1,7 @@
 const axios = require('axios');
 const AxiosLogger = require('axios-logger');
 const heimdallUri = process.env.HEIMDALL_URI || "http://localhost:3001";
+const dateformat = require('dateformat');
 
 const instance = axios.create();
 instance.interceptors.request.use((request) => {
@@ -40,7 +41,7 @@ async function getBearerToken(client, hpptClient) {
 exports.getProductOffers = async function getProductOffers(client, deviceClass, devicePrice, date = new Date(), httpClient = axios) {
     const heimdallProductOffersUrl = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + devicePrice +
-        "&device_purchase_date=" + date.toLocaleDateString();
+        "&device_purchase_date=" + dateformat(date, "yyyy-mm-dd");
     const bearerToken = await getBearerToken(client, httpClient);
     const request = {
         method: 'get',
