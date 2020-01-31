@@ -11,6 +11,7 @@ const mockHeimdallClientSuccess = () => {
         sendWertgarantieProductCheckout: jest.fn(() => {
             return {
                 payload: {
+                    activation_code: "123456",
                     contract_number: "28850277",
                     transaction_number: "28850279",
                     message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
@@ -190,7 +191,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
             {
                 wertgarantieProductId: "2",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                devicePrice: "1000",
+                devicePrice: "100000",
                 shopProductName: "IPhone X",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
@@ -200,7 +201,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
 
     const purchasedProducts = [
         {
-            price: "1000",
+            price: "100000",
             manufacturer: "Apple Inc",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "IPhone X",
@@ -259,10 +260,11 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
                     "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
                     "wertgarantieProductId": "2",
                     "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                    "devicePrice": "1000",
+                    "devicePrice": "100000",
                     "success": true,
                     "message": "successfully transmitted insurance proposal",
                     "shopProduct": "IPhone X",
+                    "activationCode": "123456",
                     "contractNumber": "28850277",
                     "transactionNumber": "28850279"
                 }
@@ -499,14 +501,14 @@ test("checkout call with multiple products where one is not found in shop cart",
             {
                 wertgarantieProductId: "2",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                devicePrice: "1000",
+                devicePrice: "100000",
                 shopProductName: "Super Bike 3000",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             },
             {
                 wertgarantieProductId: "2",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                devicePrice: "1200",
+                devicePrice: "120000",
                 shopProductName: "Super Bike 3000",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
@@ -516,13 +518,13 @@ test("checkout call with multiple products where one is not found in shop cart",
 
     const purchasedProducts = [
         {
-            price: "1000",
+            price: "100000",
             manufacturer: "Pegasus",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "Super Bike 3000",
         },
         {
-            price: "1000",
+            price: "100000",
             manufacturer: "Pegasus",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             model: "Super Bike 3000",
@@ -553,10 +555,11 @@ test("checkout call with multiple products where one is not found in shop cart",
                     "id": "37347358-1fc1-4840-992a-5d30bac1641d",
                     "wertgarantieProductId": "2",
                     "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                    "devicePrice": "1000",
+                    "devicePrice": "100000",
                     "success": true,
                     "message": "successfully transmitted insurance proposal",
                     "shopProduct": "Super Bike 3000",
+                    "activationCode": "123456",
                     "contractNumber": "28850277",
                     "transactionNumber": "28850279"
                 },
@@ -564,13 +567,13 @@ test("checkout call with multiple products where one is not found in shop cart",
                     "id": "a409e32a-053d-406c-b8c5-016bbab413dc",
                     "wertgarantieProductId": "2",
                     "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                    "devicePrice": "1200",
+                    "devicePrice": "120000",
                     "success": false,
                     "message": "couldn't find matching product in shop cart for wertgarantie product",
                     "shopProduct": "Super Bike 3000",
                     "availableShopProducts": [
                         {
-                            "price": "1000",
+                            "price": "100000",
                             "manufacturer": "Pegasus",
                             "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                             "model": "Super Bike 3000"

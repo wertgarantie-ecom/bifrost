@@ -141,7 +141,7 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         device_manufacturer: matchingShopProduct.manufacturer,
         device_model: matchingShopProduct.model,
         device_class: matchingShopProduct.deviceClass,
-        device_purchase_price: parseFloat(matchingShopProduct.price),
+        device_purchase_price: parseFloat(matchingShopProduct.price) / 100,
         device_purchase_date: formatDate(date),
         device_condition: 1,
         payment_type: "bank_transfer",
