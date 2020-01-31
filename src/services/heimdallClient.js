@@ -33,7 +33,8 @@ async function getBearerToken(client, hpptClient) {
             "Content-Type": "application/json"
         }
     };
-    return sendHeimdallRequest(request, hpptClient)
+    const response = await sendHeimdallRequest(request, hpptClient)
+    return response.payload.access_token;
 }
 
 exports.getProductOffers = async function getProductOffers(client, deviceClass, devicePrice, date = new Date(), httpClient = axios) {
