@@ -101,7 +101,7 @@ describe("should return valid confirmation data", function () {
             .send({
                 "productId": 12,
                 "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
-                "devicePrice": 45.0,
+                "devicePrice": 4500,
                 "deviceCurrency": "EUR",
                 "shopProductName": "Phone X"
             })
@@ -112,7 +112,7 @@ describe("should return valid confirmation data", function () {
         agent.get('/wertgarantie/components/confirmation?clientId=' + clientData.publicClientIds[0], function (req, res) {
             req.cookie(clientData.publicClientIds[0])
         })
-            .expect(200, done);
+        .expect(200, done);
     });
 });
 

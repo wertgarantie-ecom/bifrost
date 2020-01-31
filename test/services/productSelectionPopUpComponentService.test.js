@@ -20,7 +20,7 @@ function mockClientService(clientData) {
 
 test("should return proper product response", async () => {
     const heimdallClientMock = {
-        getProductOffers: () => Promise.resolve(heimdallTestProducts)
+        getProductOffers: () => Promise.resolve(heimdallTestProducts.payload)
     };
     const result = await service.getProductOffers("1dfd4549-9bdc-4285-9047-e5088272dade",
         "devicePrice",
@@ -64,16 +64,4 @@ test("should return proper product response", async () => {
         top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
     }];
     expect(result).toEqual(expectedResult);
-});
-
-test('should use correct price format', async () => {
-    const heimdallClientMock = {
-        getProductOffers: jest.fn(() => {
-            return heimdallTestProducts;
-        })
-    };
-
-    const result = await service.getProductOffers("deviceClass", "139999", clientData.publicClientIds[0], heimdallClientMock, productImagesServiceMock, mockClientService(clientData));
-
-    expect(heimdallClientMock.getProductOffers.mock.calls[0][2]).toBe(1399.99)
 });

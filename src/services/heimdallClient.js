@@ -39,8 +39,9 @@ async function getBearerToken(client, hpptClient) {
 }
 
 exports.getProductOffers = async function getProductOffers(client, deviceClass, devicePrice, date = new Date(), httpClient = axios) {
+    const priceInFloat = parseFloat(devicePrice) / 100; // never ever use float for prices....but heimdall wants it so...
     const heimdallProductOffersUrl = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
-        "&device_purchase_price=" + devicePrice +
+        "&device_purchase_price=" + priceInFloat +
         "&device_purchase_date=" + dateformat(date, "yyyy-mm-dd");
     const bearerToken = await getBearerToken(client, httpClient);
     const request = {
@@ -52,7 +53,11 @@ exports.getProductOffers = async function getProductOffers(client, deviceClass, 
             "Content-Type": "application/json"
         }
     };
-    return sendHeimdallRequest(request, httpClient);
+    const response = await sendHeimdallRequest(request, httpClient);
+    if (!response.payload) {
+        return [];
+    }
+    return response.payload;
 };
 
 exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(data, client, httpClient = instance) {

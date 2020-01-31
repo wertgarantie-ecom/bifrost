@@ -2,7 +2,7 @@ const service = require('../../src/services/confirmationComponentService');
 const heimdallTestData = require("./heimdallTestProducts").heimdallTestProducts;
 
 const heimdallClientMock = {
-    getProductOffers: async () => heimdallTestData
+    getProductOffers: async () => heimdallTestData.payload
 };
 
 const productImageServiceMock = {

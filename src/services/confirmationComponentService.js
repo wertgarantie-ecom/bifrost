@@ -42,8 +42,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(publicC
 };
 
 async function getConfirmationProductData(wertgarantieProduct, client, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
-    const productOffersResponse = await heimdallClient.getProductOffers(client, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice);
-    const productOffers = productOffersResponse.payload;
+    const productOffers = await heimdallClient.getProductOffers(client, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice);
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];

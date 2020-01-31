@@ -10,13 +10,12 @@ exports.getProductOffers = async function getProductOffers(deviceClass,
                                                            imageService = productImageService,
                                                            clientService = defaultClientService) {
     const client = await clientService.findClientForPublicClientId(clientId);
-    const priceInFloat = parseFloat(devicePrice) / 100; // never ever use float for prices....but heimdall wants it so...
-    const content = await heimdallClient.getProductOffers(client, deviceClass, priceInFloat);
+    const productOffers = await heimdallClient.getProductOffers(client, deviceClass, devicePrice);
     const products = [];
     let imageLinks = [];
-    imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, content.payload.length);
-    content.payload.forEach((payload, idx) => {
-        const product = convertPayloadToSelectionPopUpProduct(payload, imageLinks[idx], content.payload);
+    imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    productOffers.forEach((offer, idx) => {
+        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers);
         products.push(product);
     });
     return products;
