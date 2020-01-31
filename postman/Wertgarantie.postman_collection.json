@@ -19,7 +19,7 @@
 									"globalFunctions = {",
 									"    obtainBearerToken: function(pm) {",
 									"        var request = {",
-									"            url: pm.environment.get(\"host\") + \"/auth/client/\" + pm.globals.get(\"wg-clientId\"),",
+									"            url: pm.environment.get(\"host\") + \"/api/v1/auth/client/\" + pm.globals.get(\"wg-clientId\"),",
 									"            method: \"GET\",",
 									"            header: \"Accept:application/json\"",
 									"        }",
