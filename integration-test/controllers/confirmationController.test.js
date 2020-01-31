@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const nock = require('nock');
 const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
 const testhelper = require('../helper/fixtureHelper');
+const dateformat = require('dateformat');
 
 test('should handle valid confirm cart request', async () => {
     const clientId = uuid();
@@ -91,7 +92,7 @@ describe("should return valid confirmation data", function () {
             });
 
         nock(process.env.HEIMDALL_URI)
-            .get("/api/v1/product-offers?device_class=17fd707a-f9c0-11e9-9694-cf549fcf64e2&device_purchase_price=45&device_purchase_date=" + new Date().toLocaleDateString())
+            .get("/api/v1/product-offers?device_class=17fd707a-f9c0-11e9-9694-cf549fcf64e2&device_purchase_price=45&device_purchase_date=" + dateformat(new Date(), 'yyyy-mm-dd'))
             .reply(200, getProductOffersResponse);
     });
 
@@ -111,7 +112,7 @@ describe("should return valid confirmation data", function () {
         agent.get('/wertgarantie/components/confirmation?clientId=' + clientData.publicClientIds[0], function (req, res) {
             req.cookie(clientData.publicClientIds[0])
         })
-        .expect(200, done);
+            .expect(200, done);
     });
 });
 
