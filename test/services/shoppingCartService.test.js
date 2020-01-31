@@ -245,6 +245,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         device_purchase_price: 1000,
         device_purchase_date: "2019-06-01",
         device_condition: 1,
+        payment_method: "jährlich",
         payment_type: 'bank_transfer',
         terms_and_conditions_accepted: true
     });
