@@ -20,21 +20,21 @@ exports.validateSessionId = async function validateSessionId(req, res, next, rep
 exports.validateShoppingCart = async function validateShoppingCart(req, res, next, repository = checkoutRepository) {
     if (!(req.body && req.body.shoppingCart)) {
         console.log("Empty body and/or shopping cart not available. Nothing to validate.");
-        next();
+        return next();
     }
 
     const shoppingCart = req.body.shoppingCart;
-
     if (!signatureService.verifyShoppingCart(shoppingCart)) {
         deleteShoppingCart(req, res);
+        return next();
+    } else {
+        const result = await repository.findBySessionId(shoppingCart.sessionId);
+        if (result) {
+            deleteShoppingCart(req, res);
+        }
+        return next();
     }
-
-    const result = await repository.findBySessionId(shoppingCart.sessionId);
-    if (result) {
-        deleteShoppingCart(req, res);
-    }
-    next();
-}
+};
 
 function deleteShoppingCart(req, res) {
     delete req.body.shoppingCart;
