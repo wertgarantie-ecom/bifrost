@@ -1,4 +1,5 @@
 const service = require('../services/shoppingCartService');
+const signService = require('../services/signatureService');
 
 /**
  * Add given product to existing or new shopping cart.
@@ -17,7 +18,9 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     res.cookie(shoppingCart.clientId, shoppingCart, {
         signed: true
     });
-    res.status(200).send(shoppingCart);
+
+    const signedShoppingCart = signService.signShoppingCart(shoppingCart);
+    res.status(200).send(signedShoppingCart);
 };
 
 /**
@@ -56,7 +59,7 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(r
 exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
     if (!req.body.wertgarantieShoppingCart || req.body.wertgarantieShoppingCart === "") {
         res.status(200).send({
-            message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.` 
+            message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.`
         });
     } else {
         try {

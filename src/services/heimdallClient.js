@@ -34,7 +34,7 @@ async function getBearerToken(client, hpptClient) {
             "Content-Type": "application/json"
         }
     };
-    const response = await sendHeimdallRequest(request, hpptClient)
+    const response = await sendHeimdallRequest(request, hpptClient);
     return response.payload.access_token;
 }
 
