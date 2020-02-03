@@ -44,7 +44,9 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(r
         res.clearCookie(req.params.clientId);
     } else {
         res.cookie(req.params.clientId, shoppingCart, {
-            signed: true
+            signed: true,
+            secure: true,
+            sameSite: 'None'
         });
     }
 
