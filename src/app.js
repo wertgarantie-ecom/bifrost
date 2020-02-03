@@ -13,6 +13,7 @@ dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 const validateSessionId = require('./routes/sessionIdValidator').validateSessionId;
+const validateShoppingCart = require('./routes/sessionIdValidator').validateShoppingCart;
 
 const app = express();
 const signSecret = process.env.SIGN_SECRET;
@@ -37,6 +38,7 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
 app.use('/wertgarantie/', validateSessionId);
+app.use('/wertgarantie/', validateShoppingCart);
 app.use('/wertgarantie/', wertgarantieRoutes);
 
 // catch 404 and forward to error handler
