@@ -1,11 +1,10 @@
-const sessionIdValidator = require('../../src/routes/sessionIdValidator');
+const requestFilter = require('../../src/routes/shoppingCartRequestFilter');
 
 
 test("should remove cookies for successful insurance purchases", async () => {
     const mockRequest = {
-        signedCookies: 
-        {
-            "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f": {
+        signedShoppingCart:
+            {
                 "sessionId": "bb25bbf0-2bb8-4f15-aaf1-f73ade6fd862",
                 "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
                 "products": [
@@ -20,7 +19,6 @@ test("should remove cookies for successful insurance purchases", async () => {
                 ],
                 "confirmed": false
             }
-        }
     };
 
     const mockRepository = {
@@ -28,11 +26,12 @@ test("should remove cookies for successful insurance purchases", async () => {
     };
 
     const mockResponse = {
-        clearCookie: jest.fn(() => {
-            
+        shoppingCart: jest.fn(() => {
+
         })
     };
-    await sessionIdValidator.validateSessionId(mockRequest, mockResponse, () => {}, mockRepository);
+    await requestFilter.validateShoppingCart(mockRequest, mockResponse, () => {
+    }, mockRepository);
     expect(mockResponse.clearCookie).toBeCalled();
     expect(mockRequest.signedCookies).toEqual({});
 });

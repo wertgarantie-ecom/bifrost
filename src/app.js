@@ -12,8 +12,8 @@ const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV
 dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
-const validateSessionId = require('./routes/sessionIdValidator').validateSessionId;
-const validateShoppingCart = require('./routes/sessionIdValidator').validateShoppingCart;
+const validateShoppingCartRequest = require('./routes/shoppingCartRequestFilter').validateShoppingCart;
+const signShoppingCart = require('./routes/shoppingCartResponseFilter').signShoppingCart;
 
 const app = express();
 const signSecret = process.env.SIGN_SECRET;
@@ -37,9 +37,9 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
-app.use('/wertgarantie/', validateSessionId);
-app.use('/wertgarantie/', validateShoppingCart);
+app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
+app.use('/wertgarantie/', signShoppingCart);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -59,7 +59,7 @@ app.use(function (err, req, res, next) {
         err.status = 502;
     } else if (err.name === 'HeimdallClientError') {
         err.status = 400;
-    } else if (err.name === 'InvalidClientIdError'){
+    } else if (err.name === 'InvalidClientIdError') {
         err.status = 400;
     } else if (err.name === 'InvalidClientData') {
         err.status = 400;

@@ -2,10 +2,8 @@ const defaultHeimdallClient = require('./heimdallClient');
 const productOfferService = require('./heimdallProductOfferService');
 const documentType = require('./heimdallProductOfferService').documentType;
 const defaultProductImageService = require('./productImageService');
-const signService = require('./signatureService');
 const defaultClientService = require('./clientService');
 const _ = require('lodash');
-const SIGN_SECRET = process.env.SIGN_SECRET || "localSignSecret";
 
 exports.prepareConfirmationData = async function prepareConfirmationData(publicClientId,
                                                                          shoppingCart,
@@ -15,13 +13,12 @@ exports.prepareConfirmationData = async function prepareConfirmationData(publicC
     if (!shoppingCart) {
         return undefined;
     }
-    const shoppingCartWithSignature = signService.signShoppingCart(shoppingCart, SIGN_SECRET);
     const result = {
-        shoppingCartInputString: JSON.stringify(shoppingCartWithSignature),
         confirmed: shoppingCart.confirmed,
         title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmationHeader: "Bitte bestätige noch kurz:",
-        products: []
+        products: [],
+        shoppingCart: shoppingCart
     };
 
     let avbHref;

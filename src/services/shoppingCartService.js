@@ -18,9 +18,6 @@ const productSchema = Joi.object({
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId) {
     productToAdd.orderId = orderId;
-    validateShoppingCart(existingCart, clientId);
-    Joi.assert(productToAdd, productSchema.required());
-
     const shoppingCart = existingCart || newShoppingCart(clientId);
     shoppingCart.products.push(productToAdd);
     shoppingCart.confirmed = false;
@@ -33,14 +30,12 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(existingCar
 };
 
 exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart, clientId) {
-    validateShoppingCart(shoppingCart, clientId, true);
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmed = true;
     return clone;
 };
 
-exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, clientId) {
-    validateShoppingCart(shoppingCart, clientId, true);
+exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart) {
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmed = false;
     return clone;
@@ -150,12 +145,6 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
     }
 }
 
-function validateShoppingCart(shoppingCart, clientId, isRequired = false) {
-    Joi.assert(clientId, Joi.string().guid().required().error(new Error("clientId is required")));
-    const schema = isRequired ? cartSchema(clientId).required() : cartSchema(clientId);
-    Joi.assert(shoppingCart, schema);
-}
-
 function cartSchema(clientId) {
     return Joi.object({
         sessionId: Joi.string().guid(),
@@ -181,7 +170,7 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(o
             i--;
         }
     }
-    return shoppingCart;
+    return shoppingCart.products.length === 0 ? shoppingCart : undefined;
 };
 
 class InvalidPublicClientIdError extends Error {

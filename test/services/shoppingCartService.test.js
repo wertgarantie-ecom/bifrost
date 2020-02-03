@@ -80,16 +80,6 @@ test("should validate if given cart has proper structure", () => {
     }).toThrow(ValidationError);
 });
 
-test("should validate if given product has proper structure", () => {
-    let invalidProduct = {
-        wertgarantieProductId: "1234",
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        deviceCurrency: "EUR",
-    };
-    expect(() => {
-        addProductToShoppingCartWithOrderId(undefined, invalidProduct).products
-    }).toThrow(ValidationError);
-});
 
 test("should validate if product was given", () => {
     expect(() => {
@@ -97,25 +87,6 @@ test("should validate if product was given", () => {
     }).toThrow(ValidationError);
 });
 
-
-test("should reject product with different clientId", () => {
-    const productWithDifferentClientId = {
-        wertgarantieProductId: 1234,
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 12.0,
-        deviceCurrency: "EUR",
-        shopProductName: "Phone X"
-    };
-
-    const shoppingCart = {
-        clientId: "b8a0169e-f99e-11e9-9611-67317e9f4f28",
-        products: []
-    };
-
-    expect(() => {
-        addProductToShoppingCartWithOrderId(shoppingCart, productWithDifferentClientId).products
-    }).toThrow(ValidationError);
-});
 
 test("should allow duplicate products", () => {
     let clientId = uuid();
@@ -138,16 +109,6 @@ test("should confirm valid shopping cart", () => {
     expect(confirmedShoppingCart.confirmed).toEqual(true);
 });
 
-test("should check validity of shopping cart on confirmation", () => {
-    let clientId = uuid();
-    const invalidShoppingCart = {
-        clientId: clientId,
-        products: [validProduct()],
-        confirmed: 12
-    };
-    expect(() => shoppingCartService.confirmShoppingCart(invalidShoppingCart, clientId)).toThrow(ValidationError);
-});
-
 test("should unconfirm valid shopping cart", () => {
     let clientId = uuid();
     const validShoppingCart = {
@@ -160,15 +121,6 @@ test("should unconfirm valid shopping cart", () => {
     expect(confirmedShoppingCart.confirmed).toEqual(false);
 });
 
-test("should check validity of shopping cart on removing confirmation", () => {
-    let clientId = uuid();
-    const invalidShoppingCart = {
-        clientId: clientId,
-        products: [validProduct()],
-        confirmed: 12
-    };
-    expect(() => shoppingCartService.unconfirmShoppingCart(invalidShoppingCart, clientId)).toThrow(ValidationError);
-});
 
 test("should throw error if undefined shopping cart is given to confirmation", () => {
     expect(() => shoppingCartService.unconfirmShoppingCart(undefined, uuid())).toThrow(ValidationError);

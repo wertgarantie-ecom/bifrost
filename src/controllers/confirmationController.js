@@ -1,10 +1,9 @@
 const confirmationService = require('../services/confirmationComponentService');
 const shoppingCartService = require('../services/shoppingCartService');
-const signatureService = require('../services/signatureService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res) {
     const clientId = req.query.clientId;
-    const shoppingCart = req.signedCookies[clientId];
+    const shoppingCart = req.signedCookies[clientId] || req.shoppingCart;
 
     const result = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
     if (result) {
@@ -18,35 +17,20 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
     const clientId = req.body.clientId;
     const shoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.signedCookies[clientId]);
 
-    if (shoppingCart.products.length === 0) {
-        res.clearCookie(clientId);
-    } else {
-        res.cookie(clientId, shoppingCart, {
-            signed: true
-        });
+    if (shoppingCart) {
+        const response = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
+        res.status(200).send(response);
     }
-    const response = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
-    res.status(200).send(response);
+    res.status(204);
 };
 
 exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
-    const clientId = req.body.clientId;
-    const shoppingCart = req.signedCookies[clientId];
-    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(shoppingCart, clientId);
-    sendShoppingCart(res, confirmedShoppingCart);
+    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(req.shoppingCart);
+    res.send(200, confirmedShoppingCart);
 };
 
 exports.unconfirmShoppingCart = function unconfirmShoppingCart(req, res) {
-    const clientId = req.body.clientId;
-    const shoppingCart = req.signedCookies[clientId];
-    const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(shoppingCart, clientId);
-    sendShoppingCart(res, unconfirmedShoppingCart);
+    const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(req.shoppingCart);
+    res.send(200, confirmedShoppingCart);
 };
 
-function sendShoppingCart(res, shoppingCart) {
-    res.cookie(shoppingCart.clientId, shoppingCart, {
-        signed: true
-    });
-    const signedShoppingCart = signatureService.signShoppingCart(shoppingCart);
-    res.status(200).send(JSON.stringify(signedShoppingCart));
-}

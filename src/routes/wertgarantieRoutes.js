@@ -14,6 +14,7 @@ const basicAuth = require('express-basic-auth');
 router.get("/rating", googleController.reviewRatings);
 router.get("/components/selection-popup", productController.getProducts);
 router.get("/components/confirmation", confirmationController.getConfirmationComponentData);
+router.post("/components/confirmation", confirmationController.getConfirmationComponentData);
 router.put("/components/confirmation", confirmationController.confirmShoppingCart);
 router.delete("/components/confirmation", confirmationController.unconfirmShoppingCart);
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
