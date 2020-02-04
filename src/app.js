@@ -15,7 +15,6 @@ dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 const validateShoppingCartRequest = require('./routes/shoppingCartRequestFilter').validateShoppingCart;
-const signShoppingCart = require('./routes/shoppingCartResponseFilter').signShoppingCart;
 
 const app = express();
 const signSecret = process.env.SIGN_SECRET;
@@ -37,13 +36,13 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(sslRedirect(['prod', 'dev', 'staging']));
 
+app.use(require('./routes/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
 // app.put('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
 app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
-app.use('/wertgarantie/', signShoppingCart);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

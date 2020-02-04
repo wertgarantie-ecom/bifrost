@@ -25,8 +25,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     for (var i = 0; i < shoppingCart.products.length; i++) {
         const wertgarantieProduct = shoppingCart.products[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, heimdallClient, productImageService);
-        result.products.push(confirmationProductData.product);
-        avbHref = confirmationProductData.avbHref;
+        if (confirmationProductData) {
+            result.products.push(confirmationProductData.product);
+            avbHref = confirmationProductData.avbHref;
+        }
     }
 
     result.confirmationTextGeneral = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
@@ -62,5 +64,5 @@ async function getConfirmationProductData(wertgarantieProduct, client, heimdallC
         };
     }
 
-    return {};
+    return undefined
 }

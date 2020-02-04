@@ -16,9 +16,11 @@ exports.validateShoppingCart = async function validateShoppingCart(req, res, nex
         const result = await findBySessionId(shoppingCart.sessionId);
         if (result) {
             deleteShoppingCart(req, res);
+            return next();
+        } else {
+            req.shoppingCart = shoppingCart;
+            return next();
         }
-        req.shoppingCart = shoppingCart;
-        return next();
     }
 };
 

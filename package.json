@@ -35,6 +35,7 @@
     "express-basic-auth": "^1.2.0",
     "express-healthcheck": "^0.1.0",
     "express-jsonschema": "^1.1.6",
+    "express-mung": "^0.5.1",
     "heroku-ssl-redirect": "0.0.4",
     "http-errors": "~1.6.3",
     "joi": "^14.3.1",

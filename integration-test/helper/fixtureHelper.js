@@ -19,25 +19,26 @@ exports.createDefaultClient = async function createDefaultClient() {
     return createdClient;
 };
 
-exports.createSignedShoppingCart = function createSignedShoppingCart(clientId) {
+exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
+    const {clientId = uuid(), deviceClass = uuid(), devicePrice = 139999, shopProductId = "1"} = data;
     const sessionId = uuid();
     const shoppingCart =
-    {
-        "sessionId": sessionId,
-        "clientId": clientId || "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        "products": [
         {
-            "wertgarantieProductId": 10,
-            "shopProductId": "1",
-            "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-            "devicePrice": 139999,
-            "deviceCurrency": "EUR",
-            "shopProductName": "E-Mountainbike Premium 3000",
-            "orderId": "e0accedd-b087-46df-899e-91229eb43747"
-        }
-    ],
-        "confirmed": false
-    }
+            "sessionId": sessionId,
+            "clientId": clientId,
+            "products": [
+                {
+                    "wertgarantieProductId": 10,
+                    "shopProductId": "1",
+                    "deviceClass": deviceClass,
+                    "devicePrice": devicePrice,
+                    "deviceCurrency": "EUR",
+                    "shopProductName": "E-Mountainbike Premium 3000",
+                    "orderId": "e0accedd-b087-46df-899e-91229eb43747"
+                }
+            ],
+            "confirmed": false
+        };
 
     return signatureService.signShoppingCart(shoppingCart);
-}
+};

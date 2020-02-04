@@ -1,11 +1,12 @@
 const signatureService = require('../services/signatureService');
+const mung = require('express-mung');
 
-exports.signShoppingCart = async function signShoppingCart(req, res, next) {
-    if (!(req.res && req.res.shoppingCart)) {
-        return next();
+function signShoppingCart(body, req, res) {
+    if (body.shoppingCart) {
+        body.signedShoppingCart = signatureService.signShoppingCart(body.shoppingCart);
+        delete body.shoppingCart;
     }
+    return body;
+}
 
-    res.signedShoppingCart = signatureService.signShoppingCart(res.shoppingCart);
-    delete res.shoppingCart;
-    return next();
-};
+module.exports = mung.json(signShoppingCart);

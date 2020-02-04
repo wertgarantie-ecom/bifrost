@@ -32,10 +32,10 @@ test("should remove shopping carts which were already purchased", async () => {
     const mockResponse = {
         set: (name, value) => mockResponseHeaders.push(`${name}=${value}`),
     };
-    await requestFilter.validateShoppingCart(mockRequest, mockResponse, next, {
-        findBySessionId: () => true,
-        verifyShoppingCart: () => true
-    });
+    await requestFilter.validateShoppingCart(mockRequest, mockResponse, next,
+        () => true,
+        () => true
+    );
 
     expect(mockResponse.shoppingCart).toBe(undefined);
     expect(mockRequest.signedShoppingCart).toBe(undefined);
