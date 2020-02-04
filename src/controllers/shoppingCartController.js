@@ -1,27 +1,31 @@
 const service = require('../services/shoppingCartService');
-const signService = require('../services/signatureService');
+const clientRepository = require('../repositories/ClientRepository');
 
 /**
  * Add given product to existing or new shopping cart.
  */
-exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
-    const clientId = req.params.clientId;
-    if ()
-    const cartData = {
+exports.addProductToShoppingCart = async function addProductToShoppingCart(req, res) {
+    const publicClientId = req.params.clientId;
+    const client = await clientRepository.findClientForPublicClientId(publicClientId);
+    if (!client) {
+        return res.status(400).send({
+            message: "Unknown Client Id"
+        })
+    }
+    const wertgarantieProductToAdd = {
         wertgarantieProductId: parseInt(req.body.productId),
         deviceClass: req.body.deviceClass,
         devicePrice: parseInt(req.body.devicePrice),
         deviceCurrency: req.body.deviceCurrency,
         shopProductName: req.body.shopProductName
     };
-    const shoppingCart = service.addProductToShoppingCart(req.signedCookies[clientId], cartData, clientId);
+    const shoppingCart = service.addProductToShoppingCart(req.body.signedShoppingCart, wertgarantieProductToAdd, publicClientId);
 
-    res.cookie(shoppingCart.clientId, shoppingCart, {
-        signed: true
+    res.status(200).send({
+        shoppingCart: shoppingCart,
+        message: "Added product to shopping cart",
+        addedProduct: wertgarantieProductToAdd
     });
-
-    const signedShoppingCart = signService.signShoppingCart(shoppingCart);
-    res.status(200).send(signedShoppingCart);
 };
 
 
