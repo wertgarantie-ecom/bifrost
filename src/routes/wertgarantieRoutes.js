@@ -7,7 +7,7 @@ const confirmationController = require("../controllers/confirmationController.js
 const purchaseController = require("../controllers/purchaseController.js");
 const clientController = require("../controllers/clientController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
-const signedShoppingCartSchemna = require("../schemas/checkoutSchema").checkoutSchema;
+const addShoppingCartProductSchema = require("../schemas/addShoppingCartProduct").addShoppingCartProductSchema;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 
@@ -29,7 +29,7 @@ router.get("/purchases/:sessionId", purchaseController.findPurchaseById);
 // shopping cart
 router.get("/shoppingCart", shoppingCartController.showShoppingCart);
 router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
-router.post("/shoppingCart/:clientId", shoppingCartController.addProductToShoppingCart);
+router.post("/shoppingCart/:clientId", validate({body: addShoppingCartProductSchema}), shoppingCartController.addProductToShoppingCart);
 router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
 
 const user = process.env.BASIC_AUTH_USER;

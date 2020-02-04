@@ -6,23 +6,21 @@ const getProductOffersResponse = require('./heimdallResponses').getProductOffers
 const testhelper = require('../helper/fixtureHelper');
 const dateformat = require('dateformat');
 
-test('should handle valid confirm cart request', async () => {
-    const clientId = uuid();
+test('should reject confirm request for missing shopping cart', async () => {
     return request(app)
-        .put("/wertgarantie/components/confirmation")
-        .send({clientId: clientId})
+        .put("/wertgarantie/components/confirmation/confirm")
+        .send({signedShoppingCart: {}})
         .set('Accept', 'application/json')
         .expect(400)
 });
 
 describe('should handle shopping cart confirmation', function () {
     const agent = request.agent(app);
-    const clientId = uuid();
-    createShoppingCart(agent, clientId);
+    const signedShoppingCart = testhelper.createSignedShoppingCart();
 
     it('confirm shopping cart', function (done) {
-        agent.put('/wertgarantie/components/confirmation')
-            .send({clientId: clientId})
+        agent.put('/wertgarantie/components/confirmation/confirm')
+            .send({signedShoppingCart: signedShoppingCart})
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -115,17 +113,3 @@ describe("should return valid confirmation data", function () {
         .expect(200, done);
     });
 });
-
-function createShoppingCart(agent, clientId) {
-    it('create valid shopping cart', function (done) {
-        agent.post('/wertgarantie/shoppingCart/' + clientId)
-            .send({
-                "productId": 12,
-                "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
-                "devicePrice": 45.0,
-                "deviceCurrency": "EUR",
-                "shopProductName": "Phone X"
-            })
-            .expect('Set-Cookie', /products/, done);
-    });
-}

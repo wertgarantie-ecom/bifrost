@@ -39,7 +39,9 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
-app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}), validateShoppingCartRequest);
+app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
+// app.put('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
+app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
 app.use('/wertgarantie/', signShoppingCart);
 
@@ -66,7 +68,7 @@ app.use(function (err, req, res, next) {
     } else if (err.name === 'InvalidClientData') {
         err.status = 400;
     }
-    console.error(err);
+    console.error(JSON.stringify(err, null, 2));
     res.status(err.status || 500).json({
         error: err.name,
         message: err.message

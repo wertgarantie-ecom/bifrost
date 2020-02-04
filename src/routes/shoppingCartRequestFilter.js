@@ -1,8 +1,8 @@
-const {_findBySessionId} = require('../repositories/CheckoutRepository');
-const {_verifyShoppingCart} = require('../services/signatureService');
+const _findBySessionId = require('../repositories/CheckoutRepository').findBySessionId;
+const _verifyShoppingCart = require('../services/signatureService').verifyShoppingCart;
 const ClientError = require('../errors/ClientError');
 
-exports.validateShoppingCart = async function validateShoppingCart(req, res, next, {findBySessionId = _findBySessionId, verifyShoppingCart = _verifyShoppingCart}) {
+exports.validateShoppingCart = async function validateShoppingCart(req, res, next, findBySessionId = _findBySessionId, verifyShoppingCart = _verifyShoppingCart) {
     if (!(req.body && req.body.signedShoppingCart)) {
         console.log("Empty body and/or shopping cart not available. Nothing to validate.");
         return next();
@@ -17,7 +17,7 @@ exports.validateShoppingCart = async function validateShoppingCart(req, res, nex
         if (result) {
             deleteShoppingCart(req, res);
         }
-        req.shoppingCart = shoppingCart.shoppingCart;
+        req.shoppingCart = shoppingCart;
         return next();
     }
 };

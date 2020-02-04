@@ -108,15 +108,16 @@ const expectedResponse = {
 
 
 test("should return proper confirmation component data for one product", async () => {
-    const confirmationData = await service.prepareConfirmationData("5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+    const confirmationData = await service.prepareConfirmationData(
         testShoppingCart,
         heimdallClientMock,
         productImageServiceMock,
-        mockClientService(clientData));
+        mockClientService(clientData)
+    );
     expect(confirmationData).toEqual(expectedResponse);
 });
 
 test("should return undefined if no shopping cart is given", async () => {
-    const result = await service.prepareConfirmationData("clientId", undefined);
+    const result = await service.prepareConfirmationData(undefined);
     expect(result).toEqual(undefined);
 });
