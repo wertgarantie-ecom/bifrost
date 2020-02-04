@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const nock = require("nock");
 const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/services/signatureService');
 const uuid = require('uuid');

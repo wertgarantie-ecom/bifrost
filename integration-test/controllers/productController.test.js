@@ -1,8 +1,5 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const nock = require('nock');
-const dateformat = require('dateformat');
-const unknownDeviceClassResponse = require('./heimdallResponses').unknownDeviceClassResponse;
 const testhelper = require('../helper/fixtureHelper');
 const nockhelper = require('../helper/nockHelper');
 
