@@ -8,19 +8,23 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     if (result) {
         res.status(200).send(result);
     } else {
-        return res.sendStatus(204);
+        res.sendStatus(204);
     }
 };
 
 exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res) {
-    const clientId = req.body.clientId;
-    const shoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.signedCookies[clientId]);
+    const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart);
 
-    if (shoppingCart) {
-        const response = await confirmationService.prepareConfirmationData(shoppingCart);
-        res.status(200).send(response);
+    if (updatedShoppingCart) {
+        const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
+        if (result) {
+            res.status(200).send(result);
+        } else {
+            res.sendStatus(204);
+        }
+    } else {
+        res.sendStatus(204);
     }
-    res.status(204);
 };
 
 exports.confirmShoppingCart = function confirmShoppingCart(req, res) {

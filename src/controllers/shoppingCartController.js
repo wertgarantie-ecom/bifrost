@@ -6,6 +6,7 @@ const signService = require('../services/signatureService');
  */
 exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     const clientId = req.params.clientId;
+    if ()
     const cartData = {
         wertgarantieProductId: parseInt(req.body.productId),
         deviceClass: req.body.deviceClass,
@@ -23,38 +24,7 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(req, res) {
     res.status(200).send(signedShoppingCart);
 };
 
-/**
- * Display current shopping cart.
- */
-exports.showShoppingCart = function showShoppingCart(req, res) {
-    res.send(req.signedCookies);
-};
 
-exports.showShoppingCart = function showShoppingCart(req, res) {
-    res.send(req.signedCookies);
-};
-
-exports.getShoppingCartForClientId = function getShoppingCartForClientId(req, res) {
-    const products = req.signedCookies[req.params.clientId] || {};
-    res.status(200).send(products);
-};
-
-exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(req, res) {
-
-    const shoppingCart = service.removeProductFromShoppingCart(req.params.orderId, req.signedCookies[req.params.clientId]);
-
-    if (shoppingCart.products.length === 0) {
-        res.clearCookie(req.params.clientId);
-    } else {
-        res.cookie(req.params.clientId, shoppingCart, {
-            signed: true,
-            secure: true,
-            sameSite: 'None'
-        });
-    }
-
-    res.status(200).send(shoppingCart);
-};
 
 exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
     if (!req.body.wertgarantieShoppingCart || req.body.wertgarantieShoppingCart === "") {

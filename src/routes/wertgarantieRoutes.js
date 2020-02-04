@@ -27,10 +27,7 @@ router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}),
 router.get("/purchases/:sessionId", purchaseController.findPurchaseById);
 
 // shopping cart
-router.get("/shoppingCart", shoppingCartController.showShoppingCart);
-router.get("/shoppingCart/:clientId", shoppingCartController.getShoppingCartForClientId);
 router.post("/shoppingCart/:clientId", validate({body: addShoppingCartProductSchema}), shoppingCartController.addProductToShoppingCart);
-router.delete("/shoppingCart/:clientId", shoppingCartController.removeProductFromShoppingCart);
 
 const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;

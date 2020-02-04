@@ -16,17 +16,17 @@ const productSchema = Joi.object({
     orderId: Joi.string().guid().required()
 });
 
-exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId) {
+exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
     productToAdd.orderId = orderId;
-    const shoppingCart = existingCart || newShoppingCart(clientId);
-    shoppingCart.products.push(productToAdd);
-    shoppingCart.confirmed = false;
-    return shoppingCart;
+    const updatedShoppingCart = shoppingCart || newShoppingCart(clientId);
+    updatedShoppingCart.products.push(productToAdd);
+    updatedShoppingCart.confirmed = false;
+    return updatedShoppingCart;
 };
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(existingCart, productToAdd, clientId) {
+exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, clientId) {
     const orderId = uuid();
-    return this.addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId);
+    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId);
 };
 
 exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart, clientId) {
@@ -173,7 +173,7 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(o
             i--;
         }
     }
-    return shoppingCart.products.length === 0 ? shoppingCart : undefined;
+    return shoppingCart.products.length > 0 ? shoppingCart : undefined;
 };
 
 class InvalidPublicClientIdError extends Error {
