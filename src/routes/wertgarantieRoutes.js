@@ -7,16 +7,17 @@ const confirmationController = require("../controllers/confirmationController.js
 const purchaseController = require("../controllers/purchaseController.js");
 const clientController = require("../controllers/clientController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
+const signedShoppingCartSchemna = require("../schemas/checkoutSchema").checkoutSchema;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 
 // components
 router.get("/rating", googleController.reviewRatings);
 router.get("/components/selection-popup", productController.getProducts);
-router.get("/components/confirmation", confirmationController.getConfirmationComponentData);
-router.post("/components/confirmation", confirmationController.getConfirmationComponentData);
-router.put("/components/confirmation", confirmationController.confirmShoppingCart);
-router.delete("/components/confirmation", confirmationController.unconfirmShoppingCart);
+
+router.put("/components/confirmation", confirmationController.getConfirmationComponentData);
+router.put("/components/confirmation/confirm", confirmationController.confirmShoppingCart);
+router.delete("/components/confirmation/confirm", confirmationController.unconfirmShoppingCart);
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
 
 // shop api

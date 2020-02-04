@@ -6,7 +6,9 @@ const logger = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
-var bodyParser = require('body-parser');
+const validate = require('express-jsonschema').validate;
+const bodyParser = require('body-parser');
+const requestWithSignedShoppingCartSchema = require('./schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -37,7 +39,7 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
-app.use('/wertgarantie/', validateShoppingCartRequest);
+app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}), validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
 app.use('/wertgarantie/', signShoppingCart);
 

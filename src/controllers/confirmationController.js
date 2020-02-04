@@ -2,10 +2,9 @@ const confirmationService = require('../services/confirmationComponentService');
 const shoppingCartService = require('../services/shoppingCartService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res) {
-    const clientId = req.query.clientId;
-    const shoppingCart = req.signedCookies[clientId] || req.shoppingCart;
+    const shoppingCart = req.shoppingCart;
 
-    const result = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
+    const result = await confirmationService.prepareConfirmationData(shoppingCart);
     if (result) {
         res.status(200).send(result);
     } else {
@@ -25,12 +24,22 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
 };
 
 exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
-    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(req.shoppingCart);
-    res.send(200, confirmedShoppingCart);
+    const shoppingCart = req.shoppingCart;
+    if (!shoppingCart) {
+        res.send(400, "signedShoppingCart is required")
+    } else {
+        const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(shoppingCart);
+        res.send(200, confirmedShoppingCart);
+    }
 };
 
 exports.unconfirmShoppingCart = function unconfirmShoppingCart(req, res) {
-    const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(req.shoppingCart);
-    res.send(200, confirmedShoppingCart);
+    const shoppingCart = req.shoppingCart;
+    if (!shoppingCart) {
+        res.send(400, "signedShoppingCart is required")
+    } else {
+        const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(req.shoppingCart);
+        res.send(200, unconfirmedShoppingCart);
+    }
 };
 

@@ -164,6 +164,9 @@ function newShoppingCart(clientId) {
 }
 
 exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(orderId, shoppingCart) {
+    if (!shoppingCart) {
+        return undefined;
+    }
     for (var i = 0; i < shoppingCart.products.length; i++) {
         if (shoppingCart.products[i].orderId === orderId) {
             shoppingCart.products.splice(i, 1);

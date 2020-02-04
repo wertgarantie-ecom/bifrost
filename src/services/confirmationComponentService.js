@@ -5,8 +5,7 @@ const defaultProductImageService = require('./productImageService');
 const defaultClientService = require('./clientService');
 const _ = require('lodash');
 
-exports.prepareConfirmationData = async function prepareConfirmationData(publicClientId,
-                                                                         shoppingCart,
+exports.prepareConfirmationData = async function prepareConfirmationData(shoppingCart,
                                                                          heimdallClient = defaultHeimdallClient,
                                                                          productImageService = defaultProductImageService,
                                                                          clientService = defaultClientService) {
@@ -22,7 +21,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(publicC
     };
 
     let avbHref;
-    const client = await clientService.findClientForPublicClientId(publicClientId);
+    const client = await clientService.findClientForPublicClientId(shoppingCart.clientId);
     for (var i = 0; i < shoppingCart.products.length; i++) {
         const wertgarantieProduct = shoppingCart.products[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, heimdallClient, productImageService);
