@@ -2,10 +2,6 @@ module.exports.addShoppingCartProductSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
     properties: {
-        productId: {
-            type: "integer",
-            required: true
-        },
         devicePrice: {
             type: "integer",
             required: true
@@ -23,4 +19,4 @@ module.exports.addShoppingCartProductSchema = {
             required: true
         }
     }
-}
+};

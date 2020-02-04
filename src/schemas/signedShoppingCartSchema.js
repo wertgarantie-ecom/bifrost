@@ -30,10 +30,6 @@ module.exports.requestWithSignedShoppingCartSchema = {
                                             type: "integer",
                                             required: true
                                         },
-                                        shopProductId: {
-                                            type: "string",
-                                            required: true
-                                        },
                                         deviceClass: {
                                             type: "string",
                                             required: true

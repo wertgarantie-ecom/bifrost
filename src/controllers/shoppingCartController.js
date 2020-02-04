@@ -19,7 +19,7 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(req, 
         deviceCurrency: req.body.deviceCurrency,
         shopProductName: req.body.shopProductName
     };
-    const shoppingCart = service.addProductToShoppingCart(req.body.signedShoppingCart, wertgarantieProductToAdd, publicClientId);
+    const shoppingCart = service.addProductToShoppingCart(req.shoppingCart, wertgarantieProductToAdd, publicClientId);
 
     res.status(200).send({
         shoppingCart: shoppingCart,
