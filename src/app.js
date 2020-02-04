@@ -40,7 +40,6 @@ app.use(require('./routes/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
-// app.put('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
 app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
 

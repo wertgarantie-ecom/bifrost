@@ -36,6 +36,9 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
                                     zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
                                     einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 
                                     meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`;
+    if (result.products.length <= 0) {
+        return undefined;
+    }
     return result;
 };
 
