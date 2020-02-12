@@ -70,11 +70,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     }
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
-    const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
-    if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
-        throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
-    }
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
     if (!wertgarantieCart.confirmed) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }

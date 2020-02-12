@@ -1,6 +1,17 @@
 const _findBySessionId = require('../repositories/CheckoutRepository').findBySessionId;
 const _verifyShoppingCart = require('../services/signatureService').verifyShoppingCart;
 const ClientError = require('../errors/ClientError');
+const isBase64 = require('is-base64');
+
+exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
+    const signedShoppingCart = req.body.signedShoppingCart;
+    if (isBase64(signedShoppingCart)) {
+        const buffer = Buffer.from(signedShoppingCart, 'base64');
+        const signedShoppingCartString = buffer.toString('utf-8');
+        req.body.signedShoppingCart = JSON.parse(signedShoppingCartString);
+    }
+    next();
+}
 
 exports.validateShoppingCart = async function validateShoppingCart(req, res, next, findBySessionId = _findBySessionId, verifyShoppingCart = _verifyShoppingCart) {
     if (!(req.body && req.body.signedShoppingCart)) {

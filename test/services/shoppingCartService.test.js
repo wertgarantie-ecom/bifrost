@@ -167,12 +167,11 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         "publicClientIds": ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"],
         "secrets": ["bikesecret1"]
     };
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
     const clientService = mockClientService(client);
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
@@ -256,11 +255,9 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         throw new Error("you should never call me");
     });
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
@@ -331,11 +328,9 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
         })
     };
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         undefined,
@@ -399,11 +394,9 @@ test("checkout call with multiple products", async () => {
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
@@ -486,12 +479,11 @@ test("checkout call with multiple products where one is not found in shop cart",
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
 
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
@@ -572,17 +564,6 @@ test("checkout call executed without confirmation", async () => {
         expect.fail();
     } catch (e) {
         expect(e).toBeInstanceOf(UnconfirmedShoppingCartError);
-    }
-});
-
-test("checkout call should reject invalid signature in wertgarantie cart", async () => {
-    try {
-        var wertgarantieCart = signatureService.signShoppingCart(validShoppingCart);
-        wertgarantieCart.shoppingCart.products[0].devicePrice = 1.0;
-        await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
-        expect.fail();
-    } catch (e) {
-        expect(e).toBeInstanceOf(InvalidWertgarantieCartSignatureError);
     }
 });
 

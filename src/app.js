@@ -13,6 +13,7 @@ const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV
 dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
+const detectBase64EncodedRequestBody = require('./routes/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
 const validateShoppingCartRequest = require('./routes/shoppingCartRequestFilter').validateShoppingCart;
 
 const app = express();
@@ -24,7 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var corsOptions = {
     origin: true,
-    credentials: true
+    credentials: true,
+    exposedHeaders: [
+        'X-wertgarantie-shopping-cart-delete'
+    ]
 };
 
 app.use(bodyParser.json());
@@ -36,6 +40,7 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 app.use(require('./routes/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
+app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
 app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
