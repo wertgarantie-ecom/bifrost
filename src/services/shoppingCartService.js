@@ -29,7 +29,7 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCar
     return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId);
 };
 
-exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart, clientId) {
+exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart) {
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmed = true;
     return clone;

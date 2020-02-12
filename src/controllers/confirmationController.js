@@ -33,7 +33,10 @@ exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
         res.status(400).send("signedShoppingCart is required");
     } else {
         const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(shoppingCart);
-        res.status(200).send(confirmedShoppingCart);
+        res.status(200).send({
+            message: "confirmed shopping cart",
+            shoppingCart: confirmedShoppingCart
+        });
     }
 };
 
@@ -43,7 +46,10 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(req, res) {
         res.status(400).send("signedShoppingCart is required");
     } else {
         const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(req.shoppingCart);
-        res.status(200).send(unconfirmedShoppingCart);
+        res.status(200).send({
+            message: "unconfirmed shopping cart",
+            shoppingCart: unconfirmedShoppingCart
+        });
     }
 };
 

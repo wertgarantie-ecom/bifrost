@@ -31,13 +31,13 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(req, 
 
 
 exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
-    if (!req.body.wertgarantieShoppingCart || req.body.wertgarantieShoppingCart === "") {
+    if (!req.shoppingCart) {
         res.status(200).send({
             message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.`
         });
     } else {
         try {
-            const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, JSON.parse(req.body.wertgarantieShoppingCart), req.body.secretClientId);
+            const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, req.shoppingCart, req.body.secretClientId);
             res.status(200).send(result);
         } catch (error) {
             if (error instanceof SyntaxError) { //JSON.parse fails
