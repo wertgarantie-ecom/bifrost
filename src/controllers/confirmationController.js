@@ -8,7 +8,7 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     if (result) {
         res.status(200).send(result);
     } else {
-        res.sendStatus(204);
+        sendEmptyShoppingCart(res);
     }
 };
 
@@ -18,12 +18,12 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
     if (updatedShoppingCart) {
         const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
         if (result) {
-            res.status(200).send(result);
+            res.status(200).send(res);
         } else {
-            res.sendStatus(204);
+            sendEmptyShoppingCart(res);
         }
     } else {
-        res.sendStatus(204);
+        sendEmptyShoppingCart(res);
     }
 };
 
@@ -53,3 +53,7 @@ exports.unconfirmShoppingCart = function unconfirmShoppingCart(req, res) {
     }
 };
 
+function sendEmptyShoppingCart(res) {
+    res.set('X-wertgarantie-shopping-cart-delete', true);
+    res.sendStatus(204);
+}
