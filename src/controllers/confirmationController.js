@@ -18,7 +18,7 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
     if (updatedShoppingCart) {
         const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
         if (result) {
-            res.status(200).send(res);
+            res.status(200).send(result);
         } else {
             sendEmptyShoppingCart(res);
         }
