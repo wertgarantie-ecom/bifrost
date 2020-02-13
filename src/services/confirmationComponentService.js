@@ -2,35 +2,33 @@ const defaultHeimdallClient = require('./heimdallClient');
 const productOfferService = require('./heimdallProductOfferService');
 const documentType = require('./heimdallProductOfferService').documentType;
 const defaultProductImageService = require('./productImageService');
-const signService = require('./signatureService');
 const defaultClientService = require('./clientService');
 const _ = require('lodash');
-const SIGN_SECRET = process.env.SIGN_SECRET || "localSignSecret";
 
-exports.prepareConfirmationData = async function prepareConfirmationData(publicClientId,
-                                                                         shoppingCart,
+exports.prepareConfirmationData = async function prepareConfirmationData(shoppingCart,
                                                                          heimdallClient = defaultHeimdallClient,
                                                                          productImageService = defaultProductImageService,
                                                                          clientService = defaultClientService) {
     if (!shoppingCart) {
         return undefined;
     }
-    const shoppingCartWithSignature = signService.signShoppingCart(shoppingCart, SIGN_SECRET);
     const result = {
-        shoppingCartInputString: JSON.stringify(shoppingCartWithSignature),
         confirmed: shoppingCart.confirmed,
         title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmationHeader: "Bitte bestätige noch kurz:",
-        products: []
+        products: [],
+        shoppingCart: shoppingCart
     };
 
     let avbHref;
-    const client = await clientService.findClientForPublicClientId(publicClientId);
+    const client = await clientService.findClientForPublicClientId(shoppingCart.clientId);
     for (var i = 0; i < shoppingCart.products.length; i++) {
         const wertgarantieProduct = shoppingCart.products[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, heimdallClient, productImageService);
-        result.products.push(confirmationProductData.product);
-        avbHref = confirmationProductData.avbHref;
+        if (confirmationProductData) {
+            result.products.push(confirmationProductData.product);
+            avbHref = confirmationProductData.avbHref;
+        }
     }
 
     result.confirmationTextGeneral = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
@@ -38,6 +36,9 @@ exports.prepareConfirmationData = async function prepareConfirmationData(publicC
                                     zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
                                     einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 
                                     meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`;
+    if (result.products.length <= 0) {
+        return undefined;
+    }
     return result;
 };
 
@@ -66,5 +67,5 @@ async function getConfirmationProductData(wertgarantieProduct, client, heimdallC
         };
     }
 
-    return {};
+    return undefined
 }

@@ -16,31 +16,26 @@ const productSchema = Joi.object({
     orderId: Joi.string().guid().required()
 });
 
-exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId) {
+exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
     productToAdd.orderId = orderId;
-    validateShoppingCart(existingCart, clientId);
-    Joi.assert(productToAdd, productSchema.required());
-
-    const shoppingCart = existingCart || newShoppingCart(clientId);
-    shoppingCart.products.push(productToAdd);
-    shoppingCart.confirmed = false;
-    return shoppingCart;
+    const updatedShoppingCart = shoppingCart || newShoppingCart(clientId);
+    updatedShoppingCart.products.push(productToAdd);
+    updatedShoppingCart.confirmed = false;
+    return updatedShoppingCart;
 };
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(existingCart, productToAdd, clientId) {
+exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, clientId) {
     const orderId = uuid();
-    return this.addProductToShoppingCartWithOrderId(existingCart, productToAdd, clientId, orderId);
+    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId);
 };
 
-exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart, clientId) {
-    validateShoppingCart(shoppingCart, clientId, true);
+exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart) {
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmed = true;
     return clone;
 };
 
-exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart, clientId) {
-    validateShoppingCart(shoppingCart, clientId, true);
+exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart) {
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmed = false;
     return clone;
@@ -75,11 +70,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     }
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wrappedWertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
-    const wertgarantieCart = wrappedWertgarantieCart.shoppingCart;
-    if (!signatureService.verifyShoppingCart(wrappedWertgarantieCart)) {
-        throw new InvalidWertgarantieCartSignatureError("The signature in Wertgarantie's shopping cart is invalid for the given content!");
-    }
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
     if (!wertgarantieCart.confirmed) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
@@ -150,12 +141,6 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
     }
 }
 
-function validateShoppingCart(shoppingCart, clientId, isRequired = false) {
-    Joi.assert(clientId, Joi.string().guid().required().error(new Error("clientId is required")));
-    const schema = isRequired ? cartSchema(clientId).required() : cartSchema(clientId);
-    Joi.assert(shoppingCart, schema);
-}
-
 function cartSchema(clientId) {
     return Joi.object({
         sessionId: Joi.string().guid(),
@@ -175,13 +160,16 @@ function newShoppingCart(clientId) {
 }
 
 exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(orderId, shoppingCart) {
+    if (!shoppingCart) {
+        return undefined;
+    }
     for (var i = 0; i < shoppingCart.products.length; i++) {
         if (shoppingCart.products[i].orderId === orderId) {
             shoppingCart.products.splice(i, 1);
             i--;
         }
     }
-    return shoppingCart;
+    return shoppingCart.products.length > 0 ? shoppingCart : undefined;
 };
 
 class InvalidPublicClientIdError extends Error {

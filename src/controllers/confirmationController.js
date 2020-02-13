@@ -1,52 +1,59 @@
 const confirmationService = require('../services/confirmationComponentService');
 const shoppingCartService = require('../services/shoppingCartService');
-const signatureService = require('../services/signatureService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res) {
-    const clientId = req.query.clientId;
-    const shoppingCart = req.signedCookies[clientId];
+    const shoppingCart = req.shoppingCart;
 
-    const result = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
+    const result = await confirmationService.prepareConfirmationData(shoppingCart);
     if (result) {
         res.status(200).send(result);
     } else {
-        return res.sendStatus(204);
+        sendEmptyShoppingCart(res);
     }
 };
 
 exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res) {
-    const clientId = req.body.clientId;
-    const shoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.signedCookies[clientId]);
+    const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart);
 
-    if (shoppingCart.products.length === 0) {
-        res.clearCookie(clientId);
+    if (updatedShoppingCart) {
+        const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
+        if (result) {
+            res.status(200).send(res);
+        } else {
+            sendEmptyShoppingCart(res);
+        }
     } else {
-        res.cookie(clientId, shoppingCart, {
-            signed: true
-        });
+        sendEmptyShoppingCart(res);
     }
-    const response = await confirmationService.prepareConfirmationData(clientId, shoppingCart);
-    res.status(200).send(response);
 };
 
 exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
-    const clientId = req.body.clientId;
-    const shoppingCart = req.signedCookies[clientId];
-    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(shoppingCart, clientId);
-    sendShoppingCart(res, confirmedShoppingCart);
+    const shoppingCart = req.shoppingCart;
+    if (!shoppingCart) {
+        res.status(400).send("signedShoppingCart is required");
+    } else {
+        const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(shoppingCart);
+        res.status(200).send({
+            message: "confirmed shopping cart",
+            shoppingCart: confirmedShoppingCart
+        });
+    }
 };
 
 exports.unconfirmShoppingCart = function unconfirmShoppingCart(req, res) {
-    const clientId = req.body.clientId;
-    const shoppingCart = req.signedCookies[clientId];
-    const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(shoppingCart, clientId);
-    sendShoppingCart(res, unconfirmedShoppingCart);
+    const shoppingCart = req.shoppingCart;
+    if (!shoppingCart) {
+        res.status(400).send("signedShoppingCart is required");
+    } else {
+        const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(req.shoppingCart);
+        res.status(200).send({
+            message: "unconfirmed shopping cart",
+            shoppingCart: unconfirmedShoppingCart
+        });
+    }
 };
 
-function sendShoppingCart(res, shoppingCart) {
-    res.cookie(shoppingCart.clientId, shoppingCart, {
-        signed: true
-    });
-    const signedShoppingCart = signatureService.signShoppingCart(shoppingCart);
-    res.status(200).send(JSON.stringify(signedShoppingCart));
+function sendEmptyShoppingCart(res) {
+    res.set('X-wertgarantie-shopping-cart-delete', true);
+    res.sendStatus(204);
 }

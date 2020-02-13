@@ -1,23 +1,27 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const nock = require("nock");
 const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/services/signatureService');
 const uuid = require('uuid');
+const nockhelper = require('../helper/nockHelper');
 
-test('should return cookie with selected product', async (done) => {
-    await request(app).post('/wertgarantie/shoppingCart/43446A56-3546-416D-B942-1262CA0526FB')
+test('should return shopping cart with selected product included', async () => {
+    const client = await testhelper.createDefaultClient();
+
+    const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
         .send({
             "productId": 12,
             "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
-            "devicePrice": 45.0,
+            "devicePrice": 4500,
             "deviceCurrency": "EUR",
             "shopProductName": "Phone X"
-        })
-        .expect(200)
-        .expect('Set-Cookie', /clientId/)
-        .expect('Set-Cookie', /products/);
-    done();
+        });
+    expect(result.status).toBe(200);
+
+    const shoppingCart = result.body.signedShoppingCart.shoppingCart;
+    expect(shoppingCart.products.length).toBe(1);
+    expect(shoppingCart.confirmed).toBe(false);
+    expect(shoppingCart.products[0].deviceClass).toEqual("17fd707a-f9c0-11e9-9694-cf549fcf64e2");
 });
 
 test('should fail when invalid request params are submitted', async () => {
@@ -34,41 +38,13 @@ test('should fail when invalid request params are submitted', async () => {
         })
 });
 
-
-describe('should be able to retrieve cookies', function () {
-    const agent = request.agent(app);
-    it('should set cookie in response', function (done) {
-        agent.post('/wertgarantie/shoppingCart/43446A56-3546-416D-B942-1262CA0526FB')
-            .send({
-                "productId": 12,
-                "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
-                "devicePrice": 45.0,
-                "deviceCurrency": "EUR",
-                "shopProductName": "Phone X"
-            })
-            .expect('Set-Cookie', /products/, done);
-    });
-
-    it('should retrieve cookie', function (done) {
-        agent.get('/wertgarantie/shoppingCart')
-            .expect(function (res) {
-                res.body["43446A56-3546-416D-B942-1262CA0526FB"].products[0].productId = 12;
-                res.body["43446A56-3546-416D-B942-1262CA0526FB"].products[0].deviceClass = "17fd707a-f9c0-11e9-9694-cf549fcf64e2";
-                res.body["43446A56-3546-416D-B942-1262CA0526FB"].products[0].devicePrice = 45.0;
-                res.body["43446A56-3546-416D-B942-1262CA0526FB"].products[0].deviceCurrency = "EUR";
-                res.body["43446A56-3546-416D-B942-1262CA0526FB"].products[0].shopProductName = "Phone X"
-            })
-            .expect(200, done);
-    })
-});
-
 describe("Checkout Shopping Cart", () => {
     let clientData;
     const sessionId = uuid();
 
     test("should checkout shopping cart", async () => {
         clientData = await testhelper.createDefaultClient();
-        const wertgarantieProductId = `10`;
+        const wertgarantieProductId = 10;
         const wertgarantieShoppingCart =
             {
                 "sessionId": sessionId + "",
@@ -85,26 +61,17 @@ describe("Checkout Shopping Cart", () => {
                 ],
                 "confirmed": true
             };
-        nock(process.env.HEIMDALL_URI)
-            .get("/api/v1/auth/client/" + clientData.secrets[0])
-            .reply(200, {
-                payload: {
-                    access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
-                }
-            });
 
-        nock(process.env.HEIMDALL_URI)
-            .post("/api/v1/products/" + wertgarantieProductId + "/checkout")
-            .reply(200, {
-                payload: {
-                    contract_number: "1234",
-                    transaction_number: "28850277",
-                    activation_code: "4db56dacfbhce",
-                    message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
-                }
-            });
+        nockhelper.nockLogin(clientData);
+        nockhelper.nockCheckoutShoppingCart(wertgarantieProductId, {
+            payload: {
+                contract_number: "1234",
+                transaction_number: "28850277",
+                activation_code: "4db56dacfbhce",
+                message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+            }
+        });
 
-        const signedShoppingCart = JSON.stringify(signatureService.signShoppingCart(wertgarantieShoppingCart));
         return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
@@ -124,18 +91,16 @@ describe("Checkout Shopping Cart", () => {
                     country: "Deutschland",
                     email: "max.mustermann1234@test.com"
                 },
-                wertgarantieShoppingCart: signedShoppingCart,
+                signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart),
                 secretClientId: clientData.secrets[0]
             })
             .expect(200)
             .expect((result) => {
-                console.log(JSON.stringify(result.body, null, 2));
-                console.log(JSON.stringify(result.body.purchases[0].message, null, 2));
                 const body = result.body;
                 const purchase = body.purchases[0];
                 expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
                 expect(body.clientId).toEqual(clientData.id);
-                expect(purchase.wertgarantieProductId).toEqual("10");
+                expect(purchase.wertgarantieProductId).toEqual(10);
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
                 expect(purchase.devicePrice).toEqual(139999);
                 expect(purchase.success).toBe(true);
@@ -148,24 +113,22 @@ describe("Checkout Shopping Cart", () => {
 
     });
 
-    test("should find checkout data by session id", () => {
-        return request(app).get("/wertgarantie/purchases/" + sessionId)
-            .expect(200)
-            .expect((result) => {
-                const body = result.body;
-                const purchase = body.purchases[0];
-                expect(body.sessionId).toEqual(sessionId);
-                expect(body.clientId).toEqual(clientData.id);
-                expect(purchase.wertgarantieProductId).toEqual(10);
-                expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
-                expect(purchase.devicePrice).toEqual(139999);
-                expect(purchase.success).toBe(true);
-                expect(purchase.message).toEqual("successfully transmitted insurance proposal");
-                expect(purchase.shopProduct).toEqual("SuperBike 3000");
-                expect(purchase.contractNumber).toEqual(1234);
-                expect(purchase.transactionNumber).toEqual(28850277);
-                expect(purchase.activationCode).toEqual("4db56dacfbhce");
-            });
+    test("should find checkout data by session id", async () => {
+        const result = await request(app).get("/wertgarantie/purchases/" + sessionId);
+        expect(result.status).toBe(200);
+        const body = result.body;
+        const purchase = body.purchases[0];
+        expect(body.sessionId).toEqual(sessionId);
+        expect(body.clientId).toEqual(clientData.id);
+        expect(purchase.wertgarantieProductId).toEqual(10);
+        expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
+        expect(purchase.devicePrice).toEqual(139999);
+        expect(purchase.success).toBe(true);
+        expect(purchase.message).toEqual("successfully transmitted insurance proposal");
+        expect(purchase.shopProduct).toEqual("SuperBike 3000");
+        expect(purchase.contractNumber).toEqual(1234);
+        expect(purchase.transactionNumber).toEqual(28850277);
+        expect(purchase.activationCode).toEqual("4db56dacfbhce");
     });
 });
 
@@ -193,8 +156,8 @@ test("should handle empty wertgarantieShoppingCart with info message", (done) =>
         }, done);
 });
 
-test("should handle invalid JSON in wertgarantieShoppingCart with status 400", (done) => {
-    return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+test("should handle invalid JSON in wertgarantieShoppingCart with status 400", async () => {
+    const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
         .send({
             purchasedProducts: [],
             customer: {
@@ -209,7 +172,8 @@ test("should handle invalid JSON in wertgarantieShoppingCart with status 400", (
                 email: "max.mustermann1234@test.com"
             },
             secretClientId: "bikesecret1",
-            wertgarantieShoppingCart: "{'name': 'Alex'"
-        })
-        .expect(400, done)
+            signedShoppingCart: "{'name': 'Alex'"
+        });
+
+    expect(result.status).toBe(400);
 });

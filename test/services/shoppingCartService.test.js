@@ -80,16 +80,6 @@ test("should validate if given cart has proper structure", () => {
     }).toThrow(ValidationError);
 });
 
-test("should validate if given product has proper structure", () => {
-    let invalidProduct = {
-        wertgarantieProductId: "1234",
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        deviceCurrency: "EUR",
-    };
-    expect(() => {
-        addProductToShoppingCartWithOrderId(undefined, invalidProduct).products
-    }).toThrow(ValidationError);
-});
 
 test("should validate if product was given", () => {
     expect(() => {
@@ -97,25 +87,6 @@ test("should validate if product was given", () => {
     }).toThrow(ValidationError);
 });
 
-
-test("should reject product with different clientId", () => {
-    const productWithDifferentClientId = {
-        wertgarantieProductId: 1234,
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 12.0,
-        deviceCurrency: "EUR",
-        shopProductName: "Phone X"
-    };
-
-    const shoppingCart = {
-        clientId: "b8a0169e-f99e-11e9-9611-67317e9f4f28",
-        products: []
-    };
-
-    expect(() => {
-        addProductToShoppingCartWithOrderId(shoppingCart, productWithDifferentClientId).products
-    }).toThrow(ValidationError);
-});
 
 test("should allow duplicate products", () => {
     let clientId = uuid();
@@ -138,16 +109,6 @@ test("should confirm valid shopping cart", () => {
     expect(confirmedShoppingCart.confirmed).toEqual(true);
 });
 
-test("should check validity of shopping cart on confirmation", () => {
-    let clientId = uuid();
-    const invalidShoppingCart = {
-        clientId: clientId,
-        products: [validProduct()],
-        confirmed: 12
-    };
-    expect(() => shoppingCartService.confirmShoppingCart(invalidShoppingCart, clientId)).toThrow(ValidationError);
-});
-
 test("should unconfirm valid shopping cart", () => {
     let clientId = uuid();
     const validShoppingCart = {
@@ -160,15 +121,6 @@ test("should unconfirm valid shopping cart", () => {
     expect(confirmedShoppingCart.confirmed).toEqual(false);
 });
 
-test("should check validity of shopping cart on removing confirmation", () => {
-    let clientId = uuid();
-    const invalidShoppingCart = {
-        clientId: clientId,
-        products: [validProduct()],
-        confirmed: 12
-    };
-    expect(() => shoppingCartService.unconfirmShoppingCart(invalidShoppingCart, clientId)).toThrow(ValidationError);
-});
 
 test("should throw error if undefined shopping cart is given to confirmation", () => {
     expect(() => shoppingCartService.unconfirmShoppingCart(undefined, uuid())).toThrow(ValidationError);
@@ -215,12 +167,11 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         "publicClientIds": ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"],
         "secrets": ["bikesecret1"]
     };
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
     const clientService = mockClientService(client);
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
@@ -304,11 +255,9 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         throw new Error("you should never call me");
     });
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
@@ -379,11 +328,9 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
         })
     };
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         undefined,
@@ -447,11 +394,9 @@ test("checkout call with multiple products", async () => {
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
-
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
@@ -534,12 +479,11 @@ test("checkout call with multiple products where one is not found in shop cart",
     const customer = validCustomer();
     const secretClientId = "bikesecret1";
 
-    const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
     const mockHeimdallClient = mockHeimdallClientSuccess();
 
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
-        signedWertgarantieCart,
+        wertgarantieShoppingCart,
         secretClientId,
         mockHeimdallClient,
         generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
@@ -620,17 +564,6 @@ test("checkout call executed without confirmation", async () => {
         expect.fail();
     } catch (e) {
         expect(e).toBeInstanceOf(UnconfirmedShoppingCartError);
-    }
-});
-
-test("checkout call should reject invalid signature in wertgarantie cart", async () => {
-    try {
-        var wertgarantieCart = signatureService.signShoppingCart(validShoppingCart);
-        wertgarantieCart.shoppingCart.products[0].devicePrice = 1.0;
-        await shoppingCartService.checkoutShoppingCart(undefined, undefined, wertgarantieCart, "bikesecret1");
-        expect.fail();
-    } catch (e) {
-        expect(e).toBeInstanceOf(InvalidWertgarantieCartSignatureError);
     }
 });
 
