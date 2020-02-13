@@ -44,7 +44,7 @@ describe("Checkout Shopping Cart", () => {
 
     test("should checkout shopping cart", async () => {
         clientData = await testhelper.createDefaultClient();
-        const wertgarantieProductId = `10`;
+        const wertgarantieProductId = 10;
         const wertgarantieShoppingCart =
             {
                 "sessionId": sessionId + "",
@@ -72,7 +72,6 @@ describe("Checkout Shopping Cart", () => {
             }
         });
 
-        const signedShoppingCart = JSON.stringify(signatureService.signShoppingCart(wertgarantieShoppingCart));
         return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
@@ -92,18 +91,16 @@ describe("Checkout Shopping Cart", () => {
                     country: "Deutschland",
                     email: "max.mustermann1234@test.com"
                 },
-                wertgarantieShoppingCart: signedShoppingCart,
+                signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart),
                 secretClientId: clientData.secrets[0]
             })
             .expect(200)
             .expect((result) => {
-                console.log(JSON.stringify(result.body, null, 2));
-                console.log(JSON.stringify(result.body.purchases[0].message, null, 2));
                 const body = result.body;
                 const purchase = body.purchases[0];
                 expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
                 expect(body.clientId).toEqual(clientData.id);
-                expect(purchase.wertgarantieProductId).toEqual("10");
+                expect(purchase.wertgarantieProductId).toEqual(10);
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
                 expect(purchase.devicePrice).toEqual(139999);
                 expect(purchase.success).toBe(true);
@@ -117,7 +114,7 @@ describe("Checkout Shopping Cart", () => {
     });
 
     test("should find checkout data by session id", async () => {
-        const result = await request(app).get("/wertgarantie/purchases/" + sessionId)
+        const result = await request(app).get("/wertgarantie/purchases/" + sessionId);
         expect(result.status).toBe(200);
         const body = result.body;
         const purchase = body.purchases[0];
@@ -159,8 +156,8 @@ test("should handle empty wertgarantieShoppingCart with info message", (done) =>
         }, done);
 });
 
-test("should handle invalid JSON in wertgarantieShoppingCart with status 400", (done) => {
-    return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+test("should handle invalid JSON in wertgarantieShoppingCart with status 400", async () => {
+    const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
         .send({
             purchasedProducts: [],
             customer: {
@@ -175,7 +172,8 @@ test("should handle invalid JSON in wertgarantieShoppingCart with status 400", (
                 email: "max.mustermann1234@test.com"
             },
             secretClientId: "bikesecret1",
-            wertgarantieShoppingCart: "{'name': 'Alex'"
-        })
-        .expect(400, done)
+            signedShoppingCart: "{'name': 'Alex'"
+        });
+
+    expect(result.status).toBe(400);
 });

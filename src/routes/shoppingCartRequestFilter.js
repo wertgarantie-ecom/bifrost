@@ -11,7 +11,7 @@ exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody
         req.body.signedShoppingCart = JSON.parse(signedShoppingCartString);
     }
     next();
-}
+};
 
 exports.validateShoppingCart = async function validateShoppingCart(req, res, next, findBySessionId = _findBySessionId, verifyShoppingCart = _verifyShoppingCart) {
     if (!(req.body && req.body.signedShoppingCart)) {

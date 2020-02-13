@@ -22,7 +22,7 @@ test('should handle shopping cart confirmation', async function () {
         .set('Accept', 'application/json');
 
     expect(result.status).toBe(200);
-    expect(result.body.confirmed).toBe(true);
+    expect(result.body.signedShoppingCart.shoppingCart.confirmed).toBe(true);
 });
 
 describe('should handle shopping cart confirmation rejection', function () {
@@ -42,7 +42,7 @@ describe('should handle shopping cart confirmation rejection', function () {
             .set('Accept', 'application/json');
 
         expect(result.status).toBe(200);
-        expect(result.body.confirmed).toBe(false);
+        expect(result.body.signedShoppingCart.shoppingCart.confirmed).toBe(false);
     });
 });
 
