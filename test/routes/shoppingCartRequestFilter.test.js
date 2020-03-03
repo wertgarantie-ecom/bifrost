@@ -43,8 +43,6 @@ test("should remove shopping carts which were already purchased", async () => {
 });
 
 test('should throw ClientError on invalid signatures', async () => {
-    expect.assertions(1);
-
     const mockRequest = {
         body: {
             signedShoppingCart: {
@@ -53,13 +51,11 @@ test('should throw ClientError on invalid signatures', async () => {
         }
     };
 
-    try {
-        await requestFilter.validateShoppingCart(mockRequest, {}, next, {
-            verifyShoppingCart: () => false
-        });
-    } catch (e) {
-        expect(e.name).toBe('ClientError');
-    }
+    var next = jest.fn();
+    await requestFilter.validateShoppingCart(mockRequest, {}, next, {
+        verifyShoppingCart: () => false
+    });
+    expect(next.mock.calls[0][0].name).toBe("ClientError")
 });
 
 test('should call next if no shopping cart is given', async () => {
