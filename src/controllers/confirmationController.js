@@ -27,12 +27,13 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
     }
 };
 
-exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
+exports.confirmAttribute = function confirmAttribute(req, res) {
     const shoppingCart = req.shoppingCart;
+    const confirmationAttribute = req.params.confirmationAttribute;
     if (!shoppingCart) {
         res.status(400).send("signedShoppingCart is required");
     } else {
-        const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(shoppingCart);
+        const confirmedShoppingCart = shoppingCartService.confirmAttribute(shoppingCart, confirmationAttribute);
         res.status(200).send({
             message: "confirmed shopping cart",
             shoppingCart: confirmedShoppingCart
@@ -40,12 +41,13 @@ exports.confirmShoppingCart = function confirmShoppingCart(req, res) {
     }
 };
 
-exports.unconfirmShoppingCart = function unconfirmShoppingCart(req, res) {
+exports.unconfirmAttribute = function unconfirmAttribute(req, res) {
     const shoppingCart = req.shoppingCart;
+    const confirmationAttribute = req.params.confirmationAttribute;
     if (!shoppingCart) {
         res.status(400).send("signedShoppingCart is required");
     } else {
-        const unconfirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(req.shoppingCart);
+        const unconfirmedShoppingCart = shoppingCartService.unconfirmAttribute(shoppingCart, confirmationAttribute);
         res.status(200).send({
             message: "unconfirmed shopping cart",
             shoppingCart: unconfirmedShoppingCart

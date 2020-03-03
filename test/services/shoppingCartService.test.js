@@ -104,7 +104,7 @@ test("should confirm valid shopping cart", () => {
         products: [validProduct()],
         confirmed: false
     };
-    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(validShoppingCart, clientId);
+    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, clientId);
 
     expect(confirmedShoppingCart.confirmed).toEqual(true);
 });
@@ -116,18 +116,18 @@ test("should unconfirm valid shopping cart", () => {
         products: [validProduct()],
         confirmed: false
     };
-    const confirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(validShoppingCart, clientId);
+    const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, clientId);
 
     expect(confirmedShoppingCart.confirmed).toEqual(false);
 });
 
 
 test("should throw error if undefined shopping cart is given to confirmation", () => {
-    expect(() => shoppingCartService.unconfirmShoppingCart(undefined, uuid())).toThrow(ValidationError);
+    expect(() => shoppingCartService.unconfirmAttribute(undefined, uuid())).toThrow(ValidationError);
 });
 
 test("should throw error if null shopping cart is given to confirmation", () => {
-    expect(() => shoppingCartService.unconfirmShoppingCart(null, uuid())).toThrow(ValidationError);
+    expect(() => shoppingCartService.unconfirmAttribute(null, uuid())).toThrow(ValidationError);
 });
 
 

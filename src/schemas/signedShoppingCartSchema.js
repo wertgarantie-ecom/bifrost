@@ -16,7 +16,11 @@ module.exports.requestWithSignedShoppingCartSchema = {
                             type: "uuid",
                             required: true
                         },
-                        confirmed: {
+                        termsAndConditionsConfirmed: {
+                            type: "boolean",
+                            required: true
+                        },
+                        legalAgeConfirmed: {
                             type: "boolean",
                             required: true
                         },
