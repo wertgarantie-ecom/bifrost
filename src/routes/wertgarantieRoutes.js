@@ -17,8 +17,8 @@ router.get("/components/selection-popup", productController.getProducts);
 
 router.put("/components/confirmation", confirmationController.getConfirmationComponentData);
 router.put("/components/confirmation/:confirmationAttribute", confirmationController.confirmAttribute);
-router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
+router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
