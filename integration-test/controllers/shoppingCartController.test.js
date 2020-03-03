@@ -20,7 +20,8 @@ test('should return shopping cart with selected product included', async () => {
 
     const shoppingCart = result.body.signedShoppingCart.shoppingCart;
     expect(shoppingCart.products.length).toBe(1);
-    expect(shoppingCart.confirmed).toBe(false);
+    expect(shoppingCart.legalAgeConfirmed).toBe(false);
+    expect(shoppingCart.termsAndConditionsConfirmed).toBe(false);
     expect(shoppingCart.products[0].deviceClass).toEqual("17fd707a-f9c0-11e9-9694-cf549fcf64e2");
 });
 
@@ -59,7 +60,8 @@ describe("Checkout Shopping Cart", () => {
                         "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
                     }
                 ],
-                "confirmed": true
+                "legalAgeConfirmed": true,
+                "termsAndConditionsConfirmed": true
             };
 
         nockhelper.nockLogin(clientData);

@@ -17,12 +17,12 @@ test('should handle shopping cart confirmation', async function () {
     const agent = request.agent(app);
     const signedShoppingCart = testhelper.createSignedShoppingCart();
 
-    const result = await agent.put('/wertgarantie/components/confirmation/confirm')
+    const result = await agent.put('/wertgarantie/components/confirmation/legalAgeConfirmed')
         .send({signedShoppingCart: signedShoppingCart})
         .set('Accept', 'application/json');
 
     expect(result.status).toBe(200);
-    expect(result.body.signedShoppingCart.shoppingCart.confirmed).toBe(true);
+    expect(result.body.signedShoppingCart.shoppingCart.legalAgeConfirmed).toBe(true);
 });
 
 describe('should handle shopping cart confirmation rejection', function () {
@@ -30,19 +30,19 @@ describe('should handle shopping cart confirmation rejection', function () {
     const signedShoppingCart = testhelper.createSignedShoppingCart();
 
     it('confirm shopping cart', async function () {
-        const result = await agent.put('/wertgarantie/components/confirmation/confirm')
+        const result = await agent.put('/wertgarantie/components/confirmation/legalAgeConfirmed')
             .send({signedShoppingCart: signedShoppingCart})
             .set('Accept', 'application/json');
         expect(result.status).toBe(200);
     });
 
     it('unconfirm shopping cart', async function () {
-        const result = await agent.delete('/wertgarantie/components/confirmation/confirm')
+        const result = await agent.delete('/wertgarantie/components/confirmation/legalAgeConfirmed')
             .send({signedShoppingCart: signedShoppingCart})
             .set('Accept', 'application/json');
 
         expect(result.status).toBe(200);
-        expect(result.body.signedShoppingCart.shoppingCart.confirmed).toBe(false);
+        expect(result.body.signedShoppingCart.shoppingCart.legalAgeConfirmed).toBe(false);
     });
 });
 
@@ -64,6 +64,7 @@ test("should return valid confirmation data", async () => {
     expect(response.status).toBe(200);
     expect(response.body.signedShoppingCart).toEqual(signedShoppingCart);
     expect(response.body.shoppingCart).toEqual(undefined);
-    expect(response.body.confirmed).toEqual(false);
+    expect(response.body.legalAgeConfirmed).toEqual(false);
+    expect(response.body.termsAndConditionsConfirmed).toEqual(false);
     expect(response.body.products.length).toEqual(1);
 });

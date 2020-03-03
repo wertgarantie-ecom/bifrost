@@ -37,7 +37,8 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
                     "orderId": "e0accedd-b087-46df-899e-91229eb43747"
                 }
             ],
-            "confirmed": false
+            "legalAgeConfirmed": false,
+            "termsAndConditionsConfirmed": false
         };
 
     return signatureService.signShoppingCart(shoppingCart);

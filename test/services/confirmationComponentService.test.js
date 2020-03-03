@@ -43,7 +43,8 @@ const testShoppingCart = {
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         }
     ],
-    confirmed: true
+    legalAgeConfirmed: true,
+    termsAndConditionsConfirmed: true
 };
 
 const expectedResponse = {
@@ -68,11 +69,15 @@ const expectedResponse = {
                 "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        "confirmed": true
+        "legalAgeConfirmed": true,
+        "termsAndConditionsConfirmed": true
     },
-    confirmed: true,
-    title: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
-    confirmationHeader: 'Bitte bestätige noch kurz:',
+    legalAgeConfirmed: true,
+    termsAndConditionsConfirmed: true,
+    headerTitle: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
+    legalAgeConfirmationText: "Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.",
+    pleaseConfirmText: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
+    confirmText: 'Bitte bestätige noch kurz:',
     products: [
         {
             paymentInterval: 'monatl.',
@@ -99,7 +104,7 @@ const expectedResponse = {
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         }
     ],
-    confirmationTextGeneral: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
+    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
         '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
         '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
         '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +
