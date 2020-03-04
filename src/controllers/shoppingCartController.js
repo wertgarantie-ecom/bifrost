@@ -28,8 +28,6 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(req, 
     });
 };
 
-
-
 exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
     if (!req.shoppingCart) {
         res.status(200).send({
