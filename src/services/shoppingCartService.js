@@ -130,6 +130,7 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         customer_city: customer.city,
         customer_country: customer.country,
         customer_email: customer.email,
+        customer_birthdate: "1911-11-11",
         device_manufacturer: matchingShopProduct.manufacturer,
         device_model: matchingShopProduct.model,
         device_class: matchingShopProduct.deviceClass,
