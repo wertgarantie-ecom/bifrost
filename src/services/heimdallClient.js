@@ -8,7 +8,10 @@ instance.interceptors.request.use((request) => {
     return AxiosLogger.requestLogger(request, {
         dateFormat: 'HH:MM:ss',
         status: true,
+        url: true,
+        method: true,
         header: true,
+        data: true
     });
 }, (error) => {
     return AxiosLogger.errorLogger(error);
@@ -18,7 +21,10 @@ instance.interceptors.response.use((response) => {
     return AxiosLogger.responseLogger(response, {
         dateFormat: 'HH:MM:ss',
         status: true,
+        url: true,
+        method: true,
         header: true,
+        data: true
     });
 }, (error) => {
     return AxiosLogger.errorLogger(error);
