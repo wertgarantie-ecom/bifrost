@@ -56,7 +56,9 @@ const includedProduct = {
 };
 const validShoppingCart = {
     clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-    products: [includedProduct]
+    products: [includedProduct],
+    legalAgeConfirmed: true,
+    termsAndConditionsConfirmed: true
 };
 
 test("should create and fill new shopping cart if no cart is given", () => {
@@ -104,7 +106,7 @@ test("should confirm valid shopping cart", () => {
         products: [validProduct()],
         confirmed: false
     };
-    const confirmedShoppingCart = shoppingCartService.confirmShoppingCart(validShoppingCart, clientId);
+    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "confirmed");
 
     expect(confirmedShoppingCart.confirmed).toEqual(true);
 });
@@ -116,23 +118,25 @@ test("should unconfirm valid shopping cart", () => {
         products: [validProduct()],
         confirmed: false
     };
-    const confirmedShoppingCart = shoppingCartService.unconfirmShoppingCart(validShoppingCart, clientId);
+    const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, clientId);
 
     expect(confirmedShoppingCart.confirmed).toEqual(false);
 });
 
 
 test("should throw error if undefined shopping cart is given to confirmation", () => {
-    expect(() => shoppingCartService.unconfirmShoppingCart(undefined, uuid())).toThrow(ValidationError);
+    expect(() => shoppingCartService.unconfirmAttribute(undefined, uuid())).toThrow(ValidationError);
 });
 
 test("should throw error if null shopping cart is given to confirmation", () => {
-    expect(() => shoppingCartService.unconfirmShoppingCart(null, uuid())).toThrow(ValidationError);
+    expect(() => shoppingCartService.unconfirmAttribute(null, uuid())).toThrow(ValidationError);
 });
 
 
 test("added product should always reject confirmation", () => {
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").confirmed).toEqual(false);
+    const shoppingCartWithAddedProduct = addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083");
+    expect(shoppingCartWithAddedProduct.termsAndConditionsConfirmed).toEqual(false);
+    expect(shoppingCartWithAddedProduct.legalAgeConfirmed).toEqual(false);
 });
 
 test("shopping cart checkout should checkout wertgarantie product if referenced shop product was also purchased", async () => {
@@ -148,7 +152,8 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: true
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
     };
 
     const purchasedProducts = [
@@ -237,7 +242,8 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: true
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
     };
 
     const purchasedProducts = [
@@ -307,7 +313,8 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: true
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
     };
 
     const purchasedProducts = [
@@ -374,7 +381,8 @@ test("checkout call with multiple products", async () => {
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: true
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
     };
 
     const purchasedProducts = [
@@ -459,7 +467,8 @@ test("checkout call with multiple products where one is not found in shop cart",
                 orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        confirmed: true
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
     };
 
     const purchasedProducts = [

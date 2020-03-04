@@ -5,7 +5,8 @@ const isBase64 = require('is-base64');
 
 exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
     const signedShoppingCart = req.body.signedShoppingCart;
-    if (isBase64(signedShoppingCart)) {
+    const options = {allowEmpty: false};
+    if (isBase64(signedShoppingCart, options)) {
         const buffer = Buffer.from(signedShoppingCart, 'base64');
         const signedShoppingCartString = buffer.toString('utf-8');
         req.body.signedShoppingCart = JSON.parse(signedShoppingCartString);
@@ -21,7 +22,8 @@ exports.validateShoppingCart = async function validateShoppingCart(req, res, nex
 
     const signedShoppingCart = req.body.signedShoppingCart;
     if (!verifyShoppingCart(signedShoppingCart)) {
-        throw new ClientError(`invalid signature: ${signedShoppingCart.signature}`);
+        const clientError = new ClientError(`invalid signature: ${signedShoppingCart.signature}`);
+        return next(clientError);
     } else {
         const shoppingCart = signedShoppingCart.shoppingCart;
         const result = await findBySessionId(shoppingCart.sessionId);

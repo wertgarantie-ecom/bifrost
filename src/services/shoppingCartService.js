@@ -20,7 +20,8 @@ exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartW
     productToAdd.orderId = orderId;
     const updatedShoppingCart = shoppingCart || newShoppingCart(clientId);
     updatedShoppingCart.products.push(productToAdd);
-    updatedShoppingCart.confirmed = false;
+    updatedShoppingCart.termsAndConditionsConfirmed = false;
+    updatedShoppingCart.legalAgeConfirmed = false;
     return updatedShoppingCart;
 };
 
@@ -29,15 +30,15 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCar
     return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId);
 };
 
-exports.confirmShoppingCart = function confirmShoppingCart(shoppingCart) {
+exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute) {
     const clone = _.cloneDeep(shoppingCart);
-    clone.confirmed = true;
+    clone[confirmationAttribute] = true;
     return clone;
 };
 
-exports.unconfirmShoppingCart = function unconfirmShoppingCart(shoppingCart) {
+exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmationAttribute) {
     const clone = _.cloneDeep(shoppingCart);
-    clone.confirmed = false;
+    clone[confirmationAttribute] = false;
     return clone;
 };
 
@@ -71,7 +72,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
 }
 
 exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
-    if (!wertgarantieCart.confirmed) {
+    if (!(wertgarantieCart.termsAndConditionsConfirmed && wertgarantieCart.legalAgeConfirmed)) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
     const client = await clientService.findClientForSecret(secretClientId);
@@ -155,7 +156,8 @@ function newShoppingCart(clientId) {
         "sessionId": uuid(),
         "clientId": clientId,
         "products": [],
-        "confirmed": false
+        "termsAndConditionsConfirmed": false,
+        "legalAgeConfirmed": false
     };
 }
 

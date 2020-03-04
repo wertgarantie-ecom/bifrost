@@ -13,9 +13,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
         return undefined;
     }
     const result = {
-        confirmed: shoppingCart.confirmed,
-        title: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
-        confirmationHeader: "Bitte bestätige noch kurz:",
+        termsAndConditionsConfirmed: shoppingCart.termsAndConditionsConfirmed,
+        legalAgeConfirmed: shoppingCart.legalAgeConfirmed,
+        headerTitle: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
+        confirmText: "Bitte bestätige noch kurz:",
         products: [],
         shoppingCart: shoppingCart
     };
@@ -31,11 +32,13 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
         }
     }
 
-    result.confirmationTextGeneral = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
+    result.generalConfirmationText = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
                                     Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich 
                                     zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
                                     einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 
                                     meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`;
+    result.legalAgeConfirmationText = `Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.`;
+    result.pleaseConfirmText = `Bitte bestätige die oben stehenden Bedingungen um fortzufahren.`;
     if (result.products.length <= 0) {
         return undefined;
     }

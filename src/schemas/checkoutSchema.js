@@ -90,7 +90,11 @@ module.exports.checkoutSchema = {
                             type: "uuid",
                             required: true
                         },
-                        confirmed: {
+                        termsAndConditionsConfirmed: {
+                            type: "boolean",
+                            required: true
+                        },
+                        legalAgeConfirmed: {
                             type: "boolean",
                             required: true
                         },
