@@ -195,6 +195,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         customer_city: 'Köln',
         customer_country: 'Deutschland',
         customer_email: 'max.mustermann1234@test.com',
+        customer_birthdate: "1911-11-11",
         device_manufacturer: 'Apple Inc',
         device_model: 'IPhone X',
         device_class: '6bdd2d93-45d0-49e1-8a0c-98eb80342222',
