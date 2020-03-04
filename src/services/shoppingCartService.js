@@ -137,6 +137,7 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         device_purchase_price: parseFloat(matchingShopProduct.price) / 100,
         device_purchase_date: formatDate(date),
         device_condition: 1,
+        device_os: matchingShopProduct.deviceOS,
         payment_method: "jährlich",
         payment_type: "bank_transfer",
         terms_and_conditions_accepted: true
