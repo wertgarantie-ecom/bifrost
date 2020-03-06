@@ -6,6 +6,7 @@ const shoppingCartController = require("../controllers/shoppingCartController.js
 const confirmationController = require("../controllers/confirmationController.js");
 const purchaseController = require("../controllers/purchaseController.js");
 const clientController = require("../controllers/clientController.js");
+const afterSalesController = require("../controllers/afterSalesController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../schemas/addShoppingCartProduct").addShoppingCartProductSchema;
 const validate = require('express-jsonschema').validate;
@@ -19,6 +20,8 @@ router.put("/components/confirmation", confirmationController.getConfirmationCom
 router.put("/components/confirmation/:confirmationAttribute", confirmationController.confirmAttribute);
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
 router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
+
+router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData())
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
