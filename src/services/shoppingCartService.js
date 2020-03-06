@@ -49,6 +49,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
         return {
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
             deviceClass: wertgarantieProduct.deviceClass,
             devicePrice: wertgarantieProduct.devicePrice,
             success: true,
@@ -62,6 +63,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
         return {
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
             deviceClass: wertgarantieProduct.deviceClass,
             devicePrice: wertgarantieProduct.devicePrice,
             success: false,
@@ -143,15 +145,6 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         payment_type: "bank_transfer",
         terms_and_conditions_accepted: true
     }
-}
-
-function cartSchema(clientId) {
-    return Joi.object({
-        sessionId: Joi.string().guid(),
-        clientId: Joi.string().guid().valid(clientId).error(new Error("clientId of product and cart must match")).required(),
-        products: Joi.array().items(productSchema).required(),
-        confirmed: Joi.boolean()
-    });
 }
 
 function newShoppingCart(clientId) {
