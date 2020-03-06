@@ -20,12 +20,12 @@ exports.persist = async function persist(checkoutData) {
         await Promise.all(checkoutData.purchases.map(purchase => {
             const purchaseQuery = {
                 name: 'insert-purchases',
-                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, activationcode) ' +
-                    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);',
+                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, activationcode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);',
                 values: [
                     purchase.id,
                     checkoutData.sessionId,
                     purchase.wertgarantieProductId,
+                    purchase.wertgarantieProductName,
                     purchase.deviceClass,
                     purchase.devicePrice,
                     purchase.success,
@@ -61,6 +61,7 @@ function toPurchases(rows) {
         return {
             id: row.id,
             wertgarantieProductId: row.wertgarantieproductid,
+            wertgarantieProductName: row.wertgarantieproductname,
             deviceClass: row.deviceclass,
             devicePrice: row.deviceprice,
             success: row.success,
