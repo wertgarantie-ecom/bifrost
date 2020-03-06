@@ -34,10 +34,6 @@ module.exports.requestWithSignedShoppingCartSchema = {
                                             type: "integer",
                                             required: true
                                         },
-                                        wertgarantieProductName: {
-                                            type: "string",
-                                            required: true
-                                        },
                                         deviceClass: {
                                             type: "string",
                                             required: true

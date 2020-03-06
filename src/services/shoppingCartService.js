@@ -83,7 +83,6 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             return {
                 id: idGenerator(),
                 wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-                wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
                 deviceClass: wertgarantieProduct.deviceClass,
                 devicePrice: wertgarantieProduct.devicePrice,
                 success: false,
