@@ -21,7 +21,7 @@ router.put("/components/confirmation/:confirmationAttribute", confirmationContro
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
 router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
 
-router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData())
+router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData);
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
