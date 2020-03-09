@@ -56,9 +56,7 @@ test('should throw ClientError on invalid signatures', async () => {
     };
 
     var next = jest.fn();
-    requestFilter.validateShoppingCart(mockRequest, {}, next, {
-        verifyShoppingCart: () => false
-    });
+    requestFilter.validateShoppingCart(mockRequest, {}, next, () => false);
     expect(next.mock.calls[0][0].name).toBe("ClientError")
 });
 
