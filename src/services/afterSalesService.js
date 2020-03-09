@@ -2,6 +2,9 @@ const defaultCheckoutRepository = require('../repositories/CheckoutRepository');
 
 exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, checkoutRepository = defaultCheckoutRepository) {
     const checkoutData = await checkoutRepository.findBySessionId(sessionId);
+    if (!checkoutData) {
+        return undefined;
+    }
 
     const orderItems = [];
     checkoutData.purchases.map(checkoutItem => {

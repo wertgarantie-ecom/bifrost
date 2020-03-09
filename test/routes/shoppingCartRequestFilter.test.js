@@ -24,15 +24,19 @@ test("should remove shopping carts which were already purchased", async () => {
                         "confirmed": false
                     }
             }
-        }
+        },
+        get: () => 'bb25bbf0-2bb8-4f15-aaf1-f73ade6fd862'
+
     };
 
     const mockResponseHeaders = [];
     const mockResponse = {
         set: (name, value) => mockResponseHeaders.push(`${name}=${value}`),
     };
-    await requestFilter.validateShoppingCart(mockRequest, mockResponse, next,
-        () => true,
+
+    await requestFilter.checkSessionIdCheckout(mockRequest, mockResponse, next, () => true);
+
+    requestFilter.validateShoppingCart(mockRequest, mockResponse, next,
         () => true
     );
 
@@ -52,7 +56,7 @@ test('should throw ClientError on invalid signatures', async () => {
     };
 
     var next = jest.fn();
-    await requestFilter.validateShoppingCart(mockRequest, {}, next, {
+    requestFilter.validateShoppingCart(mockRequest, {}, next, {
         verifyShoppingCart: () => false
     });
     expect(next.mock.calls[0][0].name).toBe("ClientError")

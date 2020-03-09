@@ -2,6 +2,7 @@ const _findBySessionId = require('../repositories/CheckoutRepository').findBySes
 const _verifyShoppingCart = require('../services/signatureService').verifyShoppingCart;
 const ClientError = require('../errors/ClientError');
 const isBase64 = require('is-base64');
+const SESSION_ID_HEADER = 'X-wertgarantie-session-id';
 
 exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
     const signedShoppingCart = req.body.signedShoppingCart;
@@ -14,7 +15,16 @@ exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody
     next();
 };
 
-exports.validateShoppingCart = async function validateShoppingCart(req, res, next, findBySessionId = _findBySessionId, verifyShoppingCart = _verifyShoppingCart) {
+exports.checkSessionIdCheckout = async function checkSessionIdCheckout(req, res, next, findBySessionId = _findBySessionId) {
+    const sessionId = req.get(SESSION_ID_HEADER);
+    const result = await findBySessionId(sessionId);
+    if (result) {
+        deleteShoppingCart(req, res);
+    }
+    return next();
+}
+
+exports.validateShoppingCart = function validateShoppingCart(req, res, next, verifyShoppingCart = _verifyShoppingCart) {
     if (!(req.body && req.body.signedShoppingCart)) {
         console.log("Empty body and/or shopping cart not available. Nothing to validate.");
         return next();
@@ -26,18 +36,15 @@ exports.validateShoppingCart = async function validateShoppingCart(req, res, nex
         return next(clientError);
     } else {
         const shoppingCart = signedShoppingCart.shoppingCart;
-        const result = await findBySessionId(shoppingCart.sessionId);
-        if (result) {
-            deleteShoppingCart(req, res);
-            return next();
-        } else {
-            req.shoppingCart = shoppingCart;
-            return next();
-        }
+        req.shoppingCart = shoppingCart;
+        return next();
     }
 };
 
+
 function deleteShoppingCart(req, res) {
-    delete req.body.signedShoppingCart;
+    if (req.body) {
+        delete req.body.signedShoppingCart;
+    }
     res.set('X-wertgarantie-shopping-cart-delete', true);
 }
