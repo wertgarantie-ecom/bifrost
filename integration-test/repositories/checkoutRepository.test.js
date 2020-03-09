@@ -11,6 +11,7 @@ describe("test persist and find by session in checkout repository", () => {
         {
             id: purchase1Id,
             wertgarantieProductId: 10,
+            wertgarantieProductName: "Basic",
             deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
             devicePrice: 139999,
             success: true,
@@ -23,6 +24,7 @@ describe("test persist and find by session in checkout repository", () => {
         {
             id: purchase2Id,
             wertgarantieProductId: 10,
+            wertgarantieProductName: "Premiun",
             deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
             devicePrice: 139999,
             success: true,
