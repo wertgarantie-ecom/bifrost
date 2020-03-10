@@ -14,6 +14,7 @@ dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 const detectBase64EncodedRequestBody = require('./routes/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
+const checkSessionIdCheckout = require('./routes/shoppingCartRequestFilter').checkSessionIdCheckout;
 const validateShoppingCartRequest = require('./routes/shoppingCartRequestFilter').validateShoppingCart;
 
 const app = express();
@@ -42,6 +43,7 @@ app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
+app.use('/wertgarantie/', checkSessionIdCheckout);
 app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
 
