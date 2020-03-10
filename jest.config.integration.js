@@ -8,5 +8,9 @@ module.exports = {
     setupFilesAfterEnv: ['./jest.setup.js'],
     globalSetup: "./testcontainerSetup.js",
     globalTeardown: "./testcontainerTeardown.js",
-    reporters: ["default", "jest-junit"]
+    reporters: ["default", "jest-junit", ["jest-html-reporters", {
+        "publicPath": "./reports/html/",
+        "filename": "bifrost-integration.html",
+        "expand": true
+    }]]
 };
