@@ -7,5 +7,6 @@ module.exports = {
     testRegex: "/integration-test/.*\.test\..*",
     setupFilesAfterEnv: ['./jest.setup.js'],
     globalSetup: "./testcontainerSetup.js",
-    globalTeardown: "./testcontainerTeardown.js"
+    globalTeardown: "./testcontainerTeardown.js",
+    reporters: ["default", "jest-junit"]
 };

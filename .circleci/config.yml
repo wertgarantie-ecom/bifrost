@@ -25,7 +25,20 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm install
-      - run: npm run test-all
+      - run:
+          name: Run all Unit-Tests
+          command: npm run test
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: "reports/junit/bifrost-unit-test-results.xml"
+      - run:
+          name: Run all Integration-Tests
+          command: npm run integration-test
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: "reports/junit/bifrost-integration-test-results.xml"
+      - store_test_results:
+          path: reports/junit
+      - store_artifacts:
+          path: reports/junit
 
   deploy-dev:
     executor: heroku/default

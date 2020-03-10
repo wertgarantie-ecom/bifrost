@@ -4,5 +4,6 @@ process.env.SIGN_SECRET = "irgendwas";
 process.env.HEIMDALL_URI = "http://heimdallDummyUrl";
 
 module.exports = {
-    testRegex: "/test/.*\.test\..*"
+    testRegex: "/test/.*\.test\..*",
+    reporters: ["default", "jest-junit"]
 };
