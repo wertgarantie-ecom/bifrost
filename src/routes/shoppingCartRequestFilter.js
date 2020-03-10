@@ -2,6 +2,7 @@ const _findBySessionId = require('../repositories/CheckoutRepository').findBySes
 const _verifyShoppingCart = require('../services/signatureService').verifyShoppingCart;
 const ClientError = require('../errors/ClientError');
 const isBase64 = require('is-base64');
+const isUUID = require('is-uuid');
 const SESSION_ID_HEADER = 'X-wertgarantie-session-id';
 
 exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
@@ -17,12 +18,23 @@ exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody
 
 exports.checkSessionIdCheckout = async function checkSessionIdCheckout(req, res, next, findBySessionId = _findBySessionId) {
     const sessionId = req.get(SESSION_ID_HEADER);
-    const result = await findBySessionId(sessionId);
-    if (result) {
-        deleteShoppingCart(req, res);
+    if (sessionId === undefined) {
+        return next();
+    } else if (isUUID.anyNonNil(sessionId)) {
+        try {
+            const result = await findBySessionId(sessionId);
+            if (result) {
+                deleteShoppingCart(req, res);
+            }
+            return next();
+        } catch (error) {
+            return next(error);
+        }
+    } else {
+        const clientError = new ClientError(`only uuids are allowed as session id header. Received ${SESSION_ID_HEADER}=${sessionId}`);
+        return next(clientError);
     }
-    return next();
-}
+};
 
 exports.validateShoppingCart = function validateShoppingCart(req, res, next, verifyShoppingCart = _verifyShoppingCart) {
     if (!(req.body && req.body.signedShoppingCart)) {
@@ -35,8 +47,7 @@ exports.validateShoppingCart = function validateShoppingCart(req, res, next, ver
         const clientError = new ClientError(`invalid signature: ${signedShoppingCart.signature}`);
         return next(clientError);
     } else {
-        const shoppingCart = signedShoppingCart.shoppingCart;
-        req.shoppingCart = shoppingCart;
+        req.shoppingCart = signedShoppingCart.shoppingCart;
         return next();
     }
 };
