@@ -85,7 +85,7 @@ const expectedResponse = {
             includedTax: '(inkl. 1,11€ VerSt**)',
             productTitle: 'Premium',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
-            productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81',
+            productInformationSheetUri: 'https://heimdall-stg-04.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81',
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
@@ -97,14 +97,14 @@ const expectedResponse = {
             includedTax: '(inkl. 0,80€ VerSt**)',
             productTitle: 'Basis',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
-            productInformationSheetUri: 'https://stage-api.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448',
+            productInformationSheetUri: 'https://heimdall-stg-04.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448',
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         }
     ],
-    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://stage-api.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
+    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://heimdall-stg-04.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
         '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
         '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
         '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +
