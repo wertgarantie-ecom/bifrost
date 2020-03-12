@@ -11,8 +11,11 @@ exports.getAfterSalesData = async function getAfterSalesData(req, res, next) {
     } catch (error) {
         return next(error);
     }
-}
+};
 
 exports.componentCheckout = async function componentCheckout(req, res) {
-
-}
+    const shoppingCart = req.shoppingCart;
+    //TODO validate webshopdata
+    const webShopData = req.webshopData;
+    const result = afterSalesService.checkout(shoppingCart, webShopData);
+};

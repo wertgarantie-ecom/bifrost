@@ -3,6 +3,7 @@ const verifyObject = require("../../src/services/signatureService").verifyObject
 const signShoppingCart = require("../../src/services/signatureService").signShoppingCart;
 const verifyShoppingCart = require("../../src/services/signatureService").verifyShoppingCart;
 const verifyString = require("../../src/services/signatureService").verifyString;
+const verifySessionId = require("../../src/services/signatureService").verifySessionId;
 
 test("should ignore whitespace", () => {
     const originalShoopingCart = {
@@ -150,9 +151,43 @@ test("verify shoppingCart", () => {
 });
 
 test("verify string encryption", () => {
-   const encryptedSessionId = 'a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9';
-   const secret = "start";
-   const sessionId = "helloworld";
-   const result = verifyString(encryptedSessionId, sessionId, secret);
-   expect(result).toBe(true);
+    const encryptedSessionId = 'a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9';
+    const secret = "start";
+    const sessionId = "helloworld";
+    const result = verifyString(encryptedSessionId, sessionId, secret);
+    expect(result).toBe(true);
+});
+
+test('should verify encrypted session id', async () => {
+    const publicClientId = "publicClientId";
+    const sessionId = "helloworld";
+    const clientData = {
+        id: "43234",
+        name: "testclient",
+        secrets: ["invalid", "start", "invalid", "invalid"],
+        publicClientIds: [publicClientId]
+    };
+    const clientServiceMock = {
+        findClientForPublicClientId: (clientId) => publicClientId === clientId ? clientData : undefined
+    };
+    const result = await verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', publicClientId, sessionId, clientServiceMock);
+
+    expect(result).toBe(true);
+});
+
+test('could not verify encrypted session id with invalid secret', async () => {
+    const publicClientId = "publicClientId";
+    const sessionId = "helloworld";
+    const clientData = {
+        id: "43234",
+        name: "testclient",
+        secrets: ["invalid", "alsoinvalid", "invalid", "invalid"],
+        publicClientIds: [publicClientId]
+    };
+    const clientServiceMock = {
+        findClientForPublicClientId: (clientId) => publicClientId === clientId ? clientData : undefined
+    };
+    const result = await verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', publicClientId, sessionId, clientServiceMock);
+
+    expect(result).toBe(false);
 });
