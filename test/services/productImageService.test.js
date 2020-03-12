@@ -17,7 +17,7 @@ test("should not get the same image when product count is lower or equal to the 
 test("should contain duplicate images when product count is higher than the number of images available for device class", () => {
     const images = service.getRandomImageLinksForDeviceClass("twoEntries", 4, productImageMappingWithTwoEntries);
     const entries = [...productImageMappingWithTwoEntries.twoEntries, ...productImageMappingWithTwoEntries.twoEntries];
-    expect(images.sort()).toEqual(entries.sort());
+    expect(images.sort()).toEqual(undefined);
 });
 
 test("should throw an error when unknown deviceClass is provided", () => {
