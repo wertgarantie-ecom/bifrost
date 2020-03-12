@@ -44,7 +44,7 @@ async function getBearerToken(client, hpptClient) {
     return response.payload.access_token;
 }
 
-exports.getProductOffers = async function getProductOffers(client, deviceClass, devicePrice, date = new Date(), httpClient = axios) {
+exports.getProductOffers = async function getProductOffers(client, deviceClass, devicePrice, date = new Date(), httpClient = instance) {
     const priceInFloat = parseFloat(devicePrice) / 100; // never ever use float for prices....but heimdall wants it so...
     const heimdallProductOffersUrl = heimdallUri + "/api/v1/product-offers?device_class=" + deviceClass +
         "&device_purchase_price=" + priceInFloat +
