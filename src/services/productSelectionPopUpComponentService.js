@@ -1,6 +1,7 @@
 const productImageService = require('./productImageService');
 const defaultHeimdallClient = require("./heimdallClient");
 const productService = require("./heimdallProductOfferService");
+const documentType = require("./heimdallProductOfferService").documentType;
 const defaultClientService = require('../services/clientService');
 
 exports.getProductOffers = async function getProductOffers(deviceClass,
@@ -32,10 +33,10 @@ function convertPayloadToSelectionPopUpProduct(heimdallProductOffer, imageLink, 
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
-        infoSheetText: heimdallProductOffer.documents[0].document_title,
-        infoSheetUri: heimdallProductOffer.documents[0].document_link,
-        detailsDocText: heimdallProductOffer.documents[1].document_title,
-        detailsDocUri: heimdallProductOffer.documents[1].document_link,
+        infoSheetText: product.getDocument(documentType.PRODUCT_INFORMATION_SHEET).title,
+        infoSheetUri: product.getDocument(documentType.PRODUCT_INFORMATION_SHEET).uri,
+        detailsDocText: product.getDocument(documentType.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).title,
+        detailsDocUri: product.getDocument(documentType.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri,
         paymentInterval: heimdallProductOffer.payment,
         price: heimdallProductOffer.price,
         currency: heimdallProductOffer.price_currency,

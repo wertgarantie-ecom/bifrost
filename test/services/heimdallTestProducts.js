@@ -215,4 +215,111 @@ exports.heimdallTestProducts = {
             ]
         }
     ]
-}
+};
+
+exports.heimdallResponseWithoutDocuments = {
+    "payload": [
+        {
+            "id": 3,
+            "name": "Komplettschutz",
+            "marketing_name": "Komplettschutz",
+            "marketing_name_formatted": "Komplettschutz",
+            "description": null,
+            "premium": false,
+            "payment": "Monat",
+            "suggest": false,
+            "url": "https://www.wertgarantie.de/geraeteversicherung/#/",
+            "utm_campaign": "offer-ks",
+            "services": [],
+            "advantages": [],
+            "special_advantages": [],
+            "price_type": "ab",
+            "price": "5,00",
+            "price_currency": "€",
+            "price_formatted": "ab 5,00 €",
+            "price_tax": "0,80",
+            "prices": {
+                "monthly": {
+                    "price": "5,00",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 5,00 €",
+                    "price_tax": "0,80"
+                },
+                "quarterly": {
+                    "price": "15,00",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 15,00 €",
+                    "price_tax": "2,39"
+                },
+                "half_yearly": {
+                    "price": "30,00",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 30,00 €",
+                    "price_tax": "4,79"
+                },
+                "yearly": {
+                    "price": "60,00",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 60,00 €",
+                    "price_tax": "9,58"
+                }
+            },
+            "documents": []
+        },
+        {
+            "id": 6,
+            "name": "Komplettschutz mit Premium-Option",
+            "marketing_name": "Komplettschutz mit Premium-Option",
+            "marketing_name_formatted": "Komplettschutz <br> mit Premium-Option",
+            "description": null,
+            "premium": true,
+            "payment": "Monat",
+            "suggest": true,
+            "url": "https://www.wertgarantie.de/geraeteversicherung/#/",
+            "utm_campaign": "offer-ks-premium",
+            "services": [],
+            "advantages": [],
+            "special_advantages": [],
+            "price_type": "ab",
+            "price": "6,95",
+            "price_currency": "€",
+            "price_formatted": "ab 6,95 €",
+            "price_tax": "1,11",
+            "prices": {
+                "monthly": {
+                    "price": "6,95",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 6,95 €",
+                    "price_tax": "1,11"
+                },
+                "quarterly": {
+                    "price": "20,85",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 20,85 €",
+                    "price_tax": "3,33"
+                },
+                "half_yearly": {
+                    "price": "41,70",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 41,70 €",
+                    "price_tax": "6,66"
+                },
+                "yearly": {
+                    "price": "83,40",
+                    "price_type": "ab",
+                    "price_currency": "€",
+                    "price_formatted": "ab 83,40 €",
+                    "price_tax": "13,32"
+                }
+            },
+            "documents": []
+        }
+    ]
+};

@@ -1,5 +1,6 @@
 const service = require('../../src/services/productSelectionPopUpComponentService');
 const heimdallTestProducts = require("./heimdallTestProducts").heimdallTestProducts;
+const heimdallResponseWithoutDocuments = require("./heimdallTestProducts").heimdallResponseWithoutDocuments;
 
 const productImagesServiceMock = {
     getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
@@ -64,4 +65,19 @@ test("should return proper product response", async () => {
         top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
     }];
     expect(result).toEqual(expectedResult);
+});
+
+test("could handle missing documents", async () => {
+
+    const heimdallClientMock = {
+        getProductOffers: () => Promise.resolve(heimdallResponseWithoutDocuments.payload)
+    };
+    const result = await service.getProductOffers("1dfd4549-9bdc-4285-9047-e5088272dade",
+        "devicePrice",
+        "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        heimdallClientMock,
+        productImagesServiceMock,
+        mockClientService(clientData));
+    expect(result[0].detailsDocUri).toEqual(undefined);
+    expect(result[0].detailsDocText).toEqual(undefined);
 });
