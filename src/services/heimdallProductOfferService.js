@@ -51,6 +51,8 @@ exports.fromProductOffer = function fromProduct(heimdallProductOffer) {
 exports.documentType = {
     SEPA: "SEPA", //SEPA Lastschriftmandat
     PRODUCT_INFORMATION_SHEET: "PIS", //Produktinformationsblatt
+    GENERAL_INSURANCE_PRODUCTS_INFORMATION: "IPID", //Informationsblatt für Versicherungsprodukte
     INSURANCE_CERTIFICATE: "POLICY", // Versicherungsschein
-    GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE: "GTCI"
+    GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE: "GTCI",
+    LEGAL_NOTICE: null
 };
