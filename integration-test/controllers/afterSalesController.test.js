@@ -4,6 +4,7 @@ const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/services/signatureService');
 const uuid = require('uuid');
 const nockhelper = require('../helper/nockHelper');
+const expect = require('jest').expect;
 
 describe("Check Preparation of After Sales Component Data when checkout happens via shop call", () => {
     let clientData;

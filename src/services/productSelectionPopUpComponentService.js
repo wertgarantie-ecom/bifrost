@@ -24,7 +24,7 @@ exports.getProductOffers = async function getProductOffers(deviceClass,
 
 function convertPayloadToSelectionPopUpProduct(heimdallProductOffer, imageLink, allProductOffers) {
     const product = productService.fromProductOffer(heimdallProductOffer);
-    heimdallProductOffer.payment = product.getPaymentInterval();
+    heimdallProductOffer.payment = product.getPaymentInterval()
 
     const advantageCategories = product.getAdvantageCategories(allProductOffers);
     return {
