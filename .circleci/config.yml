@@ -28,13 +28,9 @@ jobs:
       - run:
           name: Run all Unit-Tests
           command: npm run test
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: "reports/junit/bifrost-unit-test-results.xml"
       - run:
           name: Run all Integration-Tests
           command: npm run integration-test
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: "reports/junit/bifrost-integration-test-results.xml"
       - store_test_results:
           path: reports/junit
       - store_artifacts:
