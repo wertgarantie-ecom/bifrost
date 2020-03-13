@@ -158,36 +158,26 @@ test("verify string encryption", () => {
     expect(result).toBe(true);
 });
 
-test('should verify encrypted session id', async () => {
-    const publicClientId = "publicClientId";
-    const sessionId = "helloworld";
+test('should verify encrypted session id', () => {
     const clientData = {
         id: "43234",
         name: "testclient",
         secrets: ["invalid", "start", "invalid", "invalid"],
-        publicClientIds: [publicClientId]
+        publicClientIds: ["publicClientId"]
     };
-    const clientServiceMock = {
-        findClientForPublicClientId: (clientId) => publicClientId === clientId ? clientData : undefined
-    };
-    const result = await verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', publicClientId, sessionId, clientServiceMock);
+    const result = verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', clientData, "helloworld");
 
     expect(result).toBe(true);
 });
 
-test('could not verify encrypted session id with invalid secret', async () => {
-    const publicClientId = "publicClientId";
-    const sessionId = "helloworld";
+test('could not verify encrypted session id with invalid secret', () => {
     const clientData = {
         id: "43234",
         name: "testclient",
         secrets: ["invalid", "alsoinvalid", "invalid", "invalid"],
-        publicClientIds: [publicClientId]
+        publicClientIds: ["publicClientId"]
     };
-    const clientServiceMock = {
-        findClientForPublicClientId: (clientId) => publicClientId === clientId ? clientData : undefined
-    };
-    const result = await verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', publicClientId, sessionId, clientServiceMock);
+    const result = verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', clientData, "helloworld");
 
     expect(result).toBe(false);
 });
