@@ -73,11 +73,10 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     }
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, secretClientId, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, client, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
     if (!(wertgarantieCart.termsAndConditionsConfirmed && wertgarantieCart.legalAgeConfirmed)) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
-    const client = await clientService.findClientForSecret(secretClientId);
 
     const purchaseResults = await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
         const shopProductIndex = findIndex(purchasedShopProducts, wertgarantieProduct);

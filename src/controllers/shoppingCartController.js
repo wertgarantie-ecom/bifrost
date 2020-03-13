@@ -1,5 +1,7 @@
 const service = require('../services/shoppingCartService');
 const clientRepository = require('../repositories/ClientRepository');
+const clientService = require('../services/clientService');
+const ClientError = require('../errors/ClientError');
 
 /**
  * Add given product to existing or new shopping cart.
@@ -29,6 +31,13 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(req, 
     });
 };
 
+function sendErrorResponse(res, error, errorMessage) {
+    res.status(400).send({
+        error: error,
+        message: errorMessage
+    })
+}
+
 exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
     if (!req.shoppingCart) {
         res.status(200).send({
@@ -36,14 +45,16 @@ exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart
         });
     } else {
         try {
-            const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, req.shoppingCart, req.body.secretClientId);
+            const client = await clientService.findClientForSecret(req.body.secretClientId);
+            if (!client) {
+                const errorMessage = "No client found for given client id: " + req.body.secretClientId;
+                sendErrorResponse(res, new ClientError(errorMessage));
+            }
+            const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, req.shoppingCart, client);
             res.status(200).send(result);
         } catch (error) {
             if (error instanceof SyntaxError) { //JSON.parse fails
-                res.status(400).send({
-                    error: error,
-                    message: "Corrupt JSON provided as wertgarantie shopping cart. Checkout call will not be processed."
-                })
+                sendErrorResponse(res, error, "Corrupt JSON provided as wertgarantie shopping cart. Checkout call will not be processed.");
             } else {
                 next(error);
             }

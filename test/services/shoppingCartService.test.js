@@ -1,7 +1,6 @@
 const addProductToShoppingCartWithOrderId = require('../../src/services/shoppingCartService').addProductToShoppingCartWithOrderId;
 const shoppingCartService = require('../../src/services/shoppingCartService');
 const signatureService = require('../../src/services/signatureService');
-const InvalidWertgarantieCartSignatureError = require('../../src/services/shoppingCartService').InvalidWertgarantieCartSignatureError;
 const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartService').UnconfirmedShoppingCartError;
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
@@ -166,7 +165,6 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         }
     ];
     const customer = validCustomer();
-    const secretClientId = "bikesecret1";
     const client = {
         "name": "bikeShop",
         "publicClientIds": ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"],
@@ -177,7 +175,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
         wertgarantieShoppingCart,
-        secretClientId,
+        client,
         mockHeimdallClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
         new Date(2019, 5, 1, 8, 34, 34, 345),

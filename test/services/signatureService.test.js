@@ -2,6 +2,8 @@ const signObject = require("../../src/services/signatureService").signObject;
 const verifyObject = require("../../src/services/signatureService").verifyObject;
 const signShoppingCart = require("../../src/services/signatureService").signShoppingCart;
 const verifyShoppingCart = require("../../src/services/signatureService").verifyShoppingCart;
+const verifyString = require("../../src/services/signatureService").verifyString;
+const verifySessionId = require("../../src/services/signatureService").verifySessionId;
 
 test("should ignore whitespace", () => {
     const originalShoopingCart = {
@@ -53,7 +55,7 @@ test("should ignore whitespace", () => {
     const originalSignature = signObject(originalShoopingCart, "secret");
     const hackedSignature = signObject(hackedShoppingCart, "secret");
 
-    expect(originalSignature).toBe("66VkdfvMGWIw7Fuvc60neb1UznM9ZAA6n+abYba0Rvk=");
+    expect(originalSignature).toBe("eba56475fbcc196230ec5baf73ad2779bd54ce733d64003a9fe69b61b6b446f9");
     expect(originalSignature).not.toBe(hackedSignature);
 });
 
@@ -113,7 +115,7 @@ test("verifies valid signed shopping cart", () => {
         ],
     };
 
-    const result = verifyObject(shoppingCart, "66VkdfvMGWIw7Fuvc60neb1UznM9ZAA6n+abYba0Rvk=", "secret");
+    const result = verifyObject(shoppingCart, "eba56475fbcc196230ec5baf73ad2779bd54ce733d64003a9fe69b61b6b446f9", "secret");
     expect(result).toBe(true);
 });
 
@@ -148,3 +150,34 @@ test("verify shoppingCart", () => {
     expect(result).toBe(true);
 });
 
+test("verify string encryption", () => {
+    const encryptedSessionId = 'a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9';
+    const secret = "start";
+    const sessionId = "helloworld";
+    const result = verifyString(encryptedSessionId, sessionId, secret);
+    expect(result).toBe(true);
+});
+
+test('should verify encrypted session id', () => {
+    const clientData = {
+        id: "43234",
+        name: "testclient",
+        secrets: ["invalid", "start", "invalid", "invalid"],
+        publicClientIds: ["publicClientId"]
+    };
+    const result = verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', clientData, "helloworld");
+
+    expect(result).toBe(true);
+});
+
+test('could not verify encrypted session id with invalid secret', () => {
+    const clientData = {
+        id: "43234",
+        name: "testclient",
+        secrets: ["invalid", "alsoinvalid", "invalid", "invalid"],
+        publicClientIds: ["publicClientId"]
+    };
+    const result = verifySessionId('a3660d23ea7e02859d86302aba8f5cc9cf4b95960ba8fa9909232ba5c28d65d9', clientData, "helloworld");
+
+    expect(result).toBe(false);
+});

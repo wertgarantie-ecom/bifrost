@@ -3,7 +3,15 @@ const SIGN_SECRET = process.env.SIGN_SECRET;
 
 function signObject(object, secret = SIGN_SECRET) {
     const stringRepresentation = JSON.stringify(object);
-    return CryptoJS.HmacSHA256(stringRepresentation, secret).toString((CryptoJS.enc.Base64));
+    return signString(stringRepresentation, secret);
+}
+
+function signString(string, secret = SIGN_SECRET) {
+    return CryptoJS.HmacSHA256(string, secret).toString();
+}
+
+function verifyString(encryptedString, string, secret) {
+    return signString(string, secret) === encryptedString;
 }
 
 function verifyObject(object, signature, secret = SIGN_SECRET) {
@@ -22,5 +30,11 @@ exports.verifyShoppingCart = function verifyShoppingCart(signedShoppingCart, sec
     return verifyObject(signedShoppingCart.shoppingCart, signedShoppingCart.signature, secret);
 };
 
+exports.verifySessionId = function verifySessionId(encryptedSessionId, clientData, sessionId) {
+    return clientData.secrets.reduce((isValid, secret) => isValid || verifyString(encryptedSessionId, sessionId, secret), false);
+};
+
 exports.signObject = signObject;
 exports.verifyObject = verifyObject;
+exports.signString = signString;
+exports.verifyString = verifyString;
