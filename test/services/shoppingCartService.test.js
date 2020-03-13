@@ -1,7 +1,6 @@
 const addProductToShoppingCartWithOrderId = require('../../src/services/shoppingCartService').addProductToShoppingCartWithOrderId;
 const shoppingCartService = require('../../src/services/shoppingCartService');
 const signatureService = require('../../src/services/signatureService');
-const InvalidWertgarantieCartSignatureError = require('../../src/services/shoppingCartService').InvalidWertgarantieCartSignatureError;
 const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartService').UnconfirmedShoppingCartError;
 const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');

@@ -1,11 +1,10 @@
 const defaultCheckoutRepository = require('../repositories/CheckoutRepository');
+const signatureService = require('./signatureService');
+const ClientError = require('../errors/ClientError');
+const shoppingCartService = require('./shoppingCartService');
+const clientService = require('./clientService');
 
-exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, checkoutRepository = defaultCheckoutRepository) {
-    const checkoutData = await checkoutRepository.findBySessionId(sessionId);
-    if (!checkoutData) {
-        return undefined;
-    }
-
+function getAfterSalesDataForCheckoutData(checkoutData) {
     const orderItems = [];
     checkoutData.purchases.map(checkoutItem => {
         orderItems.push({
@@ -21,17 +20,24 @@ exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, 
         nextSteps: ["Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen", "Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App."],
         orderItems: orderItems
     };
+}
+
+exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, checkoutRepository = defaultCheckoutRepository) {
+    const checkoutData = await checkoutRepository.findBySessionId(sessionId);
+    if (!checkoutData) {
+        return undefined;
+    }
+
+    return getAfterSalesDataForCheckoutData(checkoutData);
 };
 
 exports.checkout = async function checkout(shoppingCart, webshopData) {
-/*
-    Validieren der Shop Data gegen Schema (S-Cart)
-    Dekodieren und validieren (Schema + Signatur) des Wertgarantie Shopping Carts (W-Cart)
-    Mapping von ClientID (aus W-Cart) auf Secret (Secret ist in DB)
-    Validieren das gespeichertes Secret gleich ist mit gesendetem Shop Secret
-    Checkout wie bisher
-    Speichern der Checkout Daten
-    Cookie löschen
-*/
+    const clientData = await clientService.findClientForPublicClientId(shoppingCart.clientId);
+    const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientData, shoppingCart.sessionId);
+    if (!sessionIdValid) {
+        throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");
+    }
 
+    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, shoppingCart, clientData);
+    return getAfterSalesDataForCheckoutData(checkoutData);
 };

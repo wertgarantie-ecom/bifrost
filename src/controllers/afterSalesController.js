@@ -13,9 +13,15 @@ exports.getAfterSalesData = async function getAfterSalesData(req, res, next) {
     }
 };
 
-exports.componentCheckout = async function componentCheckout(req, res) {
-    const shoppingCart = req.shoppingCart;
-    //TODO validate webshopdata
-    const webShopData = req.webshopData;
-    const result = afterSalesService.checkout(shoppingCart, webShopData);
+exports.componentCheckout = async function componentCheckout(req, res, next) {
+    try {
+        const result = await afterSalesService.checkout(req.shoppingCart, req.body.webshopData);
+        res.set('X-wertgarantie-shopping-cart-delete', true);
+        if (!result) {
+            return res.sendStatus(204);
+        }
+        return res.status(200).send(result)
+    } catch (error) {
+        return next(error)
+    }
 };

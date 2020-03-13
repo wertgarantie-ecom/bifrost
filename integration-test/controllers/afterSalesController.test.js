@@ -4,7 +4,6 @@ const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/services/signatureService');
 const uuid = require('uuid');
 const nockhelper = require('../helper/nockHelper');
-const cryptoJs = require('crypto-js');
 
 describe("Check Preparation of After Sales Component Data when checkout happens via shop call", () => {
     let clientData;
@@ -89,16 +88,15 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
 
 describe("Check Checkout via after sales component ", () => {
     test("checkout via component", async () => {
-        let clientData;
         const sessionId = uuid();
-        const encryptedSessionId = cryptoJs.HmacSHA1(sessionId, clientData.secrets[0])
-        clientData = await testhelper.createDefaultClient();
+        const clientData = await testhelper.createDefaultClient();
+        const encryptedSessionId = signatureService.signString(sessionId, clientData.secrets[0]);
         const wertgarantieProductId = 10;
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =
             {
                 "sessionId": sessionId + "",
-                "clientId": clientData.id,
+                "clientId": clientData.publicClientIds[0],
                 "products": [
                     {
                         "wertgarantieProductId": wertgarantieProductId,
@@ -133,6 +131,16 @@ describe("Check Checkout via after sales component ", () => {
             },
             encryptedSessionId: encryptedSessionId
         };
+
+        nockhelper.nockLogin(clientData);
+        nockhelper.nockCheckoutShoppingCart(wertgarantieProductId, {
+            payload: {
+                contract_number: "1234",
+                transaction_number: "28850277",
+                activation_code: "4db56dacfbhce",
+                message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
+            }
+        });
 
         const result = await request(app).post("/wertgarantie/components/after-sales/checkout")
             .send({

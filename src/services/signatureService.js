@@ -1,5 +1,4 @@
 const CryptoJS = require("crypto-js");
-const _clientService = require('./clientService');
 const SIGN_SECRET = process.env.SIGN_SECRET;
 
 function signObject(object, secret = SIGN_SECRET) {
@@ -8,7 +7,6 @@ function signObject(object, secret = SIGN_SECRET) {
 }
 
 function signString(string, secret = SIGN_SECRET) {
-    // return CryptoJS.HmacSHA256(string, secret).toString((CryptoJS.enc.Base64));
     return CryptoJS.HmacSHA256(string, secret).toString();
 }
 
@@ -32,14 +30,8 @@ exports.verifyShoppingCart = function verifyShoppingCart(signedShoppingCart, sec
     return verifyObject(signedShoppingCart.shoppingCart, signedShoppingCart.signature, secret);
 };
 
-exports.verifySessionId = async function verifySessionId(encryptedSessionId, publicClientId, sessionId, clientService = _clientService) {
-    const clientConfig = await clientService.findClientForPublicClientId(publicClientId);
-    if (clientConfig) {
-        const result = false;
-        return clientConfig.secrets.reduce((isValid, secret) => isValid || verifyString(encryptedSessionId, sessionId, secret), false);
-    } else {
-        return false;
-    }
+exports.verifySessionId = function verifySessionId(encryptedSessionId, clientData, sessionId) {
+    return clientData.secrets.reduce((isValid, secret) => isValid || verifyString(encryptedSessionId, sessionId, secret), false);
 };
 
 exports.signObject = signObject;
