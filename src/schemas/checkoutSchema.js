@@ -1,3 +1,5 @@
+const signedShoppingCartSchema = require('./signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+
 module.exports.checkoutSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
@@ -76,62 +78,7 @@ module.exports.checkoutSchema = {
         secretClientId: {
             type: "string"
         },
-        signedShoppingCart: {
-            type: "object",
-            properties: {
-                signature: {
-                    type: "string",
-                    required: true
-                },
-                shoppingCart: {
-                    type: "object",
-                    properties: {
-                        clientId: {
-                            type: "uuid",
-                            required: true
-                        },
-                        termsAndConditionsConfirmed: {
-                            type: "boolean",
-                            required: true
-                        },
-                        legalAgeConfirmed: {
-                            type: "boolean",
-                            required: true
-                        },
-                        products: {
-                            type: "array",
-                            items: [
-                                {
-                                    type: "object",
-                                    properties: {
-                                        wertgarantieProductId: {
-                                            type: "integer",
-                                            required: true
-                                        },
-                                        deviceClass: {
-                                            type: "string",
-                                            required: true
-                                        },
-                                        devicePrice: {
-                                            type: "integer",
-                                            required: true
-                                        },
-                                        shopProductName: {
-                                            type: "string",
-                                            required: true
-                                        },
-                                        orderId: {
-                                            type: "uuid",
-                                            required: true
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        }
+        signedShoppingCart: signedShoppingCartSchema.properties.signedShoppingCart
     },
     required: [
         "purchasedProducts",

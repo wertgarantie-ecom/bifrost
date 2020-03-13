@@ -9,6 +9,7 @@ const clientController = require("../controllers/clientController.js");
 const afterSalesController = require("../controllers/afterSalesController.js");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../schemas/addShoppingCartProduct").addShoppingCartProductSchema;
+const afterSalesComponentCheckoutSchema = require("../schemas/afterSalesComponentCheckoutSchema").afterSalesComponentCheckoutSchema;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 
@@ -22,7 +23,7 @@ router.delete("/components/confirmation/product", confirmationController.removeP
 router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
 
 router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData);
-router.post("/components/after-sales/checkout", afterSalesController.checkout);
+router.post("/components/after-sales/checkout", validate({body: afterSalesComponentCheckoutSchema}), afterSalesController.getAfterSalesData);
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
