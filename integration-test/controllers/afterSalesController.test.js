@@ -4,7 +4,6 @@ const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/services/signatureService');
 const uuid = require('uuid');
 const nockhelper = require('../helper/nockHelper');
-const expect = require('jest').expect;
 
 describe("Check Preparation of After Sales Component Data when checkout happens via shop call", () => {
     let clientData;
@@ -22,7 +21,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                     {
                         "wertgarantieProductId": wertgarantieProductId,
                         "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "deviceClass": "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                         "devicePrice": 139999,
                         "deviceCurrency": "EUR",
                         "shopProductName": "SuperBike 3000",
@@ -48,7 +47,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                 purchasedProducts: [{
                     price: 139999,
                     manufacturer: "Super Bike Inc.",
-                    deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                     model: "SuperBike 3000"
                 }],
                 customer: {
@@ -78,6 +77,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
         expect(resultBody.nextSteps).toEqual(['Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen', 'Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App.']);
         expect(resultBody.orderItems.length).toEqual(1);
         expect(resultBody.orderItems[0]).toEqual({
+            "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
             "insuranceProductTitle": "Basic",
             "productTitle": "SuperBike 3000"
         });
@@ -102,7 +102,7 @@ describe("Check Checkout via after sales component ", () => {
                     {
                         "wertgarantieProductId": wertgarantieProductId,
                         "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "deviceClass": "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                         "devicePrice": 139999,
                         "deviceCurrency": "EUR",
                         "shopProductName": "SuperBike 3000",
@@ -116,7 +116,7 @@ describe("Check Checkout via after sales component ", () => {
             purchasedProducts: [{
                 price: 139999,
                 manufacturer: "Super Bike Inc.",
-                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                 model: "SuperBike 3000"
             }],
             customer: {
@@ -155,6 +155,7 @@ describe("Check Checkout via after sales component ", () => {
         expect(resultBody.nextSteps).toEqual(['Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen', 'Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App.']);
         expect(resultBody.orderItems.length).toEqual(1);
         expect(resultBody.orderItems[0]).toEqual({
+            "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
             "insuranceProductTitle": "Basic",
             "productTitle": "SuperBike 3000"
         });

@@ -1,6 +1,10 @@
 const afterSalesService = require('../../src/services/afterSalesService');
 
 test('should return proper after sales data for checkout data', async () => {
+    const mockProductImageService = {
+        getRandomImageLinksForDeviceClass: () => ["https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"]
+    }
+
     const sessionId = "0b511572-3aa3-4706-8146-d109693cfe37";
     const checkoutRepository = {
         findBySessionId: () => {
@@ -33,6 +37,7 @@ test('should return proper after sales data for checkout data', async () => {
     expect(result.nextSteps).toEqual(['Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen', 'Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App.']);
     expect(result.orderItems.length).toEqual(1);
     expect(result.orderItems[0]).toEqual({
+        "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png",
         "insuranceProductTitle": "Premium",
         "productTitle": "Flash Handy 3000 Pro"
     });
