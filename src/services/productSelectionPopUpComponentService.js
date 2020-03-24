@@ -3,13 +3,15 @@ const defaultHeimdallClient = require("./heimdallClient");
 const productService = require("./heimdallProductOfferService");
 const documentType = require("./heimdallProductOfferService").documentType;
 const defaultClientService = require('../services/clientService');
+const schema = require('../schemas/productSelectionResponseSchema').productSelectionResponseSchema;
+const jsonschema = require('jsonschema');
 
-exports.getProductOffers = async function getProductOffers(deviceClass,
-                                                           devicePrice,
-                                                           clientId,
-                                                           heimdallClient = defaultHeimdallClient,
-                                                           imageService = productImageService,
-                                                           clientService = defaultClientService) {
+exports.prepareProductSelectionData = async function prepateProductSelectionData(deviceClass,
+                                                                                 devicePrice,
+                                                                                 clientId,
+                                                                                 heimdallClient = defaultHeimdallClient,
+                                                                                 imageService = productImageService,
+                                                                                 clientService = defaultClientService) {
     const client = await clientService.findClientForPublicClientId(clientId);
     const productOffers = await heimdallClient.getProductOffers(client, deviceClass, devicePrice);
     const products = [];
@@ -19,7 +21,11 @@ exports.getProductOffers = async function getProductOffers(deviceClass,
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers);
         products.push(product);
     });
-    return products;
+    const data = {
+        title: "Vergessen Sie nicht Ihren Rundumschutz",
+        products: products
+    };
+    return jsonschema.validate(data, schema);
 };
 
 function convertPayloadToSelectionPopUpProduct(heimdallProductOffer, imageLink, allProductOffers) {
