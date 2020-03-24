@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const googleController = require("../controllers/googleController.js");
-const productController = require("../controllers/productController.js");
+const selectionPopUpController = require("../controllers/selectionPopUpController");
 const shoppingCartController = require("../controllers/shoppingCartController.js");
 const confirmationController = require("../controllers/confirmationController.js");
 const purchaseController = require("../controllers/purchaseController.js");
@@ -15,7 +15,7 @@ const basicAuth = require('express-basic-auth');
 
 // components
 router.get("/rating", googleController.reviewRatings);
-router.get("/components/selection-popup", productController.getProducts);
+router.get("/components/selection-popup", selectionPopUpController.getProducts);
 
 router.put("/components/confirmation", confirmationController.getConfirmationComponentData);
 router.put("/components/confirmation/:confirmationAttribute", confirmationController.confirmAttribute);
