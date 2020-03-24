@@ -6,7 +6,7 @@ const defaultClientService = require('../services/clientService');
 const schema = require('../schemas/productSelectionResponseSchema').productSelectionResponseSchema;
 const jsonschema = require('jsonschema');
 
-exports.prepareProductSelectionData = async function prepateProductSelectionData(deviceClass,
+exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
                                                                                  clientId,
                                                                                  heimdallClient = defaultHeimdallClient,

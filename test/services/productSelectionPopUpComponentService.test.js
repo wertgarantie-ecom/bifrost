@@ -81,6 +81,7 @@ test("return undefined if response is not completely filled", async () => {
         "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         heimdallClientMock,
         productImagesServiceMock,
-        mockClientService(clientData));
+        mockClientService(clientData)
+    );
     expect(result.valid).toBe(false);
 });
