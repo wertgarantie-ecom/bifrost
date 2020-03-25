@@ -7,6 +7,7 @@ const confirmationController = require("../controllers/confirmationController.js
 const purchaseController = require("../controllers/purchaseController.js");
 const clientController = require("../controllers/clientController.js");
 const afterSalesController = require("../controllers/afterSalesController.js");
+const landingPageController = require("../controllers/landingPageController");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../schemas/addShoppingCartProduct").addShoppingCartProductSchema;
 const afterSalesComponentCheckoutSchema = require("../schemas/afterSalesComponentCheckoutSchema").afterSalesComponentCheckoutSchema;
@@ -24,6 +25,8 @@ router.delete("/components/confirmation/:confirmationAttribute", confirmationCon
 
 router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData);
 router.post("/components/after-sales/checkout", validate({body: afterSalesComponentCheckoutSchema}), afterSalesController.componentCheckout);
+
+router.get("/components/landing-page/:publicClientId", landingPageController.getLandingPageData);
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
