@@ -1,20 +1,9 @@
-const Joi = require('joi');
 const uuid = require('uuid');
 const _ = require('lodash');
 const moment = require('moment');
-const signatureService = require('./signatureService');
 const checkoutRepository = require('../repositories/CheckoutRepository');
 const defaultHeimdallClient = require('../services/heimdallClient');
-const defaultClientService = require('../services/clientService');
 
-const productSchema = Joi.object({
-    wertgarantieProductId: Joi.number().integer().required(),
-    deviceClass: Joi.string().guid().required(),
-    devicePrice: Joi.number().required(),
-    deviceCurrency: Joi.string().required(),
-    shopProductName: Joi.string().required(),
-    orderId: Joi.string().guid().required()
-});
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
     productToAdd.orderId = orderId;
@@ -73,7 +62,7 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
     }
 }
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, client, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository, clientService = defaultClientService) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, client, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
     if (!(wertgarantieCart.termsAndConditionsConfirmed && wertgarantieCart.legalAgeConfirmed)) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }

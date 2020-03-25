@@ -2,7 +2,6 @@ const addProductToShoppingCartWithOrderId = require('../../src/services/shopping
 const shoppingCartService = require('../../src/services/shoppingCartService');
 const signatureService = require('../../src/services/signatureService');
 const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartService').UnconfirmedShoppingCartError;
-const ValidationError = require('joi').ValidationError;
 const uuid = require('uuid');
 
 const mockHeimdallClientSuccess = () => {
@@ -20,19 +19,6 @@ const mockHeimdallClientSuccess = () => {
     }
 };
 
-
-const clientData =
-    {
-        name: "bikeShop",
-        secrets: ["bikesecret1"],
-        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
-    };
-
-function mockClientService(clientData) {
-    return {
-        findClientForSecret: jest.fn(() => clientData)
-    }
-}
 
 function validProduct() {
     return {
@@ -73,21 +59,6 @@ test("should add product to existing shopping cart", () => {
     expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([includedProduct, validProduct()]);
 });
 
-test("should validate if given cart has proper structure", () => {
-    let invalidCart = {};
-
-    expect(() => {
-        addProductToShoppingCartWithOrderId(invalidCart, validProduct()).products
-    }).toThrow(ValidationError);
-});
-
-
-test("should validate if product was given", () => {
-    expect(() => {
-        addProductToShoppingCartWithOrderId(undefined, undefined).products
-    }).toThrow(ValidationError);
-});
-
 
 test("should allow duplicate products", () => {
     let clientId = uuid();
@@ -121,16 +92,6 @@ test("should unconfirm valid shopping cart", () => {
 
     expect(confirmedShoppingCart.confirmed).toEqual(false);
 });
-
-
-test("should throw error if undefined shopping cart is given to confirmation", () => {
-    expect(() => shoppingCartService.unconfirmAttribute(undefined, uuid())).toThrow(ValidationError);
-});
-
-test("should throw error if null shopping cart is given to confirmation", () => {
-    expect(() => shoppingCartService.unconfirmAttribute(null, uuid())).toThrow(ValidationError);
-});
-
 
 test("added product should always reject confirmation", () => {
     const shoppingCartWithAddedProduct = addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083");
@@ -171,7 +132,6 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         "secrets": ["bikesecret1"]
     };
     const mockHeimdallClient = mockHeimdallClientSuccess();
-    const clientService = mockClientService(client);
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
         wertgarantieShoppingCart,
@@ -179,8 +139,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         mockHeimdallClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
         new Date(2019, 5, 1, 8, 34, 34, 345),
-        mockRepository,
-        clientService);
+        mockRepository);
 
     expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][0]).toEqual({
         productId: "2",
@@ -267,8 +226,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         mockClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
         undefined,
-        mockRepository,
-        mockClientService(clientData));
+        mockRepository);
 
     expect(result).toEqual({
         "sessionId": "619f7fda-d77e-4be1-b73c-db145402bcab",
@@ -341,8 +299,7 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
         mockHeimdallClient,
         undefined,
         undefined,
-        mockRepository,
-        mockClientService(clientData));
+        mockRepository);
 
     expect(result.purchases.length).toEqual(1);
     expect(result.purchases[0].message).toEqual("failing call");
@@ -408,8 +365,7 @@ test("checkout call with multiple products", async () => {
         mockHeimdallClient,
         generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
         undefined,
-        mockRepository,
-        mockClientService(clientData));
+        mockRepository);
     await expect(result).toEqual({
         "sessionId": "a367f1d9-9eeb-46b7-ba09-397e5a7e1ecc",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
@@ -496,8 +452,7 @@ test("checkout call with multiple products where one is not found in shop cart",
         mockHeimdallClient,
         generateIds(["37347358-1fc1-4840-992a-5d30bac1641d", "a409e32a-053d-406c-b8c5-016bbab413dc"]),
         undefined,
-        mockRepository,
-        mockClientService(clientData));
+        mockRepository);
     await expect(result).toEqual(
         {
             "sessionId": "d5d6e839-cf3c-433f-8159-9ed648fc2240",
