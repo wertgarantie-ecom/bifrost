@@ -25,12 +25,14 @@ const insuranceForDevices = {
     title: `Die Versicherung für Ihre Haushaltsgeräte`,
     text: `Ob Kühlschrank, Rasenmäher, Gefriertruhe, Spül- oder Waschmaschine, die Geräte in der heutigen Zeit sind kaum noch wegzudenken. Haushaltsgeräte sind praktisch, sie sparen uns Zeit und erleichtern uns den Alltag. Haben Sie sich erst an den Luxus eines Haushaltsgerätes gewöhnt, ist es kaum noch weg zu denken. Mit der Zeit stellen sich leider bei vielen Geräten kleinere und oft größere Probleme ein. Besonders ärgerlich ist es, wenn die Waschmaschine den Geist aufgibt. Nicht in jedem Fall sind die Probleme mit nur wenigen Handgriffen selbst zu lösen. Daher ist es oft vorteilhaft eine Elektronikversicherung abgeschlossen zu haben.
             WERTGARANTIE ersetzt im Schadenfall anfallende Reparaturkosten – bei allen stationären und mobilen Elektronikgeräten mit einem Wert von bis zu 10.000 Euro, bei allen Smartphones mit einem Wert von bis zu 1.800 Euro.
-            Haben Sie keine Angst mehr vor Schäden und hohen Reparaturkosten – auch bei unsachgemäßem Gebrauch und bis lange nach Ablauf der gesetzlichen Gewährleistung bieten wir Ihnen, schon ab 5 Euro pro Monat, eine optimale Absicherung für praktisch alle Elektrogeräte im Haushalt.`
+            Haben Sie keine Angst mehr vor Schäden und hohen Reparaturkosten – auch bei unsachgemäßem Gebrauch und bis lange nach Ablauf der gesetzlichen Gewährleistung bieten wir Ihnen, schon ab 5 Euro pro Monat, eine optimale Absicherung für praktisch alle Elektrogeräte im Haushalt.`,
+    imageLink: ``
 };
 
 const safeIsSafe = {
     title: `Sicher ist sicher - Diebstahlversicherung`,
-    text: `Diebe werden erfinderischer. Sie nutzen immer wieder neue Methoden, um Beute zu machen. Egal ob Kameras, Notebooks, Fernseher, Smartphones oder Rasenmähroboter – Langfinger bedienen sich mithilfe einfallsreicher Tricks. Damit Sie sich in Zukunft vor Dieben schützen können, können Sie ganz einfach zum Komplettschutz der WERTGARANTIE den Diebstahlschutz dazu buchen. Wenn Sie nun eine unangenehme Begegnung mit einem Langfinger hatten, erhalten Sie eine Kostenbeteiligung für ein Ersatzgerät in Höhe des Gerätezeitwertes. Falls Sie sich für eine Elektronikversicherung mit einem Diebstahlschutz entschieden haben, sind Sie in allen Fällen auf der sicheren Seite – egal ob bei Diebstahl oder Elektronikschäden.`
+    text: `Diebe werden erfinderischer. Sie nutzen immer wieder neue Methoden, um Beute zu machen. Egal ob Kameras, Notebooks, Fernseher, Smartphones oder Rasenmähroboter – Langfinger bedienen sich mithilfe einfallsreicher Tricks. Damit Sie sich in Zukunft vor Dieben schützen können, können Sie ganz einfach zum Komplettschutz der WERTGARANTIE den Diebstahlschutz dazu buchen. Wenn Sie nun eine unangenehme Begegnung mit einem Langfinger hatten, erhalten Sie eine Kostenbeteiligung für ein Ersatzgerät in Höhe des Gerätezeitwertes. Falls Sie sich für eine Elektronikversicherung mit einem Diebstahlschutz entschieden haben, sind Sie in allen Fällen auf der sicheren Seite – egal ob bei Diebstahl oder Elektronikschäden.`,
+    imageLink: ``
 };
 
 const findYourTariff = {
