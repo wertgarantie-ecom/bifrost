@@ -1,4 +1,4 @@
-exports.getTariffCalculatorHtml = async function getTariffCalculatorHtml(clientData) {
+exports.getTariffCalculatorHtml = async function getTariffCalculatorHtml() {
     // auth + tarifrechner-HTML fetchen
 
     // erstmal dummy kram zurück liefern aus der expert seite https://www.expert.de/pfaffenhofen/wertgarantie
@@ -15,6 +15,10 @@ const queryStringParametersExpert = {
     agent: 1755805,
     _: 1585157378392
 };
+
+// Berechnungen js-file: https://wwwapi.serviceeu.com/rt/js/jq-hidden.min.js
+// Call an: https://wwwapi.serviceeu.com/rt/api/calculate?token=wgt-bUaP7SbyLSPddrd4mAOJiw&boxid=default&category=mobile&type=9025&value=850&month=2&year=2020&_=1585325456129 --> Liefert Versicherungstarife als HTML zurück
+//
 
 const staticTariffCalculatorHtml = `<div class="wgt-container">
     <div class="wgt-tarif-processing"></div>

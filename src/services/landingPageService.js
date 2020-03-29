@@ -1,9 +1,8 @@
-const _clientService = require('./clientService');
+// const _clientService = require('./clientService');
 const _tariffCalculatorService = require('./tariffCalculatorService');
 
-exports.prepareLandingPageData = async function prepareLandingPageData(publicClientId, clientService = _clientService, tariffCalculatorService = _tariffCalculatorService) {
-    const clientData = await clientService.findClientForPublicClientId(publicClientId);
-    const tariffCalculatorHtml = await tariffCalculatorService.getTariffCalculatorHtml(clientData);
+exports.prepareLandingPageData = async function prepareLandingPageData(tariffCalculatorService = _tariffCalculatorService) {
+    const tariffCalculatorHtml = await tariffCalculatorService.getTariffCalculatorHtml();
 
     return {
         textSections: {

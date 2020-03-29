@@ -1,9 +1,8 @@
 const landingPageService = require('../services/landingPageService');
 
 exports.getLandingPageData = async function getLandingPageData(req, res, next) {
-    const clientId = req.params.publicClientId;
     try {
-        const result = await landingPageService.prepareLandingPageData(clientId);
+        const result = await landingPageService.prepareLandingPageData();
         if (!result) {
             return res.sendStatus(204);
         }
