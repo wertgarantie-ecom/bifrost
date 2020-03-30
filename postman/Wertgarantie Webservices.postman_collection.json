@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "cefbb4fc-cbb8-4111-aab9-760a061197b7",
+		"_postman_id": "8a5407f9-88d7-4bb5-bd2c-2f2f81c9b8b4",
 		"name": "Wertgarantie Webservices",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -28,7 +28,7 @@
 								},
 								{
 									"key": "APPLICATION_CODE",
-									"value": "\"GU WG DE KS 0419\"",
+									"value": "GU WG DE KS 0419",
 									"type": "text"
 								},
 								{
@@ -48,7 +48,15 @@
 								}
 							]
 						},
-						"url": "{{HOST}}/callservice.pl"
+						"url": {
+							"raw": "{{HOST}}/callservice.pl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"callservice.pl"
+							]
+						}
 					},
 					"response": []
 				},
@@ -72,7 +80,7 @@
 								},
 								{
 									"key": "APPLICATION_CODE",
-									"value": "GU_WG_DE_KS_0419",
+									"value": "GU WG DE KS 0419",
 									"type": "text"
 								},
 								{
@@ -92,7 +100,15 @@
 								}
 							]
 						},
-						"url": "{{HOST}}/callservice.pl"
+						"url": {
+							"raw": "{{HOST}}/callservice.pl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"callservice.pl"
+							]
+						}
 					},
 					"response": []
 				},
@@ -116,7 +132,7 @@
 								},
 								{
 									"key": "APPLICATION_CODE",
-									"value": "GU_WG_DE_KS_0419",
+									"value": "GU WG DE KS 0419",
 									"type": "text"
 								},
 								{
@@ -136,7 +152,15 @@
 								}
 							]
 						},
-						"url": "{{HOST}}/callservice.pl"
+						"url": {
+							"raw": "{{HOST}}/callservice.pl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"callservice.pl"
+							]
+						}
 					},
 					"response": []
 				},
@@ -160,7 +184,7 @@
 								},
 								{
 									"key": "APPLICATION_CODE",
-									"value": "GU_WG_DE_KS_0419",
+									"value": "GU WG DE KS 0419",
 									"type": "text"
 								},
 								{
@@ -180,7 +204,15 @@
 								}
 							]
 						},
-						"url": "{{HOST}}/callservice.pl"
+						"url": {
+							"raw": "{{HOST}}/callservice.pl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"callservice.pl"
+							]
+						}
 					},
 					"response": []
 				},
@@ -204,7 +236,7 @@
 								},
 								{
 									"key": "APPLICATION_CODE",
-									"value": "GU_WG_DE_KS_0419",
+									"value": "GU WG DE KS 0419",
 									"type": "text"
 								},
 								{
@@ -224,7 +256,62 @@
 								}
 							]
 						},
-						"url": "{{HOST}}/callservice.pl"
+						"url": {
+							"raw": "{{HOST}}/callservice.pl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"callservice.pl"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "INSURANCE_PREMIUM",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "FUNCTION",
+									"value": "GET_PRODUCT_DATA",
+									"type": "text"
+								},
+								{
+									"key": "SHAPING",
+									"value": "INSURANCE_PREMIUM",
+									"type": "text"
+								},
+								{
+									"key": "DATA",
+									"value": "<PARAMETERS>\n    <APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE>\n    <TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE>\n    <PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE>\n    <DATE>27.03.2019</DATE>\n    <APPLICATION_DATE>27.03.2019</APPLICATION_DATE>\n    <PAYMENT_INTERVAL>12</PAYMENT_INTERVAL>\n    <DEVICES>\n        <DEVICE>\n            <OBJECT_CODE>9025</OBJECT_CODE>\n            <OBJECT_PRICE>300</OBJECT_PRICE>\n            <PURCHASE_DATE>27.03.20190</PURCHASE_DATE>\n            <MANUFACTURER_YEAR>2019</MANUFACTURER_YEAR>\n            <RISKS>\n                <RISK>\n                    <RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP>\n                </RISK>\n            </RISKS>\n        </DEVICE>\n    </DEVICES>\n</PARAMETERS>",
+									"type": "text"
+								},
+								{
+									"key": "API",
+									"value": "JSON",
+									"type": "text"
+								},
+								{
+									"key": "SESSION",
+									"value": "{{SESSION}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/callservice.pl",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"callservice.pl"
+							]
+						}
 					},
 					"response": []
 				}
@@ -279,7 +366,15 @@
 						}
 					]
 				},
-				"url": "{{HOST}}/login.pl"
+				"url": {
+					"raw": "{{HOST}}/login.pl",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"login.pl"
+					]
+				}
 			},
 			"response": []
 		},
@@ -362,7 +457,15 @@
 						}
 					]
 				},
-				"url": "{{HOST}}/callservice.pl"
+				"url": {
+					"raw": "{{HOST}}/callservice.pl",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"callservice.pl"
+					]
+				}
 			},
 			"response": []
 		},
@@ -396,7 +499,15 @@
 						}
 					]
 				},
-				"url": "{{HOST}}/callservice.pl",
+				"url": {
+					"raw": "{{HOST}}/callservice.pl",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"callservice.pl"
+					]
+				},
 				"description": "Ermittelt sämtliche Gerätekennzeichen und gibt diese in einer XML-Struktur aus."
 			},
 			"response": []
@@ -431,7 +542,62 @@
 						}
 					]
 				},
-				"url": "{{HOST}}/callservice.pl"
+				"url": {
+					"raw": "{{HOST}}/callservice.pl",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"callservice.pl"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get agent products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FUNCTION",
+							"value": "GET_AGENT_PRODUCTS",
+							"type": "text"
+						},
+						{
+							"key": "SHAPING",
+							"value": "DEFAULT",
+							"type": "text"
+						},
+						{
+							"key": "API",
+							"value": "JSON",
+							"type": "text"
+						},
+						{
+							"key": "SESSION",
+							"value": "{{SESSION}}",
+							"type": "text"
+						},
+						{
+							"key": "AGENT_NR",
+							"value": "{{VERMITTLER_NUMMER}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{HOST}}/callservice.pl",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"callservice.pl"
+					]
+				}
 			},
 			"response": []
 		}
