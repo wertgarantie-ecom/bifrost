@@ -20,7 +20,8 @@ const queryStringParametersExpert = {
 // Call an: https://wwwapi.serviceeu.com/rt/api/calculate?token=wgt-bUaP7SbyLSPddrd4mAOJiw&boxid=default&category=mobile&type=9025&value=850&month=2&year=2020&_=1585325456129 --> Liefert Versicherungstarife als HTML zurück
 //
 
-const staticTariffCalculatorHtml = `<div class="wgt-container">
+const staticTariffCalculatorHtml = `
+    <div class="wgt-container">
     <div class="wgt-tarif-processing"></div>
     <div class="wgt-row">
         <div class="wgt-col-xs-12">
