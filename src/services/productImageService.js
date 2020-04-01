@@ -1,28 +1,28 @@
 const productImageMapping = {
     // Smartphone
     "1dfd4549-9bdc-4285-9047-e5088272dade": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
     ],
     // Handy
     "2dc16d28-c7af-4e19-9494-1659e1c27201": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
     ],
     // Surfbox
     "41ade4ba-5f24-4321-b706-fa6d05d75a73": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
     ],
     // Tablets
     "bb3a615d-e92f-4d24-a4cc-22f8a87fc544": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
     ],
     // Datenstick
     "ebfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Premium.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
     ],
     // Bike
     "6bdd2d93-45d0-49e1-8a0c-98eb80342222": [
