@@ -362,50 +362,6 @@
 			"response": []
 		},
 		{
-			"name": "get available products (GET_AGENT_DATA)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "FUNCTION",
-							"value": "GET_AGENT_DATA",
-							"type": "text"
-						},
-						{
-							"key": "API",
-							"value": "JSON",
-							"type": "text"
-						},
-						{
-							"key": "SHAPING",
-							"value": "AVAILABLE_PRODUCTS",
-							"type": "text"
-						},
-						{
-							"key": "AGENT_NR",
-							"value": "{{VERMITTLER_NUMMER}}",
-							"type": "text"
-						},
-						{
-							"key": "SESSION",
-							"value": "{{SESSION}}",
-							"type": "text"
-						},
-						{
-							"key": "EXTENDED_RESULT",
-							"value": "true",
-							"type": "text"
-						}
-					]
-				},
-				"url": "{{HOST}}/callservice.pl"
-			},
-			"response": []
-		},
-		{
 			"name": "get all device classes (GET_PARAMETERS)",
 			"request": {
 				"method": "POST",
