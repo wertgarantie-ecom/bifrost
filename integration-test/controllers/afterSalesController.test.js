@@ -21,7 +21,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                     {
                         "wertgarantieProductId": wertgarantieProductId,
                         "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "deviceClass": "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                         "devicePrice": 139999,
                         "deviceCurrency": "EUR",
                         "shopProductName": "SuperBike 3000",
@@ -47,7 +47,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                 purchasedProducts: [{
                     price: 139999,
                     manufacturer: "Super Bike Inc.",
-                    deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                     model: "SuperBike 3000"
                 }],
                 customer: {
@@ -69,7 +69,6 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
 
     test("should get proper after sales component data", async () => {
         const result = await request(app).get('/wertgarantie/components/after-sales/' + sessionId).set('X-wertgarantie-session-id', sessionId);
-        console.log(result);
         const resultBody = result.body;
         expect(resultBody.headerTitle).toEqual('Ihre Geräte wurden erfolgreich versichert!');
         expect(resultBody.productBoxTitle).toEqual('Folgende Geräte wurden versichert:');
@@ -78,7 +77,8 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
         expect(resultBody.orderItems.length).toEqual(1);
         expect(resultBody.orderItems[0]).toEqual({
             "insuranceProductTitle": "Basic",
-            "productTitle": "SuperBike 3000"
+            "productTitle": "SuperBike 3000",
+            "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
         });
 
         expect(result.get('X-wertgarantie-shopping-cart-delete')).toBe("true");
@@ -101,7 +101,7 @@ describe("Check Checkout via after sales component ", () => {
                     {
                         "wertgarantieProductId": wertgarantieProductId,
                         "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                        "deviceClass": "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                         "devicePrice": 139999,
                         "deviceCurrency": "EUR",
                         "shopProductName": "SuperBike 3000",
@@ -115,7 +115,7 @@ describe("Check Checkout via after sales component ", () => {
             purchasedProducts: [{
                 price: 139999,
                 manufacturer: "Super Bike Inc.",
-                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                 model: "SuperBike 3000"
             }],
             customer: {
@@ -155,7 +155,8 @@ describe("Check Checkout via after sales component ", () => {
         expect(resultBody.orderItems.length).toEqual(1);
         expect(resultBody.orderItems[0]).toEqual({
             "insuranceProductTitle": "Basic",
-            "productTitle": "SuperBike 3000"
+            "productTitle": "SuperBike 3000",
+            "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
         });
 
         expect(result.get('X-wertgarantie-shopping-cart-delete')).toBe("true");

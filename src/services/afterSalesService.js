@@ -3,13 +3,16 @@ const signatureService = require('./signatureService');
 const ClientError = require('../errors/ClientError');
 const shoppingCartService = require('./shoppingCartService');
 const clientService = require('./clientService');
+const _productImageService = require('./productImageService');
 
-function getAfterSalesDataForCheckoutData(checkoutData) {
+function getAfterSalesDataForCheckoutData(checkoutData, productImageService = _productImageService) {
     const orderItems = [];
     checkoutData.purchases.map(checkoutItem => {
+        const imageLink = productImageService.getRandomImageLinksForDeviceClass(checkoutItem.deviceClass, 1)[0];
         orderItems.push({
             insuranceProductTitle: checkoutItem.wertgarantieProductName,
-            productTitle: checkoutItem.shopProduct
+            productTitle: checkoutItem.shopProduct,
+            imageLink: imageLink
         });
     });
 
@@ -22,13 +25,13 @@ function getAfterSalesDataForCheckoutData(checkoutData) {
     };
 }
 
-exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, checkoutRepository = defaultCheckoutRepository) {
+exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService) {
     const checkoutData = await checkoutRepository.findBySessionId(sessionId);
     if (!checkoutData) {
         return undefined;
     }
 
-    return getAfterSalesDataForCheckoutData(checkoutData);
+    return getAfterSalesDataForCheckoutData(checkoutData, productImageService);
 };
 
 exports.checkout = async function checkout(shoppingCart, webshopData) {

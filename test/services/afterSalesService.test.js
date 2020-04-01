@@ -2,6 +2,9 @@ const afterSalesService = require('../../src/services/afterSalesService');
 
 test('should return proper after sales data for checkout data', async () => {
     const sessionId = "0b511572-3aa3-4706-8146-d109693cfe37";
+    const productImageService = {
+        getRandomImageLinksForDeviceClass: () => ['linkToProductImage']
+    }
     const checkoutRepository = {
         findBySessionId: () => {
             return {
@@ -26,7 +29,7 @@ test('should return proper after sales data for checkout data', async () => {
             }
         }
     };
-    const result = await afterSalesService.prepareAfterSalesData(sessionId, checkoutRepository);
+    const result = await afterSalesService.prepareAfterSalesData(sessionId, checkoutRepository, productImageService);
     expect(result.headerTitle).toEqual('Ihre Geräte wurden erfolgreich versichert!');
     expect(result.productBoxTitle).toEqual('Folgende Geräte wurden versichert:');
     expect(result.nextStepsTitle).toEqual('Die nächsten Schritte:');
@@ -34,7 +37,8 @@ test('should return proper after sales data for checkout data', async () => {
     expect(result.orderItems.length).toEqual(1);
     expect(result.orderItems[0]).toEqual({
         "insuranceProductTitle": "Premium",
-        "productTitle": "Flash Handy 3000 Pro"
+        "productTitle": "Flash Handy 3000 Pro",
+        "imageLink": "linkToProductImage"
     });
 });
 
