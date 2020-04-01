@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "8a5407f9-88d7-4bb5-bd2c-2f2f81c9b8b4",
+		"_postman_id": "d1b698d8-fbcc-49f4-9051-ecdc9dfe3d12",
 		"name": "Wertgarantie Webservices",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
@@ -48,15 +48,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOST}}/callservice.pl",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"callservice.pl"
-							]
-						}
+						"url": "{{HOST}}/callservice.pl"
 					},
 					"response": []
 				},
@@ -100,15 +92,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOST}}/callservice.pl",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"callservice.pl"
-							]
-						}
+						"url": "{{HOST}}/callservice.pl"
 					},
 					"response": []
 				},
@@ -152,15 +136,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOST}}/callservice.pl",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"callservice.pl"
-							]
-						}
+						"url": "{{HOST}}/callservice.pl"
 					},
 					"response": []
 				},
@@ -204,15 +180,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOST}}/callservice.pl",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"callservice.pl"
-							]
-						}
+						"url": "{{HOST}}/callservice.pl"
 					},
 					"response": []
 				},
@@ -256,15 +224,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOST}}/callservice.pl",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"callservice.pl"
-							]
-						}
+						"url": "{{HOST}}/callservice.pl"
 					},
 					"response": []
 				},
@@ -303,15 +263,7 @@
 								}
 							]
 						},
-						"url": {
-							"raw": "{{HOST}}/callservice.pl",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"callservice.pl"
-							]
-						}
+						"url": "{{HOST}}/callservice.pl"
 					},
 					"response": []
 				}
@@ -366,15 +318,7 @@
 						}
 					]
 				},
-				"url": {
-					"raw": "{{HOST}}/login.pl",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"login.pl"
-					]
-				}
+				"url": "{{HOST}}/login.pl"
 			},
 			"response": []
 		},
@@ -457,15 +401,7 @@
 						}
 					]
 				},
-				"url": {
-					"raw": "{{HOST}}/callservice.pl",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"callservice.pl"
-					]
-				}
+				"url": "{{HOST}}/callservice.pl"
 			},
 			"response": []
 		},
@@ -499,15 +435,7 @@
 						}
 					]
 				},
-				"url": {
-					"raw": "{{HOST}}/callservice.pl",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"callservice.pl"
-					]
-				},
+				"url": "{{HOST}}/callservice.pl",
 				"description": "Ermittelt sämtliche Gerätekennzeichen und gibt diese in einer XML-Struktur aus."
 			},
 			"response": []
@@ -542,15 +470,7 @@
 						}
 					]
 				},
-				"url": {
-					"raw": "{{HOST}}/callservice.pl",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"callservice.pl"
-					]
-				}
+				"url": "{{HOST}}/callservice.pl"
 			},
 			"response": []
 		},
@@ -564,12 +484,12 @@
 					"formdata": [
 						{
 							"key": "FUNCTION",
-							"value": "GET_AGENT_PRODUCTS",
+							"value": "GET_AGENT_DATA",
 							"type": "text"
 						},
 						{
 							"key": "SHAPING",
-							"value": "DEFAULT",
+							"value": "AVAILABLE_PRODUCTS",
 							"type": "text"
 						},
 						{
@@ -586,18 +506,30 @@
 							"key": "AGENT_NR",
 							"value": "{{VERMITTLER_NUMMER}}",
 							"type": "text"
+						},
+						{
+							"key": "OBJECT_CODE",
+							"value": "9025",
+							"type": "text"
+						},
+						{
+							"key": "PURCHASE_PRICE",
+							"value": "1000",
+							"type": "text"
+						},
+						{
+							"key": "DATE",
+							"value": "31.03.2020",
+							"type": "text"
+						},
+						{
+							"key": "EXTENDED_RESULT",
+							"value": "true",
+							"type": "text"
 						}
 					]
 				},
-				"url": {
-					"raw": "{{HOST}}/callservice.pl",
-					"host": [
-						"{{HOST}}"
-					],
-					"path": [
-						"callservice.pl"
-					]
-				}
+				"url": "{{HOST}}/callservice.pl"
 			},
 			"response": []
 		}
