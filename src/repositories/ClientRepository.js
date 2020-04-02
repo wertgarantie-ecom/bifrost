@@ -124,11 +124,12 @@ exports.findClientById = async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
-        text: `SELECT c.id, c.name, c.heimdallclientid, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, ws.username, ws.password, ws.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
-                WHERE id = $1
-                GROUP BY c.id;`,
+                INNER JOIN webservices ws on c.id = ws.clientid
+                WHERE c.id = $1
+                GROUP BY c.id, ws.username, ws.password, ws.activepartnernumber;`,
         values: [id]
     });
     if (result.rowCount > 0) {
