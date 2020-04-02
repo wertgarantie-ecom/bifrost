@@ -1,5 +1,4 @@
 const Pool = require("../postgres").Pool;
-const uuid = require("uuid");
 
 exports.persistClientSettings = async function persistClientSettings(clientData) {
     const pool = Pool.getInstance();
@@ -61,7 +60,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: `SELECT c.id, c.name, c.heimdallclientid, c.webservicesusername, c.webservicespassword, c.activepartnernumber ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, c.webservicesusername, c.webservicespassword, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientsecret

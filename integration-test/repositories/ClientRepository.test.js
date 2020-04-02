@@ -7,17 +7,13 @@ describe("should find persisted client properties by given secret", () => {
         id: uuid(),
         name: "bikeShop",
         heimdallClientId: uuid(),
-        webservices: {
-            username: "webserviceUser",
-            password: "webservicePassword",
-            activePartnerNumber: 1234
-        },
+        webservicesUsername: "webserviceUser",
+        webservicesPassword: "webservicePassword",
+        activePartnerNumber: 1234,
         secrets: [
-            "secret:" + uuid(),
             "secret:" + uuid()
         ],
         publicClientIds: [
-            "public:" + uuid(),
             "public:" + uuid()
         ]
     };
@@ -31,7 +27,7 @@ describe("should find persisted client properties by given secret", () => {
     test("should find persisted client data by given secret", async () => {
         const client = await clientRepository.findClientForSecret(clientData.secrets[0]);
         expect(client).toEqual(clientData);
-    })
+    });
 });
 
 describe("should find persisted client properties by given public client id", () => {
@@ -39,6 +35,10 @@ describe("should find persisted client properties by given public client id", ()
     const clientData = {
         id: uuid(),
         name: "bikeShop",
+        webservicesUsername: "webserviceUser",
+        webservicesPassword: "webservicePassword",
+        activePartnerNumber: 1234,
+        heimdallClientId: uuid(),
         secrets: [uuid() + ""],
         publicClientIds: [uuid() + ""]
     };
@@ -58,6 +58,10 @@ describe("should delete client data for client id", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
+        webservicesUsername: "webserviceUser",
+        webservicesPassword: "webservicePassword",
+        activePartnerNumber: 1234,
+        heimdallClientId: uuid(),
         secrets: [uuid() + "", uuid() + ""].sort(),
         publicClientIds: [uuid() + "", uuid() + ""].sort()
     };

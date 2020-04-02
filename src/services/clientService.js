@@ -41,6 +41,10 @@ exports.addNewClient = async function addNewClient(requestBody) {
     const clientData = {
         id: uuid(),
         name: requestBody.name,
+        heimdallClientId: requestBody.heimdallClientId,
+        webservicesUsername: requestBody.webservicesUsername,
+        webservicesPassword: requestBody.webservicesPassword,
+        activePartnerNumber: requestBody.activePartnerNumber,
         secrets: requestBody.secrets,
         publicClientIds: requestBody.publicClientIds
     };
