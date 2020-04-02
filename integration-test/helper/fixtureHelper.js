@@ -7,6 +7,9 @@ exports.createDefaultClient = async function createDefaultClient() {
     const clientData = {
         id: id,
         name: "testclient",
+        webservicesUsername: "testusername",
+        webservicesPassword: "testpassword",
+        activePartnerNumber: 12345,
         secrets: [uuid() + ""],
         publicClientIds: [uuid() + ""]
     };
