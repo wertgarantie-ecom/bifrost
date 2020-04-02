@@ -1,4 +1,5 @@
 const Pool = require("../postgres").Pool;
+const uuid = require("uuid");
 
 const clients = [
     {
@@ -13,7 +14,6 @@ const clients = [
     }
 ];
 
-// persist
 exports.persistClientSettings = async function persistClientSettings(clientData) {
     const pool = Pool.getInstance();
     const client = await pool.connect();
@@ -21,10 +21,11 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: "INSERT INTO client (id, name) VALUES ($1 , $2);",
+            text: "INSERT INTO client (id, name, heimdallClientId) VALUES ($1 , $2, $3);",
             values: [
                 clientData.id,
-                clientData.name
+                clientData.name,
+                clientData.heimdallClientId
             ]
         };
         await client.query(query);
@@ -52,6 +53,20 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
             };
             return client.query(insertPublicId);
         }));
+
+        const insertIntoWebservices = {
+            name: 'insert-webservices',
+            text: 'INSERT INTO Webservices (id, clientid, username, password, activepartnernumber) VALUES ($1, $2, $3, $4, $5)',
+            values: [
+                uuid(),
+                clientData.id,
+                clientData.webservices.username,
+                clientData.webservices.password,
+                clientData.webservices.activePartnerNumber
+            ]
+        };
+        await client.query(insertIntoWebservices);
+
         await client.query('COMMIT');
         return await this.findClientById(clientData.id);
     } catch (error) {
@@ -71,7 +86,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientsecret
@@ -90,7 +105,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-public-id',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientpublicid 
@@ -109,7 +124,7 @@ exports.findClientById = async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
                 WHERE id = $1
@@ -148,7 +163,7 @@ exports.findAllClients = async function findAllClients() {
     } else {
         return undefined;
     }
-}
+};
 
 function toClients(rows) {
     return rows.map(toClientData);
@@ -158,6 +173,7 @@ function toClientData(row) {
     return {
         id: row.id,
         name: row.name,
+        heimdallClientId: row.heimdallclientid,
         secrets: row.secrets,
         publicClientIds: row.publicids
     }

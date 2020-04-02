@@ -6,9 +6,22 @@ describe("should find persisted client properties by given secret", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        secrets: [uuid() + "", uuid() + ""].sort(),
-        publicClientIds: [uuid() + "", uuid() + ""].sort()
+        heimdallClientId: uuid(),
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword",
+            activePartnerNumber: 1234
+        },
+        secrets: [
+            "secret:" + uuid(),
+            "secret:" + uuid()
+        ],
+        publicClientIds: [
+            "public:" + uuid(),
+            "public:" + uuid()
+        ]
     };
+
 
     test("should persist valid client data", async () => {
         const persistResult = await clientRepository.persistClientSettings(clientData);
