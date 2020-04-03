@@ -1,26 +1,23 @@
-const clientRepository = require('../../src/repositories/ClientRepository');
 const signatureService = require('../../src/services/signatureService');
+const clientService = require('../../src/services/clientService');
 const uuid = require('uuid');
 
 exports.createDefaultClient = async function createDefaultClient() {
-    const id = uuid();
-    const clientData = {
-        id: id,
+    const addNewClientRequest = {
         name: "testclient",
-        secrets: [uuid() + ""],
-        publicClientIds: [uuid() + ""]
+        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
+        webservices: {
+            username: "testusername",
+            password: "testpassword",
+        },
+        activePartnerNumber: 12345,
     };
 
-    await clientRepository.persistClientSettings(clientData);
-    const createdClient = await clientRepository.findClientById(id);
-    if (!createdClient) {
-        throw new Error("test helper could not create client");
-    }
-    return createdClient;
+    return await clientService.addNewClient(addNewClientRequest);
 };
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {clientId = uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = 1, wertgarantieProductName = 'Basic'} = data;
+    const {clientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = 1, wertgarantieProductName = 'Basic'} = data;
     const sessionId = uuid();
     const shoppingCart =
         {

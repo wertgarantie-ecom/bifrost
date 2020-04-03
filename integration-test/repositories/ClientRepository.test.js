@@ -6,9 +6,20 @@ describe("should find persisted client properties by given secret", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        secrets: [uuid() + "", uuid() + ""].sort(),
-        publicClientIds: [uuid() + "", uuid() + ""].sort()
+        heimdallClientId: uuid(),
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword"
+        },
+        activePartnerNumber: 1234,
+        secrets: [
+            "secret:" + uuid()
+        ],
+        publicClientIds: [
+            "public:" + uuid()
+        ]
     };
+
 
     test("should persist valid client data", async () => {
         const persistResult = await clientRepository.persistClientSettings(clientData);
@@ -18,7 +29,7 @@ describe("should find persisted client properties by given secret", () => {
     test("should find persisted client data by given secret", async () => {
         const client = await clientRepository.findClientForSecret(clientData.secrets[0]);
         expect(client).toEqual(clientData);
-    })
+    });
 });
 
 describe("should find persisted client properties by given public client id", () => {
@@ -26,8 +37,18 @@ describe("should find persisted client properties by given public client id", ()
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        secrets: [uuid() + ""],
-        publicClientIds: [uuid() + ""]
+        heimdallClientId: uuid(),
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword"
+        },
+        activePartnerNumber: 1234,
+        secrets: [
+            "secret:" + uuid()
+        ],
+        publicClientIds: [
+            "public:" + uuid()
+        ]
     };
 
     test("should persist valid client data", async () => {
@@ -45,8 +66,14 @@ describe("should delete client data for client id", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        secrets: [uuid() + "", uuid() + ""].sort(),
-        publicClientIds: [uuid() + "", uuid() + ""].sort()
+        heimdallClientId: uuid(),
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword"
+        },
+        activePartnerNumber: 1234,
+        secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
+        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort()
     };
 
     test("should persist valid client data", async () => {

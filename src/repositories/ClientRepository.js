@@ -1,19 +1,5 @@
 const Pool = require("../postgres").Pool;
 
-const clients = [
-    {
-        name: "bikeShop",
-        secrets: ["bikesecret1"],
-        publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
-    },
-    {
-        name: "handyShop",
-        secrets: ["handysecret1"],
-        publicClientIds: ["bikeclientId1"]
-    }
-];
-
-// persist
 exports.persistClientSettings = async function persistClientSettings(clientData) {
     const pool = Pool.getInstance();
     const client = await pool.connect();
@@ -21,18 +7,21 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: "INSERT INTO client (id, name) VALUES ($1 , $2);",
+            text: "INSERT INTO client (id, name, heimdallClientId, webservicesUsername, webservicesPassword, activePartnerNumber) VALUES ($1 , $2, $3, $4, $5, $6);",
             values: [
                 clientData.id,
-                clientData.name
+                clientData.name,
+                clientData.heimdallClientId,
+                clientData.webservices.username,
+                clientData.webservices.password,
+                clientData.activePartnerNumber
             ]
         };
         await client.query(query);
         await Promise.all(clientData.secrets.map(secret => {
             const insertSecret = {
                 name: 'insert-client-secrets',
-                text: 'INSERT INTO ClientSecret (secret, clientid)' +
-                    'VALUES ($1, $2);',
+                text: 'INSERT INTO ClientSecret (secret, clientid) VALUES ($1, $2);',
                 values: [
                     secret,
                     clientData.id
@@ -43,8 +32,7 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
         await Promise.all(clientData.publicClientIds.map(clientId => {
             const insertPublicId = {
                 name: 'insert-client-public-ids',
-                text: 'INSERT INTO ClientPublicId (publicid, clientid)' +
-                    'VALUES ($1, $2);',
+                text: 'INSERT INTO ClientPublicId (publicid, clientid) VALUES ($1, $2);',
                 values: [
                     clientId,
                     clientData.id
@@ -52,6 +40,7 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
             };
             return client.query(insertPublicId);
         }));
+
         await client.query('COMMIT');
         return await this.findClientById(clientData.id);
     } catch (error) {
@@ -71,7 +60,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, c.webservicesusername, c.webservicespassword, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientsecret
@@ -90,7 +79,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-public-id',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, c.webservicesusername, c.webservicespassword, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientpublicid 
@@ -109,10 +98,10 @@ exports.findClientById = async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.heimdallclientid, c.webservicesusername, c.webservicespassword, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
-                WHERE id = $1
+                WHERE c.id = $1
                 GROUP BY c.id;`,
         values: [id]
     });
@@ -137,7 +126,7 @@ exports.findAllClients = async function findAllClients() {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-all-clients',
-        text: `SELECT c.id, c.name, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
+        text: `SELECT c.id, c.name, c.heimdallclientid, c.webservicesusername, c.webservicespassword, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
                 FROM client c
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
@@ -148,7 +137,7 @@ exports.findAllClients = async function findAllClients() {
     } else {
         return undefined;
     }
-}
+};
 
 function toClients(rows) {
     return rows.map(toClientData);
@@ -158,6 +147,12 @@ function toClientData(row) {
     return {
         id: row.id,
         name: row.name,
+        heimdallClientId: row.heimdallclientid,
+        webservices: {
+            username: row.webservicesusername,
+            password: row.webservicespassword,
+        },
+        activePartnerNumber: row.activepartnernumber,
         secrets: row.secrets,
         publicClientIds: row.publicids
     }

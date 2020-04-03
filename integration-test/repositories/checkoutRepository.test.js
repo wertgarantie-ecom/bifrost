@@ -3,7 +3,7 @@ const uuid = require('uuid');
 
 describe("test persist and find by session in checkout repository", () => {
     const sessionId = uuid();
-    const clientId = uuid();
+    const clientId = "public:" + uuid();
     const traceId = uuid();
     const purchase1Id = uuid();
     const purchase2Id = uuid();
