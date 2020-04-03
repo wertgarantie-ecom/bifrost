@@ -248,7 +248,7 @@
 								},
 								{
 									"key": "DATA",
-									"value": "<PARAMETERS>\n    <APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE>\n    <TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE>\n    <PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE>\n    <DATE>27.03.2019</DATE>\n    <APPLICATION_DATE>27.03.2019</APPLICATION_DATE>\n    <PAYMENT_INTERVAL>12</PAYMENT_INTERVAL>\n    <DEVICES>\n        <DEVICE>\n            <OBJECT_CODE>9025</OBJECT_CODE>\n            <OBJECT_PRICE>300</OBJECT_PRICE>\n            <PURCHASE_DATE>27.03.20190</PURCHASE_DATE>\n            <MANUFACTURER_YEAR>2019</MANUFACTURER_YEAR>\n            <RISKS>\n                <RISK>\n                    <RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP>\n                </RISK>\n            </RISKS>\n        </DEVICE>\n    </DEVICES>\n</PARAMETERS>",
+									"value": "<PARAMETERS>\n    <APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE>\n    <TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE>\n    <PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE>\n    <DATE>27.03.2019</DATE>\n    <APPLICATION_DATE>27.03.2019</APPLICATION_DATE>\n    <PAYMENT_INTERVAL>12</PAYMENT_INTERVAL>\n    <DEVICES>\n        <DEVICE>\n            <OBJECT_CODE>9025</OBJECT_CODE>\n            <OBJECT_PRICE>300</OBJECT_PRICE>\n            <PURCHASE_DATE>27.03.2020</PURCHASE_DATE>\n            <MANUFACTURER_YEAR>2019</MANUFACTURER_YEAR>\n            <RISKS>\n                <RISK>\n                    <RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP>\n                </RISK>\n            </RISKS>\n        </DEVICE>\n    </DEVICES>\n</PARAMETERS>",
 									"type": "text"
 								},
 								{
@@ -481,6 +481,45 @@
 						{
 							"key": "EXTENDED_RESULT",
 							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{HOST}}/callservice.pl"
+			},
+			"response": []
+		},
+		{
+			"name": "SET_XML_INTERFACE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FUNCTION",
+							"value": "SET_XML_INTERFACE",
+							"type": "text"
+						},
+						{
+							"key": "API",
+							"value": "JSON",
+							"type": "text"
+						},
+						{
+							"key": "SESSION",
+							"value": "{{SESSION}}",
+							"type": "text"
+						},
+						{
+							"key": "SHAPING",
+							"value": "DEFAULT",
+							"type": "text"
+						},
+						{
+							"key": "DATA",
+							"value": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Antraege>\n  <Herkunft>Bifrost</Herkunft>\n  <Exportdatum>02.04.2020</Exportdatum>\n  <Antrag>\n    <Satznummer>443e37f0-750d-11ea-8d62-07ba43cf92dd</Satznummer>\n    <Antragsdatum>str1234000</Antragsdatum>\n   <Vermittlernummer>1541890</Vermittlernummer>\n    <Kundendaten>\n      <Anrede>Herr</Anrede>\n      <Vorname>Max</Vorname>\n      <Nachname>Mustermann</Nachname>\n      <Anschrift>\n        <Strasse>Krischerstrasse 100</Strasse>\n        <PLZ>40789</PLZ>\n        <Ort>Monheim</Ort>\n      </Anschrift>\n    </Kundendaten>\n    <Geraet>\n      <Hersteller>Apple</Hersteller>\n      <Geraetekennzeichen>9025</Geraetekennzeichen>\n      <Kaufdatum>02.04.2020</Kaufdatum>\n      <Kaufpreis>1000</Kaufpreis>\n    </Geraet>\n    <Produktdetails>\n      <Antragskodierung>GU WG DE KS 0419</Antragskodierung>\n      <Produkttyp>KOMPLETTSCHUTZ_2019</Produkttyp>\n    </Produktdetails>\n    <Zahlung />\n  </Antrag>\n</Antraege>\n",
 							"type": "text"
 						}
 					]
