@@ -1,6 +1,6 @@
-ALTER Table ClientPublicId ALTER Column publicId Type text;
-ALTER Table checkout ALTER Column clientid Type text;
-ALTER TABLE Client ADD COLUMN heimdallClientId text;
-ALTER TABLE Client ADD COLUMN webservicesUsername text;
-ALTER TABLE Client ADD COLUMN webservicesPassword text;
-ALTER TABLE Client ADD COLUMN activepartnernumber int not null;
+alter table ClientPublicId alter Column publicId Type text;
+alter table checkout alter Column clientid Type text;
+alter table Client add COLUMN heimdallClientId text;
+alter table Client add COLUMN webservicesUsername text;
+alter table Client add COLUMN webservicesPassword text;
+alter table Client add COLUMN activepartnernumber int;
