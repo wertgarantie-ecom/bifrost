@@ -23,4 +23,4 @@ exports.nockCheckoutShoppingCart = function nockCheckoutShoppingCart(wertgaranti
     nock(process.env.HEIMDALL_URI)
         .post("/api/v1/products/" + wertgarantieProductId + "/checkout")
         .reply(200, response);
-}
+};

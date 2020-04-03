@@ -1,7 +1,35 @@
-const _httpClient = require('axios');
+const axios = require('axios');
 const FormData = require('form-data');
+const AxiosLogger = require('axios-logger');
 
-exports.login = async function login(clientData, httpClient = _httpClient) {
+const axiosInstance = axios.create();
+axiosInstance.interceptors.request.use((request) => {
+    return AxiosLogger.requestLogger(request, {
+        dateFormat: 'HH:MM:ss',
+        status: true,
+        url: true,
+        method: true,
+        header: true,
+        data: true
+    });
+}, (error) => {
+    return AxiosLogger.errorLogger(error);
+});
+
+axiosInstance.interceptors.response.use((response) => {
+    return AxiosLogger.responseLogger(response, {
+        dateFormat: 'HH:MM:ss',
+        status: true,
+        url: true,
+        method: true,
+        header: true,
+        data: true
+    });
+}, (error) => {
+    return AxiosLogger.errorLogger(error);
+});
+
+exports.login = async function login(clientData, httpClient = axiosInstance) {
     const formData = new FormData();
     formData.append('FUNCTION', 'LOGIN');
     formData.append('USER', clientData.webservices.username);
