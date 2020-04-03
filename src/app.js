@@ -65,6 +65,8 @@ app.use(function (err, req, res, next) {
         err.status = 502;
     } else if (err.name === 'HeimdallClientError') {
         err.status = 400;
+    } else if (err.name === 'WebserviceError') {
+        err.status = 400;
     } else if (err.name === 'InvalidClientIdError') {
         err.status = 400;
     } else if (err.name === 'InvalidClientData') {
