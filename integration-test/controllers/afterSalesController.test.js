@@ -32,8 +32,8 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                 "termsAndConditionsConfirmed": true
             };
 
-        nockhelper.nockLogin(clientData);
-        nockhelper.nockCheckoutShoppingCart(wertgarantieProductId, {
+        nockhelper.nockHeimdallLogin(clientData);
+        nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
             payload: {
                 contract_number: "1234",
                 transaction_number: "28850277",
@@ -132,8 +132,8 @@ describe("Check Checkout via after sales component ", () => {
             encryptedSessionId: encryptedSessionId
         };
 
-        nockhelper.nockLogin(clientData);
-        nockhelper.nockCheckoutShoppingCart(wertgarantieProductId, {
+        nockhelper.nockHeimdallLogin(clientData);
+        nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
             payload: {
                 contract_number: "1234",
                 transaction_number: "28850277",

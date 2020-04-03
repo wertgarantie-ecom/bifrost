@@ -56,8 +56,8 @@ test("should return valid confirmation data", async () => {
         devicePrice: parseFloat(getProductOffersResponse.payload[0].price) * 100
     });
 
-    nockHelper.nockLogin(clientData);
-    nockHelper.getNockedProductOffers(signedShoppingCart);
+    nockHelper.nockHeimdallLogin(clientData);
+    nockHelper.getNockedHeimdallProductOffers(signedShoppingCart);
 
     const response = await request.agent(app).put('/wertgarantie/components/confirmation')
         .send({signedShoppingCart: signedShoppingCart});

@@ -66,8 +66,8 @@ describe("Checkout Shopping Cart", () => {
                 "termsAndConditionsConfirmed": true
             };
 
-        nockhelper.nockLogin(clientData);
-        nockhelper.nockCheckoutShoppingCart(wertgarantieProductId, {
+        nockhelper.nockHeimdallLogin(clientData);
+        nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
             payload: {
                 contract_number: "1234",
                 transaction_number: "28850277",

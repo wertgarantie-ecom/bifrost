@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 process.env.SIGN_SECRET = "irgendwas";
 process.env.HEIMDALL_URI = "http://heimdallDummyUrl";
-process.env.WEBSERVICES_LOGIN_URI = "http://webservicesDummyUrl";
+process.env.WEBSERVICES_URI = "http://webservicesDummyUrl";
 process.env.JEST_JUNIT_OUTPUT_DIR = "reports/junit/bifrost-integration-test-results.xml";
 
 module.exports = {

@@ -1,9 +1,10 @@
 const nock = require('nock');
 const defaultProductOffersResponse = require('../controllers/heimdallResponses').getProductOffersResponse;
 const dateformat = require('dateformat');
+const agentDataTestResponse = require('../services/webservicesResponses').agentData;
 
 
-exports.nockLogin = function nockLogin(clientData) {
+exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
     nock(process.env.HEIMDALL_URI)
         .get("/api/v1/auth/client/" + clientData.heimdallClientId)
         .reply(200, {
@@ -13,14 +14,30 @@ exports.nockLogin = function nockLogin(clientData) {
         });
 };
 
-exports.getNockedProductOffers = function getNockedProductOffers(signedShoppingCart, response = defaultProductOffersResponse, responseStatus = 200) {
+exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, response = defaultProductOffersResponse, responseStatus = 200) {
     nock(process.env.HEIMDALL_URI)
         .get(`/api/v1/product-offers?device_class=${signedShoppingCart.shoppingCart.products[0].deviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.products[0].devicePrice / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
         .reply(responseStatus, response);
 };
 
-exports.nockCheckoutShoppingCart = function nockCheckoutShoppingCart(wertgarantieProductId, response) {
+exports.nockHeimdallCheckoutShoppingCart = function nockHeimdallCheckoutShoppingCart(wertgarantieProductId, response) {
     nock(process.env.HEIMDALL_URI)
         .post("/api/v1/products/" + wertgarantieProductId + "/checkout")
         .reply(200, response);
+};
+
+exports.nockWebservicesLogin = function nockWebservicesLogin(session) {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/login.pl")
+        .reply(200, {
+            "STATUS": "OK: Login",
+            "SESSION": session,
+            "STATUSCODE": "0"
+        });
+};
+
+exports.nockGetAgentData = function nockGetAgentData() {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl")
+        .reply(200, agentDataTestResponse);
 };

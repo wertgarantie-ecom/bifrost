@@ -7,8 +7,8 @@ test('should return proper product data', async () => {
     const clientData = await testhelper.createDefaultClient();
     const signedShoppingCart = testhelper.createSignedShoppingCart({clientId: clientData.publicClientIds[0], deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice: 120000});
 
-    nockhelper.nockLogin(clientData);
-    nockhelper.getNockedProductOffers(signedShoppingCart);
+    nockhelper.nockHeimdallLogin(clientData);
+    nockhelper.getNockedHeimdallProductOffers(signedShoppingCart);
 
     const expectedStatusCode = 200;
     const result = await request(app).get('/wertgarantie/components/selection-popup').query({

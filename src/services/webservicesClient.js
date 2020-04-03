@@ -36,23 +36,34 @@ exports.login = async function login(clientData, httpClient = axiosInstance) {
     formData.append('PASSWORD', clientData.webservices.password);
     formData.append('COMPANY', 'WG');
     formData.append('API', 'JSON');
+
+    const response = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/login.pl', httpClient, "0");
+    return response.SESSION;
+};
+
+exports.getAgentData = async function getAgentData(requestParameters, httpClient = axiosInstance) {
+    const formData = new FormData();
+    formData.append('FUNCTION', 'GET_AGENT_DATA');
+    formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', requestParameters.session);
+    formData.append('EXTENDED_RESULT', true);
+    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+};
+
+async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {
+    let response;
     const formHeaders = formData.getHeaders();
     const contentLength = formData.getLengthSync();
     const request = {
         method: 'post',
-        url: process.env.WEBSERVICES_LOGIN_URI,
+        url: uri,
         data: formData,
         headers: {
             "Content-Length": contentLength,
             ...formHeaders
         }
     };
-    const response = await sendWebservicesRequest(request, httpClient, "0");
-    return response.SESSION;
-};
-
-async function sendWebservicesRequest(request, httpClient, expectedStatusCode) {
-    let response;
     try {
         response = await httpClient(request);
         if (response.data.STATUSCODE === expectedStatusCode) {
