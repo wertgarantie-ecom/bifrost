@@ -1,25 +1,20 @@
 const clientRepository = require('../../src/repositories/ClientRepository');
 const signatureService = require('../../src/services/signatureService');
+const clientService = require('../../src/services/clientService');
 const uuid = require('uuid');
 
 exports.createDefaultClient = async function createDefaultClient() {
-    const id = uuid();
-    const clientData = {
-        id: id,
+    const addNewClientRequest = {
         name: "testclient",
-        webservicesUsername: "testusername",
-        webservicesPassword: "testpassword",
+        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
+        webservices: {
+            username: "testusername",
+            password: "testpassword",
+        },
         activePartnerNumber: 12345,
-        secrets: [uuid() + ""],
-        publicClientIds: [uuid() + ""]
     };
 
-    await clientRepository.persistClientSettings(clientData);
-    const createdClient = await clientRepository.findClientById(id);
-    if (!createdClient) {
-        throw new Error("test helper could not create client");
-    }
-    return createdClient;
+    return await clientService.addNewClient(addNewClientRequest);
 };
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {

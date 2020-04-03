@@ -31,7 +31,7 @@ instance.interceptors.response.use((response) => {
 });
 
 async function getBearerToken(client, hpptClient) {
-    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + client.secrets[0];
+    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + client.heimdallClientId;
     const request = {
         method: 'get',
         url: heimdallAuthUrl,
@@ -82,10 +82,10 @@ exports.sendWertgarantieProductCheckout = async function sendWertgarantieProduct
     return sendHeimdallRequest(request, httpClient)
 };
 
-async function sendHeimdallRequest(request, client) {
+async function sendHeimdallRequest(request, httpClient) {
     let responsePayload;
     try {
-        const response = await client(request);
+        const response = await httpClient(request);
         responsePayload = response.data;
     } catch (e) {
         if (e.response) {

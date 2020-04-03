@@ -148,8 +148,10 @@ function toClientData(row) {
         id: row.id,
         name: row.name,
         heimdallClientId: row.heimdallclientid,
-        webservicesUsername: row.webservicesusername,
-        webservicesPassword: row.webservicespassword,
+        webservices: {
+            username: row.webservicesusername,
+            password: row.webservicespassword,
+        },
         activePartnerNumber: row.activepartnernumber,
         secrets: row.secrets,
         publicClientIds: row.publicids

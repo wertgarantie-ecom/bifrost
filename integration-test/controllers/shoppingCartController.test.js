@@ -50,7 +50,7 @@ describe("Checkout Shopping Cart", () => {
         const wertgarantieShoppingCart =
             {
                 "sessionId": sessionId + "",
-                "clientId": clientData.id,
+                "clientId": clientData.publicClientIds[0],
                 "products": [
                     {
                         "wertgarantieProductId": wertgarantieProductId,
@@ -103,7 +103,7 @@ describe("Checkout Shopping Cart", () => {
                 const body = result.body;
                 const purchase = body.purchases[0];
                 expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
-                expect(body.clientId).toEqual(clientData.id);
+                expect(body.clientId).toEqual(clientData.publicClientIds[0]);
                 expect(purchase.wertgarantieProductId).toEqual(10);
                 expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
                 expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");

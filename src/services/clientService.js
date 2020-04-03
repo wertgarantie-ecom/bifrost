@@ -42,11 +42,11 @@ exports.addNewClient = async function addNewClient(requestBody) {
         id: uuid(),
         name: requestBody.name,
         heimdallClientId: requestBody.heimdallClientId,
-        webservicesUsername: requestBody.webservicesUsername,
-        webservicesPassword: requestBody.webservicesPassword,
+        webservicesUsername: requestBody.webservices.username,
+        webservicesPassword: requestBody.webservices.password,
         activePartnerNumber: requestBody.activePartnerNumber,
-        secrets: requestBody.secrets,
-        publicClientIds: requestBody.publicClientIds
+        secrets: ['secret:' + uuid()],
+        publicClientIds: ['public:' + uuid()]
     };
     return await repository.persistClientSettings(clientData);
 };

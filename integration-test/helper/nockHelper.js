@@ -5,12 +5,12 @@ const dateformat = require('dateformat');
 
 exports.nockLogin = function nockLogin(clientData) {
     nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/auth/client/" + clientData.secrets[0])
+        .get("/api/v1/auth/client/" + clientData.heimdallClientId)
         .reply(200, {
             payload: {
                 access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."
             }
-    });
+        });
 };
 
 exports.getNockedProductOffers = function getNockedProductOffers(signedShoppingCart, response = defaultProductOffersResponse, responseStatus = 200) {
