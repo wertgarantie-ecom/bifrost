@@ -7,8 +7,10 @@ describe("should find persisted client properties by given secret", () => {
         id: uuid(),
         name: "bikeShop",
         heimdallClientId: uuid(),
-        webservicesUsername: "webserviceUser",
-        webservicesPassword: "webservicePassword",
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword"
+        },
         activePartnerNumber: 1234,
         secrets: [
             "secret:" + uuid()
@@ -35,12 +37,18 @@ describe("should find persisted client properties by given public client id", ()
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        webservicesUsername: "webserviceUser",
-        webservicesPassword: "webservicePassword",
-        activePartnerNumber: 1234,
         heimdallClientId: uuid(),
-        secrets: [uuid() + ""],
-        publicClientIds: [uuid() + ""]
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword"
+        },
+        activePartnerNumber: 1234,
+        secrets: [
+            "secret:" + uuid()
+        ],
+        publicClientIds: [
+            "public:" + uuid()
+        ]
     };
 
     test("should persist valid client data", async () => {
@@ -58,12 +66,14 @@ describe("should delete client data for client id", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        webservicesUsername: "webserviceUser",
-        webservicesPassword: "webservicePassword",
-        activePartnerNumber: 1234,
         heimdallClientId: uuid(),
-        secrets: [uuid() + "", uuid() + ""].sort(),
-        publicClientIds: [uuid() + "", uuid() + ""].sort()
+        webservices: {
+            username: "webserviceUser",
+            password: "webservicePassword"
+        },
+        activePartnerNumber: 1234,
+        secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
+        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort()
     };
 
     test("should persist valid client data", async () => {

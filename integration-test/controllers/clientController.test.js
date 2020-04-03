@@ -22,7 +22,7 @@ describe('should add new client with valid data', () => {
             .send(addNewClientRequest)
             .expect(200)
             .then(response => {
-                const {id, name, secrets, publicClientIds, heimdallClientId, webservices, webservicesPassword, activePartnerNumber} = response.body;
+                const {id, name, secrets, publicClientIds, heimdallClientId, webservices, activePartnerNumber} = response.body;
                 newClientId = id;
                 expect(addNewClientRequest.name).toEqual(name);
                 expect(secrets.length).toBeGreaterThan(0);
@@ -64,8 +64,10 @@ describe('should handle duplicate constraint exception', () => {
     const validData = {
         name: "test",
         heimdallClientId: uuid(),
-        webservicesUsername: 'test-user',
-        webservicesPassword: 'test-password',
+        webservices: {
+            username: 'test-user',
+            password: 'test-password',
+        },
         activePartnerNumber: 12345,
         secrets: [
             uuid(),

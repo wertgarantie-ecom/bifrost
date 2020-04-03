@@ -1,4 +1,3 @@
-const clientRepository = require('../../src/repositories/ClientRepository');
 const signatureService = require('../../src/services/signatureService');
 const clientService = require('../../src/services/clientService');
 const uuid = require('uuid');
@@ -18,7 +17,7 @@ exports.createDefaultClient = async function createDefaultClient() {
 };
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {clientId = uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = 1, wertgarantieProductName = 'Basic'} = data;
+    const {clientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = 1, wertgarantieProductName = 'Basic'} = data;
     const sessionId = uuid();
     const shoppingCart =
         {

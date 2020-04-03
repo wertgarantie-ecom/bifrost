@@ -13,7 +13,7 @@ module.exports.requestWithSignedShoppingCartSchema = {
                     type: "object",
                     properties: {
                         clientId: {
-                            type: "uuid",
+                            type: "string",
                             required: true
                         },
                         termsAndConditionsConfirmed: {

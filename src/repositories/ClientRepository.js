@@ -12,8 +12,8 @@ exports.persistClientSettings = async function persistClientSettings(clientData)
                 clientData.id,
                 clientData.name,
                 clientData.heimdallClientId,
-                clientData.webservicesUsername,
-                clientData.webservicesPassword,
+                clientData.webservices.username,
+                clientData.webservices.password,
                 clientData.activePartnerNumber
             ]
         };

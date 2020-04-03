@@ -43,7 +43,7 @@ describe("Checkout Shopping Cart", () => {
     let clientData;
     const sessionId = uuid();
 
-    test("should checkout shopping cart", async () => {
+    test("should checkout shopping cart", async (done) => {
         clientData = await testhelper.createDefaultClient();
         const wertgarantieProductId = 10;
         const wertgarantieProductName = 'Basic';
@@ -76,7 +76,7 @@ describe("Checkout Shopping Cart", () => {
             }
         });
 
-        return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
                     price: 139999,
@@ -97,34 +97,32 @@ describe("Checkout Shopping Cart", () => {
                 },
                 signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart),
                 secretClientId: clientData.secrets[0]
-            })
-            .expect(200)
-            .expect((result) => {
-                const body = result.body;
-                const purchase = body.purchases[0];
-                expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
-                expect(body.clientId).toEqual(clientData.publicClientIds[0]);
-                expect(purchase.wertgarantieProductId).toEqual(10);
-                expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
-                expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
-                expect(purchase.devicePrice).toEqual(139999);
-                expect(purchase.success).toBe(true);
-                expect(purchase.message).toEqual("successfully transmitted insurance proposal");
-                expect(purchase.shopProduct).toEqual("SuperBike 3000");
-                expect(purchase.contractNumber).toEqual("1234");
-                expect(purchase.transactionNumber).toEqual("28850277");
-                expect(purchase.activationCode).toEqual("4db56dacfbhce");
             });
-
+        expect(result.status).toBe(200);
+        const body = result.body;
+        const purchase = body.purchases[0];
+        expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
+        expect(body.clientId).toEqual(clientData.publicClientIds[0]);
+        expect(purchase.wertgarantieProductId).toEqual(10);
+        expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
+        expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
+        expect(purchase.devicePrice).toEqual(139999);
+        expect(purchase.success).toBe(true);
+        expect(purchase.message).toEqual("successfully transmitted insurance proposal");
+        expect(purchase.shopProduct).toEqual("SuperBike 3000");
+        expect(purchase.contractNumber).toEqual("1234");
+        expect(purchase.transactionNumber).toEqual("28850277");
+        expect(purchase.activationCode).toEqual("4db56dacfbhce");
+        done();
     });
 
-    test("should find checkout data by session id", async () => {
+    test("should find checkout data by session id", async (done) => {
         const result = await request(app).get("/wertgarantie/purchases/" + sessionId);
         expect(result.status).toBe(200);
         const body = result.body;
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(sessionId);
-        expect(body.clientId).toEqual(clientData.id);
+        expect(body.clientId).toEqual(clientData.publicClientIds[0]);
         expect(purchase.wertgarantieProductId).toEqual(10);
         expect(purchase.wertgarantieProductName).toEqual("Basic");
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
@@ -135,6 +133,7 @@ describe("Checkout Shopping Cart", () => {
         expect(purchase.contractNumber).toEqual(1234);
         expect(purchase.transactionNumber).toEqual(28850277);
         expect(purchase.activationCode).toEqual("4db56dacfbhce");
+        done();
     });
 });
 
