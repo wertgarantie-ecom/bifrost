@@ -47,7 +47,7 @@ exports.getAgentData = async function getAgentData(requestParameters, httpClient
     formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', requestParameters.session);
-    formData.append('EXTENDED_RESULT', true);
+    formData.append('EXTENDED_RESULT', "true");
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
@@ -73,7 +73,7 @@ async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusC
         if (e.response) {
             throw new WebserviceError(`Webservices could not process the following request: ${JSON.stringify(request)}, responded with: ${JSON.stringify(e.response.data)}`);
         } else {
-            throw new WebserviceError(`Could not connect to Webservices: ${JSON.stringify(request)}`);
+            throw new WebserviceError(`Could not connect to Webservices: ${JSON.stringify(request)}, error: ${e}`);
         }
     }
     throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${JSON.stringify(request)}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
