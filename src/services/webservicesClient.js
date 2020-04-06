@@ -41,13 +41,31 @@ exports.login = async function login(clientData, httpClient = axiosInstance) {
     return response.SESSION;
 };
 
-exports.getAgentData = async function getAgentData(requestParameters, httpClient = axiosInstance) {
+exports.getAgentData = async function getAgentData(session, httpClient = axiosInstance) {
     const formData = new FormData();
     formData.append('FUNCTION', 'GET_AGENT_DATA');
     formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
     formData.append('API', 'JSON');
-    formData.append('SESSION', requestParameters.session);
+    formData.append('SESSION', session);
     formData.append('EXTENDED_RESULT', "true");
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
+        result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
+    }
+    return result;
+};
+
+exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applicationCode, productType, httpClient = axiosInstance) {
+    if (!(session && applicationCode && productType)) {
+        throw new Error(`request data not provided. Session: ${session}, applicationCode: ${applicationCode}, productType: ${productType}`);
+    }
+    const formData = new FormData();
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'ADVERTISING_TEXT');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', session);
+    formData.append('APPLICATION_CODE', applicationCode);
+    formData.append('PRODUCT_TYPE', productType);
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
