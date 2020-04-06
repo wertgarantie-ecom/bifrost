@@ -1,7 +1,9 @@
 const nock = require('nock');
 const defaultProductOffersResponse = require('../controllers/heimdallResponses').getProductOffersResponse;
 const dateformat = require('dateformat');
-const agentDataTestResponse = require('../services/webservicesResponses').agentData;
+const agentDataMultipleProductsTestResponse = require('../services/webservicesResponses').agentDataMultipleProducts;
+const advertisingTextResponse = require('../services/webservicesResponses').advertisingText;
+const insurancePremiumResponse = require('../services/webservicesResponses').insurancePremiumResponse;
 
 
 exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
@@ -39,5 +41,17 @@ exports.nockWebservicesLogin = function nockWebservicesLogin(session) {
 exports.nockGetAgentData = function nockGetAgentData() {
     nock(process.env.WEBSERVICES_URI)
         .post("/callservice.pl")
-        .reply(200, agentDataTestResponse);
+        .reply(200, agentDataMultipleProductsTestResponse);
+};
+
+exports.nockGetAdvertisingTexts = function nockGetAdvertisingTexts() {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl")
+        .reply(200, advertisingTextResponse);
+};
+
+exports.nockGetInsurancePremium = function nockGetInsurancePremium() {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl")
+        .reply(200, insurancePremiumResponse);
 };

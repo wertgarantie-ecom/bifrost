@@ -1,5 +1,7 @@
 const webservicesClient = require('../../src/services/webservicesClient');
 const responses = require('../../integration-test/services/webservicesResponses');
+const { create } = require('xmlbuilder2');
+const dateformat = require('dateformat');
 
 test("should login", async () => {
     const client = {
@@ -112,6 +114,25 @@ test("should retrieve advertising texts for product", async () => {
     }
 });
 
-const advertisingTextResponse = {};
 
+test("should retrieve insurance premium for product", async () => {
+    const mockHttpClient = jest.fn(() => {
+        return {
+            data: responses.insurancePremiumResponse
+        }
+    });
+
+    try {
+        const agentData = await webservicesClient.getInsurancePremium("session", "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", 1, 9025, 699, ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"], 'DE', mockHttpClient);
+        const callData = mockHttpClient.mock.calls[0][0].data._streams[13];
+        const date = new Date();
+        const dateFormatted = dateformat(date, 'dd.mm.yyyy');
+        const year = date.getFullYear();
+        expect(agentData).toEqual(responses.insurancePremiumResponse);
+
+        expect(callData).toEqual(`<?xml version="1.0"?><PARAMETERS><APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE><TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE><PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE><DATE>${dateFormatted}</DATE><APPLICATION_DATE>${dateFormatted}</APPLICATION_DATE><PAYMENT_INTERVAL>1</PAYMENT_INTERVAL><DEVICES><DEVICE><OBJECT_CODE>9025</OBJECT_CODE><OBJECT_PRICE>699</OBJECT_PRICE><PURCHASE_DATE>${dateFormatted}</PURCHASE_DATE><MANUFACTURER_YEAR>${year}</MANUFACTURER_YEAR><RISKS><RISK><RISIKOTYP>KOMPLETTSCHUTZ</RISIKOTYP></RISK><RISK><RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP></RISK></RISKS></DEVICE></DEVICES></PARAMETERS>`);
+    } catch (error) {
+        fail(error);
+    }
+});
 

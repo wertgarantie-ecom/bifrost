@@ -1,6 +1,7 @@
 const webservicesClient = require('../../src/services/webservicesClient');
 const nockHelper = require('../helper/nockHelper');
 const responses = require('./webservicesResponses');
+const dateformat = require('dateformat');
 
 describe("webservices roundtrip", () => {
     const clientConfig = {
@@ -24,7 +25,6 @@ describe("webservices roundtrip", () => {
 
 
     nockHelper.nockWebservicesLogin(session);
-    nockHelper.nockGetAgentData();
 
     test("should execute proper login call", async () => {
         const retrievedSession = await webservicesClient.login(clientConfig);
@@ -33,15 +33,28 @@ describe("webservices roundtrip", () => {
 
     let productType;
     let applicationCode;
-    test("should get agent data", async (done) => {
+
+    test("should get agent data", async () => {
         nockHelper.nockGetAgentData();
-        const agentData = await webservicesClient.getAgentData("DG21585917903JR99E8D45931QQ81J1TL3CX4Q49181L17Q921Z233GB6ER5XI");
-        expect(agentData).toEqual(responses.agentData);
-        productType = agentData.RESULT.PRODUCT_LIST.PRODUCT.PRODUCT_TYPE;
-        productType = agentData.RESULT.PRODUCT_LIST.PRODUCT.APPLICATION_CODE
+        const agentData = await webservicesClient.getAgentData(session);
+        expect(agentData).toEqual(responses.agentDataMultipleProducts);
+        productType = agentData.RESULT.PRODUCT_LIST.PRODUCT[0].PRODUCT_TYPE;
+        applicationCode = agentData.RESULT.PRODUCT_LIST.PRODUCT[0].APPLICATION_CODE;
     });
 
-    test
+    test("should get advertising texts", async () => {
+        nockHelper.nockGetAdvertisingTexts();
+        const advertisingTexts = await webservicesClient.getAdvertisingTexts(session, applicationCode, productType);
+        expect(advertisingTexts.RESULT.ADVERTISING_TEXTS.ADVERTTISING_TEXT).toEqual(responses.advertisingText.RESULT.ADVERTISING_TEXTS.ADVERTTISING_TEXT);
+    });
 
+    test("should get insurance premium for product", async () => {
+        const objectCode = 9025;
+        const objectPrice = 699;
+        const riskTypes = ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"];
+        nockHelper.nockGetInsurancePremium();
+        const insurancePremium = await webservicesClient.getInsurancePremium(session, applicationCode, productType, 1, objectCode, objectPrice, riskTypes);
+        expect(insurancePremium).toEqual(responses.insurancePremiumResponse);
+    });
 });
 

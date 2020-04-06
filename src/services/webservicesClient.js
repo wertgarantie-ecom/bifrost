@@ -1,5 +1,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
+const dateformat = require('dateformat');
+const { create } = require('xmlbuilder2');
 const AxiosLogger = require('axios-logger');
 
 const axiosInstance = axios.create();
@@ -66,6 +68,65 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
+    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+};
+
+function createRiskTypeXml(riskType) {
+    return `
+        <RISK>
+            <RISIKOTYP>${riskType}</RISIKOTYP>
+        </RISK>
+    `;
+}
+
+function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
+    const date = new Date();
+    const dateFormatted = dateformat(date, 'dd.mm.yyyy');
+    const manufacturerYear = date.getFullYear();
+    const parametersJson = {
+        "PARAMETERS": {
+            "APPLICATION_CODE": applicationCode,
+            "TAX_COUNTRY_CODE": countryCode,
+            "PRODUCTTYPE": productType,
+            "DATE": dateFormatted,
+            "APPLICATION_DATE": dateFormatted,
+            "PAYMENT_INTERVAL": paymentInterval
+        }
+    };
+    const devices = [
+        {
+            "DEVICE": {
+                "OBJECT_CODE": objectCode,
+                "OBJECT_PRICE": objectPrice,
+                "PURCHASE_DATE": dateFormatted,
+                "MANUFACTURER_YEAR": manufacturerYear,
+                "RISKS":
+                    {
+                        "RISK": riskTypes.map((risk) => {
+                            return {
+                                "RISIKOTYP": risk
+                            }
+                        }),
+                    }
+            }
+        }
+    ];
+
+    parametersJson.PARAMETERS.DEVICES = devices;
+    return create(parametersJson).end();
+}
+
+exports.getInsurancePremium = async function getInsurancePremium(session, applicationCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, countryCode = 'DE', httpClient = axiosInstance) {
+    if (!(session && productType && applicationCode && objectCode && objectPrice && (riskTypes && riskTypes.length > 0))) {
+        throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, riskTypes: ${riskTypes}`);
+    }
+    const xmlData = assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
+    const formData = new FormData();
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'INSURANCE_PREMIUM');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', session);
+    formData.append('DATA', xmlData);
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 

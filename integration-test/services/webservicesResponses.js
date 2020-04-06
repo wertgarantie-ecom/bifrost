@@ -231,3 +231,20 @@ exports.advertisingText = {
     "STATUSCODE": "0",
     "PAGE": {}
 };
+
+exports.insurancePremiumResponse = {
+    "RESULT": {
+        "PREMIUM_SINGLE_PAYMENT": "0",
+        "FEHLERMELDUNG": {},
+        "PREMIUM_RECURRING": "23,4"
+    },
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "0",
+    "AMOUNT": "30",
+    "STATUS": "OK",
+    "REQUEST_ID": "98841369",
+    "ORDERBY": {},
+    "SORT": {},
+    "STATUSCODE": "0",
+    "PAGE": "1"
+};
