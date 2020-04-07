@@ -24,10 +24,12 @@ const webservicesProductOffersConfig = {
         basicRiskType: "KOMPLETTSCHUTZ",
         productOffers: [
             {
+                advantages: ["advantage1", "..."],
                 risks: [],
                 name: "Komplettschutz"
             },
             {
+                advantages: ["advantage1", "..."],
                 risks: ["DIEBSTAHLSCHUTZ"],
                 name: "Komplettschutz mit Premium"
             }
