@@ -249,23 +249,87 @@ exports.insurancePremiumResponse = {
     "PAGE": "1"
 };
 
-exports.comparisonDocumentsResponse = {
-    "RESULT" : {
-        "DOCUMENTS" : {
-            "DOCUMENT" : {
-                "FILENAME" : "EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
-                    "CONTENT" :
-                "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
+exports.singleComparisonDocumentsResponse = {
+    "RESULT": {
+        "DOCUMENTS": {
+            "DOCUMENT": {
+                "FILENAME": "EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
+                "CONTENT":
+                    "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
             }
         }
     },
-    "LANGUAGE" : "DE",
-    "MAXAMOUNT" : "1",
-    "AMOUNT" : {},
-    "STATUS" : "OK",
-    "REQUEST_ID" : "98843607",
-    "ORDERBY" : {},
-    "SORT" : {},
-    "STATUSCODE" : "0",
-    "PAGE" : {}
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "1",
+    "AMOUNT": {},
+    "STATUS": "OK",
+    "REQUEST_ID": "98843607",
+    "ORDERBY": {},
+    "SORT": {},
+    "STATUSCODE": "0",
+    "PAGE": {}
+};
+
+exports.multipleComparisonDocumentsResponse = {
+    "RESULT": {
+        "DOCUMENTS": {
+            "DOCUMENT": [
+                {
+                    "FILENAME": "EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
+                    "CONTENT":
+                        "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
+                },
+                {
+                    "FILENAME": "YY NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
+                    "CONTENT":
+                        "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
+                }
+            ]
+        }
+    },
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "1",
+    "AMOUNT": {},
+    "STATUS": "OK",
+    "REQUEST_ID": "98843607",
+    "ORDERBY": {},
+    "SORT": {},
+    "STATUSCODE": "0",
+    "PAGE": {}
+};
+
+exports.multipleLegalDocuments = {
+    "RESULT": {
+        "DOCUMENT": [
+            {
+                "FILENAME": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                "CONTENT": "JVBERi0xLjYNJcjIyMjIyMgNNCAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDk0MjY+PnN0cmVhbQ0K"
+            },
+            {
+                "FILENAME": "Elektro BOC 1118_RECHTSDOKUMENTE.PDF",
+                "CONTENT": "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE4MTEyOTE1MDYwNCswMScwMCcpL0Ny"
+            },
+            {
+                "FILENAME": "GU WG DE RAD KS 0818_RECHTSDOKUMENTE.PDF",
+                "CONTENT": "JVBERi0xLjQKJeLjz9MKCjkwIDAgb2JqCjw8IC9MaW5lYXJpemVkIDEgL0wgMTM2MDc3MSAvSCBbIDk1MiAxOTQgXSAv"
+            },
+            {
+                "FILENAME": "Werbetext2",
+                "CONTENT": "inkl. Neukaufbeteiligung"
+            },
+            {
+                "FILENAME": "GU WG DE KS 0918_RECHTSDOKUMENTE.PDF",
+                "CONTENT": "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE4MTAxMDE1NDQzMCswMScwMCcpL0Ny"
+            }
+        ]
+    },
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "5",
+    "AMOUNT": {},
+    "STATUS": "OK",
+    "REQUEST_ID": "98833927",
+    "ORDERBY": {},
+    "SORT": {},
+    "STATUSCODE": "0",
+    "PAGE": {}
 };

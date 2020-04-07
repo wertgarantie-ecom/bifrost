@@ -1,6 +1,7 @@
 const webservicesClient = require('../../src/services/webservicesClient');
 const responses = require('../../integration-test/services/webservicesResponses');
 const dateformat = require('dateformat');
+const _ = require('lodash');
 
 test("should login", async () => {
     const client = {
@@ -145,16 +146,44 @@ test("should assemble valid XML for insurance premium call", () => {
     expect(xmlData).toEqual(`<?xml version="1.0"?><PARAMETERS><APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE><TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE><PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE><DATE>${dateFormatted}</DATE><APPLICATION_DATE>${dateFormatted}</APPLICATION_DATE><PAYMENT_INTERVAL>1</PAYMENT_INTERVAL><DEVICES><DEVICE><OBJECT_CODE>9025</OBJECT_CODE><OBJECT_PRICE>699</OBJECT_PRICE><PURCHASE_DATE>${dateFormatted}</PURCHASE_DATE><MANUFACTURER_YEAR>${year}</MANUFACTURER_YEAR><RISKS><RISK><RISIKOTYP>KOMPLETTSCHUTZ</RISIKOTYP></RISK><RISK><RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP></RISK></RISKS></DEVICE></DEVICES></PARAMETERS>`);
 });
 
-test("should retrieve COMPARISON_DOCUMENTS", async () => {
+test("should retrieve single COMPARISON_DOCUMENTS", async () => {
     const mockHttpClient = jest.fn(() => {
         return {
-            data: responses.comparisonDocumentsResponse
+            data: _.cloneDeep(responses.singleComparisonDocumentsResponse)
         }
     });
     try {
         const comparisonDocumentData = await webservicesClient.getComparisonDocuments("session", "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", mockHttpClient);
-        expect(comparisonDocumentData).toEqual(responses.comparisonDocumentsResponse);
+        expect(comparisonDocumentData.RESULT.DOCUMENTS.DOCUMENT[0]).toEqual(responses.singleComparisonDocumentsResponse.RESULT.DOCUMENTS.DOCUMENT);
     } catch (error) {
         fail(error);
     }
-})
+});
+
+test("should retrieve multiple COMPARISON_DOCUMENTS", async () => {
+    const mockHttpClient = jest.fn(() => {
+        return {
+            data: responses.multipleComparisonDocumentsResponse
+        }
+    });
+    try {
+        const comparisonDocumentData = await webservicesClient.getComparisonDocuments("session", "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", mockHttpClient);
+        expect(comparisonDocumentData).toEqual(responses.multipleComparisonDocumentsResponse);
+    } catch (error) {
+        fail(error);
+    }
+});
+
+test("should retrieve single LEGAL_DOCUMENT", async () => {
+    const mockHttpClient = jest.fn(() => {
+        return {
+            data: responses.multipleLegalDocuments
+        }
+    });
+    try {
+        const comparisonDocumentData = await webservicesClient.getLegalDocuments("session", "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", mockHttpClient);
+        expect(comparisonDocumentData).toEqual(responses.multipleLegalDocuments);
+    } catch (error) {
+        fail(error);
+    }
+});

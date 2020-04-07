@@ -1,7 +1,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const dateformat = require('dateformat');
-const { create } = require('xmlbuilder2');
+const {create} = require('xmlbuilder2');
 const AxiosLogger = require('axios-logger');
 
 const axiosInstance = axios.create();
@@ -93,7 +93,7 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
             "PAYMENT_INTERVAL": paymentInterval
         }
     };
-    const devices = [
+    parametersJson.PARAMETERS.DEVICES = [
         {
             "DEVICE": {
                 "OBJECT_CODE": objectCode,
@@ -111,8 +111,6 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
             }
         }
     ];
-
-    parametersJson.PARAMETERS.DEVICES = devices;
     return create(parametersJson).end();
 };
 
@@ -137,6 +135,24 @@ exports.getComparisonDocuments = async function getComparisonDocuments(session, 
     const formData = new FormData();
     formData.append('FUNCTION', 'GET_PRODUCT_DATA');
     formData.append('SHAPING', 'COMPARISON_DOCUMENTS');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', session);
+    formData.append('APPLICATION_CODE', applicationCode);
+    formData.append('PRODUCT_TYPE', productType);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    if (!Array.isArray(result.RESULT.DOCUMENTS.DOCUMENT)) {
+        result.RESULT.DOCUMENTS.DOCUMENT = [result.RESULT.DOCUMENTS.DOCUMENT];
+    }
+    return result;
+};
+
+exports.getLegalDocuments = async function getLegalDocuments(session, applicationCode, productType, httpClient = axiosInstance) {
+    if (!(session && productType && applicationCode)) {
+        throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
+    }
+    const formData = new FormData();
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'LEGAL_DOCUMENTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
