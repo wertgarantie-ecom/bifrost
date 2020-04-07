@@ -56,5 +56,11 @@ describe("webservices roundtrip", () => {
         const insurancePremium = await webservicesClient.getInsurancePremium(session, applicationCode, productType, 1, objectCode, objectPrice, riskTypes);
         expect(insurancePremium).toEqual(responses.insurancePremiumResponse);
     });
+
+    test("should retrieve COMPARISON_DOCUMENTS", async () => {
+        nockHelper.nockGetComparisonDocuments();
+        const comparisonDocuments = await webservicesClient.getComparisonDocuments(session, applicationCode, productType);
+        expect(comparisonDocuments).toEqual(responses.comparisonDocumentsResponse);
+    })
 });
 

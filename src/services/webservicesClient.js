@@ -79,7 +79,7 @@ function createRiskTypeXml(riskType) {
     `;
 }
 
-function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
+exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
     const date = new Date();
     const dateFormatted = dateformat(date, 'dd.mm.yyyy');
     const manufacturerYear = date.getFullYear();
@@ -114,19 +114,33 @@ function assembleInsurancePremiumXmlData(applicationCode, countryCode, productTy
 
     parametersJson.PARAMETERS.DEVICES = devices;
     return create(parametersJson).end();
-}
+};
 
 exports.getInsurancePremium = async function getInsurancePremium(session, applicationCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, countryCode = 'DE', httpClient = axiosInstance) {
     if (!(session && productType && applicationCode && objectCode && objectPrice && (riskTypes && riskTypes.length > 0))) {
-        throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, riskTypes: ${riskTypes}`);
+        throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, paymentInterval: ${paymentInterval}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, objectPrice: ${objectPrice}, riskTypes: ${riskTypes}`);
     }
-    const xmlData = assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
+    const xmlData = this.assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
     const formData = new FormData();
     formData.append('FUNCTION', 'GET_PRODUCT_DATA');
     formData.append('SHAPING', 'INSURANCE_PREMIUM');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('DATA', xmlData);
+    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+};
+
+exports.getComparisonDocuments = async function getComparisonDocuments(session, applicationCode, productType, httpClient = axiosInstance) {
+    if (!(session && productType && applicationCode)) {
+        throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
+    }
+    const formData = new FormData();
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'COMPARISON_DOCUMENTS');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', session);
+    formData.append('APPLICATION_CODE', applicationCode);
+    formData.append('PRODUCT_TYPE', productType);
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 

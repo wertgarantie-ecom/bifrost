@@ -4,6 +4,7 @@ const dateformat = require('dateformat');
 const agentDataMultipleProductsTestResponse = require('../services/webservicesResponses').agentDataMultipleProducts;
 const advertisingTextResponse = require('../services/webservicesResponses').advertisingText;
 const insurancePremiumResponse = require('../services/webservicesResponses').insurancePremiumResponse;
+const comparisonDocumentsResponse = require('../services/webservicesResponses').comparisonDocumentsResponse;
 
 
 exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
@@ -54,4 +55,10 @@ exports.nockGetInsurancePremium = function nockGetInsurancePremium() {
     nock(process.env.WEBSERVICES_URI)
         .post("/callservice.pl")
         .reply(200, insurancePremiumResponse);
+};
+
+exports.nockGetComparisonDocuments = function nockGetComparisonDocuments() {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl")
+        .reply(200, comparisonDocumentsResponse);
 };
