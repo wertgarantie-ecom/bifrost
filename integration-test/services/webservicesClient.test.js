@@ -1,7 +1,6 @@
 const webservicesClient = require('../../src/services/webservicesClient');
 const nockHelper = require('../helper/nockHelper');
 const responses = require('./webservicesResponses');
-const dateformat = require('dateformat');
 
 describe("webservices roundtrip", () => {
     const clientConfig = {
