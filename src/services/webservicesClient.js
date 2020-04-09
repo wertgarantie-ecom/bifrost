@@ -54,6 +54,11 @@ exports.getAgentData = async function getAgentData(session, httpClient = axiosIn
     if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
     }
+    result.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
+       if(!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
+           product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
+       }
+    });
     return result;
 };
 
@@ -157,7 +162,11 @@ exports.getLegalDocuments = async function getLegalDocuments(session, applicatio
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
-    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    if (!Array.isArray(result.RESULT.DOCUMENT)) {
+        result.RESULT.DOCUMENT = [result.RESULT.DOCUMENT];
+    }
+    return result;
 };
 
 async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {

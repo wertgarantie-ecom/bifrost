@@ -49,7 +49,7 @@ describe('should handle shopping cart confirmation rejection', function () {
 
 test("should return valid confirmation data", async () => {
 
-    const clientData = await testhelper.createDefaultClient();
+    const clientData = await testhelper.createAndPersistDefaultClient();
 
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         clientId: clientData.publicClientIds[0],

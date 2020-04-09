@@ -2,16 +2,8 @@ const signatureService = require('../../src/services/signatureService');
 const clientService = require('../../src/services/clientService');
 const uuid = require('uuid');
 
-exports.createDefaultClient = async function createDefaultClient() {
-    const addNewClientRequest = {
-        name: "testclient",
-        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-        webservices: {
-            username: "testusername",
-            password: "testpassword",
-        },
-        activePartnerNumber: 12345,
-    };
+exports.createAndPersistDefaultClient = async function createAndPersistDefaultClient() {
+    const addNewClientRequest = this.createDefaultClient();
 
     return await clientService.addNewClient(addNewClientRequest);
 };
@@ -42,5 +34,62 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
     return signatureService.signShoppingCart(shoppingCart);
 };
 
+exports.createDefaultClient = function createDefaultClient() {
+    return {
+        name: "testclient",
+        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
+        webservices: {
+            username: "testusername",
+            password: "testpassword",
+        },
+        publicClientIds: [
+            "public:testclient-publicId"
+        ],
+        secrets: [
+            "secret:testclient-secret"
+        ],
+        activePartnerNumber: 12345,
 
+    };
+};
+
+exports.createDefaultClientWithWebservicesConfiguration = function createDefaultClientWithWebservicesConfiguration() {
+    return {
+        name: "testclient",
+        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
+        webservices: {
+            username: "testusername",
+            password: "testpassword",
+        },
+        publicClientIds: [
+            "public:testclient-publicId"
+        ],
+        secrets: [
+            "secret:testclient-secret"
+        ],
+        activePartnerNumber: 12345,
+        basicRiskType: "KOMPLETTSCHUTZ",
+        relevantProductTypes: {
+            "KOMPLETTSCHUTZ_2019": {
+                scalesOfPrices: [300, 800, 1800]
+            }
+        },
+        productOfferConfigurations: [
+            {
+                advantages: [],
+                risks: [],
+                name: "Komplettschutz"
+            },
+            {
+                advantages: ["Diebstahlschutz", "Cyberschutz", "ohne Selbstbeteiligung"],
+                risks: ["DIEBSTAHLSCHUTZ"],
+                name: "Komplettschutz mit Premium"
+            }
+        ],
+        singlePaymentFeatures:{},
+        recurringPaymentFeatures: {
+            risks: []
+        }
+    };
+};
 
