@@ -19,6 +19,40 @@ async function selectRelevantWertgarantieProducts(session, clientConfig, webserv
     return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE, false));
 }
 
+async function assembleAllProductOffers(clientConfig) {
+    const session = await login(clientConfig);
+    return await Promise.all(clientConfig.productOfferConfigurations.map(config => assembleProductOffers(session, config)));
+}
+
+async function assembleProductOffers(session, productOfferConfig) {
+    const webservicesProduct = findProductFor(session, productOfferConfig);
+    if (!webservicesProduct) {
+        return undefined;
+    }
+    return {
+        name: productOfferConfig.name,
+        id: uuid(),
+        documents: await getDocuments(session, productOfferConfig),
+        advantages: productOfferConfig.advantages,
+        devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct)
+    };
+}
+
+async function findProductFor() {
+}
+
+async function getDocuments() {
+    const documents = [];
+    documents.push(...getLegalDocuments());
+    documents.push(...getComparisonDocuments());
+    return documents;
+}
+
+async function getDevicePremiums() {
+    getDevices().max(device => getPremiums())
+}
+
+
 exports.selectRelevantWertgarantieProducts = selectRelevantWertgarantieProducts;
 
 exports.assembleProductOffers = async function assembleProductOffers(clientConfig, webservicesClient = _webservicesClient) {
