@@ -1,6 +1,14 @@
 const _webservicesClient = require('./webservicesClient');
+const _documentRespository = require('../repositories/documentRepository');
 const _ = require('lodash');
 const uuid = require('uuid');
+
+const documentType = {
+    PRODUCT_INFORMATION_SHEET: "PIS", //Produktinformationsblatt
+    GENERAL_INSURANCE_PRODUCTS_INFORMATION: "IPID", //Informationsblatt für Versicherungsprodukte
+    GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE: "GTCI", // AVB
+    LEGAL_NOTICE: "LN" // Rechtsdokumente
+};
 
 exports.getProductOffers = function getProductOffers() {
     // id --> uuid
@@ -8,7 +16,7 @@ exports.getProductOffers = function getProductOffers() {
 
 async function selectRelevantWertgarantieProducts(session, clientConfig, webservicesClient = _webservicesClient) {
     const productData = await webservicesClient.getAgentData(session);
-    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.relevantProductTypes.reduce((acc, relevantProductType) => acc || relevantProductType.name === product.PRODUCT_TYPE, false));
+    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE, false));
 }
 
 exports.selectRelevantWertgarantieProducts = selectRelevantWertgarantieProducts;
@@ -16,6 +24,7 @@ exports.selectRelevantWertgarantieProducts = selectRelevantWertgarantieProducts;
 exports.assembleProductOffers = async function assembleProductOffers(clientConfig, webservicesClient = _webservicesClient) {
     const session = await webservicesClient.login(clientConfig);
     const relevantProducts = selectRelevantWertgarantieProducts(clientConfig, webservicesClient);
+
 
     const productOffers = await Promise.all(relevantProducts.map(async product => {
         const productOffer = {
@@ -27,7 +36,7 @@ exports.assembleProductOffers = async function assembleProductOffers(clientConfi
             documents: []
         };
         // get legal documents
-        const legalDocuments = await this.getLegalDocuments(session, product, webservicesClient);
+        const legalDocuments = await getLegalDocuments(session, product.APPLICATION_CODE, product.PRODUCT_TYPE, clientConfig, webservicesClient);
         productOffer.documents = productOffer.documents.concat(legalDocuments);
 
         // pro versicherbarem product wollen wir sowas hier haben:
@@ -99,73 +108,88 @@ exports.getInsurancePremium = async function getInsurancePremium(session, applic
     return await webservicesClient.getInsurancePremium(session, applicationCode, productType, intervalValue, objectCode, objectPrice, riskTypes);
 };
 
-exports.getLegalDocuments = async function getLegalDocuments(session, product, webservicesClient = _webservicesClient) {
-    const documentsResponse = await webservicesClient.getLegalDocuments(session, product.APPLICATION_CODE, product.PRODUCT_TYPE); // liefert aktuell alle Dokumente in einem wieder...
+async function getLegalDocuments(session, applicationCode, productType, clientConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
+    const documentsResponse = await webservicesClient.getLegalDocuments(session, applicationCode, productType); // liefert aktuell alle Dokumente in einem wieder...
+    clientConfig.relevantProductTypes
 
-    const documentsForAppCode = _.filter(documentsResponse.RESULT.DOCUMENT, (document) => document.FILENAME.includes(product.APPLICATION_CODE));
-    return documentsForAppCode.map((document) => {
+    const documentsForAppCode = _.filter(documentsResponse.RESULT.DOCUMENT, (document) => document.FILENAME.includes(applicationCode));
 
-        // Umwandlung der Base64Strings in PDF
+    return documentsForAppCode.map(async (document) => {
+
+        const documentID = await documentRespository.persistDocument(document);
         // In Postgres-tabelle speichern --> zusammengesetzter primary key aus APPLICATION_CODE und document type
         // link und document type bestimmen (hoffentlich werden die documents nochmal gesplittet - Mail is raus)
-
-        const name = document.FILENAME.split(product.APPLICATION_CODE + '_')[1];
-        const type = name.split('.PDF')[0];
-        const link = `/documents/${product.APPLICATION_CODE}/${name}`;
+        const documentType = clientConfig.relevantProductTypes[productType]
         return {
-            document_name: name,
+            document_title: document.FILENAME,
             document_type: type,
-            document_link: link,
-            document_blob: ''
+            document_id: documentID
         };
     });
-};
+}
 
+exports.getLegalDocuments = getLegalDocuments;
 
 const webservicesProductOffersConfig = {
     clientIdHandyFlash: {
-        basicRiskType: "KOMPLETTSCHUTZ",
-        relevantProductTypes: [
+        productOffersConfigurations: [
             {
-                name: "KOMPLETTSCHUTZ_2019",
-                scalesOfPrices: [300, 800, 1800]
-            }
-        ],
-        productOfferConfigurations: [
-            {
+                productType: "KOMPLETTSCHUTZ_2019",
+                applicationCode: "GU WG DE KS 0419",
+                basicRiskType: "KOMPLETTSCHUTZ",
+                scalesOfPrices: [300, 800, 1800],
+                documentTypes: {
+                    legalDocuments: [
+                        {
+                            type: documentType.LEGAL_NOTICE,
+                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                        }
+                    ],
+                    comparisonDocuments: []
+                },
                 advantages: [],
                 risks: [],
                 name: "Komplettschutz"
             },
             {
-                advantages: ["Diebstahlschutz", "Cyberschutz", "ohne Selbstbeteiligung"],
+                productType: "KOMPLETTSCHUTZ_2019",
+                applicationCode: "GU WG DE KS 0419",
+                basicRiskType: "KOMPLETTSCHUTZ",
+                scalesOfPrices: [300, 800, 1800],
+                documentTypes: {
+                    legalDocuments: [
+                        {
+                            type: documentType.LEGAL_NOTICE,
+                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                        }
+                    ],
+                    comparisonDocuments: []
+                },
+                advantages: [],
                 risks: ["DIEBSTAHLSCHUTZ"],
-                name: "Komplettschutz mit Premium"
+                name: "Komplettschutz mit Premium-Option"
             }
-        ],
-        singlePaymentFeatures: {},
-        recurringPaymentFeatures: {
-            risks: []
-        },
-    },
-    clientIdBOC: {
-        productOfferConfigurations: [
-            {
-                interval: "monthly",
-                name: "Schutz mit monatlicher Bezahlweise"
-            },
-            {
-                interval: "yearly",
-                name: "Schutz mit jährlicher Bezahlweise"
-            }
-        ],
-        singlePaymentFeatures: {
-            risks: ["SOFORTSCHUTZ"]
-        },
-        recurringPaymentFeatures: {
-            risks: ["AKKUSCHUTZ"]
-        }
+        ]
     }
+    // ,
+    // clientIdBOC: {
+    //     productOfferConfigurations: [
+    //         {
+    //             interval: "monthly",
+    //             name: "Schutz mit monatlicher Bezahlweise"
+    //         },
+    //         {
+    //             interval: "yearly",
+    //             name: "Schutz mit jährlicher Bezahlweise"
+    //         }
+    //     ],
+    //     singlePaymentFeatures: {
+    //         risks: ["SOFORTSCHUTZ"]
+    //     },
+    //     recurringPaymentFeatures: {
+    //         risks: ["AKKUSCHUTZ"]
+    //     }
+    // }
 };
 
 const webservicesServiceProductOffers = [

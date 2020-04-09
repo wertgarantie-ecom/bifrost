@@ -65,14 +65,14 @@ test('should filter wertgarantie products for one relevant product', async () =>
 test('should filter wertgarantie products for two relevant products', async () => {
 
     const testClientConfig = {
-        relevantProductTypes: [
+        productOffersConfigurations: [
             {
-                name: "KOMPLETTSCHUTZ_2019"
+                productType: "GERAETESCHUTZ_KOMFORT_3_2015"
             },
             {
-                name: "GERAETESCHUTZ_KOMFORT_3_2015"
+                productType: "KOMPLETTSCHUTZ_2019"
             }
-        ],
+        ]
     };
 
     const mockClient = {
