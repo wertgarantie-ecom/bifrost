@@ -3,6 +3,8 @@ const webservicesService = require('../../src/services/webservicesService');
 const fixtureHelper = require('../../integration-test/helper/fixtureHelper');
 const _ = require('lodash');
 
+const testClientConfig = fixtureHelper.createDefaultClientWithWebservicesConfiguration();
+
 test('should return relevant documents only', async () => {
     const product = {
         APPLICATION_CODE: "GU WG DE KS 0419",
@@ -64,16 +66,7 @@ test('should filter wertgarantie products for one relevant product', async () =>
 
 test('should filter wertgarantie products for two relevant products', async () => {
 
-    const testClientConfig = {
-        productOffersConfigurations: [
-            {
-                productType: "GERAETESCHUTZ_KOMFORT_3_2015"
-            },
-            {
-                productType: "KOMPLETTSCHUTZ_2019"
-            }
-        ]
-    };
+
 
     const mockClient = {
         getAgentData: () => webservicesResponses.agentDataMultipleProducts

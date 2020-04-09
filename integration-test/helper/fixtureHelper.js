@@ -68,28 +68,44 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
             "secret:testclient-secret"
         ],
         activePartnerNumber: 12345,
-        basicRiskType: "KOMPLETTSCHUTZ",
-        relevantProductTypes: {
-            "KOMPLETTSCHUTZ_2019": {
-                scalesOfPrices: [300, 800, 1800]
-            }
-        },
-        productOfferConfigurations: [
+        productOffersConfigurations: [
             {
+                productType: "KOMPLETTSCHUTZ_2019",
+                applicationCode: "GU WG DE KS 0419",
+                basicRiskType: "KOMPLETTSCHUTZ",
+                scalesOfPrices: [300, 800, 1800],
+                documentTypes: {
+                    legalDocuments: [
+                        {
+                            type: documentType.LEGAL_NOTICE,
+                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                        }
+                    ],
+                    comparisonDocuments: []
+                },
                 advantages: [],
                 risks: [],
                 name: "Komplettschutz"
             },
             {
-                advantages: ["Diebstahlschutz", "Cyberschutz", "ohne Selbstbeteiligung"],
+                productType: "KOMPLETTSCHUTZ_2019",
+                applicationCode: "GU WG DE KS 0419",
+                basicRiskType: "KOMPLETTSCHUTZ",
+                scalesOfPrices: [300, 800, 1800],
+                documentTypes: {
+                    legalDocuments: [
+                        {
+                            type: documentType.LEGAL_NOTICE,
+                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                        }
+                    ],
+                    comparisonDocuments: []
+                },
+                advantages: [],
                 risks: ["DIEBSTAHLSCHUTZ"],
-                name: "Komplettschutz mit Premium"
+                name: "Komplettschutz mit Premium-Option"
             }
-        ],
-        singlePaymentFeatures:{},
-        recurringPaymentFeatures: {
-            risks: []
-        }
-    };
+        ]
+    }
 };
 

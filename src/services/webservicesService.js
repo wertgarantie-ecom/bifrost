@@ -1,14 +1,8 @@
+const documentTypes = require('./documentTypes').documentTypes;
 const _webservicesClient = require('./webservicesClient');
 const _documentRespository = require('../repositories/documentRepository');
 const _ = require('lodash');
 const uuid = require('uuid');
-
-const documentType = {
-    PRODUCT_INFORMATION_SHEET: "PIS", //Produktinformationsblatt
-    GENERAL_INSURANCE_PRODUCTS_INFORMATION: "IPID", //Informationsblatt für Versicherungsprodukte
-    GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE: "GTCI", // AVB
-    LEGAL_NOTICE: "LN" // Rechtsdokumente
-};
 
 exports.getProductOffers = function getProductOffers() {
     // id --> uuid
@@ -18,42 +12,48 @@ async function selectRelevantWertgarantieProducts(session, clientConfig, webserv
     const productData = await webservicesClient.getAgentData(session);
     return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE, false));
 }
+exports.selectRelevantWertgarantieProducts = selectRelevantWertgarantieProducts;
 
-async function assembleAllProductOffers(clientConfig) {
-    const session = await login(clientConfig);
-    return await Promise.all(clientConfig.productOfferConfigurations.map(config => assembleProductOffers(session, config)));
+async function assembleAllProductOffers(clientConfig, webservicesClient = _webservicesClient) {
+    const session = await webservicesClient.login(clientConfig);
+    const allWebservicesProductsForClient = await webservicesClient.getAgentData(session);
+    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffers(session, config, clientConfig.id, allWebservicesProductsForClient)));
 }
 
-async function assembleProductOffers(session, productOfferConfig) {
-    const webservicesProduct = findProductFor(session, productOfferConfig);
+async function assembleProductOffers(session, productOfferConfig, clientId, allWebservicesProductsForClient) {
+    const webservicesProduct = await findProductFor(productOfferConfig, allWebservicesProductsForClient);
     if (!webservicesProduct) {
         return undefined;
     }
     return {
         name: productOfferConfig.name,
         id: uuid(),
+        clientId: clientId,
         documents: await getDocuments(session, productOfferConfig),
         advantages: productOfferConfig.advantages,
         devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct)
     };
 }
+exports.assembleProductOffers = assembleProductOffers;
 
-async function findProductFor() {
+async function findProductFor(productOfferConfig, allWebservicesProductsForClient) {
+    return _.find(allWebservicesProductsForClient, product => product.APPLICATION_CODE === productOfferConfig.applicationCode && product.PRODUCT_TYPE === productOfferConfig.productType);
 }
+exports.findProductFor = findProductFor;
 
-async function getDocuments() {
+async function getDocuments(session, productOfferConfig) {
     const documents = [];
-    documents.push(...getLegalDocuments());
+    documents.push(...getLegalDocuments(session, productOfferConfig, ));
     documents.push(...getComparisonDocuments());
     return documents;
 }
+exports.getDocuments = getDocuments;
 
-async function getDevicePremiums() {
+async function getDevicePremiums(session, productOfferConfig, webservicesProduct) {
     getDevices().max(device => getPremiums())
 }
+exports.getDevicePremiums = getDevicePremiums;
 
-
-exports.selectRelevantWertgarantieProducts = selectRelevantWertgarantieProducts;
 
 exports.assembleProductOffers = async function assembleProductOffers(clientConfig, webservicesClient = _webservicesClient) {
     const session = await webservicesClient.login(clientConfig);
@@ -142,66 +142,102 @@ exports.getInsurancePremium = async function getInsurancePremium(session, applic
     return await webservicesClient.getInsurancePremium(session, applicationCode, productType, intervalValue, objectCode, objectPrice, riskTypes);
 };
 
-async function getLegalDocuments(session, applicationCode, productType, clientConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
-    const documentsResponse = await webservicesClient.getLegalDocuments(session, applicationCode, productType); // liefert aktuell alle Dokumente in einem wieder...
-    clientConfig.relevantProductTypes
-
-    const documentsForAppCode = _.filter(documentsResponse.RESULT.DOCUMENT, (document) => document.FILENAME.includes(applicationCode));
-
-    return documentsForAppCode.map(async (document) => {
-
+async function getLegalDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
+    const allLegalDocuments = await webservicesClient.getLegalDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
+    return await Promise.all(productOfferConfig.documentTypes.legalDocuments.map(async legalDocumentConfig => {
+        const document = _.find(allLegalDocuments.RESULT.DOCUMENT, (document) => document.FILENAME.match(legalDocumentConfig.pattern));
+        if (!document) {
+            return undefined;
+        }
         const documentID = await documentRespository.persistDocument(document);
-        // In Postgres-tabelle speichern --> zusammengesetzter primary key aus APPLICATION_CODE und document type
-        // link und document type bestimmen (hoffentlich werden die documents nochmal gesplittet - Mail is raus)
-        const documentType = clientConfig.relevantProductTypes[productType]
         return {
             document_title: document.FILENAME,
-            document_type: type,
+            document_type: legalDocumentConfig.type,
             document_id: documentID
         };
-    });
+    }));
 }
-
 exports.getLegalDocuments = getLegalDocuments;
+
+async function getComparisonDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
+    const allComparisonDocuments = await webservicesClient.getLegalDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
+    return await Promise.all(productOfferConfig.documentTypes.comparisonDocuments.map(async comparisonDocumentConfig => {
+        const document = _.find(allComparisonDocuments.RESULT.DOCUMENTS.DOCUMENT, (document) => document.FILENAME.match(comparisonDocumentConfig.pattern));
+        if (!document) {
+            return undefined;
+        }
+        const documentID = await documentRespository.persistDocument(document);
+        return {
+            document_title: document.FILENAME,
+            document_type: comparisonDocumentConfig.type,
+            document_id: documentID
+        };
+    }));
+}
+exports.getComparisonDocuments = getComparisonDocuments;
 
 const webservicesProductOffersConfig = {
     clientIdHandyFlash: {
         productOffersConfigurations: [
             {
+                name: "Komplettschutz",
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
-                scalesOfPrices: [300, 800, 1800],
+                deviceClasses: [
+                    {
+                        objectCode: 9025,
+                        externalObjectCode: "Smartphone",
+                        scalesOfPrices: [300, 800, 1800]
+                    },
+                    {
+                        objectCode: 73,
+                        externalObjectCode: "Mobilfunk",
+                        scalesOfPrices: [300, 800, 1800]
+                    }
+
+                ],
                 documentTypes: {
                     legalDocuments: [
                         {
-                            type: documentType.LEGAL_NOTICE,
+                            type: documentTypes.LEGAL_NOTICE,
                             pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                         }
                     ],
                     comparisonDocuments: []
                 },
                 advantages: [],
-                risks: [],
-                name: "Komplettschutz"
+                risks: []
             },
             {
+                name: "Komplettschutz mit Premium-Option",
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
-                scalesOfPrices: [300, 800, 1800],
+                deviceClasses: [
+                    {
+                        objectCode: 9025,
+                        externalObjectCode: "Smartphone",
+                        scalesOfPrices: [300, 800, 1800]
+                    },
+                    {
+                        objectCode: 73,
+                        externalObjectCode: "Mobilfunk",
+                        scalesOfPrices: [300, 800, 1800]
+                    }
+
+                ],
                 documentTypes: {
                     legalDocuments: [
                         {
-                            type: documentType.LEGAL_NOTICE,
+                            type: documentTypes.LEGAL_NOTICE,
                             pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                         }
                     ],
                     comparisonDocuments: []
                 },
                 advantages: [],
-                risks: ["DIEBSTAHLSCHUTZ"],
-                name: "Komplettschutz mit Premium-Option"
+                risks: ["DIEBSTAHLSCHUTZ"]
             }
         ]
     }
