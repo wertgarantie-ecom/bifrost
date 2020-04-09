@@ -6,15 +6,16 @@ exports.getProductOffers = function getProductOffers() {
     // id --> uuid
 };
 
+async function selectRelevantWertgarantieProducts(session, clientConfig, webservicesClient = _webservicesClient) {
+    const productData = await webservicesClient.getAgentData(session);
+    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.relevantProductTypes.reduce((acc, relevantProductType) => acc || relevantProductType.name === product.PRODUCT_TYPE, false));
+}
 
+exports.selectRelevantWertgarantieProducts = selectRelevantWertgarantieProducts;
 
 exports.assembleProductOffers = async function assembleProductOffers(clientConfig, webservicesClient = _webservicesClient) {
     const session = await webservicesClient.login(clientConfig);
-    const productData = await webservicesClient.getAgentData(session);
-
-    // pflege in clientConfig, welche PRODUCT_TYPES überhaupt relevant sind, dann danach filtern
-
-    const relevantProducts = _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.relevantProductTypes[product.PRODUCT_TYPE]);
+    const relevantProducts = selectRelevantWertgarantieProducts(clientConfig, webservicesClient);
 
     const productOffers = await Promise.all(relevantProducts.map(async product => {
         const productOffer = {
@@ -124,11 +125,12 @@ exports.getLegalDocuments = async function getLegalDocuments(session, product, w
 const webservicesProductOffersConfig = {
     clientIdHandyFlash: {
         basicRiskType: "KOMPLETTSCHUTZ",
-        relevantProductTypes: {
-            "KOMPLETTSCHUTZ_2019": {
+        relevantProductTypes: [
+            {
+                name: "KOMPLETTSCHUTZ_2019",
                 scalesOfPrices: [300, 800, 1800]
             }
-        },
+        ],
         productOfferConfigurations: [
             {
                 advantages: [],
@@ -141,7 +143,7 @@ const webservicesProductOffersConfig = {
                 name: "Komplettschutz mit Premium"
             }
         ],
-        singlePaymentFeatures:{},
+        singlePaymentFeatures: {},
         recurringPaymentFeatures: {
             risks: []
         },
