@@ -59,6 +59,11 @@ exports.getAgentData = async function getAgentData(session, httpClient = axiosIn
            product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
        }
     });
+    result.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
+        if(!Array.isArray(product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE)) {
+            product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE = [product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE];
+        }
+    });
     return result;
 };
 
@@ -75,14 +80,6 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
     formData.append('PRODUCT_TYPE', productType);
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
-
-function createRiskTypeXml(riskType) {
-    return `
-        <RISK>
-            <RISIKOTYP>${riskType}</RISIKOTYP>
-        </RISK>
-    `;
-}
 
 exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
     const date = new Date();

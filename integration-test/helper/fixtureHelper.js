@@ -1,5 +1,6 @@
 const signatureService = require('../../src/services/signatureService');
 const clientService = require('../../src/services/clientService');
+const documentTypes = require('../../src/services/documentTypes').documentTypes;
 const uuid = require('uuid');
 
 exports.createAndPersistDefaultClient = async function createAndPersistDefaultClient() {
@@ -55,6 +56,7 @@ exports.createDefaultClient = function createDefaultClient() {
 
 exports.createDefaultClientWithWebservicesConfiguration = function createDefaultClientWithWebservicesConfiguration() {
     return {
+        id: "testclientId",
         name: "testclient",
         heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
         webservices: {
@@ -70,40 +72,114 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         activePartnerNumber: 12345,
         productOffersConfigurations: [
             {
+                name: "Komplettschutz",
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
-                scalesOfPrices: [300, 800, 1800],
+                deviceClasses: [
+                    {
+                        objectCode: "9025",
+                        objectCodeExternal: "Smartphone",
+                        priceRanges: [
+                            {
+                                min: 0,
+                                max: 300
+                            },
+                            {
+                                min: 300,
+                                max: 800
+                            },
+                            {
+                                min: 800,
+                                max: 1800
+                            }]
+                    },
+                    {
+                        objectCode: "73",
+                        objectCodeExternal: "Mobilfunk",
+                        priceRanges: [
+                            {
+                                min: 0,
+                                max: 300
+                            },
+                            {
+                                min: 300,
+                                max: 800
+                            },
+                            {
+                                min: 800,
+                                max: 1800
+                            }]
+                    }
+
+                ],
                 documentTypes: {
                     legalDocuments: [
                         {
-                            type: documentType.LEGAL_NOTICE,
+                            type: documentTypes.LEGAL_NOTICE,
                             pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                         }
                     ],
                     comparisonDocuments: []
                 },
                 advantages: [],
-                risks: [],
-                name: "Komplettschutz"
+                risks: []
             },
             {
+                name: "Komplettschutz mit Premium-Option",
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
-                scalesOfPrices: [300, 800, 1800],
+                deviceClasses: [
+                    {
+                        objectCode: "9025",
+                        objectCodeExternal: "Smartphone",
+                        priceRanges: [
+                            {
+                                minClose: 0,
+                                maxOpen: 300
+                            },
+                            {
+                                minClose: 300,
+                                maxOpen: 800
+                            },
+                            {
+                                minClose: 800,
+                                maxOpen: 1800
+                            }
+                        ]
+                    },
+                    {
+                        objectCode: "73",
+                        objectCodeExternal: "Mobilfunk",
+                        priceRanges: [
+                            {
+                                minClose: 0,
+                                maxOpen: 300
+                            },
+                            {
+                                minClose: 300,
+                                maxOpen: 800
+                            },
+                            {
+                                minClose: 800,
+                                maxOpen: 1800
+                            }
+                        ]
+                    }
+
+                ],
                 documentTypes: {
                     legalDocuments: [
                         {
-                            type: documentType.LEGAL_NOTICE,
+                            type: documentTypes.LEGAL_NOTICE,
                             pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                         }
                     ],
                     comparisonDocuments: []
                 },
                 advantages: [],
-                risks: ["DIEBSTAHLSCHUTZ"],
-                name: "Komplettschutz mit Premium-Option"
+                risks: ["DIEBSTAHLSCHUTZ"]
             }
         ]
     }

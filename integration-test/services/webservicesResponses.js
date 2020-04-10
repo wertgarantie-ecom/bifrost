@@ -149,11 +149,22 @@ exports.agentDataSingleProduct = {
                 "APPLICATION_CODE": "GU WG DE KS 0419",
                 "SIGNATURES": "0",
                 "PURCHASE_PRICE_LIMITATIONS": {
-                    "MAX_PRICE": {
-                        "OBJECT_DESCRIPTION": "Smartphone",
-                        "AMOUNT": "1800",
-                        "OBJECT_CODE": "9025"
-                    }
+                    "MAX_PRICE": [
+                        {
+                            "OBJECT_DESCRIPTION": "Mobilfunk",
+                            "AMOUNT": "1800",
+                            "OBJECT_CODE": "73"
+                        },
+                        {
+                            "OBJECT_DESCRIPTION": "Smartphone",
+                            "AMOUNT": "1800",
+                            "OBJECT_CODE": "9025"
+                        },
+                        {
+                            "AMOUNT": "10000",
+                            "OBJECT_CODE": {}
+                        }
+                    ]
                 },
                 "PRODUCT_TYPE": "KOMPLETTSCHUTZ_2019",
                 "PRODUCT_NAME": "Komplettschutz 2019",
