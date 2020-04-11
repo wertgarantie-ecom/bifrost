@@ -56,8 +56,8 @@ exports.createDefaultClient = function createDefaultClient() {
 
 exports.createDefaultClientWithWebservicesConfiguration = function createDefaultClientWithWebservicesConfiguration() {
     return {
-        id: "testclientId",
-        name: "testclient",
+        id: "testClientId",
+        name: "testClient",
         heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
         webservices: {
             username: "testusername",
@@ -82,34 +82,36 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         objectCodeExternal: "Smartphone",
                         priceRanges: [
                             {
-                                min: 0,
-                                max: 300
+                                minClose: 0,
+                                maxOpen: 300
                             },
                             {
-                                min: 300,
-                                max: 800
+                                minClose: 300,
+                                maxOpen: 800
                             },
                             {
-                                min: 800,
-                                max: 1800
-                            }]
+                                minClose: 800,
+                                maxOpen: 1800
+                            }
+                        ]
                     },
                     {
                         objectCode: "73",
                         objectCodeExternal: "Mobilfunk",
                         priceRanges: [
                             {
-                                min: 0,
-                                max: 300
+                                minClose: 0,
+                                maxOpen: 300
                             },
                             {
-                                min: 300,
-                                max: 800
+                                minClose: 300,
+                                maxOpen: 800
                             },
                             {
-                                min: 800,
-                                max: 1800
-                            }]
+                                minClose: 800,
+                                maxOpen: 1800
+                            }
+                        ]
                     }
 
                 ],

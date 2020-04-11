@@ -1,7 +1,7 @@
 const _webservicesClient = require('./webservicesClient');
 const _documentRespository = require('../repositories/documentRepository');
 const _ = require('lodash');
-const uuid = require('uuid');
+const _uuid = require('uuid');
 
 
 async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {
@@ -10,14 +10,14 @@ async function selectRelevantWebservicesProducts(session, clientConfig, webservi
 }
 
 
-async function assembleAllProductOffers(clientConfig, webservicesClient = _webservicesClient) {
+async function assembleAllProductOffers(clientConfig, webservicesClient = _webservicesClient, uuid = _uuid) {
     const session = await webservicesClient.login(clientConfig);
     const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, clientConfig, webservicesClient);
-    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffers(session, config, clientConfig.id, allWebservicesProductsForClient, webservicesClient)));
+    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffers(session, config, clientConfig.id, allWebservicesProductsForClient, webservicesClient, uuid)));
 }
 
 
-async function assembleProductOffers(session, productOfferConfig, clientId, allWebservicesProductsForClient, webservicesClient = _webservicesClient) {
+async function assembleProductOffers(session, productOfferConfig, clientId, allWebservicesProductsForClient, webservicesClient = _webservicesClient, uuid = _uuid) {
     const webservicesProduct = await findProductFor(productOfferConfig, allWebservicesProductsForClient);
     if (!webservicesProduct) {
         return undefined;

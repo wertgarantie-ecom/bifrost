@@ -324,36 +324,19 @@ test('should assemble product offers for client', async () => {
                 objectCodeExternal: "Smartphone",
                 priceRanges: [
                     {
-                        min: 0,
-                        max: 300
+                        minClose: 0,
+                        maxOpen: 300
                     },
                     {
-                        min: 300,
-                        max: 800
+                        minClose: 300,
+                        maxOpen: 800
                     },
                     {
-                        min: 800,
-                        max: 1800
-                    }]
-            },
-            {
-                objectCode: "73",
-                objectCodeExternal: "Mobilfunk",
-                priceRanges: [
-                    {
-                        min: 0,
-                        max: 300
-                    },
-                    {
-                        min: 300,
-                        max: 800
-                    },
-                    {
-                        min: 800,
-                        max: 1800
-                    }]
+                        minClose: 800,
+                        maxOpen: 1800
+                    }
+                ]
             }
-
         ],
         documentTypes: {
             legalDocuments: [
@@ -368,14 +351,55 @@ test('should assemble product offers for client', async () => {
         risks: []
     };
 
-    const result = await webservicesService.assembleProductOffers(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, mockWebservicesClient);
-    console.log(JSON.stringify(result, null, 2));
+    const uuid = () => "productOfferUuid";
+    const result = await webservicesService.assembleProductOffers(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, mockWebservicesClient, uuid);
+    expect(result).toEqual({
+        name: "Komplettschutz",
+        id: "productOfferUuid",
+        clientId: "public:publicId",
+        documents: [
+            {
+                document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                document_type: "LN"
+            }
+        ],
+        advantages: [],
+        devices: [expectedIntervalPremiumsForKS[0]]
+    });
 });
 
 // big big one
 test('should assembleAllProductOffers', async () => {
-    const result = await webservicesService.assembleAllProductOffers(testClientConfig, mockWebservicesClient);
-    console.log(JSON.stringify(result, null, 2));
+    const uuid = () => "productOfferUuid";
+    const result = await webservicesService.assembleAllProductOffers(testClientConfig, mockWebservicesClient, uuid);
+    expect(result).toEqual([
+        {
+            name: "Komplettschutz",
+            id: "productOfferUuid",
+            clientId: "testClientId",
+            documents: [
+                {
+                    document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                    document_type: "LN"
+                }
+            ],
+            advantages: [],
+            devices: expectedIntervalPremiumsForKS
+        },
+        {
+            name: "Komplettschutz mit Premium-Option",
+            id: "productOfferUuid",
+            clientId: "testClientId",
+            documents: [
+                {
+                    document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                    document_type: "LN"
+                }
+            ],
+            advantages: [],
+            devices: expectedIntervalPremiumsForKS
+        }
+    ]);
 });
 
 const expectedIntervalPremiumsForKS = [
