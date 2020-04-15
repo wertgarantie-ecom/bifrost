@@ -1,20 +1,54 @@
 const Pool = require("../postgres").Pool;
+const CryptoJS = require('crypto-js');
 
-exports.persistDocument = async function persistDocument(documentInfo, documentBlob) {
-    // upsert
+exports.persistDocument = async function persistDocument(document) {
+    var hash = CryptoJS.SHA1(document.content).toString();
 
-    /*
-    *
-    *   create table if not exists documents (
-    *       id: hashwert aus blob,
-    *       documentname: string,
-    *       documentblob: blob,
-    *
-    *   )
-    *
-    *   hashe das blob und gucke ob es schon in der DB ist
-    *   wenn ja --> mache nichts und gib hash zurück
-    *   wenn nein --> überschreibe eintrag
-    * */
+    const pool = Pool.getInstance();
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const query = {
+            name: 'insert-document',
+            text: "INSERT INTO documents (id, name, type, content) VALUES ($1 , $2 , $3, $4);",
+            values: [
+                hash,
+                document.name,
+                document.type,
+                document.content
+            ]
+        };
+        await client.query(query);
+        await client.query('COMMIT');
+        return hash;
+    } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+    } finally {
+        client.release();
+    }
 };
+
+exports.findById = async function findById(id) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'find-document-by-id',
+        text: `select id, name, type, content from documents where id = $1`,
+        values: [id]
+    });
+    if (result.rowCount > 0) {
+        return toDocument(result.rows[0]);
+    } else {
+        return undefined;
+    }
+};
+
+function toDocument(row) {
+    return {
+        id: row.id,
+        content: row.content,
+        name: row.name,
+        type: row.type
+    }
+}
 
