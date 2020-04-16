@@ -271,15 +271,15 @@ test('should getDevicePremiums', async () => {
                 priceRanges: [
                     {
                         minClose: 0,
-                        maxOpen: 300
+                        maxOpen: 30000
                     },
                     {
-                        minClose: 300,
-                        maxOpen: 800
+                        minClose: 30000,
+                        maxOpen: 80000
                     },
                     {
-                        minClose: 800,
-                        maxOpen: 1800
+                        minClose: 80000,
+                        maxOpen: 180000
                     }
                 ]
             },
@@ -289,15 +289,15 @@ test('should getDevicePremiums', async () => {
                 priceRanges: [
                     {
                         minClose: 0,
-                        maxOpen: 300
+                        maxOpen: 30000
                     },
                     {
-                        minClose: 300,
-                        maxOpen: 800
+                        minClose: 30000,
+                        maxOpen: 80000
                     },
                     {
-                        minClose: 800,
-                        maxOpen: 1800
+                        minClose: 80000,
+                        maxOpen: 180000
                     }
                 ]
             }
@@ -305,7 +305,7 @@ test('should getDevicePremiums', async () => {
         ],
         risks: ["DIEBSTAHLSCHUTZ"]
     };
-    const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT
+    const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT;
     const result = await webservicesService.getDevicePremiums(session, productOfferConfig, webservicesProduct, mockWebservicesClient);
     expect(result).toEqual(expectedIntervalPremiumsForKS);
 });
@@ -325,15 +325,15 @@ test('should assemble product offers for client', async () => {
                 priceRanges: [
                     {
                         minClose: 0,
-                        maxOpen: 300
+                        maxOpen: 30000
                     },
                     {
-                        minClose: 300,
-                        maxOpen: 800
+                        minClose: 30000,
+                        maxOpen: 80000
                     },
                     {
-                        minClose: 800,
-                        maxOpen: 1800
+                        minClose: 80000,
+                        maxOpen: 180000
                     }
                 ]
             }
