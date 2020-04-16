@@ -61,6 +61,10 @@ app.use(function (err, req, res, next) {
         };
     } else if (err.name === 'ValidationError') {
         err.status = 400;
+        err.message = {
+            validations: err.errors,
+            received: err.instance
+        };
     } else if (err.name === 'HeimdallConnectionError') {
         err.status = 502;
     } else if (err.name === 'HeimdallClientError') {

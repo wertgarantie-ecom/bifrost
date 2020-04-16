@@ -50,10 +50,12 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
         productOffersConfigurations: createClientRequest.productOffersConfigurations
     };
-    try {
-        jsonschema.validate(clientData, newClientSchema, {throwError: true});
-    } catch (error) {
+    const validationResult = jsonschema.validate(clientData, newClientSchema);
+    if (!validationResult.valid) {
+        const error = new Error();
         error.name = "ValidationError";
+        error.errors = validationResult.errors;
+        error.instance = validationResult.instance;
         throw error;
     }
     return await repository.persistClientSettings(clientData);
