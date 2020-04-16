@@ -19,12 +19,18 @@ exports.persistProductOffersForClient = async function persistProductOffersForCl
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
-
+        const hash = hashProductOffers(productOffers);
+        if (await productOffersExists(productOffers[0].clientId, hash)) {
+            return productOffers;
+        }
         const query = {
             name: 'insert-product-offers',
-            text: "INSERT INTO productoffers (id, clientid, productoffers) VALUES ($1 , $2, $3);",
+            text: `INSERT INTO productoffers (clientid, hash, productoffers) VALUES ($1 , $2, $3)
+                    ON CONFLICT (clientId)
+                    DO UPDATE SET hash = $2, productoffers = $3`,
             values: [
                 productOffers[0].clientId,
+                hash,
                 JSON.stringify(productOffers)
             ]
         };
@@ -39,21 +45,33 @@ exports.persistProductOffersForClient = async function persistProductOffersForCl
     }
 };
 
+async function productOffersExists(clientId, hash) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'find-product-offers-by-client-id-and-hash',
+        text: `SELECT productoffers FROM productoffers  
+               WHERE clientid = $1
+               AND hash = $2`,
+        values: [clientId, hash]
+    });
+    if (result.rowCount > 0) {
+        return true
+    } else {
+        return false;
+    }
+}
+
 exports.findByClientId = async function findByClientId(clientId) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-product-offers-by-client-id',
-        text: `SELECT productoffers FROM client  
-               WHERE id = $1`,
+        text: `SELECT productoffers FROM productoffers  
+               WHERE clientid = $1`,
         values: [clientId]
     });
     if (result.rowCount > 0) {
-        return result.rows.map(toProductOffer);
+        return result.rows[0].productoffers;
     } else {
         return undefined;
     }
 };
-
-function toProductOffer(row) {
-    // make product offer
-}

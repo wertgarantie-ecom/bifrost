@@ -1,12 +1,15 @@
 const repository = require('../../src/repositories/productOffersRepository');
+const fixtureHelper = require('../helper/fixtureHelper');
+
 
 describe("test handle product offers for client", () => {
     test("persist productOffersForClient", async () => {
+        const client = await fixtureHelper.createAndPersistDefaultClient();
         const productOffers = [
             {
                 name: "Komplettschutz",
                 id: "productOfferUuid",
-                clientId: "testClientId",
+                clientId: client.id,
                 documents: [
                     {
                         document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
@@ -19,7 +22,7 @@ describe("test handle product offers for client", () => {
             {
                 name: "Komplettschutz mit Premium-Option",
                 id: "productOfferUuid",
-                clientId: "testClientId",
+                clientId: client.id,
                 documents: [
                     {
                         document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
@@ -32,9 +35,7 @@ describe("test handle product offers for client", () => {
         ];
 
         const result = await repository.persistProductOffersForClient(productOffers);
-        expect(result).toEqual({
-
-        });
+        expect(result).toEqual(productOffers);
     });
 });
 

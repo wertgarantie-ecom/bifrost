@@ -1,7 +1,7 @@
 ALTER TABLE client ADD COLUMN productoffersconfigurations jsonb;
 
 CREATE TABLE IF NOT EXISTS productOffers (
-    id text PRIMARY KEY,
-    clientId uuid REFERENCES client (id),
+	clientId uuid PRIMARY KEY REFERENCES client (id),
+    hash text,
     productOffers jsonb
 );
