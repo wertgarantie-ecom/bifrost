@@ -89,15 +89,15 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         priceRanges: [
                             {
                                 minClose: 0,
-                                maxOpen: 300
+                                maxOpen: 30000
                             },
                             {
-                                minClose: 300,
-                                maxOpen: 800
+                                minClose: 30000,
+                                maxOpen: 80000
                             },
                             {
-                                minClose: 800,
-                                maxOpen: 1800
+                                minClose: 80000,
+                                maxOpen: 180000
                             }
                         ]
                     },
@@ -107,15 +107,15 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         priceRanges: [
                             {
                                 minClose: 0,
-                                maxOpen: 300
+                                maxOpen: 30000
                             },
                             {
-                                minClose: 300,
-                                maxOpen: 800
+                                minClose: 30000,
+                                maxOpen: 80000
                             },
                             {
-                                minClose: 800,
-                                maxOpen: 1800
+                                minClose: 80000,
+                                maxOpen: 180000
                             }
                         ]
                     }
@@ -145,15 +145,15 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         priceRanges: [
                             {
                                 minClose: 0,
-                                maxOpen: 300
+                                maxOpen: 30000
                             },
                             {
-                                minClose: 300,
-                                maxOpen: 800
+                                minClose: 30000,
+                                maxOpen: 80000
                             },
                             {
-                                minClose: 800,
-                                maxOpen: 1800
+                                minClose: 80000,
+                                maxOpen: 180000
                             }
                         ]
                     },
@@ -163,15 +163,15 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         priceRanges: [
                             {
                                 minClose: 0,
-                                maxOpen: 300
+                                maxOpen: 30000
                             },
                             {
-                                minClose: 300,
-                                maxOpen: 800
+                                minClose: 30000,
+                                maxOpen: 80000
                             },
                             {
-                                minClose: 800,
-                                maxOpen: 1800
+                                minClose: 80000,
+                                maxOpen: 180000
                             }
                         ]
                     }

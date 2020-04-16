@@ -3,7 +3,7 @@ const _documentRespository = require('../repositories/documentRepository');
 const _ = require('lodash');
 const _uuid = require('uuid');
 const clientService = require('./clientService');
-const productOfferRepository = require('../repositories/productOffersRepository');
+const _productOfferRepository = require('../repositories/productOffersRepository');
 const jsonschema = require('jsonschema');
 const productOfferSchema = require('../schemas/productOfferSchema').productOfferSchema;
 
@@ -23,8 +23,8 @@ async function updateProductOffersForAllClients(clients) {
     });
 }
 
-async function updateAllProductOffersForClient(clientConfig) {
-    const productOffers = await assembleAllProductOffersForClient(clientConfig);
+async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, productOfferRepository = _productOfferRepository, documentRepository = _documentRespository) {
+    const productOffers = await assembleAllProductOffersForClient(clientConfig, uuid, webservicesClient, documentRepository);
     productOffers.forEach(offer => {
         const validationResult = jsonschema.validate(offer, productOfferSchema);
         if (!validationResult.valid) {
@@ -32,6 +32,7 @@ async function updateAllProductOffersForClient(clientConfig) {
             error.name = "ValidationError";
             error.errors = validationResult.errors;
             error.instance = validationResult.instance;
+            error.message = JSON.stringify(validationResult.errors, null, 2);
             throw error;
         }
     });
@@ -76,9 +77,15 @@ async function getDocuments(session, productOfferConfig, webservicesClient = _we
 
 function findMaxPriceForDeviceClass(webservicesProduct, deviceClassConfig) {
     const priceLimitation = _.find(webservicesProduct.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE, limit => limit.OBJECT_CODE === deviceClassConfig.objectCode);
-    return priceLimitation ? priceLimitation.AMOUNT : undefined;
+    return priceLimitation ? parseStringToMinorUnit(priceLimitation.AMOUNT) : undefined;
 }
 
+function parseStringToMinorUnit(string) {
+    const float = parseFloat(string.replace(",", "."));
+    const minorUnits = float * 100;
+
+    return Math.round(minorUnits);
+}
 
 async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, applicationCode, productType, riskTypes, webservicesClient = _webservicesClient) {
     return await Promise.all(webservicesProduct.PAYMENTINTERVALS.INTERVAL.map(async interval => {
@@ -93,7 +100,7 @@ async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, de
             return {
                 minClose: range.minClose,
                 maxOpen: range.maxOpen,
-                insurancePremium: result.RESULT.PREMIUM_RECURRING
+                insurancePremium: parseStringToMinorUnit(result.RESULT.PREMIUM_RECURRING)
             };
         }));
         intervalData.priceRangePremiums.push(...priceRangePremiums);
@@ -154,12 +161,13 @@ async function getComparisonDocuments(session, productOfferConfig, webservicesCl
 }
 
 exports.selectRelevantWebservicesProducts = selectRelevantWebservicesProducts;
-exports.assembleAllProductOffers = assembleAllProductOffersForClient;
+exports.assembleAllProductOffersForClient = assembleAllProductOffersForClient;
 exports.findProductFor = findProductFor;
-exports.assembleProductOffers = assembleProductOffer;
+exports.assembleProductOffer = assembleProductOffer;
 exports.getDocuments = getDocuments;
 exports.findMaxPriceForDeviceClass = findMaxPriceForDeviceClass;
 exports.getIntervalPremiumsForPriceRanges = getIntervalPremiumsForPriceRanges;
 exports.getDevicePremiums = getDevicePremiums;
 exports.getLegalDocuments = getLegalDocuments;
 exports.getComparisonDocuments = getComparisonDocuments;
+exports.updateAllProductOffersForClient = updateAllProductOffersForClient;

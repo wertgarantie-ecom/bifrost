@@ -208,7 +208,7 @@ test('should findMaxPriceForDeviceClass', async () => {
     };
     const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT;
     const result = await webservicesService.findMaxPriceForDeviceClass(webservicesProduct, deviceClassConfig);
-    expect(result).toBe("1800");
+    expect(result).toBe(180000);
 });
 
 test('should getIntervalPremiumsForPriceRanges', async () => {
@@ -240,17 +240,17 @@ test('should getIntervalPremiumsForPriceRanges', async () => {
             {
                 "minClose": 0,
                 "maxOpen": 300,
-                "insurancePremium": "23,4"
+                "insurancePremium": 2340
             },
             {
                 "minClose": 300,
                 "maxOpen": 800,
-                "insurancePremium": "23,4"
+                "insurancePremium": 2340
             },
             {
                 "minClose": 800,
                 "maxOpen": 1800,
-                "insurancePremium": "23,4"
+                "insurancePremium": 2340
             }
         ]
     });
@@ -356,7 +356,7 @@ test('should assemble product offers for client', async () => {
     const documentRepository = {
         persistDocument: () => documentId
     };
-    const result = await webservicesService.assembleProductOffers(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, uuid, mockWebservicesClient, documentRepository);
+    const result = await webservicesService.assembleProductOffer(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, uuid, mockWebservicesClient, documentRepository);
     expect(result).toEqual({
         name: "Komplettschutz",
         id: "productOfferUuid",
@@ -373,22 +373,24 @@ test('should assemble product offers for client', async () => {
     });
 });
 
-// big big one
-test('should assembleAllProductOffers', async () => {
-    const uuid = () => "productOfferUuid";
-    const documentId = 1234;
-    const documentRepository = {
-        persistDocument: () => documentId
+test('should update all product offers for client', async () => {
+    const mockDocumentRepo = {
+        persistDocument: () => "1234"
     };
-    const result = await webservicesService.assembleAllProductOffers(testClientConfig, uuid, mockWebservicesClient, documentRepository);
+    const clientConfig = fixtureHelper.createDefaultClientWithWebservicesConfiguration();
+    const mockProductOfferRepo = {
+        persistProductOffersForClient: productOffers => productOffers
+    };
+    const uuid = () => "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd";
+    const result = await webservicesService.updateAllProductOffersForClient(clientConfig, uuid, mockWebservicesClient, mockProductOfferRepo, mockDocumentRepo);
     expect(result).toEqual([
         {
             name: "Komplettschutz",
-            id: "productOfferUuid",
+            id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
             clientId: "testClientId",
             documents: [
                 {
-                    documentId: documentId,
+                    documentId: "1234",
                     documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
                     documentType: "LN"
                 }
@@ -398,11 +400,11 @@ test('should assembleAllProductOffers', async () => {
         },
         {
             name: "Komplettschutz mit Premium-Option",
-            id: "productOfferUuid",
+            id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
             clientId: "testClientId",
             documents: [
                 {
-                    documentId: documentId,
+                    documentId: "1234",
                     documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
                     documentType: "LN"
                 }
@@ -410,14 +412,14 @@ test('should assembleAllProductOffers', async () => {
             advantages: [],
             devices: expectedIntervalPremiumsForKS
         }
-    ]);
+    ])
 });
 
 const expectedIntervalPremiumsForKS = [
     {
         "objectCode": "9025",
         "objectCodeExternal": "Smartphone",
-        "maxPriceLimitation": "1800",
+        "maxPriceLimitation": 180000,
         "intervals": [
             {
                 "intervalCode": "1",
@@ -425,18 +427,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             },
@@ -446,18 +448,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             },
@@ -467,18 +469,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             },
@@ -488,18 +490,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             }
@@ -508,7 +510,7 @@ const expectedIntervalPremiumsForKS = [
     {
         "objectCode": "73",
         "objectCodeExternal": "Mobilfunk",
-        "maxPriceLimitation": "1800",
+        "maxPriceLimitation": 180000,
         "intervals": [
             {
                 "intervalCode": "1",
@@ -516,18 +518,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             },
@@ -537,18 +539,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             },
@@ -558,18 +560,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             },
@@ -579,18 +581,18 @@ const expectedIntervalPremiumsForKS = [
                 "priceRangePremiums": [
                     {
                         "minClose": 0,
-                        "maxOpen": 300,
-                        "insurancePremium": "23,4"
+                        "maxOpen": 30000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 300,
-                        "maxOpen": 800,
-                        "insurancePremium": "23,4"
+                        "minClose": 30000,
+                        "maxOpen": 80000,
+                        "insurancePremium": 2340
                     },
                     {
-                        "minClose": 800,
-                        "maxOpen": 1800,
-                        "insurancePremium": "23,4"
+                        "minClose": 80000,
+                        "maxOpen": 180000,
+                        "insurancePremium": 2340
                     }
                 ]
             }
