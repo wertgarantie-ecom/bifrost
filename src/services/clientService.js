@@ -50,8 +50,13 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
         productOffersConfigurations: createClientRequest.productOffersConfigurations
     };
-    jsonschema.validate(clientData, newClientSchema, {throwError: true});
-    return await repository.persistClientSettings(clientData);
+    try {
+        jsonschema.validate(clientData, newClientSchema, {throwError: true});
+        return await repository.persistClientSettings(clientData);
+    } catch (error) {
+        error.name = "ValidationError";
+        throw error;
+    }
 };
 
 class InvalidClientIdError extends Error {

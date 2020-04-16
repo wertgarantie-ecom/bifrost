@@ -1,6 +1,4 @@
 module.exports.productOffersConfigSchema = {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/example.json",
     "type": "array",
     "items": {
         "type": "object",
