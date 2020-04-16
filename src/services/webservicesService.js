@@ -2,6 +2,10 @@ const _webservicesClient = require('./webservicesClient');
 const _documentRespository = require('../repositories/documentRepository');
 const _ = require('lodash');
 const _uuid = require('uuid');
+const clientService = require('./clientService');
+const productOfferRepository = require('../repositories/productOffersRepository');
+const jsonschema = require('jsonschema');
+const productOfferSchema = require('../schemas/productOfferSchema').productOfferSchema;
 
 
 async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {
@@ -9,15 +13,39 @@ async function selectRelevantWebservicesProducts(session, clientConfig, webservi
     return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE && productOfferConfig.applicationCode === product.APPLICATION_CODE, false));
 }
 
+async function updateProductOffersForAllClients(clients) {
+    if (!clients) {
+        clients = await clientService.findAllClients();
+    }
 
-async function assembleAllProductOffers(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
+    clients.map(client => {
+        updateAllProductOffersForClient(client);
+    });
+}
+
+async function updateAllProductOffersForClient(clientConfig) {
+    const productOffers = await assembleAllProductOffersForClient(clientConfig);
+    productOffers.forEach(offer => {
+        const validationResult = jsonschema.validate(offer, productOfferSchema);
+        if (!validationResult.valid) {
+            const error = new Error();
+            error.name = "ValidationError";
+            error.errors = validationResult.errors;
+            error.instance = validationResult.instance;
+            throw error;
+        }
+    });
+    return productOfferRepository.persistProductOffersForClient(productOffers);
+}
+
+async function assembleAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const session = await webservicesClient.login(clientConfig);
     const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, clientConfig, webservicesClient);
-    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffers(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)));
+    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffer(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)));
 }
 
 
-async function assembleProductOffers(session, productOfferConfig, clientId, allWebservicesProductsForClient, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
+async function assembleProductOffer(session, productOfferConfig, clientId, allWebservicesProductsForClient, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const webservicesProduct = await findProductFor(productOfferConfig, allWebservicesProductsForClient);
     if (!webservicesProduct) {
         return undefined;
@@ -126,9 +154,9 @@ async function getComparisonDocuments(session, productOfferConfig, webservicesCl
 }
 
 exports.selectRelevantWebservicesProducts = selectRelevantWebservicesProducts;
-exports.assembleAllProductOffers = assembleAllProductOffers;
+exports.assembleAllProductOffers = assembleAllProductOffersForClient;
 exports.findProductFor = findProductFor;
-exports.assembleProductOffers = assembleProductOffers;
+exports.assembleProductOffers = assembleProductOffer;
 exports.getDocuments = getDocuments;
 exports.findMaxPriceForDeviceClass = findMaxPriceForDeviceClass;
 exports.getIntervalPremiumsForPriceRanges = getIntervalPremiumsForPriceRanges;
