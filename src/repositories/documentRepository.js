@@ -8,6 +8,11 @@ exports.persistDocument = async function persistDocument(document) {
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
+
+        if (await this.findById(hash)) {
+            return hash;
+        }
+
         const query = {
             name: 'insert-document',
             text: "INSERT INTO documents (id, name, type, content) VALUES ($1 , $2 , $3, $4);",

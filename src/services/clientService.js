@@ -45,7 +45,8 @@ exports.addNewClient = async function addNewClient(requestBody) {
         webservices: requestBody.webservices,
         activePartnerNumber: requestBody.activePartnerNumber,
         secrets: requestBody.secrets || ['secret:' + uuid()],
-        publicClientIds: requestBody.publicClientIds || ['public:' + uuid()]
+        publicClientIds: requestBody.publicClientIds || ['public:' + uuid()],
+        productOffersConfigurations: requestBody.productOffersConfigurations
     };
     return await repository.persistClientSettings(clientData);
 };

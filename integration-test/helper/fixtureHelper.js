@@ -54,6 +54,12 @@ exports.createDefaultClient = function createDefaultClient() {
     };
 };
 
+
+exports.createAndPersistDefaultClientWithWebservicesConfiguratio = async function createAndPersistDefaultClientWithWebservicesConfiguratio() {
+    const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();
+    return await clientService.addNewClient(addNewClientRequest);
+};
+
 exports.createDefaultClientWithWebservicesConfiguration = function createDefaultClientWithWebservicesConfiguration() {
     return {
         id: "testClientId",
