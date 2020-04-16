@@ -44,10 +44,10 @@ exports.createDefaultClient = function createDefaultClient() {
             password: "testpassword",
         },
         publicClientIds: [
-            "public:testclient-publicId"
+            "public:" + uuid()
         ],
         secrets: [
-            "secret:testclient-secret"
+            "secret:" + uuid()
         ],
         activePartnerNumber: 12345,
 
@@ -70,10 +70,10 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
             password: "testpassword",
         },
         publicClientIds: [
-            "public:testclient-publicId"
+            "public:" + uuid()
         ],
         secrets: [
-            "secret:testclient-secret"
+            "secret:" + uuid()
         ],
         activePartnerNumber: 12345,
         productOffersConfigurations: [

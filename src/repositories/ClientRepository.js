@@ -156,7 +156,7 @@ function toClientData(row) {
         activePartnerNumber: row.activepartnernumber,
         secrets: row.secrets,
         publicClientIds: row.publicids,
-        productOffersConfigurations: row.productoffersconfigurations
+        productOffersConfigurations: row.productoffersconfigurations || undefined
     }
 }
 
