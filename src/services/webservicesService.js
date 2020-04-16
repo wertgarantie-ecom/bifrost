@@ -10,14 +10,14 @@ async function selectRelevantWebservicesProducts(session, clientConfig, webservi
 }
 
 
-async function assembleAllProductOffers(clientConfig, webservicesClient = _webservicesClient, uuid = _uuid) {
+async function assembleAllProductOffers(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const session = await webservicesClient.login(clientConfig);
     const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, clientConfig, webservicesClient);
-    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffers(session, config, clientConfig.id, allWebservicesProductsForClient, webservicesClient, uuid)));
+    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffers(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)));
 }
 
 
-async function assembleProductOffers(session, productOfferConfig, clientId, allWebservicesProductsForClient, webservicesClient = _webservicesClient, uuid = _uuid) {
+async function assembleProductOffers(session, productOfferConfig, clientId, allWebservicesProductsForClient, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const webservicesProduct = await findProductFor(productOfferConfig, allWebservicesProductsForClient);
     if (!webservicesProduct) {
         return undefined;
@@ -26,7 +26,7 @@ async function assembleProductOffers(session, productOfferConfig, clientId, allW
         name: productOfferConfig.name,
         id: uuid(),
         clientId: clientId,
-        documents: await getDocuments(session, productOfferConfig, webservicesClient),
+        documents: await getDocuments(session, productOfferConfig, webservicesClient, documentRepository),
         advantages: productOfferConfig.advantages,
         devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient)
     };
@@ -92,7 +92,6 @@ async function getDevicePremiums(session, productOfferConfig, webservicesProduct
 }
 
 
-
 async function getLegalDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
     const allLegalDocuments = await webservicesClient.getLegalDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
     return await Promise.all(productOfferConfig.documentTypes.legalDocuments.map(async legalDocumentConfig => {
@@ -102,9 +101,9 @@ async function getLegalDocuments(session, productOfferConfig, webservicesClient 
         }
         const documentID = await documentRespository.persistDocument(document);
         return {
-            document_title: document.FILENAME,
-            document_type: legalDocumentConfig.type,
-            document_id: documentID
+            documentTitle: document.FILENAME,
+            documentType: legalDocumentConfig.type,
+            documentId: documentID
         };
     }));
 }
@@ -119,9 +118,9 @@ async function getComparisonDocuments(session, productOfferConfig, webservicesCl
         }
         const documentID = await documentRespository.persistDocument(document);
         return {
-            document_title: document.FILENAME,
-            document_type: comparisonDocumentConfig.type,
-            document_id: documentID
+            documentTitle: document.FILENAME,
+            documentType: comparisonDocumentConfig.type,
+            documentId: documentID
         };
     }));
 }

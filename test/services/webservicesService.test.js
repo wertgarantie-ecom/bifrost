@@ -120,9 +120,9 @@ test('should getComparisonDocuments', async () => {
 
     const result = await webservicesService.getComparisonDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
     expect(result.length).toBe(1);
-    expect(result[0].document_title).toEqual("EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF");
-    expect(result[0].document_type).toEqual(documentTypes.COMPARISON);
-    expect(result[0].document_id).toEqual("comparisonDocumentID");
+    expect(result[0].documentTitle).toEqual("EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF");
+    expect(result[0].documentType).toEqual(documentTypes.COMPARISON);
+    expect(result[0].documentId).toEqual("comparisonDocumentID");
 });
 
 test('should not have comparison documents if not configured', async () => {
@@ -158,9 +158,9 @@ test('should getLegalDocuments', async () => {
 
     const result = await webservicesService.getLegalDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
     expect(result.length).toBe(1);
-    expect(result[0].document_title).toEqual("GU WG DE KS 0419_RECHTSDOKUMENTE.PDF");
-    expect(result[0].document_type).toEqual(documentTypes.LEGAL_NOTICE);
-    expect(result[0].document_id).toEqual("legalDocumentID");
+    expect(result[0].documentTitle).toEqual("GU WG DE KS 0419_RECHTSDOKUMENTE.PDF");
+    expect(result[0].documentType).toEqual(documentTypes.LEGAL_NOTICE);
+    expect(result[0].documentId).toEqual("legalDocumentID");
 });
 
 test('should getDocuments', async () => {
@@ -182,9 +182,9 @@ test('should getDocuments', async () => {
     };
     const result = await webservicesService.getDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
     expect(result.length).toBe(1);
-    expect(result[0].document_title).toEqual("GU WG DE KS 0419_RECHTSDOKUMENTE.PDF");
-    expect(result[0].document_type).toEqual(documentTypes.LEGAL_NOTICE);
-    expect(result[0].document_id).toEqual("legalDocumentID");
+    expect(result[0].documentTitle).toEqual("GU WG DE KS 0419_RECHTSDOKUMENTE.PDF");
+    expect(result[0].documentType).toEqual(documentTypes.LEGAL_NOTICE);
+    expect(result[0].documentId).toEqual("legalDocumentID");
 });
 
 test('should findMaxPriceForDeviceClass', async () => {
@@ -352,15 +352,20 @@ test('should assemble product offers for client', async () => {
     };
 
     const uuid = () => "productOfferUuid";
-    const result = await webservicesService.assembleProductOffers(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, mockWebservicesClient, uuid);
+    const documentId = 1234;
+    const documentRepository = {
+        persistDocument: () => documentId
+    };
+    const result = await webservicesService.assembleProductOffers(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, uuid, mockWebservicesClient, documentRepository);
     expect(result).toEqual({
         name: "Komplettschutz",
         id: "productOfferUuid",
         clientId: "public:publicId",
         documents: [
             {
-                document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                document_type: "LN"
+                documentId: documentId,
+                documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                documentType: "LN"
             }
         ],
         advantages: [],
@@ -371,7 +376,11 @@ test('should assemble product offers for client', async () => {
 // big big one
 test('should assembleAllProductOffers', async () => {
     const uuid = () => "productOfferUuid";
-    const result = await webservicesService.assembleAllProductOffers(testClientConfig, mockWebservicesClient, uuid);
+    const documentId = 1234;
+    const documentRepository = {
+        persistDocument: () => documentId
+    };
+    const result = await webservicesService.assembleAllProductOffers(testClientConfig, uuid, mockWebservicesClient, documentRepository);
     expect(result).toEqual([
         {
             name: "Komplettschutz",
@@ -379,8 +388,9 @@ test('should assembleAllProductOffers', async () => {
             clientId: "testClientId",
             documents: [
                 {
-                    document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                    document_type: "LN"
+                    documentId: documentId,
+                    documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                    documentType: "LN"
                 }
             ],
             advantages: [],
@@ -392,8 +402,9 @@ test('should assembleAllProductOffers', async () => {
             clientId: "testClientId",
             documents: [
                 {
-                    document_title: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                    document_type: "LN"
+                    documentId: documentId,
+                    documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                    documentType: "LN"
                 }
             ],
             advantages: [],
