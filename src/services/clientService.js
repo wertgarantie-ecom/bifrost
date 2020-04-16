@@ -52,11 +52,11 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
     };
     try {
         jsonschema.validate(clientData, newClientSchema, {throwError: true});
-        return await repository.persistClientSettings(clientData);
     } catch (error) {
         error.name = "ValidationError";
         throw error;
     }
+    return await repository.persistClientSettings(clientData);
 };
 
 class InvalidClientIdError extends Error {
