@@ -43,13 +43,14 @@ exports.login = async function login(clientData, httpClient = axiosInstance) {
     return response.SESSION;
 };
 
-exports.getAgentData = async function getAgentData(session, httpClient = axiosInstance) {
+exports.getAgentData = async function getAgentData(session, clientConfig , httpClient = axiosInstance) {
     const formData = new FormData();
     formData.append('FUNCTION', 'GET_AGENT_DATA');
     formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('EXTENDED_RESULT', "true");
+    formData.append('AGENT_NR', clientConfig.activePartnerNumber);
     const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];

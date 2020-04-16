@@ -9,7 +9,7 @@ const productOfferSchema = require('../schemas/productOfferSchema').productOffer
 
 
 async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {
-    const productData = await webservicesClient.getAgentData(session);
+    const productData = await webservicesClient.getAgentData(session, clientConfig);
     return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE && productOfferConfig.applicationCode === product.APPLICATION_CODE, false));
 }
 
@@ -24,6 +24,9 @@ async function updateProductOffersForAllClients(clients) {
 }
 
 async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, productOfferRepository = _productOfferRepository, documentRepository = _documentRespository) {
+    if (!clientConfig.productOffersConfigurations) {
+        return undefined;
+    }
     const productOffers = await assembleAllProductOffersForClient(clientConfig, uuid, webservicesClient, documentRepository);
     productOffers.forEach(offer => {
         const validationResult = jsonschema.validate(offer, productOfferSchema);
