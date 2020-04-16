@@ -1,4 +1,18 @@
 const Pool = require("../postgres").Pool;
+const CryptoJS = require('crypto-js');
+
+function hashProductOffers(productOffers) {
+    const relevantOfferParts = productOffers.map(offer => {
+        return {
+            documents: offer.documents,
+            advantages: offer.advantages,
+            devices: offer.devices
+        };
+    });
+
+    const asString = JSON.stringify(relevantOfferParts);
+    return CryptoJS.SHA1(asString).toString();
+}
 
 exports.persistProductOffersForClient = async function persistProductOffersForClient(productOffers) {
     const pool = Pool.getInstance();
