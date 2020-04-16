@@ -194,15 +194,15 @@ test('should findMaxPriceForDeviceClass', async () => {
         priceRanges: [
             {
                 min: 0,
-                max: 300
+                max: 30000
             },
             {
-                min: 300,
-                max: 800
+                min: 30000,
+                max: 80000
             },
             {
-                min: 800,
-                max: 1800
+                min: 80000,
+                max: 180000
             }
         ]
     };
@@ -218,19 +218,19 @@ test('should getIntervalPremiumsForPriceRanges', async () => {
         priceRanges: [
             {
                 minClose: 0,
-                maxOpen: 300
+                maxOpen: 30000
             },
             {
-                minClose: 300,
-                maxOpen: 800
+                minClose: 30000,
+                maxOpen: 80000
             },
             {
-                minClose: 800,
-                maxOpen: 1800
+                minClose: 80000,
+                maxOpen: 180000
             }
         ]
     };
-    const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT
+    const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT;
     const result = await webservicesService.getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", ["KOMPLETTSCHUTZ"], mockWebservicesClient);
     expect(result.length).toBe(4);
     expect(result[0]).toEqual({
@@ -239,17 +239,17 @@ test('should getIntervalPremiumsForPriceRanges', async () => {
         "priceRangePremiums": [
             {
                 "minClose": 0,
-                "maxOpen": 300,
+                "maxOpen": 30000,
                 "insurancePremium": 2340
             },
             {
-                "minClose": 300,
-                "maxOpen": 800,
+                "minClose": 30000,
+                "maxOpen": 80000,
                 "insurancePremium": 2340
             },
             {
-                "minClose": 800,
-                "maxOpen": 1800,
+                "minClose": 80000,
+                "maxOpen": 180000,
                 "insurancePremium": 2340
             }
         ]
