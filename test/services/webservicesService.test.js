@@ -362,6 +362,9 @@ test('should assemble product offers for client', async () => {
         name: "Komplettschutz",
         id: "productOfferUuid",
         clientId: "public:publicId",
+        applicationCode: productOfferConfig.applicationCode,
+        productType: productOfferConfig.productType,
+        risks: productOfferConfig.risks,
         documents: [
             {
                 documentId: documentId,

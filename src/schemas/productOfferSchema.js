@@ -1,5 +1,6 @@
 module.exports.productOfferSchema = {
     "type": "object",
+    "additionalProperties": false,
     "properties": {
         "name": {
             "type": "string"

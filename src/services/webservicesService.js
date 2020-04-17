@@ -59,6 +59,9 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
     return {
         name: productOfferConfig.name,
         id: uuid(),
+        applicationCode: productOfferConfig.applicationCode,
+        risks: productOfferConfig.risks,
+        productType: productOfferConfig.productType,
         clientId: clientId,
         documents: await getDocuments(session, productOfferConfig, webservicesClient, documentRepository),
         advantages: productOfferConfig.advantages,
