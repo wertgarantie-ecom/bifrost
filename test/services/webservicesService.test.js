@@ -89,7 +89,7 @@ test('should find product for client product offer config', async () => {
 
 test('should getComparisonDocuments', async () => {
     const productOfferConfig = {
-        documentTypes: {
+        documents: {
             comparisonDocuments: [
                 {
                     type: documentTypes.COMPARISON,
@@ -112,13 +112,13 @@ test('should getComparisonDocuments', async () => {
 
 test('should not have comparison documents if not configured', async () => {
     const productOfferConfig = {
-        documentTypes: {
+        documents: {
             comparisonDocuments: []
         }
     };
 
     const documentRepository = {
-        persistDocument: () => "comparisonDocumentID"
+        persist: () => "comparisonDocumentID"
     };
 
     const result = await webservicesService.getComparisonDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
@@ -127,7 +127,7 @@ test('should not have comparison documents if not configured', async () => {
 
 test('should getLegalDocuments', async () => {
     const productOfferConfig = {
-        documentTypes: {
+        documents: {
             legalDocuments: [
                 {
                     type: documentTypes.LEGAL_NOTICE,
@@ -152,7 +152,7 @@ test('should getDocuments', async () => {
     const productOfferConfig = {
         applicationCode: "GU WG DE KS 0419",
         productType: "KOMPLETTSCHUTZ_2019",
-        documentTypes: {
+        documents: {
             legalDocuments: [
                 {
                     type: documentTypes.LEGAL_NOTICE,
@@ -323,7 +323,7 @@ test('should assemble product offers for client', async () => {
                 ]
             }
         ],
-        documentTypes: {
+        documents: {
             legalDocuments: [
                 {
                     type: documentTypes.LEGAL_NOTICE,
