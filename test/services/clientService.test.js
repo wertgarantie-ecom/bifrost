@@ -72,50 +72,10 @@ test('should reject client with invalid offers config', async () => {
         productOffersConfigurations: [{
             "bla": "bla bla"
         }]
-        // productOffersConfigurations: [
-        //     {
-        //         name: "Komplettschutz",
-        //         productType: "KOMPLETTSCHUTZ_2019",
-        //         applicationCode: "GU WG DE KS 0419",
-        //         deviceClasses: [
-        //             {
-        //                 objectCode: "9025",
-        //                 objectCodeExternal: "Smartphone",
-        //                 priceRanges: [
-        //                     {
-        //                         minClose: 0,
-        //                         maxOpen: 300
-        //                     },
-        //                     {
-        //                         minClose: 300,
-        //                         maxOpen: 800
-        //                     },
-        //                     {
-        //                         minClose: 800,
-        //                         maxOpen: 1800
-        //                     }
-        //                 ]
-        //             }
-        //         ],
-        //         documents: {
-        //             legalDocuments: [
-        //                 {
-        //                     type: documentTypes.LEGAL_NOTICE,
-        //                     mypattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-        //                 }
-        //             ],
-        //             comparisonDocuments: []
-        //         },
-        //         advantages: [],
-        //     }
-        // ]
     };
 
-    const repository = {
-        persistClientSettings: (client) => client
-    };
     try {
-        await clientService.addNewClient(data, repository);
+        await clientService.addNewClient(data);
         fail();
     } catch (error) {
         console.log(error);
