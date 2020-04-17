@@ -607,7 +607,7 @@ test('should not fail for client configs without product offer configuration', a
     expect(result).toEqual(undefined);
 });
 
-test('call webservices dev', async () => {
+test.skip('call webservices dev', async () => {
     const clientConfig = {
         "id": "99d98769-2b76-43c2-915e-534ee141de9a",
         "name": "handyflash",
