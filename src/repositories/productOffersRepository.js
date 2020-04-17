@@ -14,7 +14,7 @@ function hashProductOffers(productOffers) {
     return CryptoJS.SHA1(asString).toString();
 }
 
-exports.persistProductOffersForClient = async function persistProductOffersForClient(productOffers) {
+exports.persist = async function persist(productOffers) {
     const pool = Pool.getInstance();
     const client = await pool.connect();
     try {
@@ -54,11 +54,7 @@ async function productOffersExists(clientId, hash) {
                AND hash = $2`,
         values: [clientId, hash]
     });
-    if (result.rowCount > 0) {
-        return true
-    } else {
-        return false;
-    }
+    return result.rowCount > 0;
 }
 
 exports.findByClientId = async function findByClientId(clientId) {

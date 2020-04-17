@@ -34,7 +34,7 @@ describe("test handle product offers for client", () => {
             }
         ];
 
-        const result = await repository.persistProductOffersForClient(productOffers);
+        const result = await repository.persist(productOffers);
         expect(result).toEqual(productOffers);
     });
 });

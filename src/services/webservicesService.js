@@ -39,13 +39,15 @@ async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webse
             throw error;
         }
     });
-    return productOfferRepository.persistProductOffersForClient(productOffers);
+    return productOfferRepository.persist(productOffers);
 }
 
 async function assembleAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const session = await webservicesClient.login(clientConfig);
     const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, clientConfig, webservicesClient);
-    return await Promise.all(clientConfig.productOffersConfigurations.map(config => assembleProductOffer(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)));
+    return await Promise.all(clientConfig.productOffersConfigurations
+        .map(config => assembleProductOffer(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)))
+        .then(offers => offers.filter(offer => offer !== undefined));
 }
 
 

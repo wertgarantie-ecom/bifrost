@@ -36,10 +36,10 @@ describe("webservices roundtrip", () => {
 
     test("should get agent data", async () => {
         nockHelper.nockGetAgentData();
-        const agentData = await webservicesClient.getAgentData(session);
+        const agentData = await webservicesClient.getAgentData(session, clientConfig);
         const expectedResult = _.cloneDeep(agentData);
         expectedResult.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
-            if(!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
+            if (!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
                 product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
             }
         });
