@@ -675,7 +675,7 @@ test('should not fail if no products are matching for the given offers configura
         ]
     };
 
-    productOfferRepository = {
+    const productOfferRepository = {
         persist: (productOffers) => productOffers
     };
     const result = await webservicesService.updateAllProductOffersForClient(clientConfig, undefined, mockWebservicesClient, productOfferRepository);
@@ -744,7 +744,7 @@ test.skip('call webservices dev', async () => {
                     }
 
                 ],
-                documentTypes: {
+                documents: {
                     legalDocuments: [
                         {
                             type: documentTypes.LEGAL_NOTICE,
@@ -800,7 +800,7 @@ test.skip('call webservices dev', async () => {
                     }
 
                 ],
-                documentTypes: {
+                documents: {
                     legalDocuments: [
                         {
                             type: documentTypes.LEGAL_NOTICE,
@@ -815,9 +815,9 @@ test.skip('call webservices dev', async () => {
         ]
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
-    const client = require('../../src/repositories/ClientRepository').persist(clientConfig);
+    const client = await require('../../src/repositories/ClientRepository').persist(clientConfig);
     process.env.WEBSERVICES_URI = "http://localhost:3001/webservices";
-    const offers = await webservicesService.updateAllProductOffersForClient(clientConfig);
+    const offers = await webservicesService.updateAllProductOffersForClient(client);
     console.log(JSON.stringify(offers, null, 2));
-});
+}, 60000);
 

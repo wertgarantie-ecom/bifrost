@@ -15,6 +15,9 @@ function hashProductOffers(productOffers) {
 }
 
 exports.persist = async function persist(productOffers) {
+    if (!productOffers || productOffers.length === 0) {
+        return [];
+    }
     const pool = Pool.getInstance();
     const client = await pool.connect();
     try {

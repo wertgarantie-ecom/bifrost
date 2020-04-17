@@ -86,6 +86,8 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
     const date = new Date();
     const dateFormatted = dateformat(date, 'dd.mm.yyyy');
     const manufacturerYear = date.getFullYear();
+    const objectPriceMajorUnits = (objectPrice/100) + "";
+    const objectPriceFormatted = objectPriceMajorUnits.replace(".", ",");
     const parametersJson = {
         "PARAMETERS": {
             "APPLICATION_CODE": applicationCode,
@@ -100,7 +102,7 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
         {
             "DEVICE": {
                 "OBJECT_CODE": objectCode,
-                "OBJECT_PRICE": objectPrice,
+                "OBJECT_PRICE": objectPriceFormatted,
                 "PURCHASE_DATE": dateFormatted,
                 "MANUFACTURER_YEAR": manufacturerYear,
                 "RISKS":
