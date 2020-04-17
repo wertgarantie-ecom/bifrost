@@ -3,6 +3,7 @@ const webservicesService = require('../../src/services/webservicesService');
 const fixtureHelper = require('../../integration-test/helper/fixtureHelper');
 const documentTypes = require('../../src/services/documentTypes').documentTypes;
 const _ = require('lodash');
+const uuid = require('uuid');
 
 const session = 'DG21586374946XD38P9X37K64BD3NI1L78XD9GR93B33E3N34CO456R26KL2DE5';
 const testClientConfig = fixtureHelper.createDefaultClientWithWebservicesConfiguration();
@@ -691,16 +692,19 @@ test('should not fail if no products are matching for the given offers configura
 
 test.skip('call webservices dev', async () => {
     const clientConfig = {
-        "id": "99d98769-2b76-43c2-915e-534ee141de9a",
+        "id": uuid(),
         "name": "handyflash",
         "heimdallClientId": "0831cc8d-f5b8-4cfc-9c6c-6a08248348f2",
-        "webservices": {},
+        "webservices": {
+            username: "test-phone-user",
+            password: "test-phone-password"
+        },
         "activePartnerNumber": "1400689",
         "secrets": [
-            "secret:9b94e0da-75a3-11ea-829c-9f33247ea535"
+            "secret:" + uuid()
         ],
         "publicClientIds": [
-            "public:9fc8764e-75a3-11ea-a64e-0b231b5109b9"
+            "public:" + uuid()
         ],
         productOffersConfigurations: [
             {
@@ -756,7 +760,7 @@ test.skip('call webservices dev', async () => {
                     ],
                     comparisonDocuments: []
                 },
-                advantages: [],
+                advantages: ["Das schon toll hier", "alles wird gut", "Corona Party!!!"],
                 risks: []
             },
             {
@@ -812,13 +816,14 @@ test.skip('call webservices dev', async () => {
                     ],
                     comparisonDocuments: []
                 },
-                advantages: [],
+                advantages: ["total geiler diebstahlschutz", "was gegen Wasser", "mit Soße"],
                 risks: ["DIEBSTAHLSCHUTZ"]
             }
         ]
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
-    process.env.WEBSERVICES_URI = "https://webtest.serviceeu.com/mdp/ws/dev";
+    const client = require('../../src/repositories/ClientRepository').persistClientSettings(clientConfig);
+    process.env.WEBSERVICES_URI = "http://localhost:3001/webservices";
     const offers = await webservicesService.updateAllProductOffersForClient(clientConfig);
     console.log(JSON.stringify(offers, null, 2));
 });
