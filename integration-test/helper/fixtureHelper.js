@@ -55,7 +55,7 @@ exports.createDefaultClient = function createDefaultClient() {
 };
 
 
-exports.createAndPersistDefaultClientWithWebservicesConfiguratio = async function createAndPersistDefaultClientWithWebservicesConfiguratio() {
+exports.createAndPersistDefaultClientWithWebservicesConfiguration = async function createAndPersistDefaultClientWithWebservicesConfiguratio() {
     const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();
     return await clientService.addNewClient(addNewClientRequest);
 };
@@ -121,7 +121,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                     }
 
                 ],
-                documentTypes: {
+                documents: {
                     legalDocuments: [
                         {
                             type: documentTypes.LEGAL_NOTICE,
@@ -177,7 +177,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                     }
 
                 ],
-                documentTypes: {
+                documents: {
                     legalDocuments: [
                         {
                             type: documentTypes.LEGAL_NOTICE,

@@ -56,6 +56,7 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         error.name = "ValidationError";
         error.errors = validationResult.errors;
         error.instance = validationResult.instance;
+        error.message = JSON.stringify(validationResult.errors, null, 2);
         throw error;
     }
     return await repository.persist(clientData);

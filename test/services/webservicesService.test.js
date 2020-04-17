@@ -2,26 +2,10 @@ const webservicesResponses = require('../../integration-test/services/webservice
 const webservicesService = require('../../src/services/webservicesService');
 const fixtureHelper = require('../../integration-test/helper/fixtureHelper');
 const documentTypes = require('../../src/services/documentTypes').documentTypes;
-const _ = require('lodash');
 const uuid = require('uuid');
 
 const session = 'DG21586374946XD38P9X37K64BD3NI1L78XD9GR93B33E3N34CO456R26KL2DE5';
-const testClientConfig = fixtureHelper.createDefaultClientWithWebservicesConfiguration();
-const mockWebservicesClient = {
-    getLegalDocuments: () => webservicesResponses.multipleLegalDocuments,
-    getComparisonDocuments: () => webservicesResponses.multipleComparisonDocumentsResponse,
-    login: () => session,
-    getAgentData: () => {
-        const agentData = _.cloneDeep(webservicesResponses.agentDataMultipleProducts);
-        agentData.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
-            if (!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
-                product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
-            }
-        });
-        return agentData;
-    },
-    getInsurancePremium: () => webservicesResponses.insurancePremiumResponse
-};
+const mockWebservicesClient = require('../helpers/webserviceMockClient').createMockWebserviceClient(session);
 
 const allRelevantWebservicesProducts = [{
     "RISKS": {
@@ -392,6 +376,9 @@ test('should update all product offers for client', async () => {
             name: "Komplettschutz",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
             clientId: "testClientId",
+            applicationCode: "GU WG DE KS 0419",
+            productType: "KOMPLETTSCHUTZ_2019",
+            risks: [],
             documents: [
                 {
                     documentId: "1234",
@@ -406,6 +393,9 @@ test('should update all product offers for client', async () => {
             name: "Komplettschutz mit Premium-Option",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
             clientId: "testClientId",
+            applicationCode: "GU WG DE KS 0419",
+            productType: "KOMPLETTSCHUTZ_2019",
+            risks: ["DIEBSTAHLSCHUTZ"],
             documents: [
                 {
                     documentId: "1234",

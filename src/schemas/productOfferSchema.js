@@ -9,6 +9,18 @@ module.exports.productOfferSchema = {
             "type": "string",
             "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}"
         },
+        "productType": {
+            "type": "string"
+        },
+        "applicationCode": {
+            "type": "string"
+        },
+        "risks": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
         "clientId": {
             "type": "string"
         },
@@ -105,6 +117,8 @@ module.exports.productOfferSchema = {
         "name",
         "id",
         "clientId",
-        "documents"
+        "documents",
+        "productType",
+        "risks"
     ]
 };

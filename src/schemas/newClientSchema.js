@@ -2,6 +2,7 @@ const productOffersConfigSchema = require('./productOffersConfigSchema').product
 
 module.exports.newClientSchema = {
     "type": "object",
+    "additionalProperties": false,
     "required": [
         "id",
         "name",

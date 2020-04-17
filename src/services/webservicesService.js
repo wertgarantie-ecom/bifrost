@@ -137,7 +137,7 @@ async function getDevicePremiums(session, productOfferConfig, webservicesProduct
 
 async function getLegalDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
     const allLegalDocuments = await webservicesClient.getLegalDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
-    return await Promise.all(productOfferConfig.documentTypes.legalDocuments.map(async legalDocumentConfig => {
+    return await Promise.all(productOfferConfig.documents.legalDocuments.map(async legalDocumentConfig => {
         const document = _.find(allLegalDocuments.RESULT.DOCUMENT, (document) => document.FILENAME.match(legalDocumentConfig.pattern));
         if (!document) {
             return undefined;
@@ -154,7 +154,7 @@ async function getLegalDocuments(session, productOfferConfig, webservicesClient 
 
 async function getComparisonDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
     const allComparisonDocuments = await webservicesClient.getComparisonDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
-    return await Promise.all(productOfferConfig.documentTypes.comparisonDocuments.map(async comparisonDocumentConfig => {
+    return await Promise.all(productOfferConfig.documents.comparisonDocuments.map(async comparisonDocumentConfig => {
         const document = _.find(allComparisonDocuments.RESULT.DOCUMENTS.DOCUMENT, (document) => document.FILENAME.match(comparisonDocumentConfig.pattern));
         if (!document) {
             return undefined;
