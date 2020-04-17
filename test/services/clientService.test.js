@@ -53,7 +53,7 @@ test('should create client with valid offers config', async () => {
     };
 
     const repository = {
-        persistClientSettings: (client) => client
+        persist: (client) => client
     };
     const newClient = await clientService.addNewClient(data, repository);
 

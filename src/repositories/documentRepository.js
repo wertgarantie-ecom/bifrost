@@ -1,7 +1,7 @@
 const Pool = require("../postgres").Pool;
 const CryptoJS = require('crypto-js');
 
-exports.persistDocument = async function persistDocument(document) {
+exports.persist = async function persist(document) {
     var hash = CryptoJS.SHA1(document.content).toString();
 
     const pool = Pool.getInstance();

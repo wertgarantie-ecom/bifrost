@@ -58,7 +58,7 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         error.instance = validationResult.instance;
         throw error;
     }
-    return await repository.persistClientSettings(clientData);
+    return await repository.persist(clientData);
 };
 
 class InvalidClientIdError extends Error {

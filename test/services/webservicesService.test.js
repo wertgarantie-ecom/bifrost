@@ -116,7 +116,7 @@ test('should getComparisonDocuments', async () => {
     };
 
     const documentRepository = {
-        persistDocument: () => "comparisonDocumentID"
+        persist: () => "comparisonDocumentID"
     };
 
     const result = await webservicesService.getComparisonDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
@@ -154,7 +154,7 @@ test('should getLegalDocuments', async () => {
     };
 
     const documentRepository = {
-        persistDocument: () => "legalDocumentID"
+        persist: () => "legalDocumentID"
     };
 
     const result = await webservicesService.getLegalDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
@@ -179,7 +179,7 @@ test('should getDocuments', async () => {
         }
     };
     const documentRepository = {
-        persistDocument: () => "legalDocumentID"
+        persist: () => "legalDocumentID"
     };
     const result = await webservicesService.getDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
     expect(result.length).toBe(1);
@@ -355,7 +355,7 @@ test('should assemble product offers for client', async () => {
     const uuid = () => "productOfferUuid";
     const documentId = 1234;
     const documentRepository = {
-        persistDocument: () => documentId
+        persist: () => documentId
     };
     const result = await webservicesService.assembleProductOffer(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, uuid, mockWebservicesClient, documentRepository);
     expect(result).toEqual({
@@ -376,11 +376,11 @@ test('should assemble product offers for client', async () => {
 
 test('should update all product offers for client', async () => {
     const mockDocumentRepo = {
-        persistDocument: () => "1234"
+        persist: () => "1234"
     };
     const clientConfig = fixtureHelper.createDefaultClientWithWebservicesConfiguration();
     const mockProductOfferRepo = {
-        persistProductOffersForClient: productOffers => productOffers
+        persist: productOffers => productOffers
     };
     const uuid = () => "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd";
     const result = await webservicesService.updateAllProductOffersForClient(clientConfig, uuid, mockWebservicesClient, mockProductOfferRepo, mockDocumentRepo);
@@ -822,7 +822,7 @@ test.skip('call webservices dev', async () => {
         ]
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
-    const client = require('../../src/repositories/ClientRepository').persistClientSettings(clientConfig);
+    const client = require('../../src/repositories/ClientRepository').persist(clientConfig);
     process.env.WEBSERVICES_URI = "http://localhost:3001/webservices";
     const offers = await webservicesService.updateAllProductOffersForClient(clientConfig);
     console.log(JSON.stringify(offers, null, 2));

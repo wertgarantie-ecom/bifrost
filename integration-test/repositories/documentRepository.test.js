@@ -10,7 +10,7 @@ describe("could retrieve persisted document", () => {
     let id;
 
     test('should persist document', async () => {
-        id = await repository.persistDocument(document)
+        id = await repository.persist(document)
     });
 
     test('could retrieve document by id', async () => {

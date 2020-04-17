@@ -1,6 +1,6 @@
 const Pool = require("../postgres").Pool;
 
-exports.persistClientSettings = async function persistClientSettings(clientData) {
+exports.persist = async function persist(clientData) {
     const pool = Pool.getInstance();
     const client = await pool.connect();
     try {
