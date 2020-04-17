@@ -6,7 +6,7 @@ const uuid = require('uuid');
 const nockhelper = require('../helper/nockHelper');
 
 test('should return shopping cart with selected product included', async () => {
-    const client = await testhelper.createDefaultClient();
+    const client = await testhelper.createAndPersistDefaultClient();
 
     const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
         .send({
@@ -44,7 +44,7 @@ describe("Checkout Shopping Cart", () => {
     const sessionId = uuid();
 
     test("should checkout shopping cart", async (done) => {
-        clientData = await testhelper.createDefaultClient();
+        clientData = await testhelper.createAndPersistDefaultClient();
         const wertgarantieProductId = 10;
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =

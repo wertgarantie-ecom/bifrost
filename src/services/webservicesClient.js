@@ -43,17 +43,28 @@ exports.login = async function login(clientData, httpClient = axiosInstance) {
     return response.SESSION;
 };
 
-exports.getAgentData = async function getAgentData(session, httpClient = axiosInstance) {
+exports.getAgentData = async function getAgentData(session, clientConfig , httpClient = axiosInstance) {
     const formData = new FormData();
     formData.append('FUNCTION', 'GET_AGENT_DATA');
     formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('EXTENDED_RESULT', "true");
+    formData.append('AGENT_NR', clientConfig.activePartnerNumber);
     const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
     }
+    result.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
+       if(!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
+           product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
+       }
+    });
+    result.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
+        if(!Array.isArray(product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE)) {
+            product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE = [product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE];
+        }
+    });
     return result;
 };
 
@@ -71,18 +82,12 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
-function createRiskTypeXml(riskType) {
-    return `
-        <RISK>
-            <RISIKOTYP>${riskType}</RISIKOTYP>
-        </RISK>
-    `;
-}
-
 exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
     const date = new Date();
     const dateFormatted = dateformat(date, 'dd.mm.yyyy');
     const manufacturerYear = date.getFullYear();
+    const objectPriceMajorUnits = (objectPrice/100) + "";
+    const objectPriceFormatted = objectPriceMajorUnits.replace(".", ",");
     const parametersJson = {
         "PARAMETERS": {
             "APPLICATION_CODE": applicationCode,
@@ -97,7 +102,7 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
         {
             "DEVICE": {
                 "OBJECT_CODE": objectCode,
-                "OBJECT_PRICE": objectPrice,
+                "OBJECT_PRICE": objectPriceFormatted,
                 "PURCHASE_DATE": dateFormatted,
                 "MANUFACTURER_YEAR": manufacturerYear,
                 "RISKS":
@@ -157,7 +162,11 @@ exports.getLegalDocuments = async function getLegalDocuments(session, applicatio
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
-    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    if (!Array.isArray(result.RESULT.DOCUMENT)) {
+        result.RESULT.DOCUMENT = [result.RESULT.DOCUMENT];
+    }
+    return result;
 };
 
 async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {

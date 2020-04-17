@@ -1,7 +1,7 @@
 const webservicesClient = require('../../src/services/webservicesClient');
 const nockHelper = require('../helper/nockHelper');
 const responses = require('./webservicesResponses');
-const dateformat = require('dateformat');
+const _ = require('lodash');
 
 describe("webservices roundtrip", () => {
     const clientConfig = {
@@ -36,10 +36,16 @@ describe("webservices roundtrip", () => {
 
     test("should get agent data", async () => {
         nockHelper.nockGetAgentData();
-        const agentData = await webservicesClient.getAgentData(session);
-        expect(agentData).toEqual(responses.agentDataMultipleProducts);
-        productType = agentData.RESULT.PRODUCT_LIST.PRODUCT[0].PRODUCT_TYPE;
-        applicationCode = agentData.RESULT.PRODUCT_LIST.PRODUCT[0].APPLICATION_CODE;
+        const agentData = await webservicesClient.getAgentData(session, clientConfig);
+        const expectedResult = _.cloneDeep(agentData);
+        expectedResult.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
+            if (!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
+                product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
+            }
+        });
+        expect(agentData).toEqual(expectedResult);
+        productType = agentData.RESULT.PRODUCT_LIST.PRODUCT[1].PRODUCT_TYPE;
+        applicationCode = agentData.RESULT.PRODUCT_LIST.PRODUCT[1].APPLICATION_CODE;
     });
 
     test("should get advertising texts", async () => {

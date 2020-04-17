@@ -10,7 +10,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
     const sessionId = uuid();
 
     test("checkout shopping cart", async () => {
-        clientData = await testhelper.createDefaultClient();
+        clientData = await testhelper.createAndPersistDefaultClient();
         const wertgarantieProductId = 10;
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =
@@ -89,7 +89,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
 describe("Check Checkout via after sales component ", () => {
     test("checkout via component", async () => {
         const sessionId = uuid();
-        const clientData = await testhelper.createDefaultClient();
+        const clientData = await testhelper.createAndPersistDefaultClient();
         const encryptedSessionId = signatureService.signString(sessionId, clientData.secrets[0]);
         const wertgarantieProductId = 10;
         const wertgarantieProductName = 'Basic';

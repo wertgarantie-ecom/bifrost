@@ -1,8 +1,10 @@
-const repository = require('../repositories/ClientRepository');
+const _repository = require('../repositories/ClientRepository');
 const uuid = require('uuid');
+const jsonschema = require('jsonschema');
+const newClientSchema = require('../schemas/newClientSchema').newClientSchema;
 
 exports.findClientById = async function findClientById(id) {
-    const client = await repository.findClientById(id);
+    const client = await _repository.findClientById(id);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified ID: ${id}`);
     }
@@ -10,7 +12,7 @@ exports.findClientById = async function findClientById(id) {
 };
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
-    const client = await repository.findClientForSecret(secret);
+    const client = await _repository.findClientForSecret(secret);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified secret.`)
     }
@@ -18,7 +20,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
 };
 
 exports.findClientForPublicClientId = async function findClientForPublicClientId(publicClientId) {
-    const client = await repository.findClientForPublicClientId(publicClientId);
+    const client = await _repository.findClientForPublicClientId(publicClientId);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified public client ID: ${publicClientId}`);
     }
@@ -26,7 +28,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
 };
 
 exports.deleteClientById = async function deleteClientById(clientId) { // technical clientId
-    const isDeleted = await repository.deleteClientById(clientId);
+    const isDeleted = await _repository.deleteClientById(clientId);
     if (!isDeleted) {
         throw new InvalidClientIdError(`Could not delete client with technical id ${clientId}`);
     }
@@ -34,20 +36,30 @@ exports.deleteClientById = async function deleteClientById(clientId) { // techni
 };
 
 exports.findAllClients = async function findAllClients() {
-    return await repository.findAllClients();
+    return await _repository.findAllClients();
 };
 
-exports.addNewClient = async function addNewClient(requestBody) {
+exports.addNewClient = async function addNewClient(createClientRequest, repository = _repository) {
     const clientData = {
         id: uuid(),
-        name: requestBody.name,
-        heimdallClientId: requestBody.heimdallClientId,
-        webservices: requestBody.webservices,
-        activePartnerNumber: requestBody.activePartnerNumber,
-        secrets: requestBody.secrets || ['secret:' + uuid()],
-        publicClientIds: requestBody.publicClientIds || ['public:' + uuid()]
+        name: createClientRequest.name,
+        heimdallClientId: createClientRequest.heimdallClientId,
+        webservices: createClientRequest.webservices,
+        activePartnerNumber: createClientRequest.activePartnerNumber,
+        secrets: createClientRequest.secrets || ['secret:' + uuid()],
+        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
+        productOffersConfigurations: createClientRequest.productOffersConfigurations
     };
-    return await repository.persistClientSettings(clientData);
+    const validationResult = jsonschema.validate(clientData, newClientSchema);
+    if (!validationResult.valid) {
+        const error = new Error();
+        error.name = "ValidationError";
+        error.errors = validationResult.errors;
+        error.instance = validationResult.instance;
+        error.message = JSON.stringify(validationResult.errors, null, 2);
+        throw error;
+    }
+    return await repository.persist(clientData);
 };
 
 class InvalidClientIdError extends Error {

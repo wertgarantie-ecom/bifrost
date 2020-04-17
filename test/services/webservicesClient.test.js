@@ -77,7 +77,7 @@ test("should retrieve agent data for multiple products", async () => {
     });
 
     try {
-        const retrivedData = await webservicesClient.getAgentData("session", mockHttpClient);
+        const retrivedData = await webservicesClient.getAgentData("session", {activePartnerNumber: 123456}, mockHttpClient);
         expect(retrivedData.RESULT.PRODUCT_LIST.PRODUCT[1].APPLICATION_CODE).toEqual("GU WG DE KS 0419");
     } catch (error) {
         fail(error);
@@ -92,7 +92,7 @@ test("should retrieve agent data for single product", async () => {
     });
 
     try {
-        const retrivedData = await webservicesClient.getAgentData("session", mockHttpClient);
+        const retrivedData = await webservicesClient.getAgentData("session", {activePartnerNumber: 123456}, mockHttpClient);
         expect(retrivedData.RESULT.PRODUCT_LIST.PRODUCT[0].APPLICATION_CODE).toEqual("GU WG DE KS 0419");
     } catch (error) {
         fail(error);
@@ -138,12 +138,12 @@ test("should assemble valid XML for insurance premium call", () => {
     const productType = "KOMPLETTSCHUTZ_2019";
     const paymentInterval = 1;
     const objectCode = 9025;
-    const objectPrice = 699;
+    const objectPrice = 69934;
     const riskTypes = ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"];
     const countryCode = 'DE';
 
     const xmlData = webservicesClient.assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
-    expect(xmlData).toEqual(`<?xml version="1.0"?><PARAMETERS><APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE><TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE><PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE><DATE>${dateFormatted}</DATE><APPLICATION_DATE>${dateFormatted}</APPLICATION_DATE><PAYMENT_INTERVAL>1</PAYMENT_INTERVAL><DEVICES><DEVICE><OBJECT_CODE>9025</OBJECT_CODE><OBJECT_PRICE>699</OBJECT_PRICE><PURCHASE_DATE>${dateFormatted}</PURCHASE_DATE><MANUFACTURER_YEAR>${year}</MANUFACTURER_YEAR><RISKS><RISK><RISIKOTYP>KOMPLETTSCHUTZ</RISIKOTYP></RISK><RISK><RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP></RISK></RISKS></DEVICE></DEVICES></PARAMETERS>`);
+    expect(xmlData).toEqual(`<?xml version="1.0"?><PARAMETERS><APPLICATION_CODE>GU WG DE KS 0419</APPLICATION_CODE><TAX_COUNTRY_CODE>DE</TAX_COUNTRY_CODE><PRODUCTTYPE>KOMPLETTSCHUTZ_2019</PRODUCTTYPE><DATE>${dateFormatted}</DATE><APPLICATION_DATE>${dateFormatted}</APPLICATION_DATE><PAYMENT_INTERVAL>1</PAYMENT_INTERVAL><DEVICES><DEVICE><OBJECT_CODE>9025</OBJECT_CODE><OBJECT_PRICE>699,34</OBJECT_PRICE><PURCHASE_DATE>${dateFormatted}</PURCHASE_DATE><MANUFACTURER_YEAR>${year}</MANUFACTURER_YEAR><RISKS><RISK><RISIKOTYP>KOMPLETTSCHUTZ</RISIKOTYP></RISK><RISK><RISIKOTYP>DIEBSTAHLSCHUTZ</RISIKOTYP></RISK></RISKS></DEVICE></DEVICES></PARAMETERS>`);
 });
 
 test("should retrieve single COMPARISON_DOCUMENTS", async () => {
