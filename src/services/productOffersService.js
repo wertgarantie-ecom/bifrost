@@ -1,9 +1,8 @@
-const heimdallClient = require('./heimdallClient');
+const _heimdallClient = require('./heimdallClient');
 const _productOffersRepository = require('../repositories/productOffersRepository');
 const _ = require('lodash');
-const currencyFormatterEUR = new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'EUR'});
 
-async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _productOffersRepository) {
+async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _productOffersRepository, heimdallClient = _heimdallClient) {
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
         return {
@@ -27,24 +26,24 @@ function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
             advantages: [...heimdallOffer.advantages, ...heimdallOffer.services, ...heimdallOffer.special_advantages],
             prices: {
                 monthly: {
-                    "price": heimdallOffer.prices.monthly.price,
+                    "price": parseInt(heimdallOffer.prices.monthly.price.replace(",", "")),
                     "price_currency": heimdallOffer.prices.monthly.price_currency,
-                    "price_tax": heimdallOffer.prices.monthly.price_tax
+                    "price_tax": parseInt(heimdallOffer.prices.monthly.price_tax.replace(",", ""))
                 },
                 quarterly: {
-                    "price": heimdallOffer.prices.quarterly.price,
+                    "price": parseInt(heimdallOffer.prices.quarterly.price.replace(",", "")),
                     "price_currency": heimdallOffer.prices.quarterly.price_currency,
-                    "price_tax": heimdallOffer.prices.quarterly.price_tax
+                    "price_tax": parseInt(heimdallOffer.prices.quarterly.price_tax.replace(",", ""))
                 },
                 halfYearly: {
-                    "price": heimdallOffer.prices.half_yearly.price,
+                    "price": parseInt(heimdallOffer.prices.half_yearly.price.replace(",", "")),
                     "price_currency": heimdallOffer.prices.half_yearly.price_currency,
-                    "price_tax": heimdallOffer.prices.half_yearly.price_tax
+                    "price_tax": parseInt(heimdallOffer.prices.half_yearly.price_tax.replace(",", ""))
                 },
                 yearly: {
-                    "price": heimdallOffer.prices.yearly.price,
+                    "price": parseInt(heimdallOffer.prices.yearly.price.replace(",", "")),
                     "price_currency": heimdallOffer.prices.yearly.price_currency,
-                    "price_tax": heimdallOffer.prices.yearly.price_tax
+                    "price_tax": parseInt(heimdallOffer.prices.yearly.price_tax.replace(",", ""))
                 }
             },
             documents: heimdallOffer.documents.map(document => {
@@ -87,7 +86,7 @@ function mapIntervalCode(code) {
 function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
     const intervalPrices = {};
     webservicesProductOffer.device.intervals.map(interval => {
-        const priceRangePremium = _.find(interval.priceRangePremiums, priceRangePremium => priceRangePremium.minClose < price && priceRangePremium.maxOpen >= price);
+        const priceRangePremium = _.find(interval.priceRangePremiums, priceRangePremium => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen);
         if (!priceRangePremium) {
             throw new ProductOffersError(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer, null, 2)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
         }

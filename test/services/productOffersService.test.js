@@ -1,4 +1,5 @@
 const productOffersService = require('../../src/services/productOffersService');
+const heimdallProductOffers = require('../../integration-test/controllers/heimdallResponses').getProductOffersResponse;
 
 test("test webservices product offer conversion", async () => {
     process.env.BACKEND = "webservices";
@@ -91,6 +92,93 @@ test("test webservices product offer conversion", async () => {
             }
         ]
     })
+});
+
+test("test heimdall product offer conversion", async () => {
+    process.env.BACKEND = "heimdall";
+    const mockHeimdallClient = {
+        getProductOffers: () => heimdallProductOffers
+    };
+    const result = await productOffersService.getProductOffers({}, "Smartphone", 80000, undefined, mockHeimdallClient);
+    expect(result).toEqual({
+        "generalDocuments": [],
+        "productOffers": [
+            {
+                "id": 1,
+                "name": "Basis",
+                "advantages": [
+                    "Für private und berufliche Nutzung",
+                    "Unsachgemäße Handhabung",
+                    "Weltweiter Schutz",
+                    "Volle Kostenübernahme bei Reparaturen",
+                    "Bei Totalschaden zählt der Zeitwert",
+                    "Für private und berufliche Nutzung",
+                    "Weltweiter Schutz",
+                    "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                    "Unsachgemäße Handhabung"
+                ],
+                "prices": {
+                    "monthly": {
+                        "price": 500,
+                        "price_currency": "€",
+                        "price_tax": 80
+                    },
+                    "quarterly": {
+                        "price": 1500,
+                        "price_currency": "€",
+                        "price_tax": 239
+                    },
+                    "halfYearly": {
+                        "price": 3000,
+                        "price_currency": "€",
+                        "price_tax": 479
+                    },
+                    "yearly": {
+                        "price": 6000,
+                        "price_currency": "€",
+                        "price_tax": 958
+                    }
+                },
+                "documents": [
+                    {
+                        "type": null,
+                        "name": "Rechtsdokumente",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5"
+                    },
+                    {
+                        "type": "IPID",
+                        "name": "Informationsblatt für Versicherungsprodukte",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1"
+                    },
+                    {
+                        "type": "POLICY",
+                        "name": "Versicherungsschein",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/e725f5d0-a72c-4d00-9063-81753f191150"
+                    },
+                    {
+                        "type": "GDPR",
+                        "name": "DSGVO Beileger",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/334e5b9b-0fb5-4a45-859e-ad0267a4431e"
+                    },
+                    {
+                        "type": "GTCI",
+                        "name": "Allgemeine Versicherungsbedingungen",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b"
+                    },
+                    {
+                        "type": "SEPA",
+                        "name": "SEPA Lastschriftmandat",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/2954d934-884d-46c5-81a9-11e9e5c8fb19"
+                    },
+                    {
+                        "type": "PIS",
+                        "name": "Produktinformationsblatt",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448"
+                    }
+                ]
+            }
+        ]
+    });
 });
 
 const productOffersResult = [
@@ -197,18 +285,18 @@ const productOffersResult = [
                         "intervalCode": "1",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
+                                "maxOpen": 30001,
                                 "insurancePremium": 695
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
+                                "minClose": 30001,
+                                "maxOpen": 80001,
                                 "insurancePremium": 995
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
+                                "minClose": 80001,
+                                "maxOpen": 180001,
                                 "insurancePremium": 1295
                             }
                         ]
@@ -218,18 +306,18 @@ const productOffersResult = [
                         "intervalCode": "3",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
+                                "maxOpen": 30001,
                                 "insurancePremium": 2085
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
+                                "minClose": 30001,
+                                "maxOpen": 80001,
                                 "insurancePremium": 2985
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
+                                "minClose": 80001,
+                                "maxOpen": 180001,
                                 "insurancePremium": 3885
                             }
                         ]
@@ -239,18 +327,18 @@ const productOffersResult = [
                         "intervalCode": "6",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
+                                "maxOpen": 30001,
                                 "insurancePremium": 4170
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
+                                "minClose": 30001,
+                                "maxOpen": 80001,
                                 "insurancePremium": 5970
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
+                                "minClose": 80001,
+                                "maxOpen": 180001,
                                 "insurancePremium": 7770
                             }
                         ]
@@ -260,18 +348,18 @@ const productOffersResult = [
                         "intervalCode": "12",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
+                                "maxOpen": 30001,
                                 "insurancePremium": 8340
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
+                                "minClose": 30001,
+                                "maxOpen": 80001,
                                 "insurancePremium": 11940
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
+                                "minClose": 80001,
+                                "maxOpen": 180001,
                                 "insurancePremium": 15540
                             }
                         ]
@@ -312,19 +400,19 @@ const productOffersResult = [
                         "intervalCode": "1",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "maxOpen": 30001,
+                                "insurancePremium": 695
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
-                                "insurancePremium": 0
+                                "minClose": 30001,
+                                "maxOpen": 80001,
+                                "insurancePremium": 995
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
-                                "insurancePremium": 0
+                                "minClose": 80001,
+                                "maxOpen": 180001,
+                                "insurancePremium": 1295
                             }
                         ]
                     },
@@ -333,19 +421,19 @@ const productOffersResult = [
                         "intervalCode": "3",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "maxOpen": 30001,
+                                "insurancePremium": 2085
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
-                                "insurancePremium": 0
+                                "minClose": 30001,
+                                "maxOpen": 80001,
+                                "insurancePremium": 2985
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
-                                "insurancePremium": 0
+                                "minClose": 80001,
+                                "maxOpen": 180001,
+                                "insurancePremium": 3885
                             }
                         ]
                     },
@@ -354,19 +442,19 @@ const productOffersResult = [
                         "intervalCode": "6",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "maxOpen": 30001,
+                                "insurancePremium": 4170
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
-                                "insurancePremium": 0
+                                "minClose": 30001,
+                                "maxOpen": 80001,
+                                "insurancePremium": 5970
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
-                                "insurancePremium": 0
+                                "minClose": 80001,
+                                "maxOpen": 180001,
+                                "insurancePremium": 7770
                             }
                         ]
                     },
@@ -375,19 +463,19 @@ const productOffersResult = [
                         "intervalCode": "12",
                         "priceRangePremiums": [
                             {
-                                "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "maxOpen": 30001,
+                                "insurancePremium": 8340
                             },
                             {
-                                "maxOpen": 80000,
-                                "minClose": 30000,
-                                "insurancePremium": 0
+                                "minClose": 30001,
+                                "maxOpen": 80001,
+                                "insurancePremium": 11940
                             },
                             {
-                                "maxOpen": 180000,
-                                "minClose": 80000,
-                                "insurancePremium": 0
+                                "minClose": 80001,
+                                "maxOpen": 180001,
+                                "insurancePremium": 15540
                             }
                         ]
                     }
