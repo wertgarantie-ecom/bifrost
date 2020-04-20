@@ -63,6 +63,7 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
         risks: productOfferConfig.risks,
         productType: productOfferConfig.productType,
         clientId: clientId,
+        defaultPaymentInterval: productOfferConfig.defaultPaymentInterval,
         documents: await getDocuments(session, productOfferConfig, webservicesClient, documentRepository),
         advantages: productOfferConfig.advantages,
         devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient)

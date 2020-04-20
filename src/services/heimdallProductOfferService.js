@@ -1,14 +1,17 @@
 const _ = require("lodash");
 
-exports.fromProductOffer = function fromProduct(heimdallProductOffer) {
+exports.fromProductOffer = function fromProduct(productOffer) {
     return {
         getPaymentInterval() {
-            if (heimdallProductOffer.payment === "Monat") {
-                return "monatl.";
-            } else if (heimdallProductOffer.payment === "Jahr") {
-                return "jährl.";
-            } else {
-                return "pro " + heimdallProductOffer.payment;
+            switch (productOffer.defaultPaymentInterval) {
+                case "monthly":
+                    return "monatl.";
+                case "quarterly":
+                    return "pro Quartal";
+                case "halfYearly":
+                    return "halbjährl.";
+                case "yearly":
+                    return "jährl.";
             }
         },
 
@@ -17,13 +20,13 @@ exports.fromProductOffer = function fromProduct(heimdallProductOffer) {
             function getExcludedAdvantages(advantages, allProductOffers) {
                 const advantagesSet = new Set(advantages);
                 var allAdvantages = [];
-                allProductOffers.forEach(payload => {
-                    allAdvantages = allAdvantages.concat(payload.special_advantages, payload.services, payload.advantages);
+                allProductOffers.forEach(offer => {
+                    allAdvantages = allAdvantages.concat(offer.advantages);
                 });
                 return Array.from(new Set(allAdvantages.filter(adv => !advantagesSet.has(adv))));
             }
 
-            const advantages = heimdallProductOffer.special_advantages.concat(heimdallProductOffer.services, heimdallProductOffer.advantages);
+            const advantages = productOffer.advantages;
             const excludedAdvantages = getExcludedAdvantages(advantages, allProductOffers);
             const top3 = advantages.splice(0, 3);
 
@@ -35,11 +38,16 @@ exports.fromProductOffer = function fromProduct(heimdallProductOffer) {
         },
 
         getIncludedTaxFormatted() {
-            return "(inkl. " + heimdallProductOffer.price_tax + heimdallProductOffer.price_currency + " VerSt**)"
+            const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
+            const formattedNumber = new Intl.NumberFormat('de-DE', {
+                style: 'currency',
+                currency: intervalPrice.price_currency
+            }).format(intervalPrice.price_tax);
+            return "(inkl. " + formattedNumber + " VerSt**)"
         },
 
         getDocument(documentType) {
-            const document = _.find(heimdallProductOffer.documents, ["document_type", documentType]);
+            const document = _.find(productOffer.documents, ["document_type", documentType]);
             return {
                 title: _.get(document, "document_title"),
                 uri: _.get(document, "document_link")

@@ -378,6 +378,7 @@ test('should update all product offers for client', async () => {
             clientId: "testClientId",
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
+            defaultPaymentInterval: "monthly",
             risks: [],
             documents: [
                 {
@@ -395,6 +396,7 @@ test('should update all product offers for client', async () => {
             clientId: "testClientId",
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
+            defaultPaymentInterval: "monthly",
             risks: ["DIEBSTAHLSCHUTZ"],
             documents: [
                 {

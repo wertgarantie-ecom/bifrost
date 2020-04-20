@@ -24,6 +24,10 @@ module.exports.productOfferSchema = {
         "clientId": {
             "type": "string"
         },
+        "defaultPaymentInterval": {
+            "type": "string",
+            "enum": ["monthly", "quarterly", "halfYearly", "yearly"]
+        },
         "documents": {
             "type": "array",
             "items": {
@@ -119,6 +123,7 @@ module.exports.productOfferSchema = {
         "clientId",
         "documents",
         "productType",
-        "risks"
+        "risks",
+        "defaultPaymentInterval"
     ]
 };

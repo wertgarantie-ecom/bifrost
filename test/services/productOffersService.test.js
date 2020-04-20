@@ -25,23 +25,23 @@ test("test webservices product offer conversion", async () => {
                 "prices": {
                     "monthly": {
                         "price": 800,
-                        "price_currency": "€",
-                        "price_tax": 128
+                        "priceCurrency": "EUR",
+                        "priceTax": 128
                     },
                     "quarterly": {
                         "price": 2400,
-                        "price_currency": "€",
-                        "price_tax": 383
+                        "priceCurrency": "EUR",
+                        "priceTax": 383
                     },
                     "halfYearly": {
                         "price": 4800,
-                        "price_currency": "€",
-                        "price_tax": 766
+                        "priceCurrency": "EUR",
+                        "priceTax": 766
                     },
                     "yearly": {
                         "price": 9600,
-                        "price_currency": "€",
-                        "price_tax": 1533
+                        "priceCurrency": "EUR",
+                        "priceTax": 1533
                     }
                 },
                 "documents": [
@@ -63,23 +63,23 @@ test("test webservices product offer conversion", async () => {
                 "prices": {
                     "monthly": {
                         "price": 995,
-                        "price_currency": "€",
-                        "price_tax": 159
+                        "priceCurrency": "EUR",
+                        "priceTax": 159
                     },
                     "quarterly": {
                         "price": 2985,
-                        "price_currency": "€",
-                        "price_tax": 477
+                        "priceCurrency": "EUR",
+                        "priceTax": 477
                     },
                     "halfYearly": {
                         "price": 5970,
-                        "price_currency": "€",
-                        "price_tax": 953
+                        "priceCurrency": "EUR",
+                        "priceTax": 953
                     },
                     "yearly": {
                         "price": 11940,
-                        "price_currency": "€",
-                        "price_tax": 1906
+                        "priceCurrency": "EUR",
+                        "priceTax": 1906
                     }
                 },
                 "documents": [
@@ -117,26 +117,27 @@ test("test heimdall product offer conversion", async () => {
                     "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                     "Unsachgemäße Handhabung"
                 ],
+                "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
                         "price": 500,
-                        "price_currency": "€",
-                        "price_tax": 80
+                        "priceCurrency": "EUR",
+                        "priceTax": 80
                     },
                     "quarterly": {
                         "price": 1500,
-                        "price_currency": "€",
-                        "price_tax": 239
+                        "priceCurrency": "EUR",
+                        "priceTax": 239
                     },
                     "halfYearly": {
                         "price": 3000,
-                        "price_currency": "€",
-                        "price_tax": 479
+                        "priceCurrency": "EUR",
+                        "priceTax": 479
                     },
                     "yearly": {
                         "price": 6000,
-                        "price_currency": "€",
-                        "price_tax": 958
+                        "priceCurrency": "EUR",
+                        "priceTax": 958
                     }
                 },
                 "documents": [

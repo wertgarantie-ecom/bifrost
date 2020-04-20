@@ -82,6 +82,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
+                defaultPaymentInterval: "monthly",
                 deviceClasses: [
                     {
                         objectCode: "9025",
@@ -138,6 +139,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
+                defaultPaymentInterval: "monthly",
                 deviceClasses: [
                     {
                         objectCode: "9025",

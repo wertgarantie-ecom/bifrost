@@ -24,26 +24,27 @@ function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
             id: heimdallOffer.id,
             name: heimdallOffer.name,
             advantages: [...heimdallOffer.advantages, ...heimdallOffer.services, ...heimdallOffer.special_advantages],
+            defaultPaymentInterval: toDefaultPaymentInterval(heimdallOffer.payment),
             prices: {
                 monthly: {
                     "price": parseInt(heimdallOffer.prices.monthly.price.replace(",", "")),
-                    "price_currency": heimdallOffer.prices.monthly.price_currency,
-                    "price_tax": parseInt(heimdallOffer.prices.monthly.price_tax.replace(",", ""))
+                    "priceCurrency": "EUR",
+                    "priceTax": parseInt(heimdallOffer.prices.monthly.price_tax.replace(",", ""))
                 },
                 quarterly: {
                     "price": parseInt(heimdallOffer.prices.quarterly.price.replace(",", "")),
-                    "price_currency": heimdallOffer.prices.quarterly.price_currency,
-                    "price_tax": parseInt(heimdallOffer.prices.quarterly.price_tax.replace(",", ""))
+                    "priceCurrency": "EUR",
+                    "priceTax": parseInt(heimdallOffer.prices.quarterly.price_tax.replace(",", ""))
                 },
                 halfYearly: {
                     "price": parseInt(heimdallOffer.prices.half_yearly.price.replace(",", "")),
-                    "price_currency": heimdallOffer.prices.half_yearly.price_currency,
-                    "price_tax": parseInt(heimdallOffer.prices.half_yearly.price_tax.replace(",", ""))
+                    "priceCurrency": "EUR",
+                    "priceTax": parseInt(heimdallOffer.prices.half_yearly.price_tax.replace(",", ""))
                 },
                 yearly: {
                     "price": parseInt(heimdallOffer.prices.yearly.price.replace(",", "")),
-                    "price_currency": heimdallOffer.prices.yearly.price_currency,
-                    "price_tax": parseInt(heimdallOffer.prices.yearly.price_tax.replace(",", ""))
+                    "priceCurrency": "EUR",
+                    "priceTax": parseInt(heimdallOffer.prices.yearly.price_tax.replace(",", ""))
                 }
             },
             documents: heimdallOffer.documents.map(document => {
@@ -55,6 +56,20 @@ function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
             })
         };
     });
+}
+
+function toDefaultPaymentInterval(heimdallPaymentInterval) {
+    switch (heimdallPaymentInterval) {
+        case "Monat":
+            return "monthly";
+        case "Quartal":
+            return "quaterly";
+        case "Halbjahr":
+            return "halfYearly";
+        case "Jahr":
+            return "yearly";
+    }
+
 }
 
 function filterProductOffers(productOffers, deviceClass, price) {
@@ -92,8 +107,8 @@ function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
         }
         intervalPrices[mapIntervalCode(interval.intervalCode)] = {
             "price": priceRangePremium.insurancePremium,
-            "price_currency": "€",
-            "price_tax": Math.round(priceRangePremium.insurancePremium - priceRangePremium.insurancePremium / 1.19)
+            "priceCurrency": "EUR",
+            "priceTax": Math.round(priceRangePremium.insurancePremium - priceRangePremium.insurancePremium / 1.19)
         };
     });
     return intervalPrices;
@@ -106,6 +121,7 @@ function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers,
             id: webservicesProductOffer.id,
             name: webservicesProductOffer.name,
             advantages: [...webservicesProductOffer.advantages],
+            defaultPaymentInterval: webservicesProductOffer.defaultPaymentInterval,
             prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
             documents: webservicesProductOffer.documents.map(document => {
                 return {
