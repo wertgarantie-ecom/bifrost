@@ -1,8 +1,9 @@
 const productOffersService = require('../../src/services/productOffersService');
 
 test("test webservices product offer conversion", async () => {
+    process.env.BACKEND = "webservices";
     const clientConfig = {
-        id: 'clientId'
+        id: "clientId"
     };
     const mockProductOffersRepository = {
         findByClientId: () => productOffersResult
@@ -10,42 +11,85 @@ test("test webservices product offer conversion", async () => {
     const result = await productOffersService.getProductOffers(clientConfig, "Smartphone", 80000, mockProductOffersRepository);
 
     expect(result).toEqual({
-        "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
-        "name": "Komplettschutz",
-        "advantages": [
-            "Das schon toll hier",
-            "alles wird gut",
-            "Corona Party!!!"
-        ],
-        "prices": {
-            "monthly": {
-                "price": 800,
-                "price_currency": "€",
-                "price_tax": 128
-            },
-            "quarterly": {
-                "price": 2400,
-                "price_currency": "€",
-                "price_tax": 383
-            },
-            "halfYearly": {
-                "price": 4800,
-                "price_currency": "€",
-                "price_tax": 766
-            },
-            "yearly": {
-                "price": 9600,
-                "price_currency": "€",
-                "price_tax": 1533
-            }
-        },
-        "documents": [
+        "generalDocuments": [],
+        "productOffers": [
             {
-                "documentId": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                "documentType": "LN",
-                "documentTitle": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                "name": "Komplettschutz",
+                "advantages": [
+                    "Das schon toll hier",
+                    "alles wird gut",
+                    "Corona Party!!!"
+                ],
+                "prices": {
+                    "monthly": {
+                        "price": 800,
+                        "price_currency": "€",
+                        "price_tax": 128
+                    },
+                    "quarterly": {
+                        "price": 2400,
+                        "price_currency": "€",
+                        "price_tax": 383
+                    },
+                    "halfYearly": {
+                        "price": 4800,
+                        "price_currency": "€",
+                        "price_tax": 766
+                    },
+                    "yearly": {
+                        "price": 9600,
+                        "price_currency": "€",
+                        "price_tax": 1533
+                    }
+                },
+                "documents": [
+                    {
+                        "documentId": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                        "documentType": "LN",
+                        "documentTitle": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                    }
+                ]
+            },
+            {
+                "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+                "name": "Komplettschutz mit Premium-Option",
+                "advantages": [
+                    "total geiler diebstahlschutz",
+                    "was gegen Wasser",
+                    "mit Soße"
+                ],
+                "prices": {
+                    "monthly": {
+                        "price": 995,
+                        "price_currency": "€",
+                        "price_tax": 159
+                    },
+                    "quarterly": {
+                        "price": 2985,
+                        "price_currency": "€",
+                        "price_tax": 477
+                    },
+                    "halfYearly": {
+                        "price": 5970,
+                        "price_currency": "€",
+                        "price_tax": 953
+                    },
+                    "yearly": {
+                        "price": 11940,
+                        "price_currency": "€",
+                        "price_tax": 1906
+                    }
+                },
+                "documents": [
+                    {
+                        "documentId": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                        "documentType": "LN",
+                        "documentTitle": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                    }
+                ]
             }
-        ],
+        ]
     })
 });
 
@@ -155,17 +199,17 @@ const productOffersResult = [
                             {
                                 "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "insurancePremium": 695
                             },
                             {
                                 "maxOpen": 80000,
                                 "minClose": 30000,
-                                "insurancePremium": 0
+                                "insurancePremium": 995
                             },
                             {
                                 "maxOpen": 180000,
                                 "minClose": 80000,
-                                "insurancePremium": 0
+                                "insurancePremium": 1295
                             }
                         ]
                     },
@@ -176,17 +220,17 @@ const productOffersResult = [
                             {
                                 "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "insurancePremium": 2085
                             },
                             {
                                 "maxOpen": 80000,
                                 "minClose": 30000,
-                                "insurancePremium": 0
+                                "insurancePremium": 2985
                             },
                             {
                                 "maxOpen": 180000,
                                 "minClose": 80000,
-                                "insurancePremium": 0
+                                "insurancePremium": 3885
                             }
                         ]
                     },
@@ -197,17 +241,17 @@ const productOffersResult = [
                             {
                                 "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "insurancePremium": 4170
                             },
                             {
                                 "maxOpen": 80000,
                                 "minClose": 30000,
-                                "insurancePremium": 0
+                                "insurancePremium": 5970
                             },
                             {
                                 "maxOpen": 180000,
                                 "minClose": 80000,
-                                "insurancePremium": 0
+                                "insurancePremium": 7770
                             }
                         ]
                     },
@@ -218,17 +262,17 @@ const productOffersResult = [
                             {
                                 "maxOpen": 30000,
                                 "minClose": 0,
-                                "insurancePremium": 0
+                                "insurancePremium": 8340
                             },
                             {
                                 "maxOpen": 80000,
                                 "minClose": 30000,
-                                "insurancePremium": 0
+                                "insurancePremium": 11940
                             },
                             {
                                 "maxOpen": 180000,
                                 "minClose": 80000,
-                                "insurancePremium": 0
+                                "insurancePremium": 15540
                             }
                         ]
                     }
