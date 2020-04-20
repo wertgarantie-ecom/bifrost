@@ -41,13 +41,18 @@ function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
                         "price_tax": heimdallOffer.prices.yearly.price_tax
                     }
                 },
-                documents: heimdallOffer.[
-                    {
-                        type: "type",
-                        name: "name",
-                        uri: "uri"
-                    }
-                ]
+                documents: heimdallOffer.documents.map(document => {
+                    type: document.type,
+
+                }
+                    [
+                        {
+                            type: "type",
+                            name: "name",
+                            uri: "uri"
+                        }
+                    ]
+                }
             },
         ]
     });
