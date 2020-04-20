@@ -126,3 +126,12 @@ class ProductOffersError extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
+
+exports.getProductOffers = getProductOffers;
+exports.heimdallProductOffersToGeneralProductOffers = heimdallProductOffersToGeneralProductOffers;
+exports.filterProductOffers = filterProductOffers;
+exports.hasDeviceClassAndIsInLimit = hasDeviceClassAndIsInLimit;
+exports.mapIntervalDescription = mapIntervalDescription;
+exports.getPricesForWebservicesProductOffer = getPricesForWebservicesProductOffer;
+exports.convertPriceToString = convertPriceToString;
+exports.webserviceProductOffersToGeneralProductOffers = webserviceProductOffersToGeneralProductOffers;
