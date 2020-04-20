@@ -77,6 +77,8 @@ app.use(function (err, req, res, next) {
         err.status = 400;
     } else if (err.name === 'ClientError') {
         err.status = 400;
+    } else if (err.name === 'ProductOffersError') {
+        err.status = 400;
     }
     console.error(err);
     err.message ? console.error(JSON.stringify(err, 2, null)) : console.error("no error details specified");

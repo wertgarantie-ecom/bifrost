@@ -60,7 +60,7 @@ module.exports.productOfferSchema = {
                     "objectCode": {
                         "type": "string"
                     },
-                    "objectCodeExteral": {
+                    "objectCodeExternal": {
                         "type": "string"
                     },
                     "maxPriceLimitation": {
