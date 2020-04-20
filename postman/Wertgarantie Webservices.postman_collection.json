@@ -298,12 +298,12 @@
 						},
 						{
 							"key": "USER",
-							"value": "1119845",
+							"value": "{{USER}}",
 							"type": "text"
 						},
 						{
 							"key": "PASSWORD",
-							"value": "EQRNQ2DZ",
+							"value": "{{PASSWORD}}",
 							"type": "text"
 						},
 						{
@@ -490,6 +490,118 @@
 			"response": []
 		},
 		{
+			"name": "get contract state (GET_CONTRACT_DETAILS)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FUNCTION",
+							"value": "GET_CONTRACT_DETAILS",
+							"type": "text"
+						},
+						{
+							"key": "SHAPING",
+							"value": "STATE",
+							"type": "text"
+						},
+						{
+							"key": "API",
+							"value": "JSON",
+							"type": "text"
+						},
+						{
+							"key": "SESSION",
+							"value": "{{SESSION}}",
+							"type": "text"
+						},
+						{
+							"key": "CONTRACT_UNIQUE_NO",
+							"value": "{{CONTRACT_NUMBER}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{HOST}}/callservice.pl"
+			},
+			"response": []
+		},
+		{
+			"name": "new contract number (GET_NEW_CONTRACTNUMBER)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FUNCTION",
+							"value": "GET_NEW_CONTRACTNUMBER",
+							"type": "text"
+						},
+						{
+							"key": "SHAPING",
+							"value": "DEFAULT",
+							"type": "text"
+						},
+						{
+							"key": "API",
+							"value": "JSON",
+							"type": "text"
+						},
+						{
+							"key": "SESSION",
+							"value": "{{SESSION}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{HOST}}/callservice.pl"
+			},
+			"response": []
+		},
+		{
+			"name": "new contract number pooling (GET_NEW_CONTRACTNUMBER)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FUNCTION",
+							"value": "GET_NEW_CONTRACTNUMBER",
+							"type": "text"
+						},
+						{
+							"key": "SHAPING",
+							"value": "POOLING",
+							"type": "text"
+						},
+						{
+							"key": "API",
+							"value": "JSON",
+							"type": "text"
+						},
+						{
+							"key": "SESSION",
+							"value": "{{SESSION}}",
+							"type": "text"
+						},
+						{
+							"key": "QUANTITY",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{HOST}}/callservice.pl"
+			},
+			"response": []
+		},
+		{
 			"name": "SET_XML_INTERFACE",
 			"request": {
 				"method": "POST",
@@ -520,6 +632,45 @@
 						{
 							"key": "DATA",
 							"value": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Antraege>\n  <Herkunft>Bifrost</Herkunft>\n  <Exportdatum>02.04.2020</Exportdatum>\n  <Antrag>\n    <Satznummer>443e37f0-750d-11ea-8d62-07ba43cf92dd</Satznummer>\n    <Antragsdatum>str1234000</Antragsdatum>\n   <Vermittlernummer>1541890</Vermittlernummer>\n    <Kundendaten>\n      <Anrede>Herr</Anrede>\n      <Vorname>Max</Vorname>\n      <Nachname>Mustermann</Nachname>\n      <Anschrift>\n        <Strasse>Krischerstrasse 100</Strasse>\n        <PLZ>40789</PLZ>\n        <Ort>Monheim</Ort>\n      </Anschrift>\n    </Kundendaten>\n    <Geraet>\n      <Hersteller>Apple</Hersteller>\n      <Geraetekennzeichen>9025</Geraetekennzeichen>\n      <Kaufdatum>02.04.2020</Kaufdatum>\n      <Kaufpreis>1000</Kaufpreis>\n    </Geraet>\n    <Produktdetails>\n      <Antragskodierung>GU WG DE KS 0419</Antragskodierung>\n      <Produkttyp>KOMPLETTSCHUTZ_2019</Produkttyp>\n    </Produktdetails>\n    <Zahlung />\n  </Antrag>\n</Antraege>\n",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{HOST}}/callservice.pl"
+			},
+			"response": []
+		},
+		{
+			"name": "SET_XML_INTERFACE with contract number",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FUNCTION",
+							"value": "SET_XML_INTERFACE",
+							"type": "text"
+						},
+						{
+							"key": "API",
+							"value": "JSON",
+							"type": "text"
+						},
+						{
+							"key": "SESSION",
+							"value": "{{SESSION}}",
+							"type": "text"
+						},
+						{
+							"key": "SHAPING",
+							"value": "DEFAULT",
+							"type": "text"
+						},
+						{
+							"key": "DATA",
+							"value": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Antraege>\n  <Herkunft>Bifrost</Herkunft>\n  <Exportdatum>02.04.2020</Exportdatum>\n  <Antrag>\n    <Vertragsnummer>{{CONTRACT_NUMBER}}</Vertragsnummer>\n    <Satznummer>443e37f0-750d-11ea-8d62-07ba43cf92dd</Satznummer>\n    <Antragsdatum>str1234000</Antragsdatum>\n   <Vermittlernummer>1541890</Vermittlernummer>\n    <Kundendaten>\n      <Anrede>Herr</Anrede>\n      <Vorname>Max</Vorname>\n      <Nachname>Mustermann</Nachname>\n      <Anschrift>\n        <Strasse>Krischerstrasse 100</Strasse>\n        <PLZ>40789</PLZ>\n        <Ort>Monheim</Ort>\n      </Anschrift>\n    </Kundendaten>\n    <Geraet>\n      <Hersteller>Apple</Hersteller>\n      <Geraetekennzeichen>9025</Geraetekennzeichen>\n      <Kaufdatum>02.04.2020</Kaufdatum>\n      <Kaufpreis>1000</Kaufpreis>\n    </Geraet>\n    <Produktdetails>\n      <Antragskodierung>GU WG DE KS 0419</Antragskodierung>\n      <Produkttyp>KOMPLETTSCHUTZ_2019</Produkttyp>\n    </Produktdetails>\n    <Zahlung />\n  </Antrag>\n</Antraege>\n",
 							"type": "text"
 						}
 					]
