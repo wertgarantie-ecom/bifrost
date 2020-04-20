@@ -50,8 +50,8 @@ function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
             documents: heimdallOffer.documents.map(document => {
                 return {
                     type: document.document_type,
-                    title: document.document_title,
-                    link: document.document_link
+                    name: document.document_title,
+                    uri: document.document_link
                 };
             })
         };
@@ -71,33 +71,33 @@ function hasDeviceClassAndIsInLimit(productOffer, deviceClass, price) {
     return _.find(productOffer.devices, device => device.objectCodeExternal === deviceClass && device.maxPriceLimitation >= price) !== undefined;
 }
 
-function mapIntervalDescription(description) {
-    switch (description) {
-        case 1: return "monthly";
-        case 3: return "quarterly";
-        case 6: return "halfYearly";
-        case 12: return "yearly";
+function mapIntervalCode(code) {
+    switch (code) {
+        case "1":
+            return "monthly";
+        case "3":
+            return "quarterly";
+        case "6":
+            return "halfYearly";
+        case "12":
+            return "yearly";
     }
 }
 
 function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
     const intervalPrices = {};
     webservicesProductOffer.device.intervals.map(interval => {
-        const priceRangePremium = _.find(interval.priceRangePremiums, priceRangePremium => priceRangePremium.minClose < price && priceRagePremium.maxOpen >= price);
+        const priceRangePremium = _.find(interval.priceRangePremiums, priceRangePremium => priceRangePremium.minClose < price && priceRangePremium.maxOpen >= price);
         if (!priceRangePremium) {
             throw new ProductOffersError(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer, null, 2)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
         }
-        intervalPrices[mapIntervalDescription(interval.description)] = {
-            "price": convertPriceToString(priceRangePremium.insurancePremium),
+        intervalPrices[mapIntervalCode(interval.intervalCode)] = {
+            "price": priceRangePremium.insurancePremium,
             "price_currency": "€",
-            "price_tax": convertPriceToString(Math.round(priceRangePremium.insurancePremium - priceRangePremium.insurancePremium / 1.19))
+            "price_tax": Math.round(priceRangePremium.insurancePremium - priceRangePremium.insurancePremium / 1.19)
         };
     });
     return intervalPrices;
-}
-
-function convertPriceToString(price) {
-    return currencyFormatterEUR.format(price/100);
 }
 
 function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, deviceClass, price) {
@@ -107,12 +107,12 @@ function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers,
             id: webservicesProductOffer.id,
             name: webservicesProductOffer.name,
             advantages: [...webservicesProductOffer.advantages],
-            prices: getPricesForWebservicesProductOffer(webservicesProductOffer),
+            prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
             documents: webservicesProductOffer.documents.map(document => {
                 return {
                     type: document.documentType,
-                    title: document.documentTitle,
-                    link: `/document/${document.documentId}`
+                    name: document.documentTitle,
+                    uri: `${process.env.BASE_URI}/documents/${document.documentId}`
                 };
             })
         }
@@ -131,7 +131,6 @@ exports.getProductOffers = getProductOffers;
 exports.heimdallProductOffersToGeneralProductOffers = heimdallProductOffersToGeneralProductOffers;
 exports.filterProductOffers = filterProductOffers;
 exports.hasDeviceClassAndIsInLimit = hasDeviceClassAndIsInLimit;
-exports.mapIntervalDescription = mapIntervalDescription;
+exports.mapIntervalDescription = mapIntervalCode;
 exports.getPricesForWebservicesProductOffer = getPricesForWebservicesProductOffer;
-exports.convertPriceToString = convertPriceToString;
 exports.webserviceProductOffersToGeneralProductOffers = webserviceProductOffersToGeneralProductOffers;

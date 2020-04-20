@@ -45,9 +45,9 @@ test("test webservices product offer conversion", async () => {
                 },
                 "documents": [
                     {
-                        "documentId": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                        "documentType": "LN",
-                        "documentTitle": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                        "uri": "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                        "type": "LN",
+                        "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
                     }
                 ]
             },
@@ -83,9 +83,9 @@ test("test webservices product offer conversion", async () => {
                 },
                 "documents": [
                     {
-                        "documentId": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                        "documentType": "LN",
-                        "documentTitle": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                        "uri": "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                        "type": "LN",
+                        "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
                     }
                 ]
             }
