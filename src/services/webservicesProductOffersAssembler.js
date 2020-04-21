@@ -18,9 +18,13 @@ async function updateProductOffersForAllClients(clients) {
         clients = await clientService.findAllClients();
     }
 
-    clients.map(client => {
-        updateAllProductOffersForClient(client);
-    });
+    await Promise.all(clients.map(async client => {
+        try {
+            await updateAllProductOffersForClient(client);
+        } catch (error) {
+            console.error("could not update product offers for client: " + client.id);
+        }
+    }));
 }
 
 async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, productOfferRepository = _productOfferRepository, documentRepository = _documentRespository) {
@@ -169,6 +173,7 @@ async function getComparisonDocuments(session, productOfferConfig, webservicesCl
     }));
 }
 
+exports.updateProductOffersForAllClients = updateProductOffersForAllClients;
 exports.selectRelevantWebservicesProducts = selectRelevantWebservicesProducts;
 exports.assembleAllProductOffersForClient = assembleAllProductOffersForClient;
 exports.findProductFor = findProductFor;
