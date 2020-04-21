@@ -54,7 +54,7 @@ const expectedResponse = {
         "signature": "signature",
         "products": [
             {
-                "wertgarantieProductId": 4,
+                "wertgarantieProductId": "9338a770-0d0d-4203-8d54-583a03bdebf3",
                 "shopProductId": "1",
                 "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 "devicePrice": "1000",
@@ -62,7 +62,7 @@ const expectedResponse = {
                 "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
             },
             {
-                "wertgarantieProductId": 1,
+                "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
                 "shopProductId": "1",
                 "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 "devicePrice": "1000",
@@ -81,8 +81,7 @@ const expectedResponse = {
     confirmText: 'Bitte bestätige noch kurz:',
     products: [
         {
-            paymentInterval: 'monatl.',
-            price: 'ab 8,00 €',
+            price: "ab 8,00 € monatl.",
             includedTax: "(inkl. 1,28 € VerSt**)",
             productTitle: 'Komplettschutz',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
@@ -93,12 +92,11 @@ const expectedResponse = {
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         },
         {
-            paymentInterval: 'monatl.',
-            price: 'ab 6,95 €',
-            includedTax: '(inkl. 1,28 VerSt**)',
-            productTitle: 'Komplettschutz',
+            price: "ab 9,95 € monatl.",
+            includedTax: "(inkl. 1,59 € VerSt**)",
+            productTitle: 'Komplettschutz mit Premium-Option',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
-            productInformationSheetUri: '"http://localhost:3000/documents/justnotthere"',
+            productInformationSheetUri: "http://localhost:3000/documents/justnotthere",
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',

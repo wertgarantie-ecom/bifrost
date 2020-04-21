@@ -50,23 +50,23 @@ async function getConfirmationProductData(wertgarantieProduct, client, productOf
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
-        const heimdallProduct = productOfferFormattingService.fromProductOffer(matchingOffer);
-        const advantageCategories = heimdallProduct.getAdvantageCategories(productOffers);
-        const productInformationSheet = heimdallProduct.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET);
+        const productOfferFormatter = productOfferFormattingService.fromProductOffer(matchingOffer);
+        matchingOffer.payment = productOfferFormatter.getPaymentInterval();
+        const advantageCategories = productOfferFormatter.getAdvantageCategories(productOffers);
+        const productInformationSheet = productOfferFormatter.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET);
         return {
             product: {
-                paymentInterval: heimdallProduct.getPaymentInterval(),
-                price: matchingOffer.price_formatted,
-                includedTax: heimdallProduct.getIncludedTaxFormatted(),
+                price: productOfferFormatter.getPriceFormatted(),
+                includedTax: productOfferFormatter.getIncludedTaxFormatted(),
                 productTitle: matchingOffer.name,
                 top3: advantageCategories.top3,
                 productInformationSheetUri: productInformationSheet.uri,
-                productInformationSheetText: productInformationSheet.title,
+                productInformationSheetText: productInformationSheet.name,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(wertgarantieProduct.deviceClass, 1)[0],
                 shopProductShortName: wertgarantieProduct.shopProductName,
                 orderId: wertgarantieProduct.orderId
             },
-            avbHref: heimdallProduct.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri
+            avbHref: productOfferFormatter.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri
         };
     }
 

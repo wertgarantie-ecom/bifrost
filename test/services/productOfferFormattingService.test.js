@@ -20,7 +20,7 @@ test("should extract correct document", () => {
     const document = service.fromProductOffer(productOffer).getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
 
     expect(document.uri).toEqual("http://localhost:3000/documents/abc");
-    expect(document.name).toEqual("GU WG DE KS 0419_IPID.PDF");
+    expect(document.name).toEqual("Informationsblatt für Versicherungsprodukte");
 });
 
 
@@ -42,8 +42,7 @@ test("should not fail on missing document", () => {
 
     const document = service.fromProductOffer(productOffer).getDocument(documentTypes.COMPARISON);
 
-    expect(document.uri).toEqual(undefined);
-    expect(document.name).toEqual(undefined);
+    expect(document).toEqual(undefined);
 });
 
 

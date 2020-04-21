@@ -47,9 +47,9 @@ exports.fromProductOffer = function fromProductOffer(productOffer) {
         },
 
         getPriceFormatted() {
-            const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
+            const intervalData = productOffer.prices[productOffer.defaultPaymentInterval];
             const globalizer = Globalize.getInstance();
-            const formattedPrice = globalizer.currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.price / 100);
+            const formattedPrice = globalizer.currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
             return "ab " + formattedPrice + " " + productOffer.payment;
         },
 
@@ -57,13 +57,22 @@ exports.fromProductOffer = function fromProductOffer(productOffer) {
             function documentTypeToDescription(documentType) {
                 switch (documentType) {
                     case documentTypes.PRODUCT_INFORMATION_SHEET:
-                        return "Informationsblatt für Versicherungsprodukte";
+                        return "Produktinformationsblatt";
                     case documentTypes.LEGAL_NOTICE:
                         return "Rechtsdokumente";
+                    case documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION:
+                        return "Informationsblatt für Versicherungsprodukte";
+                    case documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE:
+                        return "Allgemeine Versicherungsbedingungen";
+                    case documentTypes.COMPARISON:
+                        return "Vergleichsdokument";
                 }
             }
 
             const document = _.find(productOffer.documents, ["type", documentType]);
+            if (!document) {
+                return undefined;
+            }
             return {
                 name: documentTypeToDescription(document.type),
                 uri: _.get(document, "uri")
