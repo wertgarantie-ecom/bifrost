@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const Globalize = require('../globalize').Globalize;
 
 exports.fromProductOffer = function fromProduct(productOffer) {
     return {
@@ -39,26 +40,24 @@ exports.fromProductOffer = function fromProduct(productOffer) {
 
         getIncludedTaxFormatted() {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const priceFormatter = new Intl.NumberFormat(['de-DE'], {style: 'currency', currency: intervalPrice.priceCurrency});
-            const formattedTax = priceFormatter.format(intervalPrice.priceTax / 100);
+            const globalizer = Globalize.getInstance();
+            const formattedTax = globalizer.currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
             return "(inkl. " + formattedTax + " VerSt**)"
         },
 
+        getPriceFormatted() {
+            const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
+            const globalizer = Globalize.getInstance();
+            const formattedPrice = globalizer.currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.price / 100);
+            return "ab " + formattedPrice + " " + productOffer.payment;
+        },
+
         getDocument(documentType) {
-            const document = _.find(productOffer.documents, ["document_type", documentType]);
+            const document = _.find(productOffer.documents, ["type", documentType]);
             return {
-                title: _.get(document, "document_title"),
-                uri: _.get(document, "document_link")
+                name: _.get(document, "name"),
+                uri: _.get(document, "uri")
             }
         }
     }
-};
-
-exports.documentType = {
-    SEPA: "SEPA", //SEPA Lastschriftmandat
-    PRODUCT_INFORMATION_SHEET: "PIS", //Produktinformationsblatt
-    GENERAL_INSURANCE_PRODUCTS_INFORMATION: "IPID", //Informationsblatt für Versicherungsprodukte
-    INSURANCE_CERTIFICATE: "POLICY", // Versicherungsschein
-    GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE: "GTCI",
-    LEGAL_NOTICE: null
 };

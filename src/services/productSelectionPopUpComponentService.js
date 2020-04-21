@@ -1,7 +1,7 @@
 const productImageService = require('./productImageService');
 const _productOffersService = require("./productOffersService");
 const productService = require("./productOfferFormattingService");
-const documentType = require("./productOfferFormattingService").documentType;
+const documentTypes = require("./documentTypes").documentTypes;
 const defaultClientService = require('../services/clientService');
 const schema = require('../schemas/productSelectionResponseSchema').productSelectionResponseSchema;
 const jsonschema = require('jsonschema');
@@ -40,15 +40,11 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
-        infoSheetText: product.getDocument(documentType.LEGAL_NOTICE).title,
-        infoSheetUri: product.getDocument(documentType.LEGAL_NOTICE).uri,
-        detailsDocText: product.getDocument(documentType.GENERAL_INSURANCE_PRODUCTS_INFORMATION).title,
-        detailsDocUri: product.getDocument(documentType.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri,
-        paymentInterval: productOffer.payment,
-        price: productOffer.price,
-        currency: productOffer.priceCurrency,
-        priceFormatted: productOffer.priceFormatted,
-        tax: productOffer.priceTax,
+        infoSheetText: product.getDocument(documentTypes.LEGAL_NOTICE).name,
+        infoSheetUri: product.getDocument(documentTypes.LEGAL_NOTICE).uri,
+        detailsDocText: product.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).name,
+        detailsDocUri: product.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri,
+        priceFormatted: product.getPriceFormatted(),
         taxFormatted: product.getIncludedTaxFormatted(),
         imageLink: imageLink
     }

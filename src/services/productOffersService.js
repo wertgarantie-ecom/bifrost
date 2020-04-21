@@ -21,7 +21,7 @@ async function getProductOffers(clientConfig, deviceClass, price, productOffersR
 function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
     return heimdallClientResponse.payload.map(heimdallOffer => {
         return {
-            id: heimdallOffer.id,
+            id: heimdallOffer.id + "",
             name: heimdallOffer.name,
             advantages: [...heimdallOffer.advantages, ...heimdallOffer.services, ...heimdallOffer.special_advantages],
             defaultPaymentInterval: toDefaultPaymentInterval(heimdallOffer.payment),

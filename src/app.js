@@ -8,6 +8,7 @@ const sslRedirect = require('heroku-ssl-redirect');
 const validate = require('express-jsonschema').validate;
 const bodyParser = require('body-parser');
 const requestWithSignedShoppingCartSchema = require('./schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const localeRequestFilter = require('./routes/localeRequestFilter');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -41,6 +42,7 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 app.use(require('./routes/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
+app.use('/wertgarantie/', localeRequestFilter.getBrowserLocale);
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
 app.use('/wertgarantie/', checkSessionIdCheckout);

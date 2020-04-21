@@ -23,17 +23,13 @@ module.exports.productSelectionResponseSchema = {
                     "infoSheetUri",
                     "detailsDocText",
                     "detailsDocUri",
-                    "paymentInterval",
-                    "price",
-                    "currency",
                     "priceFormatted",
-                    "tax",
                     "taxFormatted",
                     "imageLink"
                 ],
                 "properties": {
                     "id": {
-                        "type": "integer",
+                        "type": "string",
                     },
                     "name": {
                         "type": "string",
@@ -68,19 +64,7 @@ module.exports.productSelectionResponseSchema = {
                     "detailsDocUri": {
                         "type": "string",
                     },
-                    "paymentInterval": {
-                        "type": "string",
-                    },
-                    "price": {
-                        "type": "string",
-                    },
-                    "currency": {
-                        "type": "string",
-                    },
                     "priceFormatted": {
-                        "type": "string",
-                    },
-                    "tax": {
                         "type": "string",
                     },
                     "taxFormatted": {
