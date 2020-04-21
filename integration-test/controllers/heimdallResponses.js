@@ -61,7 +61,7 @@ module.exports.getProductOffersResponse = {
                 {
                     "document_title": "Rechtsdokumente",
                     "document_file": "gu_wg_de_ks_0419_rechtsdokumente.pdf",
-                    "document_type": null,
+                    "document_type": "LN",
                     "document_link": "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5"
                 },
                 {
