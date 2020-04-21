@@ -8,6 +8,7 @@ const sslRedirect = require('heroku-ssl-redirect');
 const validate = require('express-jsonschema').validate;
 const bodyParser = require('body-parser');
 const requestWithSignedShoppingCartSchema = require('./schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const localeRequestFilter = require('./routes/localeRequestFilter');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -41,6 +42,7 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 app.use(require('./routes/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./controllers/herokuController'));
+app.use('/wertgarantie/', localeRequestFilter.getBrowserLocale);
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));
 app.use('/wertgarantie/', checkSessionIdCheckout);
@@ -77,9 +79,10 @@ app.use(function (err, req, res, next) {
         err.status = 400;
     } else if (err.name === 'ClientError') {
         err.status = 400;
+    } else if (err.name === 'ProductOffersError') {
+        err.status = 400;
     }
     console.error(err);
-    err.message ? console.error(JSON.stringify(err, 2, null)) : console.error("no error details specified");
     res.status(err.status || 500).json({
         error: err.name,
         message: err.message

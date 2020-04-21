@@ -11,7 +11,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
 
     test("checkout shopping cart", async () => {
         clientData = await testhelper.createAndPersistDefaultClient();
-        const wertgarantieProductId = 10;
+        const wertgarantieProductId = "10";
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =
             {
@@ -42,7 +42,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
             }
         });
 
-        return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
                     price: 139999,
@@ -64,7 +64,6 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                 signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart),
                 secretClientId: clientData.secrets[0]
             });
-
     });
 
     test("should get proper after sales component data", async () => {
@@ -91,7 +90,7 @@ describe("Check Checkout via after sales component ", () => {
         const sessionId = uuid();
         const clientData = await testhelper.createAndPersistDefaultClient();
         const encryptedSessionId = signatureService.signString(sessionId, clientData.secrets[0]);
-        const wertgarantieProductId = 10;
+        const wertgarantieProductId = "10";
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =
             {

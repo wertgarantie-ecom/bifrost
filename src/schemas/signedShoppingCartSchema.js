@@ -31,7 +31,7 @@ module.exports.requestWithSignedShoppingCartSchema = {
                                     type: "object",
                                     properties: {
                                         wertgarantieProductId: {
-                                            type: "integer",
+                                            type: "string",
                                             required: true
                                         },
                                         wertgarantieProductName: {

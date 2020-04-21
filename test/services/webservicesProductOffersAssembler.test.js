@@ -1,5 +1,5 @@
 const webservicesResponses = require('../../integration-test/services/webservicesResponses');
-const webservicesService = require('../../src/services/webservicesService');
+const webservicesService = require('../../src/services/webservicesProductOffersAssembler');
 const fixtureHelper = require('../../integration-test/helper/fixtureHelper');
 const documentTypes = require('../../src/services/documentTypes').documentTypes;
 const uuid = require('uuid');
@@ -378,6 +378,7 @@ test('should update all product offers for client', async () => {
             clientId: "testClientId",
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
+            defaultPaymentInterval: "monthly",
             risks: [],
             documents: [
                 {
@@ -395,6 +396,7 @@ test('should update all product offers for client', async () => {
             clientId: "testClientId",
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
+            defaultPaymentInterval: "monthly",
             risks: ["DIEBSTAHLSCHUTZ"],
             documents: [
                 {

@@ -10,6 +10,7 @@ module.exports.productOffersConfigSchema = {
             "deviceClasses",
             "documents",
             "advantages",
+            "defaultPaymentInterval",
             "risks"
         ],
         "properties": {
@@ -24,6 +25,10 @@ module.exports.productOffersConfigSchema = {
             },
             "basicRiskType": {
                 "type": "string",
+            },
+            "defaultPaymentInterval": {
+                "type": "string",
+                "enum": ["monthly", "quarterly", "halfYearly", "yearly"]
             },
             "deviceClasses": {
                 "type": "array",

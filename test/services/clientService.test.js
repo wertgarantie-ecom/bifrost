@@ -17,6 +17,7 @@ test('should create client with valid offers config', async () => {
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
+                defaultPaymentInterval: "monthly",
                 deviceClasses: [
                     {
                         objectCode: "9025",

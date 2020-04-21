@@ -1,8 +1,9 @@
 const service = require('../../src/services/confirmationComponentService');
 const heimdallTestData = require("./heimdallTestProducts").heimdallTestProducts;
+const productOffersTestResponse = require('./productOffersTestResponses').productOffers;
 
-const heimdallClientMock = {
-    getProductOffers: async () => heimdallTestData.payload
+const productOffersMock = {
+    getProductOffers: async () => productOffersTestResponse
 };
 
 const productImageServiceMock = {
@@ -27,7 +28,7 @@ const testShoppingCart = {
     signature: "signature",
     products: [
         {
-            wertgarantieProductId: 4,
+            wertgarantieProductId: "9338a770-0d0d-4203-8d54-583a03bdebf3",
             shopProductId: "1",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             devicePrice: "1000",
@@ -35,7 +36,7 @@ const testShoppingCart = {
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         },
         {
-            wertgarantieProductId: 1,
+            wertgarantieProductId: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
             shopProductId: "1",
             deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
             devicePrice: "1000",
@@ -53,7 +54,7 @@ const expectedResponse = {
         "signature": "signature",
         "products": [
             {
-                "wertgarantieProductId": 4,
+                "wertgarantieProductId": "9338a770-0d0d-4203-8d54-583a03bdebf3",
                 "shopProductId": "1",
                 "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 "devicePrice": "1000",
@@ -61,7 +62,7 @@ const expectedResponse = {
                 "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
             },
             {
-                "wertgarantieProductId": 1,
+                "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
                 "shopProductId": "1",
                 "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 "devicePrice": "1000",
@@ -80,31 +81,29 @@ const expectedResponse = {
     confirmText: 'Bitte bestätige noch kurz:',
     products: [
         {
-            paymentInterval: 'monatl.',
-            price: 'ab 6,95 €',
-            includedTax: '(inkl. 1,11€ VerSt**)',
-            productTitle: 'Premium',
-            top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
-            productInformationSheetUri: 'https://heimdall-stg-04.wertgarantie.com/download/0fd3b43b-164c-45ea-8e2f-9b6f35c57c81',
+            price: "ab 8,00 € monatl.",
+            includedTax: "(inkl. 1,28 € VerSt**)",
+            productTitle: 'Komplettschutz',
+            top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
+            productInformationSheetUri: 'http://localhost:3000/documents/justnotthere',
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         },
         {
-            paymentInterval: 'monatl.',
-            price: 'ab 5,00 €',
-            includedTax: '(inkl. 0,80€ VerSt**)',
-            productTitle: 'Basis',
-            top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
-            productInformationSheetUri: 'https://heimdall-stg-04.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448',
+            price: "ab 9,95 € monatl.",
+            includedTax: "(inkl. 1,59 € VerSt**)",
+            productTitle: 'Komplettschutz mit Premium-Option',
+            top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
+            productInformationSheetUri: "http://localhost:3000/documents/justnotthere",
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
-        }
+        },
     ],
-    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="https://heimdall-stg-04.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
+    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://localhost:3000/documents/justnotthere">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
         '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
         '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
         '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +
@@ -115,7 +114,7 @@ const expectedResponse = {
 test("should return proper confirmation component data for one product", async () => {
     const confirmationData = await service.prepareConfirmationData(
         testShoppingCart,
-        heimdallClientMock,
+        productOffersMock,
         productImageServiceMock,
         mockClientService(clientData)
     );

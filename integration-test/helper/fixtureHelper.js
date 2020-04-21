@@ -10,7 +10,7 @@ exports.createAndPersistDefaultClient = async function createAndPersistDefaultCl
 };
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {clientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = 1, wertgarantieProductName = 'Basic'} = data;
+    const {clientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
     const sessionId = uuid();
     const shoppingCart =
         {
@@ -82,6 +82,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
+                defaultPaymentInterval: "monthly",
                 deviceClasses: [
                     {
                         objectCode: "9025",
@@ -138,6 +139,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                 productType: "KOMPLETTSCHUTZ_2019",
                 applicationCode: "GU WG DE KS 0419",
                 basicRiskType: "KOMPLETTSCHUTZ",
+                defaultPaymentInterval: "monthly",
                 deviceClasses: [
                     {
                         objectCode: "9025",

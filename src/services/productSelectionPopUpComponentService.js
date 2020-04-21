@@ -1,7 +1,7 @@
 const productImageService = require('./productImageService');
-const defaultHeimdallClient = require("./heimdallClient");
-const productService = require("./heimdallProductOfferService");
-const documentType = require("./heimdallProductOfferService").documentType;
+const _productOffersService = require("./productOffersService");
+const productService = require("./productOfferFormattingService");
+const documentTypes = require("./documentTypes").documentTypes;
 const defaultClientService = require('../services/clientService');
 const schema = require('../schemas/productSelectionResponseSchema').productSelectionResponseSchema;
 const jsonschema = require('jsonschema');
@@ -9,11 +9,12 @@ const jsonschema = require('jsonschema');
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
                                                                                  clientId,
-                                                                                 heimdallClient = defaultHeimdallClient,
+                                                                                 productOffersService = _productOffersService,
                                                                                  imageService = productImageService,
                                                                                  clientService = defaultClientService) {
     const client = await clientService.findClientForPublicClientId(clientId);
-    const productOffers = await heimdallClient.getProductOffers(client, deviceClass, devicePrice);
+    const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
+    const productOffers = productOffersData.productOffers;
     const products = [];
     let imageLinks = [];
     imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
@@ -28,27 +29,24 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     return jsonschema.validate(data, schema);
 };
 
-function convertPayloadToSelectionPopUpProduct(heimdallProductOffer, imageLink, allProductOffers) {
-    const product = productService.fromProductOffer(heimdallProductOffer);
-    heimdallProductOffer.payment = product.getPaymentInterval();
+function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers) {
+    const displayableProductOffer = productService.fromProductOffer(productOffer);
+    productOffer.payment = displayableProductOffer.getPaymentInterval();
 
-    const advantageCategories = product.getAdvantageCategories(allProductOffers);
+    const advantageCategories = displayableProductOffer.getAdvantageCategories(allProductOffers);
     return {
-        id: heimdallProductOffer.id,
-        name: heimdallProductOffer.name,
+        id: productOffer.id,
+        name: productOffer.name,
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
-        infoSheetText: product.getDocument(documentType.LEGAL_NOTICE).title,
-        infoSheetUri: product.getDocument(documentType.LEGAL_NOTICE).uri,
-        detailsDocText: product.getDocument(documentType.GENERAL_INSURANCE_PRODUCTS_INFORMATION).title,
-        detailsDocUri: product.getDocument(documentType.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri,
-        paymentInterval: heimdallProductOffer.payment,
-        price: heimdallProductOffer.price,
-        currency: heimdallProductOffer.price_currency,
-        priceFormatted: heimdallProductOffer.price_formatted,
-        tax: heimdallProductOffer.price_tax,
-        taxFormatted: product.getIncludedTaxFormatted(),
+        infoSheetText: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).name,
+        infoSheetUri: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).uri,
+        detailsDocText: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).name,
+        detailsDocUri: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).uri,
+        priceFormatted: displayableProductOffer.getPriceFormatted(),
+        taxFormatted: displayableProductOffer.getIncludedTaxFormatted(),
         imageLink: imageLink
     }
 }
+

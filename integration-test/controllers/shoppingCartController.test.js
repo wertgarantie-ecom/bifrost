@@ -45,7 +45,7 @@ describe("Checkout Shopping Cart", () => {
 
     test("should checkout shopping cart", async (done) => {
         clientData = await testhelper.createAndPersistDefaultClient();
-        const wertgarantieProductId = 10;
+        const wertgarantieProductId = "10";
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =
             {
@@ -103,7 +103,7 @@ describe("Checkout Shopping Cart", () => {
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
         expect(body.clientId).toEqual(clientData.publicClientIds[0]);
-        expect(purchase.wertgarantieProductId).toEqual(10);
+        expect(purchase.wertgarantieProductId).toEqual("10");
         expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
         expect(purchase.devicePrice).toEqual(139999);
