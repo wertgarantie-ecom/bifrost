@@ -13,6 +13,9 @@ workflows:
       - deploy-staging:
           requires:
             - deploy-dev
+      - deploy-prod:
+          requires:
+            - deploy-staging
 jobs:
   build:
     machine: true
