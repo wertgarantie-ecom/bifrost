@@ -1,5 +1,5 @@
-const service = require("../../src/services/heimdallProductOfferService");
-const documentType = require("../../src/services/heimdallProductOfferService").documentType;
+const service = require("../../src/services/productOfferFormattingService");
+const documentType = require("../../src/services/productOfferFormattingService").documentType;
 
 test("should extract correct document", () => {
     const heimdallProductOffer = {
@@ -75,20 +75,14 @@ test("should not fail on missing document", () => {
 
 test("should return correct diff array", () => {
     const productOffer = {
-        special_advantages: [],
-        services: [],
-        advantages: ["advantage1, advantage2, advantage3"]
+        advantages: ["advantage1", "advantage2", "advantage3"]
     };
     const allAdvantages = [
         {
-            special_advantages: [],
-            services: [],
-            advantages: ["advantage1, advantage2, advantage3"],
+            advantages: ["advantage1", "advantage2", "advantage3"],
         },
         {
-            special_advantages: ["special_advantage"],
-            services: ["service"],
-            advantages: ["advantage1, advantage2, advantage3", "advantage4"],
+            advantages: ["advantage1", "advantage2", "advantage3", "advantage4", "service", "special_advantage"],
         }
     ];
 
@@ -96,5 +90,5 @@ test("should return correct diff array", () => {
     const advantagesDiff = service.fromProductOffer(productOffer).getAdvantageCategories(allAdvantages).excludedAdvantages;
 
     expect(advantagesDiff).toContain("special_advantage", "service", "advantage4");
-    expect(advantagesDiff).not.toContain("advantage1, advantage2, advantage3");
+    expect(advantagesDiff).not.toContain("advantage1", "advantage2", "advantage3");
 });

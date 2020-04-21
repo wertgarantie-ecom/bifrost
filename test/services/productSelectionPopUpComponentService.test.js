@@ -1,5 +1,5 @@
 const service = require('../../src/services/productSelectionPopUpComponentService');
-const heimdallTestProducts = require("./heimdallTestProducts").heimdallTestProducts;
+const productOffersTestResponses = require("./productOffersTestResponses");
 const heimdallResponseWithoutDocuments = require("./heimdallTestProducts").heimdallResponseWithoutDocuments;
 
 const productImagesServiceMock = {
@@ -20,8 +20,9 @@ function mockClientService(clientData) {
 }
 
 test("should return proper product response", async () => {
+    process.env.BACKEND = "heimdall";
     const heimdallClientMock = {
-        getProductOffers: () => Promise.resolve(heimdallTestProducts.payload)
+        getProductOffers: () => productOffersTestResponses.productOffers
     };
     const result = await service.prepareProductSelectionData("1dfd4549-9bdc-4285-9047-e5088272dade",
         "devicePrice",

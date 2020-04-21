@@ -39,11 +39,9 @@ exports.fromProductOffer = function fromProduct(productOffer) {
 
         getIncludedTaxFormatted() {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const formattedNumber = new Intl.NumberFormat('de-DE', {
-                style: 'currency',
-                currency: intervalPrice.price_currency
-            }).format(intervalPrice.price_tax);
-            return "(inkl. " + formattedNumber + " VerSt**)"
+            const priceFormatter = new Intl.NumberFormat(['de-DE'], {style: 'currency', currency: intervalPrice.priceCurrency});
+            const formattedTax = priceFormatter.format(intervalPrice.priceTax / 100);
+            return "(inkl. " + formattedTax + " VerSt**)"
         },
 
         getDocument(documentType) {

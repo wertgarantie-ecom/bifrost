@@ -22,6 +22,7 @@ test("test webservices product offer conversion", async () => {
                     "alles wird gut",
                     "Corona Party!!!"
                 ],
+                "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
                         "price": 800,
@@ -60,6 +61,7 @@ test("test webservices product offer conversion", async () => {
                     "was gegen Wasser",
                     "mit Soße"
                 ],
+                "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
                         "price": 995,
@@ -187,6 +189,7 @@ const productOffersResult = [
         "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
         "name": "Komplettschutz",
         "risks": [],
+        "defaultPaymentInterval": "monthly",
         "devices": [
             {
                 "intervals": [
@@ -393,6 +396,7 @@ const productOffersResult = [
         "risks": [
             "DIEBSTAHLSCHUTZ"
         ],
+        "defaultPaymentInterval": "monthly",
         "devices": [
             {
                 "intervals": [

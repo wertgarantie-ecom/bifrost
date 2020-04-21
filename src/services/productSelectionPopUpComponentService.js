@@ -1,7 +1,7 @@
 const productImageService = require('./productImageService');
 const _productOffersService = require("./productOffersService");
-const productService = require("./heimdallProductOfferService");
-const documentType = require("./heimdallProductOfferService").documentType;
+const productService = require("./productOfferFormattingService");
+const documentType = require("./productOfferFormattingService").documentType;
 const defaultClientService = require('../services/clientService');
 const schema = require('../schemas/productSelectionResponseSchema').productSelectionResponseSchema;
 const jsonschema = require('jsonschema');
@@ -13,7 +13,8 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
                                                                                  imageService = productImageService,
                                                                                  clientService = defaultClientService) {
     const client = await clientService.findClientForPublicClientId(clientId);
-    const productOffers = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
+    const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
+    const productOffers = productOffersData.productOffers;
     const products = [];
     let imageLinks = [];
     imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
@@ -45,9 +46,9 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         detailsDocUri: product.getDocument(documentType.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri,
         paymentInterval: productOffer.payment,
         price: productOffer.price,
-        currency: productOffer.price_currency,
-        priceFormatted: productOffer.price_formatted,
-        tax: productOffer.price_tax,
+        currency: productOffer.priceCurrency,
+        priceFormatted: productOffer.priceFormatted,
+        tax: productOffer.priceTax,
         taxFormatted: product.getIncludedTaxFormatted(),
         imageLink: imageLink
     }
