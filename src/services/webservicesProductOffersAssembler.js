@@ -147,6 +147,7 @@ async function getLegalDocuments(session, productOfferConfig, webservicesClient 
         if (!document) {
             return undefined;
         }
+        document.type = legalDocumentConfig.type;
         const documentID = await documentRespository.persist(document);
         return {
             documentTitle: document.FILENAME,
@@ -164,6 +165,7 @@ async function getComparisonDocuments(session, productOfferConfig, webservicesCl
         if (!document) {
             return undefined;
         }
+        document.type = comparisonDocumentConfig.type;
         const documentID = await documentRespository.persist(document);
         return {
             documentTitle: document.FILENAME,

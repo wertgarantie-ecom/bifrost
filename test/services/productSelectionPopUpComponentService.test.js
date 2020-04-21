@@ -42,7 +42,8 @@ test("should return proper product response", async () => {
             infoSheetText: "Rechtsdokumente",
             infoSheetUri: "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
             name: "Komplettschutz",
-            priceFormatted: "ab 8,00 € monatl.",
+            paymentInterval: "monatl.",
+            priceFormatted: "ab 8,00 €",
             taxFormatted: "(inkl. 1,28 € VerSt**)",
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"]
         }, {
@@ -55,7 +56,8 @@ test("should return proper product response", async () => {
             infoSheetText: "Rechtsdokumente",
             infoSheetUri: "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
             name: "Komplettschutz mit Premium-Option",
-            priceFormatted: "ab 9,95 € monatl.",
+            paymentInterval: "monatl.",
+            priceFormatted: "ab 9,95 €",
             taxFormatted: "(inkl. 1,59 € VerSt**)",
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
         }]

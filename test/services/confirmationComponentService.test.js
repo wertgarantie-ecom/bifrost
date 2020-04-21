@@ -1,5 +1,4 @@
 const service = require('../../src/services/confirmationComponentService');
-const heimdallTestData = require("./heimdallTestProducts").heimdallTestProducts;
 const productOffersTestResponse = require('./productOffersTestResponses').productOffers;
 
 const productOffersMock = {
@@ -81,7 +80,8 @@ const expectedResponse = {
     confirmText: 'Bitte bestätige noch kurz:',
     products: [
         {
-            price: "ab 8,00 € monatl.",
+            paymentInterval: "monatl.",
+            price: "ab 8,00 €",
             includedTax: "(inkl. 1,28 € VerSt**)",
             productTitle: 'Komplettschutz',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
@@ -92,7 +92,8 @@ const expectedResponse = {
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
         },
         {
-            price: "ab 9,95 € monatl.",
+            paymentInterval: "monatl.",
+            price: "ab 9,95 €",
             includedTax: "(inkl. 1,59 € VerSt**)",
             productTitle: 'Komplettschutz mit Premium-Option',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],

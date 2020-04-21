@@ -50,7 +50,7 @@ exports.fromProductOffer = function fromProductOffer(productOffer) {
             const intervalData = productOffer.prices[productOffer.defaultPaymentInterval];
             const globalizer = Globalize.getInstance();
             const formattedPrice = globalizer.currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
-            return "ab " + formattedPrice + " " + productOffer.payment;
+            return "ab " + formattedPrice;
         },
 
         getDocument(documentType) {

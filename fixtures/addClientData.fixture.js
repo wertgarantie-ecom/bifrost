@@ -71,6 +71,10 @@ describe('add phone test shop client', () => {
                             {
                                 type: documentTypes.LEGAL_NOTICE,
                                 pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            },
+                            {
+                                type: documentTypes.PRODUCT_INFORMATION_SHEET,
+                                pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
                             }
                         ],
                         comparisonDocuments: []
@@ -138,6 +142,10 @@ describe('add phone test shop client', () => {
                             {
                                 type: documentTypes.LEGAL_NOTICE,
                                 pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            },
+                            {
+                                type: documentTypes.PRODUCT_INFORMATION_SHEET,
+                                pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
                             }
                         ],
                         comparisonDocuments: []
@@ -284,6 +292,10 @@ describe('add phone test shop client', () => {
                             {
                                 type: documentTypes.LEGAL_NOTICE,
                                 pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            },
+                            {
+                                type: documentTypes.PRODUCT_INFORMATION_SHEET,
+                                pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
                             }
                         ],
                         comparisonDocuments: []
@@ -351,6 +363,10 @@ describe('add phone test shop client', () => {
                             {
                                 type: documentTypes.LEGAL_NOTICE,
                                 pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            },
+                            {
+                                type: documentTypes.PRODUCT_INFORMATION_SHEET,
+                                pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
                             }
                         ],
                         comparisonDocuments: []

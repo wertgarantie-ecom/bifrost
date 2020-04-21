@@ -18,9 +18,9 @@ exports.persist = async function persist(document) {
             text: "INSERT INTO documents (id, name, type, content) VALUES ($1 , $2 , $3, $4);",
             values: [
                 hash,
-                document.name,
+                document.FILENAME,
                 document.type,
-                document.content
+                document.CONTENT
             ]
         };
         await client.query(query);
