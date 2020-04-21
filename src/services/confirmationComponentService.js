@@ -1,12 +1,12 @@
-const defaultHeimdallClient = require('./heimdallClient');
-const productOfferService = require('./productOfferFormattingService');
-const documentType = require('./productOfferFormattingService').documentType;
+const productOfferFormattingService = require('./productOfferFormattingService');
+const _productOfferService = require('./productOffersService');
+const documentTypes = require('./documentTypes').documentTypes;
 const defaultProductImageService = require('./productImageService');
 const defaultClientService = require('./clientService');
 const _ = require('lodash');
 
 exports.prepareConfirmationData = async function prepareConfirmationData(shoppingCart,
-                                                                         heimdallClient = defaultHeimdallClient,
+                                                                         productOfferService = _productOfferService,
                                                                          productImageService = defaultProductImageService,
                                                                          clientService = defaultClientService) {
     if (!shoppingCart) {
@@ -25,7 +25,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     const client = await clientService.findClientForPublicClientId(shoppingCart.clientId);
     for (var i = 0; i < shoppingCart.products.length; i++) {
         const wertgarantieProduct = shoppingCart.products[i];
-        const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, heimdallClient, productImageService);
+        const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, productOfferService, productImageService);
         if (confirmationProductData) {
             result.products.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
@@ -45,14 +45,14 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     return result;
 };
 
-async function getConfirmationProductData(wertgarantieProduct, client, heimdallClient = defaultHeimdallClient, productImageService = defaultProductImageService) {
-    const productOffers = await heimdallClient.getProductOffers(client, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice);
+async function getConfirmationProductData(wertgarantieProduct, client, productOfferService = _productOfferService, productImageService = defaultProductImageService) {
+    const productOffers = (await productOfferService.getProductOffers(client, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice)).productOffers;
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
-        const heimdallProduct = productOfferService.fromProductOffer(matchingOffer);
+        const heimdallProduct = productOfferFormattingService.fromProductOffer(matchingOffer);
         const advantageCategories = heimdallProduct.getAdvantageCategories(productOffers);
-        const productInformationSheet = heimdallProduct.getDocument(documentType.PRODUCT_INFORMATION_SHEET);
+        const productInformationSheet = heimdallProduct.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET);
         return {
             product: {
                 paymentInterval: heimdallProduct.getPaymentInterval(),
@@ -66,7 +66,7 @@ async function getConfirmationProductData(wertgarantieProduct, client, heimdallC
                 shopProductShortName: wertgarantieProduct.shopProductName,
                 orderId: wertgarantieProduct.orderId
             },
-            avbHref: heimdallProduct.getDocument(documentType.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri
+            avbHref: heimdallProduct.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri
         };
     }
 

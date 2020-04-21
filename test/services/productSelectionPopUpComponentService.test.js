@@ -35,28 +35,28 @@ test("should return proper product response", async () => {
         products: [{
             advantages: ["Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
             detailsDocText: "Informationsblatt für Versicherungsprodukte",
-            detailsDocUri: "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
+            detailsDocUri: "http://localhost:3000/documents/justnotthere",
             excludedAdvantages: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall", "einfacher Diebstahl"],
             id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
             imageLink: "imageLink1",
             infoSheetText: "Rechtsdokumente",
-            infoSheetUri: "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5",
+            infoSheetUri: "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
             name: "Komplettschutz",
-            priceFormatted: "ab 5,00 € monatl.",
-            taxFormatted: "(inkl. 0,80 € VerSt**)",
+            priceFormatted: "ab 8,00 € monatl.",
+            taxFormatted: "(inkl. 1,28 € VerSt**)",
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"]
         }, {
             advantages: ["einfacher Diebstahl", "Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz", "Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
             detailsDocText: "Informationsblatt für Versicherungsprodukte",
-            detailsDocUri: "https://heimdall-stg-04.wertgarantie.com/download/191a36e2-6685-4a3d-beb0-dc0159a90387",
+            detailsDocUri: "http://localhost:3000/documents/justnotthere",
             excludedAdvantages: [],
             id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
             imageLink: "imageLink2",
             infoSheetText: "Rechtsdokumente",
-            infoSheetUri: "https://heimdall-stg-04.wertgarantie.com/download/928e51ef-d92f-4aa4-ba42-61d1e100af2f",
+            infoSheetUri: "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
             name: "Komplettschutz mit Premium-Option",
-            priceFormatted: "ab 6,95 € monatl.",
-            taxFormatted: "(inkl. 1,11 € VerSt**)",
+            priceFormatted: "ab 9,95 € monatl.",
+            taxFormatted: "(inkl. 1,59 € VerSt**)",
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
         }]
     };

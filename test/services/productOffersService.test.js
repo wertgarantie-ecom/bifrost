@@ -106,7 +106,7 @@ test("test heimdall product offer conversion", async () => {
         "generalDocuments": [],
         "productOffers": [
             {
-                "id": 1,
+                "id": "1",
                 "name": "Basis",
                 "advantages": [
                     "Für private und berufliche Nutzung",

@@ -1,75 +1,49 @@
 const service = require("../../src/services/productOfferFormattingService");
-const documentType = require("../../src/services/productOfferFormattingService").documentType;
+const documentTypes = require("../../src/services/documentTypes").documentTypes;
 
 test("should extract correct document", () => {
-    const heimdallProductOffer = {
-        documents: [
+    const productOffer = {
+        "documents": [
             {
-                "document_title": "Rechtsdokumente",
-                "document_file": "gu_wg_de_ks_0419_rechtsdokumente.pdf",
-                "document_type": null,
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5"
+                "uri": "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "type": "LN",
+                "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
             },
             {
-                "document_title": "Informationsblatt für Versicherungsprodukte",
-                "document_file": "ipid.pdf",
-                "document_type": "IPID",
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1"
-            },
-            {
-                "document_title": "Versicherungsschein",
-                "document_file": "policy.pdf",
-                "document_type": "POLICY",
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/e725f5d0-a72c-4d00-9063-81753f191150"
-            },
-            {
-                "document_title": "DSGVO Beileger",
-                "document_file": "gdpr.pdf",
-                "document_type": "GDPR",
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/334e5b9b-0fb5-4a45-859e-ad0267a4431e"
-            }]
+                "uri": "http://localhost:3000/documents/abc",
+                "type": "IPID",
+                "name": "GU WG DE KS 0419_IPID.PDF"
+            }
+        ]
     };
 
-    const document = service.fromProductOffer(heimdallProductOffer).getDocument(documentType.INSURANCE_CERTIFICATE);
+    const document = service.fromProductOffer(productOffer).getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
 
-    expect(document.uri).toEqual("https://heimdall-stg-04.wertgarantie.com/download/e725f5d0-a72c-4d00-9063-81753f191150");
-    expect(document.title).toEqual("Versicherungsschein");
+    expect(document.uri).toEqual("http://localhost:3000/documents/abc");
+    expect(document.name).toEqual("GU WG DE KS 0419_IPID.PDF");
 });
 
 
 test("should not fail on missing document", () => {
-    const heimdallProductOffer = {
-        documents: [
+    const productOffer = {
+        "documents": [
             {
-                "document_title": "Rechtsdokumente",
-                "document_file": "gu_wg_de_ks_0419_rechtsdokumente.pdf",
-                "document_type": null,
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5"
+                "uri": "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
+                "type": "LN",
+                "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
             },
             {
-                "document_title": "Informationsblatt für Versicherungsprodukte",
-                "document_file": "ipid.pdf",
-                "document_type": "IPID",
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1"
-            },
-            {
-                "document_title": "Versicherungsschein",
-                "document_file": "policy.pdf",
-                "document_type": "POLICY",
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/e725f5d0-a72c-4d00-9063-81753f191150"
-            },
-            {
-                "document_title": "DSGVO Beileger",
-                "document_file": "gdpr.pdf",
-                "document_type": "GDPR",
-                "document_link": "https://heimdall-stg-04.wertgarantie.com/download/334e5b9b-0fb5-4a45-859e-ad0267a4431e"
-            }]
+                "uri": "http://localhost:3000/documents/abc",
+                "type": "IPID",
+                "name": "GU WG DE KS 0419_IPID.PDF"
+            }
+        ]
     };
 
-    const document = service.fromProductOffer(heimdallProductOffer).getDocument(documentType.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE);
+    const document = service.fromProductOffer(productOffer).getDocument(documentTypes.COMPARISON);
 
     expect(document.uri).toEqual(undefined);
-    expect(document.title).toEqual(undefined);
+    expect(document.name).toEqual(undefined);
 });
 
 

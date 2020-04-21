@@ -43,6 +43,16 @@ exports.productOffers = {
                     "uri": "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
                     "type": "LN",
                     "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "PIS",
+                    "name": "PRODUCT_INFORMATION_SHEET.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "IPID",
+                    "name": "GENERAL.PDF"
                 }
             ]
         },
@@ -92,6 +102,16 @@ exports.productOffers = {
                     "uri": "http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
                     "type": "LN",
                     "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "PIS",
+                    "name": "PRODUCT_INFORMATION_SHEET.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "IPID",
+                    "name": "GENERAL.PDF"
                 }
             ]
         }

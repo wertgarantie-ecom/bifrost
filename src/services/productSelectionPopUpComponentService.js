@@ -30,22 +30,23 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
 };
 
 function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers) {
-    const product = productService.fromProductOffer(productOffer);
-    productOffer.payment = product.getPaymentInterval();
+    const displayableProductOffer = productService.fromProductOffer(productOffer);
+    productOffer.payment = displayableProductOffer.getPaymentInterval();
 
-    const advantageCategories = product.getAdvantageCategories(allProductOffers);
+    const advantageCategories = displayableProductOffer.getAdvantageCategories(allProductOffers);
     return {
         id: productOffer.id,
         name: productOffer.name,
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
-        infoSheetText: product.getDocument(documentTypes.LEGAL_NOTICE).name,
-        infoSheetUri: product.getDocument(documentTypes.LEGAL_NOTICE).uri,
-        detailsDocText: product.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).name,
-        detailsDocUri: product.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri,
-        priceFormatted: product.getPriceFormatted(),
-        taxFormatted: product.getIncludedTaxFormatted(),
+        infoSheetText: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).name,
+        infoSheetUri: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).uri,
+        detailsDocText: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).name,
+        detailsDocUri: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).uri,
+        priceFormatted: displayableProductOffer.getPriceFormatted(),
+        taxFormatted: displayableProductOffer.getIncludedTaxFormatted(),
         imageLink: imageLink
     }
 }
+

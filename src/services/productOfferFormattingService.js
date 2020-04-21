@@ -1,7 +1,8 @@
 const _ = require("lodash");
 const Globalize = require('../globalize').Globalize;
+const documentTypes = require('./documentTypes').documentTypes;
 
-exports.fromProductOffer = function fromProduct(productOffer) {
+exports.fromProductOffer = function fromProductOffer(productOffer) {
     return {
         getPaymentInterval() {
             switch (productOffer.defaultPaymentInterval) {
@@ -53,9 +54,18 @@ exports.fromProductOffer = function fromProduct(productOffer) {
         },
 
         getDocument(documentType) {
+            function documentTypeToDescription(documentType) {
+                switch (documentType) {
+                    case documentTypes.PRODUCT_INFORMATION_SHEET:
+                        return "Informationsblatt für Versicherungsprodukte";
+                    case documentTypes.LEGAL_NOTICE:
+                        return "Rechtsdokumente";
+                }
+            }
+
             const document = _.find(productOffer.documents, ["type", documentType]);
             return {
-                name: _.get(document, "name"),
+                name: documentTypeToDescription(document.type),
                 uri: _.get(document, "uri")
             }
         }
