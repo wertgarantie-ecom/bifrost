@@ -52,3 +52,11 @@ jobs:
       - heroku/deploy-via-git:
           only-branch: master
           app-name: wertgarantie-bifrost-staging
+  deploy-prod:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git:
+          only-branch: master
+          app-name: wertgarantie-bifrost-prod
