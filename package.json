@@ -53,10 +53,10 @@
     "request": "^2.88.0",
     "testcontainers": "^2.2.0",
     "uuid": "^3.3.3",
-    "xmlbuilder2": "^2.1.1"
+    "xmlbuilder2": "^2.1.1",
+    "axios-logger": "^2.3.0"
   },
   "devDependencies": {
-    "axios-logger": "^2.3.0",
     "eslint": "^6.3.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
