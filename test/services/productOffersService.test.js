@@ -99,7 +99,7 @@ test("test webservices product offer conversion", async () => {
 test("test heimdall product offer conversion", async () => {
     process.env.BACKEND = "heimdall";
     const mockHeimdallClient = {
-        getProductOffers: () => heimdallProductOffers
+        getProductOffers: () => heimdallProductOffers.payload
     };
     const result = await productOffersService.getProductOffers({}, "Smartphone", 80000, undefined, mockHeimdallClient);
     expect(result).toEqual({
@@ -144,7 +144,7 @@ test("test heimdall product offer conversion", async () => {
                 },
                 "documents": [
                     {
-                        "type": null,
+                        "type": "LN",
                         "name": "Rechtsdokumente",
                         "uri": "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5"
                     },
