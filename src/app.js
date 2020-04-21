@@ -82,8 +82,7 @@ app.use(function (err, req, res, next) {
     } else if (err.name === 'ProductOffersError') {
         err.status = 400;
     }
-    console.error(JSON.stringify(err, null, 2));
-    err.message ? console.error(JSON.stringify(err, null, 2)) : console.error("no error details specified");
+    console.error(err);
     res.status(err.status || 500).json({
         error: err.name,
         message: err.message

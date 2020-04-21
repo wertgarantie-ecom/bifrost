@@ -15,7 +15,7 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(req, 
         })
     }
     const wertgarantieProductToAdd = {
-        wertgarantieProductId: parseInt(req.body.productId),
+        wertgarantieProductId: req.body.productId,
         wertgarantieProductName: req.body.productName,
         deviceClass: req.body.deviceClass,
         devicePrice: parseInt(req.body.devicePrice),
