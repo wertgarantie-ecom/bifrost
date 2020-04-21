@@ -19,7 +19,7 @@ async function getProductOffers(clientConfig, deviceClass, price, productOffersR
 }
 
 function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
-    return heimdallClientResponse.payload.map(heimdallOffer => {
+    return heimdallClientResponse.map(heimdallOffer => {
         return {
             id: heimdallOffer.id + "",
             name: heimdallOffer.name,
