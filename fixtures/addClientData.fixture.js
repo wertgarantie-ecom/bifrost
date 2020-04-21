@@ -1,3 +1,4 @@
+const documentTypes = require('../src/services/documentTypes').documentTypes;
 const request = require('supertest');
 const app = require('../src/app');
 
@@ -18,6 +19,146 @@ describe('add phone test shop client', () => {
             ],
             publicClientIds: [
                 "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"
+            ],
+            productOffersConfigurations: [
+                {
+                    name: "Komplettschutz",
+                    productType: "KOMPLETTSCHUTZ_2019",
+                    applicationCode: "GU WG DE KS 0419",
+                    basicRiskType: "KOMPLETTSCHUTZ",
+                    defaultPaymentInterval: "monthly",
+                    deviceClasses: [
+                        {
+                            objectCode: "9025",
+                            objectCodeExternal: "Smartphone",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        },
+                        {
+                            objectCode: "73",
+                            objectCodeExternal: "Mobilfunk",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        }
+
+                    ],
+                    documents: {
+                        legalDocuments: [
+                            {
+                                type: documentTypes.LEGAL_NOTICE,
+                                pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            }
+                        ],
+                        comparisonDocuments: []
+                    },
+                    advantages: [
+                        "Für private und berufliche Nutzung",
+                        "Unsachgemäße Handhabung",
+                        "Weltweiter Schutz",
+                        "Volle Kostenübernahme bei Reparaturen",
+                        "Bei Totalschaden zählt der Zeitwert",
+                        "Für private und berufliche Nutzung",
+                        "Weltweiter Schutz",
+                        "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                        "Unsachgemäße Handhabung"
+                    ],
+                    risks: []
+                },
+                {
+                    name: "Komplettschutz mit Premium-Option",
+                    productType: "KOMPLETTSCHUTZ_2019",
+                    applicationCode: "GU WG DE KS 0419",
+                    basicRiskType: "KOMPLETTSCHUTZ",
+                    defaultPaymentInterval: "monthly",
+                    deviceClasses: [
+                        {
+                            objectCode: "9025",
+                            objectCodeExternal: "Smartphone",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        },
+                        {
+                            objectCode: "73",
+                            objectCodeExternal: "Mobilfunk",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        }
+
+                    ],
+                    documents: {
+                        legalDocuments: [
+                            {
+                                type: documentTypes.LEGAL_NOTICE,
+                                pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            }
+                        ],
+                        comparisonDocuments: []
+                    },
+                    advantages: [
+                        "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
+                        "Diebstahlschutz",
+                        "Keine Selbstbeteiligung im Schadensfall",
+                        "einfacher Diebstahl",
+                        "Für private und berufliche Nutzung",
+                        "Unsachgemäße Handhabung",
+                        "Weltweiter Schutz",
+                        "Volle Kostenübernahme bei Reparaturen",
+                        "Bei Totalschaden zählt der Zeitwert",
+                        "Für private und berufliche Nutzung",
+                        "Weltweiter Schutz",
+                        "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                        "Unsachgemäße Handhabung"
+                    ],
+                    risks: ["DIEBSTAHLSCHUTZ"]
+                }
             ]
         };
 
@@ -91,6 +232,146 @@ describe('add phone test shop client', () => {
             ],
             publicClientIds: [
                 "public:b9f303d0-74e1-11ea-b9e9-034d1bd36e8d"
+            ],
+            productOffersConfigurations: [
+                {
+                    name: "Komplettschutz",
+                    productType: "KOMPLETTSCHUTZ_2019",
+                    applicationCode: "GU WG DE KS 0419",
+                    basicRiskType: "KOMPLETTSCHUTZ",
+                    defaultPaymentInterval: "monthly",
+                    deviceClasses: [
+                        {
+                            objectCode: "9025",
+                            objectCodeExternal: "Smartphone",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        },
+                        {
+                            objectCode: "73",
+                            objectCodeExternal: "Mobilfunk",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        }
+
+                    ],
+                    documents: {
+                        legalDocuments: [
+                            {
+                                type: documentTypes.LEGAL_NOTICE,
+                                pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            }
+                        ],
+                        comparisonDocuments: []
+                    },
+                    advantages: [
+                        "Für private und berufliche Nutzung",
+                        "Unsachgemäße Handhabung",
+                        "Weltweiter Schutz",
+                        "Volle Kostenübernahme bei Reparaturen",
+                        "Bei Totalschaden zählt der Zeitwert",
+                        "Für private und berufliche Nutzung",
+                        "Weltweiter Schutz",
+                        "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                        "Unsachgemäße Handhabung"
+                    ],
+                    risks: []
+                },
+                {
+                    name: "Komplettschutz mit Premium-Option",
+                    productType: "KOMPLETTSCHUTZ_2019",
+                    applicationCode: "GU WG DE KS 0419",
+                    basicRiskType: "KOMPLETTSCHUTZ",
+                    defaultPaymentInterval: "monthly",
+                    deviceClasses: [
+                        {
+                            objectCode: "9025",
+                            objectCodeExternal: "Smartphone",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        },
+                        {
+                            objectCode: "73",
+                            objectCodeExternal: "Mobilfunk",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30001
+                                },
+                                {
+                                    minClose: 30001,
+                                    maxOpen: 80001
+                                },
+                                {
+                                    minClose: 80001,
+                                    maxOpen: 180001
+                                }
+                            ]
+                        }
+
+                    ],
+                    documents: {
+                        legalDocuments: [
+                            {
+                                type: documentTypes.LEGAL_NOTICE,
+                                pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            }
+                        ],
+                        comparisonDocuments: []
+                    },
+                    advantages: [
+                        "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
+                        "Diebstahlschutz",
+                        "Keine Selbstbeteiligung im Schadensfall",
+                        "einfacher Diebstahl",
+                        "Für private und berufliche Nutzung",
+                        "Unsachgemäße Handhabung",
+                        "Weltweiter Schutz",
+                        "Volle Kostenübernahme bei Reparaturen",
+                        "Bei Totalschaden zählt der Zeitwert",
+                        "Für private und berufliche Nutzung",
+                        "Weltweiter Schutz",
+                        "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                        "Unsachgemäße Handhabung"
+                    ],
+                    risks: ["DIEBSTAHLSCHUTZ"]
+                }
             ]
         };
 
@@ -109,6 +390,13 @@ describe('add phone test shop client', () => {
                 .send(validData)
                 .expect(200);
         }
+        done();
+    });
+
+    test("update product offers for all clients", async (done) => {
+        const response = await request(app).post(`/wertgarantie/productOffers`)
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+        console.log(response.body);
         done();
     });
 
