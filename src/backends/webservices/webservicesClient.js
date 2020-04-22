@@ -208,6 +208,20 @@ exports.getNewContractNumber = async function getNewContractNumber(session, http
     return result.RESULT.NEWCONTRACTNUMBER;
 };
 
+exports.sendInsuranceProposal = async function sendInsuranceProposal(session, insuranceProposalXML, httpClient = axiosWithCompleteLogging) {
+    if (!session) {
+        throw new Error(`request data not provided. Session: ${session}`);
+    }
+    const formData = new FormData();
+    formData.append('FUNCTION', 'SET_XML_INTERFACE');
+    formData.append('SHAPING', 'DEFAULT');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', session);
+    formData.append('DATA', insuranceProposalXML);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    return result.RESULT;
+};
+
 async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {
     let response;
     const formHeaders = formData.getHeaders();

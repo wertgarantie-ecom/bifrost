@@ -64,7 +64,7 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
         name: productOfferConfig.name,
         id: uuid(),
         applicationCode: productOfferConfig.applicationCode,
-        risks: productOfferConfig.risks,
+        risks: [productOfferConfig.basicRiskType, ...productOfferConfig.risks],
         productType: productOfferConfig.productType,
         clientId: clientId,
         defaultPaymentInterval: productOfferConfig.defaultPaymentInterval,

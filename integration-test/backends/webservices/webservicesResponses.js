@@ -361,3 +361,19 @@ exports.newContractNumber = {
     "STATUSCODE": "0",
     "PAGE": "1"
 };
+
+exports.successfulInsuranceProposal = {
+    "RESULT": {
+        "STATUS_TEXT": "Verarbeitet",
+        "STATUS_CODE": "3"
+    },
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "1",
+    "AMOUNT": "30",
+    "STATUS": "OK",
+    "REQUEST_ID": "98889510",
+    "ORDERBY": {},
+    "SORT": {},
+    "STATUSCODE": "0",
+    "PAGE": "1"
+};

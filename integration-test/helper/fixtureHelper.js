@@ -50,7 +50,6 @@ exports.createDefaultClient = function createDefaultClient() {
             "secret:" + uuid()
         ],
         activePartnerNumber: 12345,
-
     };
 };
 

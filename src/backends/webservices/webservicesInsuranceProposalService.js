@@ -1,30 +1,33 @@
 const {create} = require('xmlbuilder2');
 const dateformat = require('dateformat');
 const uuid = require('uuid');
+const _webservicesClient = require('./webservicesClient');
+const _productOffersRepository = require('../../productoffers/productOffersRepository');
+const _ = require('lodash');
 
-exports.sendInsuranceProposal = async function sendInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, clientConfig) {
-    // hole contract number
-    // generiere Satznummer (möglicher Identifier auf unserer Seite?)
+exports.submitInsuranceProposal = async function submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, satznummerGenerator = uuid) {
+    const session = await webservicesClient.login(clientConfig);
+    const contractnumber = await webservicesClient.getNewContractNumber(session);
+    const satznummer = satznummerGenerator();
     // hole productoffer für wertgarantieProductId
-    // Wertgarantie Object Code ermitteln
+    const productOffersForClient = productOffersRepository.findByClientId(clientConfig.id);
+    const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
+
+    // Wertgarantie Object Code ermitteln --> Ne, wir können Mapping nutzen: http://www.wertgarantie.de/XMLSchema/sst_antrag/ --> AntragKommunikation
     // erstelle SET XML INTERFACE XML
-    const insuranceProposalXML = getInsuranceProposalXML();
+    const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
 
-    // Response zusammenbauen
-};
-const customer = {
-    company: "INNOQ",
-    salutation: "Herr",
-    firstname: "Max",
-    lastname: "Mustermann",
-    street: "Unter den Linden",
-    zip: "52345",
-    city: "Köln",
-    country: "Deutschland",
-    email: "max.mustermann1234@test.com"
+    const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
+
+    return {
+        contractnumber: contractnumber,
+        satznummer: satznummer,
+        statusCode: submitResult.STATUS_TEXT,
+        webservicesMessage: submitResult.STATUS_CODE
+    }
 };
 
-function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, objectCode, productOffer) {
+function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer) {
     const date = dateformat(new Date(), 'dd.mm.yyyy');
     const proposalJson = {
         "Antraege": {
@@ -45,11 +48,20 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
                         "Ort": customer.city
                     }
                 },
-                "Geraet": {
+                "Kommunikation": {
+                    "Position": 1,
                     "Hersteller": shopProduct.manufacturer,
-                    "Geraetekennzeichen": objectCode,
+                    "Mapping": "TEST_KUNDE",
+                    "Geraetetyp": shopProduct.deviceClass,
                     "Kaufdatum": date,
-                    "Kaufpreis": ((shopProduct.devicePrice / 100) + "").replace(".", ",")
+                    "Kaufpreis": ((shopProduct.price / 100) + "").replace(".", ","),
+                    "Risiken": {
+                        "Risiko": productOffer.risks.map(risk => {
+                            return {
+                                "Risikotyp": risk
+                            }
+                        })
+                    }
                 },
                 "ProduktDetails": {
                     "Antragskodierung": productOffer.applicationCode,
