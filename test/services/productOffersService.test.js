@@ -179,6 +179,81 @@ test("test heimdall product offer conversion", async () => {
                         "uri": "https://heimdall-stg-04.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448"
                     }
                 ]
+            },
+            {
+                "id": "2",
+                "name": "Premium",
+                "advantages": [
+                    "Für private und berufliche Nutzung",
+                    "Unsachgemäße Handhabung",
+                    "Weltweiter Schutz",
+                    "Volle Kostenübernahme bei Reparaturen",
+                    "Bei Totalschaden zählt der Zeitwert",
+                    "Für private und berufliche Nutzung",
+                    "Weltweiter Schutz",
+                    "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                    "Unsachgemäße Handhabung"
+                ],
+                "defaultPaymentInterval": "monthly",
+                "prices": {
+                    "monthly": {
+                        "price": 500,
+                        "priceCurrency": "EUR",
+                        "priceTax": 80
+                    },
+                    "quarterly": {
+                        "price": 1500,
+                        "priceCurrency": "EUR",
+                        "priceTax": 239
+                    },
+                    "halfYearly": {
+                        "price": 3000,
+                        "priceCurrency": "EUR",
+                        "priceTax": 479
+                    },
+                    "yearly": {
+                        "price": 6000,
+                        "priceCurrency": "EUR",
+                        "priceTax": 958
+                    }
+                },
+                "documents": [
+                    {
+                        "type": "LN",
+                        "name": "Rechtsdokumente",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/82e38762-4440-46a9-a34e-58974a3ddad5"
+                    },
+                    {
+                        "type": "IPID",
+                        "name": "Informationsblatt für Versicherungsprodukte",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1"
+                    },
+                    {
+                        "type": "POLICY",
+                        "name": "Versicherungsschein",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/e725f5d0-a72c-4d00-9063-81753f191150"
+                    },
+                    {
+                        "type": "GDPR",
+                        "name": "DSGVO Beileger",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/334e5b9b-0fb5-4a45-859e-ad0267a4431e"
+                    },
+                    {
+                        "type": "GTCI",
+                        "name": "Allgemeine Versicherungsbedingungen",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b"
+                    },
+                    {
+                        "type": "SEPA",
+                        "name": "SEPA Lastschriftmandat",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/2954d934-884d-46c5-81a9-11e9e5c8fb19"
+                    },
+                    {
+                        "type": "PIS",
+                        "name": "Produktinformationsblatt",
+                        "uri": "https://heimdall-stg-04.wertgarantie.com/download/b190b136-5d4f-43a0-b9f2-f1dd23348448"
+                    }
+                ]
             }
         ]
     });
