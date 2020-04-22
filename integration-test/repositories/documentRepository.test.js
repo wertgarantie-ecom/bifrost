@@ -26,3 +26,25 @@ describe("could retrieve persisted document", () => {
     })
 });
 
+describe("should have different hashes for different contents", () => {
+   test("save 2 documents with different content", async () => {
+       const content1 = uuid() + "";
+       const document1 = {
+           type: "AVB",
+           FILENAME: "my name",
+           CONTENT: content1
+       };
+       const id1 = await repository.persist(document1);
+
+       const content2 = uuid() + "";
+       const document2 = {
+           type: "AVB",
+           FILENAME: "my name",
+           CONTENT: content2
+       };
+       const id2 = await repository.persist(document2);
+
+       expect(id1).not.toEqual(id2);
+   });
+});
+

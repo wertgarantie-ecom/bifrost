@@ -4,6 +4,7 @@ const CryptoJS = require('crypto-js');
 function hashProductOffers(productOffers) {
     const relevantOfferParts = productOffers.map(offer => {
         return {
+
             documents: offer.documents,
             advantages: offer.advantages,
             devices: offer.devices
@@ -23,9 +24,6 @@ exports.persist = async function persist(productOffers) {
     try {
         await client.query('BEGIN');
         const hash = hashProductOffers(productOffers);
-        if (await productOffersExists(productOffers[0].clientId, hash)) {
-            return productOffers;
-        }
         const query = {
             name: 'insert-product-offers',
             text: `INSERT INTO productoffers (clientid, hash, productoffers) VALUES ($1 , $2, $3)

@@ -9,6 +9,7 @@ const clientController = require("../controllers/clientController.js");
 const afterSalesController = require("../controllers/afterSalesController.js");
 const landingPageController = require("../controllers/landingPageController");
 const webservicesController = require("../controllers/webservicesController");
+const documentsController = require("../controllers/documentsController");
 const checkoutSchema = require("../schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../schemas/addShoppingCartProduct").addShoppingCartProductSchema;
 const afterSalesComponentCheckoutSchema = require("../schemas/afterSalesComponentCheckoutSchema").afterSalesComponentCheckoutSchema;
@@ -55,5 +56,8 @@ router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);
 router.post("/productOffers/:clientId", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssemblyForClient);
 router.get("/productOffers/:clientId", basicAuth(basicAuthUsers), webservicesController.getProductOffersForClient);
+
+// documents
+router.get("/documents/:documentId", documentsController.getDocumentById);
 
 module.exports = router;
