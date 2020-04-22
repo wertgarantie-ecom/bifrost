@@ -1,6 +1,5 @@
 const service = require('../../src/services/productSelectionPopUpComponentService');
 const productOffersTestResponses = require("./productOffersTestResponses");
-const heimdallResponses = require("./heimdallTestProducts");
 
 const productImagesServiceMock = {
     getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
@@ -20,7 +19,6 @@ function mockClientService(clientData) {
 }
 
 test("should return proper product response", async () => {
-    process.env.BACKEND = "heimdall";
     const mockProductOfferService = {
         getProductOffers: () => productOffersTestResponses.productOffers
     };

@@ -1,10 +1,955 @@
 {
 	"info": {
-		"_postman_id": "c0747e3d-57e4-4325-992c-b7168f01552a",
-		"name": "Wertgarantie",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"_postman_id": "c0d90fda-0508-4e9c-a7ac-bca3bd5800d9",
+		"name": "Wertgarantie-Bifrost-Heimdall",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Heimdall",
+			"item": [
+				{
+					"name": "Get Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b9d7b0c7-bd1b-41e7-8aab-20cd02e9c131",
+								"exec": [
+									"globalFunctions = {",
+									"    obtainBearerToken: function(pm) {",
+									"        var request = {",
+									"            url: pm.environment.get(\"host\") + \"/api/v1/auth/client/\" + pm.globals.get(\"wg-clientId\"),",
+									"            method: \"GET\",",
+									"            header: \"Accept:application/json\"",
+									"        }",
+									"        pm.sendRequest(request, function(err, response) {",
+									"            var jsonResponse = response.json();",
+									"            var bearerToken = jsonResponse.payload.access_token.split(\"Bearer \")[1];",
+									"            pm.globals.set(\"wg-bearer-token\", bearerToken);",
+									"        });",
+									"    }",
+									"}",
+									"",
+									"globalFunctions.obtainBearerToken(pm);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET bearer token",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json | jq '.payload.access_token'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/auth/client/{{wg-clientId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"client",
+								"{{wg-clientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET product device classes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/products/:product_id/device-classes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								":product_id",
+								"device-classes"
+							],
+							"variable": [
+								{
+									"key": "product_id",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET product offer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/product-offers?device_class=bb3a615d-e92f-4d24-a4cc-22f8a87fc544&device_purchase_price=450&device_purchase_date=2019-09-19",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"product-offers"
+							],
+							"query": [
+								{
+									"key": "device_class",
+									"value": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+									"description": "class ID for smartphones"
+								},
+								{
+									"key": "device_purchase_price",
+									"value": "450"
+								},
+								{
+									"key": "device_purchase_date",
+									"value": "2019-09-19"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checkout product",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"productId\": {{productId}},\n\t\"customer_company\": \"INNOQ\",\n\t\"customer_salutation\": \"Herr\",\n\t\"customer_firstname\": \"Max\",\n\t\"customer_lastname\": \"Mustermann\",\n\t\"customer_street\": \"Unter den Linden\",\n\t\"customer_zip\": \"52345\",\n\t\"customer_city\": \"Köln\",\n\t\"customer_country\": \"Deutschland\",\n\t\"customer_email\": \"wertgarantie.bifrost@gmail.com\",\n\t\"device_manufacturer\": \"XXXPhone Inc.\",\n\t\"device_model\": \"Flash Handy 3000 Pro\",\n\t\"device_class\": \"1dfd4549-9bdc-4285-9047-e5088272dade\",\n\t\"device_os\": \"other\",\n\t\"device_purchase_price\": 860,\n\t\"device_purchase_date\": \"2020-03-04\",\n\t\"device_condition\": 1,\n\t\"payment_type\": \"bank_transfer\",\n\t\"terms_and_conditions_accepted\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/products/{{productId}}/checkout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{productId}}",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Products Checkout Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{ACCESS_TOKEN}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "customer_company",
+									"value": "INNOQ",
+									"description": "The customer company name (Optional)",
+									"type": "text"
+								},
+								{
+									"key": "customer_salutation",
+									"value": "Herr",
+									"description": "The customer salutation, required without customer_company (values: Herr, Frau, Firma)",
+									"type": "text"
+								},
+								{
+									"key": "customer_title",
+									"value": "",
+									"description": "The customer title (optional)",
+									"type": "text"
+								},
+								{
+									"key": "customer_firstname",
+									"value": "Otto",
+									"description": "The customer firstname, required without customer_company",
+									"type": "text"
+								},
+								{
+									"key": "customer_lastname",
+									"value": "Normalverbraucher",
+									"description": "The customer lastname, required without customer_company",
+									"type": "text"
+								},
+								{
+									"key": "customer_country",
+									"value": "Deutschland",
+									"description": "The customer country (required)",
+									"type": "text"
+								},
+								{
+									"key": "customer_city",
+									"value": "Köln",
+									"description": "The customer city (required)",
+									"type": "text"
+								},
+								{
+									"key": "customer_zip",
+									"value": "52345",
+									"description": "The customer postalcode (required)",
+									"type": "text"
+								},
+								{
+									"key": "customer_street",
+									"value": "Breite Strasse",
+									"description": "The customer street (required)",
+									"type": "text"
+								},
+								{
+									"key": "customer_email",
+									"value": "wertgarantie.bifrost@gmail.com",
+									"description": "The customer email (required)",
+									"type": "text"
+								},
+								{
+									"key": "customer_birthdate",
+									"value": "1911-11-11",
+									"description": "The customer birthdate (required if customer is not a company)",
+									"type": "text"
+								},
+								{
+									"key": "terms_and_conditions_accepted",
+									"value": "1",
+									"description": "The terms and condition field (required)",
+									"type": "text"
+								},
+								{
+									"key": "tax_reduction_selected",
+									"value": "",
+									"description": "The taxs reduction field (optional)",
+									"type": "text"
+								},
+								{
+									"key": "voucher",
+									"value": "",
+									"description": "The voucher code (optional)",
+									"type": "text"
+								},
+								{
+									"key": "payment_type",
+									"value": "bank_transfer",
+									"description": "The payment type (required. values: direct_debit,bank_transfer)",
+									"type": "text"
+								},
+								{
+									"key": "payment_method",
+									"value": "monatlich",
+									"description": "The payment interval (required. values: monatlich,vierteljährlich,halbjährlich,jährlich)",
+									"type": "text"
+								},
+								{
+									"key": "debit_mandate_accepted",
+									"value": "",
+									"description": "The debit mandate accepted field. (required if payment method is set to direct_debit)",
+									"type": "text"
+								},
+								{
+									"key": "payment_iban",
+									"value": "",
+									"description": "The payment iban field. (required if payment method is set to direct_debit)",
+									"type": "text"
+								},
+								{
+									"key": "device_purchase_price",
+									"value": "860",
+									"description": "The device purchase price (required)",
+									"type": "text"
+								},
+								{
+									"key": "device_purchase_date",
+									"value": "2020-03-04",
+									"description": "The device purchase date (required)",
+									"type": "text"
+								},
+								{
+									"key": "device_condition",
+									"value": "1",
+									"description": "The device condition field. (required for device category CE and smartphone and not for bike/ebike category. values: 1 = new device, 2 = used device)",
+									"type": "text"
+								},
+								{
+									"key": "device_class",
+									"value": "1dfd4549-9bdc-4285-9047-e5088272dade",
+									"description": "The device class id (required)",
+									"type": "text"
+								},
+								{
+									"key": "device_os",
+									"value": "other",
+									"description": "The device os (required if device class = smartphone/handy. values: ios,android,other)",
+									"type": "text"
+								},
+								{
+									"key": "device_imei",
+									"value": "",
+									"description": "The device imei (required if device_os = other)",
+									"type": "text"
+								},
+								{
+									"key": "device_manufacturer",
+									"value": "XXXPhone Inc.",
+									"description": "The device manufacturer (required if device_os = other or if device_class is not smartphone)",
+									"type": "text"
+								},
+								{
+									"key": "device_model",
+									"value": "Flash Handy 3000 Pro",
+									"description": "The device model (required if device_os = other)",
+									"type": "text"
+								},
+								{
+									"key": "lock_price_confirm",
+									"value": "",
+									"description": "The lock price confirm field (required if device_class = bike/ebike)",
+									"type": "text"
+								},
+								{
+									"key": "instant_protection_selection",
+									"value": "",
+									"description": "The instant protection field (optional)",
+									"type": "text"
+								},
+								{
+									"key": "device_serial_number",
+									"value": "",
+									"description": "The device serial serial number (optional)",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{HOST}}/api/v1/products/{{PRODUCT_ID}}/checkout",
+							"host": [
+								"{{HOST}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"{{PRODUCT_ID}}",
+								"checkout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Smartphone Checkout Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{ACCESS_TOKEN}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "customer_company",
+											"value": "",
+											"description": "The customer company name (Optional)",
+											"type": "text"
+										},
+										{
+											"key": "customer_salutation",
+											"value": "Herr",
+											"description": "The customer salutation, required without customer_company (values: Herr, Frau, Firma)",
+											"type": "text"
+										},
+										{
+											"key": "customer_title",
+											"value": "",
+											"description": "The customer title (optional)",
+											"type": "text"
+										},
+										{
+											"key": "customer_firstname",
+											"value": "Otto",
+											"description": "The customer firstname, required without customer_company",
+											"type": "text"
+										},
+										{
+											"key": "customer_lastname",
+											"value": "Normalverbraucher",
+											"description": "The customer lastname, required without customer_company",
+											"type": "text"
+										},
+										{
+											"key": "customer_country",
+											"value": "DE",
+											"description": "The customer country (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_city",
+											"value": "Hannover",
+											"description": "The customer city (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_zip",
+											"value": "30159",
+											"description": "The customer postalcode (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_street",
+											"value": "Breite Strasse 7",
+											"description": "The customer street (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_email",
+											"value": "qs@clickrepair.de",
+											"description": "The customer email (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_birthdate",
+											"value": "1980-01-31",
+											"description": "The customer birthdate (required)",
+											"type": "text"
+										},
+										{
+											"key": "terms_and_conditions_accepted",
+											"value": "1",
+											"description": "The terms and condition field (required)",
+											"type": "text"
+										},
+										{
+											"key": "tax_reduction_selected",
+											"value": "0",
+											"description": "The taxs reduction field (optional)",
+											"type": "text"
+										},
+										{
+											"key": "voucher",
+											"value": "",
+											"description": "The voucher code (optional)",
+											"type": "text"
+										},
+										{
+											"key": "payment_type",
+											"value": "direct_debit",
+											"description": "The payment type (required. values: direct_debit,bank_transfer)",
+											"type": "text"
+										},
+										{
+											"key": "payment_method",
+											"value": "monatlich",
+											"description": "The payment interval (required. values: monatlich,vierteljährlich,halbjährlich,jährlich)",
+											"type": "text"
+										},
+										{
+											"key": "debit_mandate_accepted",
+											"value": "1",
+											"description": "The debit mandate accepted field. (required if payment method is set to direct_debit)",
+											"type": "text"
+										},
+										{
+											"key": "payment_iban",
+											"value": "DE27100777770209299700",
+											"description": "The payment iban field. (required if payment method is set to direct_debit)",
+											"type": "text"
+										},
+										{
+											"key": "device_purchase_price",
+											"value": "1400",
+											"description": "The device purchase price (required)",
+											"type": "text"
+										},
+										{
+											"key": "device_purchase_date",
+											"value": "2018-12-01",
+											"description": "The device purchase date (required)",
+											"type": "text"
+										},
+										{
+											"key": "device_condition",
+											"value": "1",
+											"description": "The device condition field. (required for device category CE and smartphone and not for bike/ebike category. values: 1 = new device, 2 = used device)",
+											"type": "text"
+										},
+										{
+											"key": "device_class",
+											"value": "1dfd4549-9bdc-4285-9047-e5088272dade",
+											"description": "The device class id (required)",
+											"type": "text"
+										},
+										{
+											"key": "device_os",
+											"value": "ios",
+											"description": "The device os (required if device class = smartphone/handy. values: ios,android,other)",
+											"type": "text"
+										},
+										{
+											"key": "device_manufacturer",
+											"value": "Apple",
+											"description": "The device manufacturer (required if device_os = other or if device_class is not smartphone)",
+											"type": "text"
+										},
+										{
+											"key": "device_model",
+											"value": "iPhone 6s",
+											"description": "The device model (required if device_os = other)",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{HOST}}/api/v1/products/{{PRODUCT_ID}}/checkout",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"{{PRODUCT_ID}}",
+										"checkout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.15.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/7.2.16"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 17 Feb 2020 12:40:25 GMT"
+								},
+								{
+									"key": "X-API-VERSION",
+									"value": "1.0.0"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"payload\": {\n        \"contract_number\": \"57376744\",\n        \"transaction_number\": null,\n        \"activation_code\": \"ae991bb58bd9\",\n        \"message\": \"Der Versicherungsantrag wurde erfolgreich übermittelt.\"\n    }\n}"
+						},
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{ACCESS_TOKEN}}"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/x-www-form-urlencoded",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "customer_company",
+											"value": "",
+											"description": "The customer company name (Optional)",
+											"type": "text"
+										},
+										{
+											"key": "customer_salutation",
+											"value": "Herr",
+											"description": "The customer salutation, required without customer_company (values: Herr, Frau, Firma)",
+											"type": "text"
+										},
+										{
+											"key": "customer_title",
+											"value": "",
+											"description": "The customer title (optional)",
+											"type": "text"
+										},
+										{
+											"key": "customer_firstname",
+											"value": "Otto",
+											"description": "The customer firstname, required without customer_company",
+											"type": "text"
+										},
+										{
+											"key": "customer_lastname",
+											"value": "Normalverbraucher",
+											"description": "The customer lastname, required without customer_company",
+											"type": "text"
+										},
+										{
+											"key": "customer_country",
+											"value": "DE",
+											"description": "The customer country (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_city",
+											"value": "Hannover",
+											"description": "The customer city (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_zip",
+											"value": "30159",
+											"description": "The customer postalcode (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_street",
+											"value": "Breite Strasse 7",
+											"description": "The customer street (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_email",
+											"value": "qs@clickrepair.de",
+											"description": "The customer email (required)",
+											"type": "text"
+										},
+										{
+											"key": "customer_birthdate",
+											"value": "1980-01-31",
+											"description": "The customer birthdate (required)",
+											"type": "text"
+										},
+										{
+											"key": "terms_and_conditions_accepted",
+											"value": "1",
+											"description": "The terms and condition field (required)",
+											"type": "text"
+										},
+										{
+											"key": "tax_reduction_selected",
+											"value": "0",
+											"description": "The taxs reduction field (optional)",
+											"type": "text"
+										},
+										{
+											"key": "voucher",
+											"value": "",
+											"description": "The voucher code (optional)",
+											"type": "text"
+										},
+										{
+											"key": "payment_type",
+											"value": "direct_debit",
+											"description": "The payment type (required. values: direct_debit,bank_transfer)",
+											"type": "text"
+										},
+										{
+											"key": "payment_method",
+											"value": "monatlich",
+											"description": "The payment interval (required. values: monatlich,vierteljährlich,halbjährlich,jährlich)",
+											"type": "text"
+										},
+										{
+											"key": "debit_mandate_accepted",
+											"value": "1",
+											"description": "The debit mandate accepted field. (required if payment method is set to direct_debit)",
+											"type": "text"
+										},
+										{
+											"key": "payment_iban",
+											"value": "DE27100777770209299700",
+											"description": "The payment iban field. (required if payment method is set to direct_debit)",
+											"type": "text"
+										},
+										{
+											"key": "device_purchase_price",
+											"value": "500",
+											"description": "The device purchase price (required)",
+											"type": "text"
+										},
+										{
+											"key": "device_purchase_date",
+											"value": "2019-12-01",
+											"description": "The device purchase date (required)",
+											"type": "text"
+										},
+										{
+											"key": "device_condition",
+											"value": "1",
+											"description": "The device condition field. (required for device category CE and smartphone and not for bike/ebike category. values: 1 = new device, 2 = used device)",
+											"type": "text"
+										},
+										{
+											"key": "device_class",
+											"value": "23216ca4-7a56-4a67-8dd3-70affa1ab09c",
+											"description": "The device class id (required)",
+											"type": "text"
+										},
+										{
+											"key": "device_os",
+											"value": "ios",
+											"description": "The device os (required if device class = smartphone/handy. values: ios,android,other)",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "device_manufacturer",
+											"value": "Apple",
+											"description": "The device manufacturer (required if device_os = other or if device_class is not smartphone)",
+											"type": "text"
+										},
+										{
+											"key": "device_model",
+											"value": "iPhone 6s",
+											"description": "The device model (required if device_os = other)",
+											"type": "text"
+										},
+										{
+											"key": "lock_price_confirm",
+											"value": "1",
+											"description": "The lock price confirm field (required if device_class = bike/ebike)",
+											"type": "text"
+										},
+										{
+											"key": "instant_protection_selection",
+											"value": "0",
+											"description": "The instant protection field (optional)",
+											"type": "text"
+										},
+										{
+											"key": "device_serial_number",
+											"value": "",
+											"description": "The device serial serial number (optional)",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{HOST}}/api/v1/products/3/checkout",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"products",
+										"3",
+										"checkout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.15.12"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/7.2.16"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 17 Feb 2020 12:52:43 GMT"
+								},
+								{
+									"key": "X-API-VERSION",
+									"value": "1.0.0"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"payload\": {\n        \"contract_number\": \"57376766\",\n        \"transaction_number\": \"98717703\",\n        \"activation_code\": null,\n        \"message\": \"Der Versicherungsantrag wurde erfolgreich übermittelt.\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
 		{
 			"name": "Bifröst BFF",
 			"item": [
@@ -27,7 +972,16 @@
 									"mode": "raw",
 									"raw": ""
 								},
-								"url": "{{host}}/clients/0a4ac10c-ae80-4875-aff8-294b857419bd"
+								"url": {
+									"raw": "{{host}}/clients/0a4ac10c-ae80-4875-aff8-294b857419bd",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"clients",
+										"0a4ac10c-ae80-4875-aff8-294b857419bd"
+									]
+								}
 							},
 							"response": []
 						},
@@ -50,7 +1004,15 @@
 									"mode": "raw",
 									"raw": ""
 								},
-								"url": "{{host}}/clients"
+								"url": {
+									"raw": "{{host}}/clients",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"clients"
+									]
+								}
 							},
 							"response": []
 						},
@@ -68,24 +1030,41 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"handyflash\",\n    \"heimdallClientId\": \"e51a8498-7581-11ea-99c0-43e22abf112c\",\n    \"webservices\": {\n        \"username\": \"user\",\n        \"password\": \"password\"\n    },\n    \"activePartnerNumber\": 123456,\n    \"productOffersConfigurations\": [\n        {\n            \"name\": \"Komplettschutz\",\n            \"productType\": \"KOMPLETTSCHUTZ_2019\",\n            \"applicationCode\": \"GU WG DE KS 0419\",\n            \"basicRiskType\": \"KOMPLETTSCHUTZ\",\n            \"deviceClasses\": [\n                {\n                    \"objectCode\": \"9025\",\n                    \"objectCodeExternal\": \"Smartphone\",\n                    \"priceRanges\": [\n                        {\n                            \"minClose\": 0,\n                            \"maxOpen\": 300\n                        },\n                        {\n                            \"minClose\": 300,\n                            \"maxOpen\": 800\n                        },\n                        {\n                            \"minClose\": 800,\n                            \"maxOpen\": 1800\n                        }\n                    ]\n                }\n            ],\n            \"documents\": {\n                \"legalDocuments\": [\n                    {\n                        \"type\": \"LN\",\n                        \"pattern\": \"GU WG DE KS 0419_RECHTSDOKUMENTE.PDF\"\n                    }\n                ],\n                \"comparisonDocuments\": []\n            },\n            \"advantages\": [],\n            \"risks\": []\n        }\n    ]\n}",
+									"raw": "{\n    \"name\": \"Test Shop Handy\",\n    \"heimdallClientId\": \"test-phone-heimdall-clientId\",\n    \"webservicesUsername\": \"test-phone-user\",\n    \"webservicesPassword\": \"test-phone-password\",\n    \"activePartnerNumber\": 11111,\n    \"secrets\": [\n        \"test-phone-secret\"\n    ],\n    \"publicClientIds\": [\n        \"5209d6ea-1a6e-11ea-9f8d-778f0ad9137f\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": "{{host}}/clients/"
+								"url": {
+									"raw": "{{host}}/clients/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"clients",
+										""
+									]
+								}
 							},
 							"response": []
 						}
 					],
 					"auth": {
 						"type": "basic",
-						"basic": {
-							"password": "{{password}}",
-							"username": "{{user}}"
-						}
+						"basic": [
+							{
+								"key": "password",
+								"value": "{{password}}",
+								"type": "string"
+							},
+							{
+								"key": "username",
+								"value": "{{user}}",
+								"type": "string"
+							}
+						]
 					},
 					"event": [
 						{
@@ -113,11 +1092,183 @@
 					"_postman_isSubFolder": true
 				},
 				{
+					"name": "webservices product offers",
+					"item": [
+						{
+							"name": "update product  offers for all clients",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/productOffers/",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"productOffers",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update product  offers for client with id",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Test Shop Handy\",\n    \"heimdallClientId\": \"test-phone-heimdall-clientId\",\n    \"webservicesUsername\": \"test-phone-user\",\n    \"webservicesPassword\": \"test-phone-password\",\n    \"activePartnerNumber\": 11111,\n    \"secrets\": [\n        \"test-phone-secret\"\n    ],\n    \"publicClientIds\": [\n        \"5209d6ea-1a6e-11ea-9f8d-778f0ad9137f\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/productOffers/:clientId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"productOffers",
+										":clientId"
+									],
+									"variable": [
+										{
+											"key": "clientId",
+											"value": "0af733fe-a99d-4114-8cad-ba81ede3af8a"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "show product offers for client",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/productOffers/:clientId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"productOffers",
+										":clientId"
+									],
+									"variable": [
+										{
+											"key": "clientId",
+											"value": "0af733fe-a99d-4114-8cad-ba81ede3af8a"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "GET wg google rating",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "{{host}}/rating"
+						"url": {
+							"raw": "{{host}}/rating",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"rating"
+							]
+						}
 					},
 					"response": []
 				},
@@ -191,7 +1342,16 @@
 							"mode": "raw",
 							"raw": "{\n\t\"productId\": 12,\n\t\"deviceClass\": \"17fd707a-f9c0-11e9-9694-cf549fcf64e2\",\n\t\"devicePrice\": 45.0,\n\t\"deviceCurrency\": \"EUR\"\n}"
 						},
-						"url": "{{host}}/shoppingCart/f1eea02c-f9bd-11e9-a37a-b3513bff18fd"
+						"url": {
+							"raw": "{{host}}/shoppingCart/f1eea02c-f9bd-11e9-a37a-b3513bff18fd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shoppingCart",
+								"f1eea02c-f9bd-11e9-a37a-b3513bff18fd"
+							]
+						}
 					},
 					"response": []
 				},
@@ -214,7 +1374,15 @@
 							"mode": "raw",
 							"raw": ""
 						},
-						"url": "{{host}}/shoppingCart"
+						"url": {
+							"raw": "{{host}}/shoppingCart",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"shoppingCart"
+							]
+						}
 					},
 					"response": []
 				}
@@ -224,9 +1392,13 @@
 	],
 	"auth": {
 		"type": "bearer",
-		"bearer": {
-			"token": "{{wg-bearer-token}}"
-		}
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{ACCESS_TOKEN}}",
+				"type": "string"
+			}
+		]
 	},
 	"event": [
 		{
