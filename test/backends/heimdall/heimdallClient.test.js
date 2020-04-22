@@ -1,4 +1,4 @@
-const heimdallClient = require('../../src/backends/heimdall/heimdallClient');
+const heimdallClient = require('../../../src/backends/heimdall/heimdallClient');
 const uuid = require('uuid');
 const heimdallTestProducts = require('./heimdallTestProducts').heimdallTestProducts;
 

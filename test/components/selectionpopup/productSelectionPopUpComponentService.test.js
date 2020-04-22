@@ -1,5 +1,5 @@
-const service = require('../../src/components/selectionpopup/productSelectionPopUpComponentService');
-const productOffersTestResponses = require("./productOffersTestResponses");
+const service = require('../../../src/components/selectionpopup/productSelectionPopUpComponentService');
+const productOffersTestResponses = require("../../productoffer/productOffersTestResponses");
 
 const productImagesServiceMock = {
     getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]

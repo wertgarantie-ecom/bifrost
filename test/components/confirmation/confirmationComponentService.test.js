@@ -1,5 +1,5 @@
-const service = require('../../src/components/confirmation/confirmationComponentService');
-const productOffersTestResponse = require('./productOffersTestResponses').productOffers;
+const service = require('../../../src/components/confirmation/confirmationComponentService');
+const productOffersTestResponse = require('../../productoffer/productOffersTestResponses').productOffers;
 
 const productOffersMock = {
     getProductOffers: async () => productOffersTestResponse
