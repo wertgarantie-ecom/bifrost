@@ -1,0 +1,2 @@
+ALTER TABLE documents ADD PRIMARY KEY (id);
+

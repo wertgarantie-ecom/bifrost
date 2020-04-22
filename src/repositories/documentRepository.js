@@ -2,20 +2,15 @@ const Pool = require("../postgres").Pool;
 const CryptoJS = require('crypto-js');
 
 exports.persist = async function persist(document) {
-    var hash = CryptoJS.SHA1(document.content).toString();
+    var hash = CryptoJS.SHA1(document.CONTENT + document.FILENAME + document.type).toString();
 
     const pool = Pool.getInstance();
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
-
-        if (await this.findById(hash)) {
-            return hash;
-        }
-
         const query = {
             name: 'insert-document',
-            text: "INSERT INTO documents (id, name, type, content) VALUES ($1 , $2 , $3, $4);",
+            text: "INSERT INTO documents (id, name, type, content) VALUES ($1 , $2 , $3, $4) ON CONFLICT DO NOTHING;",
             values: [
                 hash,
                 document.FILENAME,

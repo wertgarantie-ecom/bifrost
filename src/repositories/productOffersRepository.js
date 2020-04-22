@@ -4,6 +4,7 @@ const CryptoJS = require('crypto-js');
 function hashProductOffers(productOffers) {
     const relevantOfferParts = productOffers.map(offer => {
         return {
+
             documents: offer.documents,
             advantages: offer.advantages,
             devices: offer.devices
@@ -23,7 +24,7 @@ exports.persist = async function persist(productOffers) {
     try {
         await client.query('BEGIN');
         const hash = hashProductOffers(productOffers);
-        if (await productOffersExists(productOffers[0].clientId, hash)) {
+        if (await productOffersExists(productOffers[0].clientId, hash, client)) {
             return productOffers;
         }
         const query = {
@@ -48,8 +49,7 @@ exports.persist = async function persist(productOffers) {
     }
 };
 
-async function productOffersExists(clientId, hash) {
-    const pool = Pool.getInstance();
+async function productOffersExists(clientId, hash, pool = Pool.getInstance()) {
     const result = await pool.query({
         name: 'find-product-offers-by-client-id-and-hash',
         text: `SELECT productoffers FROM productoffers  

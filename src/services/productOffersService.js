@@ -127,7 +127,7 @@ function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers,
                 return {
                     type: document.documentType,
                     name: document.documentTitle,
-                    uri: `${process.env.BASE_URI}/documents/${document.documentId}`
+                    uri: `${process.env.BASE_URI}/wertgarantie/documents/${document.documentId}`
                 };
             })
         }
