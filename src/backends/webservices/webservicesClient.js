@@ -195,6 +195,19 @@ exports.getLegalDocuments = async function getLegalDocuments(session, applicatio
     return result;
 };
 
+exports.getNewContractNumber = async function getNewContractNumber(session, httpClient = axiosWithCompleteLogging) {
+    if (!session) {
+        throw new Error(`request data not provided. Session: ${session}`);
+    }
+    const formData = new FormData();
+    formData.append('FUNCTION', 'GET_NEW_CONTRACTNUMBER');
+    formData.append('SHAPING', 'DEFAULT');
+    formData.append('API', 'JSON');
+    formData.append('SESSION', session);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0")
+    return result.RESULT.NEWCONTRACTNUMBER;
+};
+
 async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {
     let response;
     const formHeaders = formData.getHeaders();

@@ -345,3 +345,19 @@ exports.multipleLegalDocuments = {
     "STATUSCODE": "0",
     "PAGE": {}
 };
+
+exports.newContractNumber = {
+    "RESULT":
+        {
+            "NEWCONTRACTNUMBER": "12345678"
+        },
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "1",
+    "AMOUNT": "30",
+    "STATUS": "OK",
+    "REQUEST_ID": "98889205",
+    "ORDERBY": {},
+    "SORT": {},
+    "STATUSCODE": "0",
+    "PAGE": "1"
+};
