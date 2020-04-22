@@ -4,8 +4,8 @@ const dateformat = require('dateformat');
 const {create} = require('xmlbuilder2');
 const AxiosLogger = require('axios-logger');
 
-const axiosInstance = axios.create();
-axiosInstance.interceptors.request.use((request) => {
+const axiosWithCompleteLogging = axios.create();
+axiosWithCompleteLogging.interceptors.request.use((request) => {
     return AxiosLogger.requestLogger(request, {
         dateFormat: 'HH:MM:ss',
         status: true,
@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use((request) => {
     return AxiosLogger.errorLogger(error);
 });
 
-axiosInstance.interceptors.response.use((response) => {
+axiosWithCompleteLogging.interceptors.response.use((response) => {
     return AxiosLogger.responseLogger(response, {
         dateFormat: 'HH:MM:ss',
         status: true,
@@ -30,8 +30,34 @@ axiosInstance.interceptors.response.use((response) => {
 }, (error) => {
     return AxiosLogger.errorLogger(error);
 });
+const axiosWithSimpleLogging = axios.create();
+axiosWithSimpleLogging.interceptors.request.use((request) => {
+    return AxiosLogger.requestLogger(request, {
+        dateFormat: 'HH:MM:ss',
+        status: true,
+        url: true,
+        method: true,
+        header: true,
+        data: false
+    });
+}, (error) => {
+    return AxiosLogger.errorLogger(error);
+});
 
-exports.login = async function login(clientData, httpClient = axiosInstance) {
+axiosWithSimpleLogging.interceptors.response.use((response) => {
+    return AxiosLogger.responseLogger(response, {
+        dateFormat: 'HH:MM:ss',
+        status: true,
+        url: true,
+        method: true,
+        header: true,
+        data: false
+    });
+}, (error) => {
+    return AxiosLogger.errorLogger(error);
+});
+
+exports.login = async function login(clientData, httpClient = axiosWithCompleteLogging) {
     const formData = new FormData();
     formData.append('FUNCTION', 'LOGIN');
     formData.append('USER', clientData.webservices.username);
@@ -43,7 +69,7 @@ exports.login = async function login(clientData, httpClient = axiosInstance) {
     return response.SESSION;
 };
 
-exports.getAgentData = async function getAgentData(session, clientConfig , httpClient = axiosInstance) {
+exports.getAgentData = async function getAgentData(session, clientConfig, httpClient = axiosWithCompleteLogging) {
     const formData = new FormData();
     formData.append('FUNCTION', 'GET_AGENT_DATA');
     formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
@@ -56,19 +82,19 @@ exports.getAgentData = async function getAgentData(session, clientConfig , httpC
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
     }
     result.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
-       if(!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
-           product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
-       }
+        if (!Array.isArray(product.PAYMENTINTERVALS.INTERVAL)) {
+            product.PAYMENTINTERVALS.INTERVAL = [product.PAYMENTINTERVALS.INTERVAL];
+        }
     });
     result.RESULT.PRODUCT_LIST.PRODUCT.map(product => {
-        if(!Array.isArray(product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE)) {
+        if (!Array.isArray(product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE)) {
             product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE = [product.PURCHASE_PRICE_LIMITATIONS.MAX_PRICE];
         }
     });
     return result;
 };
 
-exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applicationCode, productType, httpClient = axiosInstance) {
+exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applicationCode, productType, httpClient = axiosWithCompleteLogging) {
     if (!(session && applicationCode && productType)) {
         throw new Error(`request data not provided. Session: ${session}, applicationCode: ${applicationCode}, productType: ${productType}`);
     }
@@ -86,7 +112,7 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
     const date = new Date();
     const dateFormatted = dateformat(date, 'dd.mm.yyyy');
     const manufacturerYear = date.getFullYear();
-    const objectPriceMajorUnits = (objectPrice/100) + "";
+    const objectPriceMajorUnits = (objectPrice / 100) + "";
     const objectPriceFormatted = objectPriceMajorUnits.replace(".", ",");
     const parametersJson = {
         "PARAMETERS": {
@@ -119,7 +145,7 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
     return create(parametersJson).end();
 };
 
-exports.getInsurancePremium = async function getInsurancePremium(session, applicationCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, countryCode = 'DE', httpClient = axiosInstance) {
+exports.getInsurancePremium = async function getInsurancePremium(session, applicationCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, countryCode = 'DE', httpClient = axiosWithCompleteLogging) {
     if (!(session && productType && applicationCode && objectCode && objectPrice && (riskTypes && riskTypes.length > 0))) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, paymentInterval: ${paymentInterval}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, objectPrice: ${objectPrice}, riskTypes: ${riskTypes}`);
     }
@@ -133,7 +159,7 @@ exports.getInsurancePremium = async function getInsurancePremium(session, applic
     return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
-exports.getComparisonDocuments = async function getComparisonDocuments(session, applicationCode, productType, httpClient = axiosInstance) {
+exports.getComparisonDocuments = async function getComparisonDocuments(session, applicationCode, productType, httpClient = axiosWithSimpleLogging) {
     if (!(session && productType && applicationCode)) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
     }
@@ -151,7 +177,7 @@ exports.getComparisonDocuments = async function getComparisonDocuments(session, 
     return result;
 };
 
-exports.getLegalDocuments = async function getLegalDocuments(session, applicationCode, productType, httpClient = axiosInstance) {
+exports.getLegalDocuments = async function getLegalDocuments(session, applicationCode, productType, httpClient = axiosWithSimpleLogging) {
     if (!(session && productType && applicationCode)) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
     }
