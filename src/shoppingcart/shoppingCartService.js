@@ -1,8 +1,8 @@
 const uuid = require('uuid');
 const _ = require('lodash');
 const moment = require('moment');
-const checkoutRepository = require('../repositories/CheckoutRepository');
-const defaultHeimdallClient = require('../services/heimdallClient');
+const checkoutRepository = require('./CheckoutRepository');
+const defaultHeimdallClient = require('../backends/heimdall/heimdallClient');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {

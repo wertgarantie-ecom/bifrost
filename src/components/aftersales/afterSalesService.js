@@ -1,9 +1,9 @@
-const defaultCheckoutRepository = require('../repositories/CheckoutRepository');
-const signatureService = require('./signatureService');
-const ClientError = require('../errors/ClientError');
-const shoppingCartService = require('./shoppingCartService');
-const clientService = require('./clientService');
-const _productImageService = require('./productImageService');
+const defaultCheckoutRepository = require('../../shoppingcart/CheckoutRepository');
+const signatureService = require('../../shoppingcart/signatureService');
+const ClientError = require('../../errors/ClientError');
+const shoppingCartService = require('../../shoppingcart/shoppingCartService');
+const clientService = require('../../clientconfig/clientService');
+const _productImageService = require('../../images/productImageService');
 
 function getAfterSalesDataForCheckoutData(checkoutData, productImageService = _productImageService) {
     const orderItems = [];

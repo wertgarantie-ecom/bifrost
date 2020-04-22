@@ -1,4 +1,4 @@
-const afterSalesService = require('../services/afterSalesService');
+const afterSalesService = require('./afterSalesService');
 
 exports.getAfterSalesData = async function getAfterSalesData(req, res, next) {
     const sessionId = req.params.sessionId;

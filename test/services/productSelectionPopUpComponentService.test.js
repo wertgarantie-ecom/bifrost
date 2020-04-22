@@ -1,4 +1,4 @@
-const service = require('../../src/services/productSelectionPopUpComponentService');
+const service = require('../../src/components/selectionpopup/productSelectionPopUpComponentService');
 const productOffersTestResponses = require("./productOffersTestResponses");
 
 const productImagesServiceMock = {

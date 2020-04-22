@@ -7,16 +7,16 @@ const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 const validate = require('express-jsonschema').validate;
 const bodyParser = require('body-parser');
-const requestWithSignedShoppingCartSchema = require('./schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const requestWithSignedShoppingCartSchema = require('./shoppingcart/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
 const localeRequestFilter = require('./routes/localeRequestFilter');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
 
 const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
-const detectBase64EncodedRequestBody = require('./routes/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
-const checkSessionIdCheckout = require('./routes/shoppingCartRequestFilter').checkSessionIdCheckout;
-const validateShoppingCartRequest = require('./routes/shoppingCartRequestFilter').validateShoppingCart;
+const detectBase64EncodedRequestBody = require('./shoppingcart/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
+const checkSessionIdCheckout = require('./shoppingcart/shoppingCartRequestFilter').checkSessionIdCheckout;
+const validateShoppingCartRequest = require('./shoppingcart/shoppingCartRequestFilter').validateShoppingCart;
 
 const app = express();
 
@@ -39,9 +39,9 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(sslRedirect(['prod', 'dev', 'staging']));
 
-app.use(require('./routes/shoppingCartResponseFilter'));
+app.use(require('./shoppingcart/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
-app.use('/heroku', require('./controllers/herokuController'));
+app.use('/heroku', require('./heroku/herokuController'));
 app.use('/wertgarantie/', localeRequestFilter.getBrowserLocale);
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', validate({body: requestWithSignedShoppingCartSchema}));

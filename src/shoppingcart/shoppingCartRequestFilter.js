@@ -1,5 +1,5 @@
-const _findBySessionId = require('../repositories/CheckoutRepository').findBySessionId;
-const _verifyShoppingCart = require('../services/signatureService').verifyShoppingCart;
+const _findBySessionId = require('./CheckoutRepository').findBySessionId;
+const _verifyShoppingCart = require('./signatureService').verifyShoppingCart;
 const ClientError = require('../errors/ClientError');
 const isBase64 = require('is-base64');
 const isUUID = require('is-uuid');

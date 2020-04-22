@@ -1,4 +1,4 @@
-const checkoutRepository = require('../../src/repositories/CheckoutRepository');
+const checkoutRepository = require('../../src/shoppingcart/CheckoutRepository');
 const uuid = require('uuid');
 
 describe("test persist and find by session in checkout repository", () => {

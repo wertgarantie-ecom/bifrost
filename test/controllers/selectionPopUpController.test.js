@@ -1,4 +1,4 @@
-const selectionPopupController = require('../../src/controllers/selectionPopUpController');
+const selectionPopupController = require('../../src/components/selectionpopup/selectionPopUpController');
 const productSelectionPopUpComponentService = {
     prepareProductSelectionData: () => {
         return {

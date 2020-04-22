@@ -1,4 +1,4 @@
-const productOffersService = require('../../src/services/productOffersService');
+const productOffersService = require('../../src/productoffers/productOffersService');
 const heimdallProductOffers = require('../../integration-test/controllers/heimdallResponses').getProductOffersResponse;
 
 test("test webservices product offer conversion", async () => {

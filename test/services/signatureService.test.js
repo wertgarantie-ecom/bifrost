@@ -1,9 +1,9 @@
-const signObject = require("../../src/services/signatureService").signObject;
-const verifyObject = require("../../src/services/signatureService").verifyObject;
-const signShoppingCart = require("../../src/services/signatureService").signShoppingCart;
-const verifyShoppingCart = require("../../src/services/signatureService").verifyShoppingCart;
-const verifyString = require("../../src/services/signatureService").verifyString;
-const verifySessionId = require("../../src/services/signatureService").verifySessionId;
+const signObject = require("../../src/shoppingcart/signatureService").signObject;
+const verifyObject = require("../../src/shoppingcart/signatureService").verifyObject;
+const signShoppingCart = require("../../src/shoppingcart/signatureService").signShoppingCart;
+const verifyShoppingCart = require("../../src/shoppingcart/signatureService").verifyShoppingCart;
+const verifyString = require("../../src/shoppingcart/signatureService").verifyString;
+const verifySessionId = require("../../src/shoppingcart/signatureService").verifySessionId;
 
 test("should ignore whitespace", () => {
     const originalShoopingCart = {

@@ -1,4 +1,4 @@
-const _service = require('../services/productSelectionPopUpComponentService.js');
+const _service = require('./productSelectionPopUpComponentService.js');
 
 exports.getProducts = async function getProducts(req, res, next, service = _service) {
     if (!(req.query.deviceClass && req.query.devicePrice && req.query.clientId)) {

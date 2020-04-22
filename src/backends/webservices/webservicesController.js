@@ -1,6 +1,6 @@
-const webservicesProductOffersAssembler = require('../services/webservicesProductOffersAssembler');
-const productOffersRepository = require('../repositories/productOffersRepository');
-const clientService = require('../services/clientService');
+const webservicesProductOffersAssembler = require('./webservicesProductOffersAssembler');
+const productOffersRepository = require('../../productoffers/productOffersRepository');
+const clientService = require('../../clientconfig/clientService');
 
 exports.triggerProductOffersAssembly = async function triggerProductOffersAssembly(req, res, next) {
     try {

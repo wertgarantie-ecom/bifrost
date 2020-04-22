@@ -1,4 +1,4 @@
-const requestFilter = require('../../src/routes/shoppingCartRequestFilter');
+const requestFilter = require('../../src/shoppingcart/shoppingCartRequestFilter');
 
 const next = () => undefined;
 

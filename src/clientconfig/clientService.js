@@ -1,7 +1,7 @@
-const _repository = require('../repositories/ClientRepository');
+const _repository = require('./ClientRepository');
 const uuid = require('uuid');
 const jsonschema = require('jsonschema');
-const newClientSchema = require('../schemas/newClientSchema').newClientSchema;
+const newClientSchema = require('./newClientSchema').newClientSchema;
 
 exports.findClientById = async function findClientById(id) {
     const client = await _repository.findClientById(id);

@@ -1,4 +1,4 @@
-const clientService = require('../services/clientService');
+const clientService = require('./clientService');
 
 exports.addNewClient = async function addNewClient(req, res, next) {
     const requestBody = req.body;

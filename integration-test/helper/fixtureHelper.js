@@ -1,6 +1,6 @@
-const signatureService = require('../../src/services/signatureService');
-const clientService = require('../../src/services/clientService');
-const documentTypes = require('../../src/services/documentTypes').documentTypes;
+const signatureService = require('../../src/shoppingcart/signatureService');
+const clientService = require('../../src/clientconfig/clientService');
+const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
 
 exports.createAndPersistDefaultClient = async function createAndPersistDefaultClient() {

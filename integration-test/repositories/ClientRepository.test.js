@@ -1,5 +1,5 @@
-const clientRepository = require('../../src/repositories/ClientRepository');
-const documentTypes = require('../../src/services/documentTypes').documentTypes;
+const clientRepository = require('../../src/clientconfig/ClientRepository');
+const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
 
 describe("should find persisted client properties by given secret", () => {

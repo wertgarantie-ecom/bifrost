@@ -1,4 +1,4 @@
-const documentTypes = require('../src/services/documentTypes').documentTypes;
+const documentTypes = require('../src/documents/documentTypes').documentTypes;
 const request = require('supertest');
 const app = require('../src/app');
 

@@ -1,5 +1,5 @@
-const service = require("../../src/services/productOfferFormattingService");
-const documentTypes = require("../../src/services/documentTypes").documentTypes;
+const service = require("../../src/productoffers/productOfferFormattingService");
+const documentTypes = require("../../src/documents/documentTypes").documentTypes;
 
 test("should extract correct document", () => {
     const productOffer = {

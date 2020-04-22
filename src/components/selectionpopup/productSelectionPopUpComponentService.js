@@ -1,9 +1,9 @@
-const productImageService = require('./productImageService');
-const _productOffersService = require("./productOffersService");
-const productService = require("./productOfferFormattingService");
-const documentTypes = require("./documentTypes").documentTypes;
-const defaultClientService = require('../services/clientService');
-const schema = require('../schemas/productSelectionResponseSchema').productSelectionResponseSchema;
+const productImageService = require('../../images/productImageService');
+const _productOffersService = require("../../productoffers/productOffersService");
+const productService = require("../../productoffers/productOfferFormattingService");
+const documentTypes = require("../../documents/documentTypes").documentTypes;
+const defaultClientService = require('../../clientconfig/clientService');
+const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
 const jsonschema = require('jsonschema');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,

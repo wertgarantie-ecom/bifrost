@@ -1,4 +1,4 @@
-const signatureService = require('../services/signatureService');
+const signatureService = require('./signatureService');
 const mung = require('express-mung');
 
 function signShoppingCart(body, req, res) {

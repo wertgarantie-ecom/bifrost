@@ -1,7 +1,7 @@
-const addProductToShoppingCartWithOrderId = require('../../src/services/shoppingCartService').addProductToShoppingCartWithOrderId;
-const shoppingCartService = require('../../src/services/shoppingCartService');
-const signatureService = require('../../src/services/signatureService');
-const UnconfirmedShoppingCartError = require('../../src/services/shoppingCartService').UnconfirmedShoppingCartError;
+const addProductToShoppingCartWithOrderId = require('../../src/shoppingcart/shoppingCartService').addProductToShoppingCartWithOrderId;
+const shoppingCartService = require('../../src/shoppingcart/shoppingCartService');
+const signatureService = require('../../src/shoppingcart/signatureService');
+const UnconfirmedShoppingCartError = require('../../src/shoppingcart/shoppingCartService').UnconfirmedShoppingCartError;
 const uuid = require('uuid');
 
 const mockHeimdallClientSuccess = () => {

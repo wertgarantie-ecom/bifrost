@@ -1,7 +1,7 @@
 const webservicesResponses = require('../../integration-test/services/webservicesResponses');
-const webservicesService = require('../../src/services/webservicesProductOffersAssembler');
+const webservicesService = require('../../src/backends/webservices/webservicesProductOffersAssembler');
 const fixtureHelper = require('../../integration-test/helper/fixtureHelper');
-const documentTypes = require('../../src/services/documentTypes').documentTypes;
+const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
 
 const session = 'DG21586374946XD38P9X37K64BD3NI1L78XD9GR93B33E3N34CO456R26KL2DE5';
@@ -817,7 +817,7 @@ test.skip('call webservices dev', async () => {
         ]
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
-    const client = await require('../../src/repositories/ClientRepository').persist(clientConfig);
+    const client = await require('../../src/clientconfig/ClientRepository').persist(clientConfig);
     process.env.WEBSERVICES_URI = "http://localhost:3001/webservices";
     const offers = await webservicesService.updateAllProductOffersForClient(client);
     console.log(JSON.stringify(offers, null, 2));

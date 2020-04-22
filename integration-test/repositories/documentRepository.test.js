@@ -1,4 +1,4 @@
-const repository = require('../../src/repositories/documentRepository');
+const repository = require('../../src/documents/documentRepository');
 const uuid = require('uuid');
 
 describe("could retrieve persisted document", () => {

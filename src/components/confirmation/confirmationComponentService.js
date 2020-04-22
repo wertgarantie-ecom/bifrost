@@ -1,8 +1,8 @@
-const productOfferFormattingService = require('./productOfferFormattingService');
-const _productOfferService = require('./productOffersService');
-const documentTypes = require('./documentTypes').documentTypes;
-const defaultProductImageService = require('./productImageService');
-const defaultClientService = require('./clientService');
+const productOfferFormattingService = require('../../productoffers/productOfferFormattingService');
+const _productOfferService = require('../../productoffers/productOffersService');
+const documentTypes = require('../../documents/documentTypes').documentTypes;
+const defaultProductImageService = require('../../images/productImageService');
+const defaultClientService = require('../../clientconfig/clientService');
 const _ = require('lodash');
 
 exports.prepareConfirmationData = async function prepareConfirmationData(shoppingCart,

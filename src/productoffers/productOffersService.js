@@ -1,5 +1,5 @@
-const _heimdallClient = require('./heimdallClient');
-const _productOffersRepository = require('../repositories/productOffersRepository');
+const _heimdallClient = require('../backends/heimdall/heimdallClient');
+const _productOffersRepository = require('./productOffersRepository');
 const _ = require('lodash');
 
 async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _productOffersRepository, heimdallClient = _heimdallClient) {

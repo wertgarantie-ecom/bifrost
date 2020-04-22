@@ -1,4 +1,4 @@
-const checkoutRespository = require("../repositories/CheckoutRepository");
+const checkoutRespository = require("./CheckoutRepository");
 
 exports.findPurchaseById = async function findPurchaseById(req, res) {
     const sessionId = req.params.sessionId;

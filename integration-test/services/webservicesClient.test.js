@@ -1,4 +1,4 @@
-const webservicesClient = require('../../src/services/webservicesClient');
+const webservicesClient = require('../../src/backends/webservices/webservicesClient');
 const nockHelper = require('../helper/nockHelper');
 const responses = require('./webservicesResponses');
 const _ = require('lodash');

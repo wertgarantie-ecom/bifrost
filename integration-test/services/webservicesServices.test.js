@@ -1,4 +1,4 @@
-const webservicesService = require('../../src/services/webservicesProductOffersAssembler');
+const webservicesService = require('../../src/backends/webservices/webservicesProductOffersAssembler');
 const fixtures = require('../helper/fixtureHelper');
 const webserviceMockClient = require('../../test/helpers/webserviceMockClient').createMockWebserviceClient();
 

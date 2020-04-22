@@ -1,4 +1,4 @@
-const afterSalesService = require('../../src/services/afterSalesService');
+const afterSalesService = require('../../src/components/aftersales/afterSalesService');
 
 test('should return proper after sales data for checkout data', async () => {
     const sessionId = "0b511572-3aa3-4706-8146-d109693cfe37";

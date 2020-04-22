@@ -1,6 +1,6 @@
-const service = require('../services/shoppingCartService');
-const clientRepository = require('../repositories/ClientRepository');
-const clientService = require('../services/clientService');
+const service = require('./shoppingCartService');
+const clientRepository = require('../clientconfig/ClientRepository');
+const clientService = require('../clientconfig/clientService');
 const ClientError = require('../errors/ClientError');
 
 /**

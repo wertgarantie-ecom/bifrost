@@ -1,4 +1,4 @@
-const documentRepo = require('../repositories/documentRepository');
+const documentRepo = require('./documentRepository');
 
 
 exports.getDocumentById = async function getDocumentById(req, res, next) {

@@ -1,4 +1,4 @@
-const service = require('../../src/services/productImageService');
+const service = require('../../src/images/productImageService');
 
 const productImageMappingWithTwoEntries = {
     "twoEntries": [

@@ -1,5 +1,5 @@
-const confirmationService = require('../services/confirmationComponentService');
-const shoppingCartService = require('../services/shoppingCartService');
+const confirmationService = require('./confirmationComponentService');
+const shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res, next) {
     const shoppingCart = req.shoppingCart;

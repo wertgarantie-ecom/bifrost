@@ -1,11 +1,11 @@
 const _webservicesClient = require('./webservicesClient');
-const _documentRespository = require('../repositories/documentRepository');
+const _documentRespository = require('../../documents/documentRepository');
 const _ = require('lodash');
 const _uuid = require('uuid');
-const clientService = require('./clientService');
-const _productOfferRepository = require('../repositories/productOffersRepository');
+const clientService = require('../../clientconfig/clientService');
+const _productOfferRepository = require('../../productoffers/productOffersRepository');
 const jsonschema = require('jsonschema');
-const productOfferSchema = require('../schemas/productOfferSchema').productOfferSchema;
+const productOfferSchema = require('../../productoffers/productOfferSchema').productOfferSchema;
 
 
 async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {

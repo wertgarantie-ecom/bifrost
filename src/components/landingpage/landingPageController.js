@@ -1,4 +1,4 @@
-const landingPageService = require('../services/landingPageService');
+const landingPageService = require('./landingPageService');
 
 exports.getLandingPageData = async function getLandingPageData(req, res, next) {
     try {

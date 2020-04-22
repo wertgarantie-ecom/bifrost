@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const Globalize = require('../globalize').Globalize;
-const documentTypes = require('./documentTypes').documentTypes;
+const documentTypes = require('../documents/documentTypes').documentTypes;
 
 exports.fromProductOffer = function fromProductOffer(productOffer) {
     return {

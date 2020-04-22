@@ -1,5 +1,5 @@
-const clientService = require('../../src/services/clientService');
-const documentTypes = require('../../src/services/documentTypes').documentTypes;
+const clientService = require('../../src/clientconfig/clientService');
+const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
 
 test('should create client with valid offers config', async () => {

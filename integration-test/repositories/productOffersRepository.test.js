@@ -1,4 +1,4 @@
-const repository = require('../../src/repositories/productOffersRepository');
+const repository = require('../../src/productoffers/productOffersRepository');
 const fixtureHelper = require('../helper/fixtureHelper');
 
 
