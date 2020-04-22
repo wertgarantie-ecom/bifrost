@@ -1,7 +1,7 @@
 const request = require('supertest');
-const app = require('../../src/app');
-const testhelper = require('../helper/fixtureHelper');
-const nockhelper = require('../helper/nockHelper');
+const app = require('../../../src/app');
+const testhelper = require('../../helper/fixtureHelper');
+const nockhelper = require('../../helper/nockHelper');
 
 test('should return proper product data', async () => {
     const clientData = await testhelper.createAndPersistDefaultClient();

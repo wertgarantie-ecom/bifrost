@@ -1,4 +1,4 @@
-const webservicesResponses = require('../../../integration-test/services/webservicesResponses');
+const webservicesResponses = require('../../../integration-test/backends/webservices/webservicesResponses');
 const webservicesService = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
 const fixtureHelper = require('../../../integration-test/helper/fixtureHelper');
 const documentTypes = require('../../../src/documents/documentTypes').documentTypes;

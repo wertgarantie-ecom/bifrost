@@ -1,11 +1,11 @@
 const nock = require('nock');
-const defaultProductOffersResponse = require('../controllers/heimdallResponses').getProductOffersResponse;
+const defaultProductOffersResponse = require('../backends/heimdall/heimdallResponses').getProductOffersResponse;
 const dateformat = require('dateformat');
-const agentDataMultipleProductsTestResponse = require('../services/webservicesResponses').agentDataMultipleProducts;
-const advertisingTextResponse = require('../services/webservicesResponses').advertisingText;
-const insurancePremiumResponse = require('../services/webservicesResponses').insurancePremiumResponse;
-const comparisonDocumentsResponse = require('../services/webservicesResponses').multipleComparisonDocumentsResponse;
-const legalDocumentsResponse = require('../services/webservicesResponses').multipleLegalDocuments;
+const agentDataMultipleProductsTestResponse = require('../backends/webservices/webservicesResponses').agentDataMultipleProducts;
+const advertisingTextResponse = require('../backends/webservices/webservicesResponses').advertisingText;
+const insurancePremiumResponse = require('../backends/webservices/webservicesResponses').insurancePremiumResponse;
+const comparisonDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleComparisonDocumentsResponse;
+const legalDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleLegalDocuments;
 
 
 exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {

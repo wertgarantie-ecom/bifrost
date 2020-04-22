@@ -1,9 +1,9 @@
 const request = require('supertest');
-const app = require('../../src/app');
-const testhelper = require('../helper/fixtureHelper');
-const signatureService = require('../../src/shoppingcart/signatureService');
+const app = require('../../../src/app');
+const testhelper = require('../../helper/fixtureHelper');
+const signatureService = require('../../../src/shoppingcart/signatureService');
 const uuid = require('uuid');
-const nockhelper = require('../helper/nockHelper');
+const nockhelper = require('../../helper/nockHelper');
 
 describe("Check Preparation of After Sales Component Data when checkout happens via shop call", () => {
     let clientData;

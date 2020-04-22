@@ -1,5 +1,5 @@
 const webservicesClient = require('../../../src/backends/webservices/webservicesClient');
-const responses = require('../../../integration-test/services/webservicesResponses');
+const responses = require('../../../integration-test/backends/webservices/webservicesResponses');
 const dateformat = require('dateformat');
 const _ = require('lodash');
 

@@ -1,5 +1,5 @@
 const productOffersService = require('../../src/productoffers/productOffersService');
-const heimdallProductOffers = require('../../integration-test/controllers/heimdallResponses').getProductOffersResponse;
+const heimdallProductOffers = require('../../integration-test/backends/heimdall/heimdallResponses').getProductOffersResponse;
 
 test("test webservices product offer conversion", async () => {
     process.env.BACKEND = "webservices";

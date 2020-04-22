@@ -1,4 +1,4 @@
-const webservicesResponses = require('../../integration-test/services/webservicesResponses');
+const webservicesResponses = require('../../integration-test/backends/webservices/webservicesResponses');
 const _ = require('lodash');
 const uuid = require('uuid');
 

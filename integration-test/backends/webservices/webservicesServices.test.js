@@ -1,6 +1,6 @@
-const webservicesService = require('../../src/backends/webservices/webservicesProductOffersAssembler');
-const fixtures = require('../helper/fixtureHelper');
-const webserviceMockClient = require('../../test/helpers/webserviceMockClient').createMockWebserviceClient();
+const webservicesService = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
+const fixtures = require('../../helper/fixtureHelper');
+const webserviceMockClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClient();
 
 describe('should persist product offers', () => {
 

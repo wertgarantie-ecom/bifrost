@@ -1,8 +1,8 @@
 const request = require('supertest');
-const app = require('../../src/app');
-const nockHelper = require('../helper/nockHelper');
-const getProductOffersResponse = require('./heimdallResponses').getProductOffersResponse;
-const testhelper = require('../helper/fixtureHelper');
+const app = require('../../../src/app');
+const nockHelper = require('../../helper/nockHelper');
+const getProductOffersResponse = require('../../backends/heimdall/heimdallResponses').getProductOffersResponse;
+const testhelper = require('../../helper/fixtureHelper');
 
 test('should reject confirm request for missing shopping cart', async () => {
     const result = await request(app)
