@@ -24,6 +24,9 @@ exports.persist = async function persist(productOffers) {
     try {
         await client.query('BEGIN');
         const hash = hashProductOffers(productOffers);
+        if (await productOffersExists(productOffers[0].clientId, hash, client)) {
+            return productOffers;
+        }
         const query = {
             name: 'insert-product-offers',
             text: `INSERT INTO productoffers (clientid, hash, productoffers) VALUES ($1 , $2, $3)
@@ -46,8 +49,7 @@ exports.persist = async function persist(productOffers) {
     }
 };
 
-async function productOffersExists(clientId, hash) {
-    const pool = Pool.getInstance();
+async function productOffersExists(clientId, hash, pool = Pool.getInstance()) {
     const result = await pool.query({
         name: 'find-product-offers-by-client-id-and-hash',
         text: `SELECT productoffers FROM productoffers  
