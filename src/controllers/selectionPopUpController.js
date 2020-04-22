@@ -9,6 +9,9 @@ exports.getProducts = async function getProducts(req, res, next, service = _serv
         if (!validatorResult.valid) {
             return res.status(502).send(validatorResult.errors);
         } else {
+            if (validatorResult.instance.products.length !== 2) {
+                return res.status(204).send("could not assemble two product offers");
+            }
             return res.status(200).send(validatorResult.instance);
         }
     } catch (e) {

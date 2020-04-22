@@ -56,6 +56,7 @@ async function getConfirmationProductData(wertgarantieProduct, client, productOf
         const productInformationSheet = productOfferFormatter.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET);
         return {
             product: {
+                paymentInterval: matchingOffer.payment,
                 price: productOfferFormatter.getPriceFormatted(),
                 includedTax: productOfferFormatter.getIncludedTaxFormatted(),
                 productTitle: matchingOffer.name,
@@ -66,7 +67,7 @@ async function getConfirmationProductData(wertgarantieProduct, client, productOf
                 shopProductShortName: wertgarantieProduct.shopProductName,
                 orderId: wertgarantieProduct.orderId
             },
-            avbHref: productOfferFormatter.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri
+            avbHref: productOfferFormatter.getDocument(documentTypes.LEGAL_NOTICE).uri
         };
     }
 

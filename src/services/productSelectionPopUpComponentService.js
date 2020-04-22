@@ -35,6 +35,7 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
 
     const advantageCategories = displayableProductOffer.getAdvantageCategories(allProductOffers);
     return {
+        paymentInterval: productOffer.payment,
         id: productOffer.id,
         name: productOffer.name,
         top3: advantageCategories.top3,

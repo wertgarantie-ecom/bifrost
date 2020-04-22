@@ -1,29 +1,36 @@
 const confirmationService = require('../services/confirmationComponentService');
 const shoppingCartService = require('../services/shoppingCartService');
 
-exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res) {
+exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res, next) {
     const shoppingCart = req.shoppingCart;
-
-    const result = await confirmationService.prepareConfirmationData(shoppingCart);
-    if (result) {
-        res.status(200).send(result);
-    } else {
-        sendEmptyShoppingCart(res);
+    try {
+        const result = await confirmationService.prepareConfirmationData(shoppingCart);
+        if (result) {
+            return res.status(200).send(result);
+        } else {
+            return sendEmptyShoppingCart(res);
+        }
+    } catch (error) {
+        return next(error)
     }
 };
 
-exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res) {
-    const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart);
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res, next) {
+    try {
+        const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart);
 
-    if (updatedShoppingCart) {
-        const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
-        if (result) {
-            res.status(200).send(result);
+        if (updatedShoppingCart) {
+            const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
+            if (result) {
+                return res.status(200).send(result);
+            } else {
+                return sendEmptyShoppingCart(res);
+            }
         } else {
-            sendEmptyShoppingCart(res);
+            return sendEmptyShoppingCart(res);
         }
-    } else {
-        sendEmptyShoppingCart(res);
+    } catch (error) {
+        return next(error);
     }
 };
 

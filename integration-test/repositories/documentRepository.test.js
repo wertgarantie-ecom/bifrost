@@ -3,8 +3,8 @@ const repository = require('../../src/repositories/documentRepository');
 describe("could retrieve persisted document", () => {
     const document = {
         type: "AVB",
-        name: "my name",
-        content: "blob"
+        FILENAME: "my name",
+        CONTENT: "blob"
     };
 
     let id;
@@ -14,10 +14,12 @@ describe("could retrieve persisted document", () => {
     });
 
     test('could retrieve document by id', async () => {
-
         const retrievedDocument = await repository.findById(id);
         expect(retrievedDocument).toEqual({
-            ...document, id
+            id: id,
+            content: "blob",
+            name: "my name",
+            type: "AVB"
         });
     })
 });
