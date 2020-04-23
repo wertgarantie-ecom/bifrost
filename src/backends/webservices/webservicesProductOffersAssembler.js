@@ -3,9 +3,9 @@ const _documentRespository = require('../../documents/documentRepository');
 const _ = require('lodash');
 const _uuid = require('uuid');
 const clientService = require('../../clientconfig/clientService');
-const _productOfferRepository = require('../../productoffers/productOffersRepository');
+const _productOfferRepository = require('./webserviceProductOffersRepository');
 const jsonschema = require('jsonschema');
-const productOfferSchema = require('../../productoffers/productOfferSchema').productOfferSchema;
+const productOfferSchema = require('./webserviceProductOffersSchema').productOfferSchema;
 
 
 async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {
@@ -64,7 +64,7 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
         name: productOfferConfig.name,
         id: uuid(),
         applicationCode: productOfferConfig.applicationCode,
-        risks: productOfferConfig.risks,
+        risks: [productOfferConfig.basicRiskType, ...productOfferConfig.risks],
         productType: productOfferConfig.productType,
         clientId: clientId,
         defaultPaymentInterval: productOfferConfig.defaultPaymentInterval,

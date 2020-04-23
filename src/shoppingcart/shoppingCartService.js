@@ -1,8 +1,8 @@
 const uuid = require('uuid');
 const _ = require('lodash');
-const moment = require('moment');
 const checkoutRepository = require('./CheckoutRepository');
-const defaultHeimdallClient = require('../backends/heimdall/heimdallClient');
+const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutService');
+const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
@@ -31,38 +31,7 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, client) {
-    const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
-    try {
-        const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, client);
-        return {
-            id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
-            success: true,
-            message: "successfully transmitted insurance proposal",
-            shopProduct: wertgarantieProduct.shopProductName,
-            contractNumber: responseBody.payload.contract_number,
-            transactionNumber: responseBody.payload.transaction_number,
-            activationCode: responseBody.payload.activation_code
-        };
-    } catch (e) {
-        return {
-            id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
-            success: false,
-            message: e.message,
-            shopProduct: wertgarantieProduct.shopProductName
-        };
-    }
-}
-
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, client, heimdallClient = defaultHeimdallClient, idGenerator = uuid, date = new Date(), repository = checkoutRepository) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, client, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
     if (!(wertgarantieCart.termsAndConditionsConfirmed && wertgarantieCart.legalAgeConfirmed)) {
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
@@ -83,7 +52,11 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, client);
+        if (process.env.BACKEND === 'webservices') {
+            return webservicesInsuranceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, client);
+        } else {
+            return heimdallCheckoutService.checkout(client, wertgarantieProduct, customer, matchingShopProduct);
+        }
     }));
 
 
@@ -103,36 +76,6 @@ function findIndex(shopCartProducts, wertgarantieProduct) {
     return _.findIndex(shopCartProducts, shopProduct => shopProduct.model === wertgarantieProduct.shopProductName
         && shopProduct.price === wertgarantieProduct.devicePrice
         && shopProduct.deviceClass === wertgarantieProduct.deviceClass);
-}
-
-function formatDate(date) {
-    return moment(date).format("YYYY-MM-DD");
-}
-
-function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date) {
-    return {
-        productId: wertgarantieProduct.wertgarantieProductId,
-        customer_company: customer.company,
-        customer_salutation: customer.salutation,
-        customer_firstname: customer.firstname,
-        customer_lastname: customer.lastname,
-        customer_street: customer.street,
-        customer_zip: customer.zip,
-        customer_city: customer.city,
-        customer_country: customer.country,
-        customer_email: customer.email,
-        customer_birthdate: "1911-11-11",
-        device_manufacturer: matchingShopProduct.manufacturer,
-        device_model: matchingShopProduct.model,
-        device_class: matchingShopProduct.deviceClass,
-        device_purchase_price: parseFloat(matchingShopProduct.price) / 100,
-        device_purchase_date: formatDate(date),
-        device_condition: 1,
-        device_os: matchingShopProduct.deviceOS,
-        payment_method: "jährlich",
-        payment_type: "bank_transfer",
-        terms_and_conditions_accepted: true
-    }
 }
 
 function newShoppingCart(clientId) {

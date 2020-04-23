@@ -187,3 +187,17 @@ test("should retrieve single LEGAL_DOCUMENT", async () => {
         fail(error);
     }
 });
+
+test('should retrieve new contract number', async () => {
+    const mockHttpClient = jest.fn(() => {
+        return {
+            data: responses.newContractNumber
+        }
+    });
+    try {
+        const newContractNumber = await webservicesClient.getNewContractNumber("session", mockHttpClient);
+        expect(newContractNumber).toBe("12345678");
+    } catch (error) {
+        fail(error);
+    }
+})

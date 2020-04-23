@@ -303,6 +303,7 @@ test('should assemble product offers for client', async () => {
         productType: "KOMPLETTSCHUTZ_2019",
         applicationCode: "GU WG DE KS 0419",
         basicRiskType: "KOMPLETTSCHUTZ",
+        defaultPaymentInterval: "monthly",
         deviceClasses: [
             {
                 objectCode: "9025",
@@ -346,9 +347,10 @@ test('should assemble product offers for client', async () => {
         name: "Komplettschutz",
         id: "productOfferUuid",
         clientId: "public:publicId",
+        defaultPaymentInterval: "monthly",
         applicationCode: productOfferConfig.applicationCode,
         productType: productOfferConfig.productType,
-        risks: productOfferConfig.risks,
+        risks: [productOfferConfig.basicRiskType, ...productOfferConfig.risks],
         documents: [
             {
                 documentId: documentId,
@@ -379,7 +381,7 @@ test('should update all product offers for client', async () => {
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
             defaultPaymentInterval: "monthly",
-            risks: [],
+            risks: ["KOMPLETTSCHUTZ"],
             documents: [
                 {
                     documentId: "1234",
@@ -397,7 +399,7 @@ test('should update all product offers for client', async () => {
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
             defaultPaymentInterval: "monthly",
-            risks: ["DIEBSTAHLSCHUTZ"],
+            risks: ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"],
             documents: [
                 {
                     documentId: "1234",
@@ -408,7 +410,7 @@ test('should update all product offers for client', async () => {
             advantages: [],
             devices: expectedIntervalPremiumsForKS
         }
-    ])
+    ]);
 });
 
 const expectedIntervalPremiumsForKS = [

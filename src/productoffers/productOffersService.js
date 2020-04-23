@@ -1,8 +1,8 @@
 const _heimdallClient = require('../backends/heimdall/heimdallClient');
-const _productOffersRepository = require('./productOffersRepository');
+const _webserviceProductOffersRepository = require('../backends/webservices/webserviceProductOffersRepository');
 const _ = require('lodash');
 
-async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _productOffersRepository, heimdallClient = _heimdallClient) {
+async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
         return {

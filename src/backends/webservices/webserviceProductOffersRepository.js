@@ -1,4 +1,4 @@
-const Pool = require("../postgres").Pool;
+const Pool = require("../../postgres").Pool;
 const CryptoJS = require('crypto-js');
 
 function hashProductOffers(productOffers) {
