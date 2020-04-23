@@ -3,6 +3,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const checkoutRepository = require('./CheckoutRepository');
 const defaultHeimdallClient = require('../backends/heimdall/heimdallClient');
+const webservicesInsurenceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
@@ -46,7 +47,8 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
             shopProduct: wertgarantieProduct.shopProductName,
             contractNumber: responseBody.payload.contract_number,
             transactionNumber: responseBody.payload.transaction_number,
-            activationCode: responseBody.payload.activation_code
+            activationCode: responseBody.payload.activation_code,
+            backend: "heimdall"
         };
     } catch (e) {
         return {
@@ -57,7 +59,8 @@ async function callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, cu
             devicePrice: wertgarantieProduct.devicePrice,
             success: false,
             message: e.message,
-            shopProduct: wertgarantieProduct.shopProductName
+            shopProduct: wertgarantieProduct.shopProductName,
+            backend: "heimdall"
         };
     }
 }
@@ -83,7 +86,11 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, client);
+        if (process.env.BACKEND === 'webservices') {
+            return webservicesInsurenceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, client);
+        } else {
+            return callHeimdallToCheckoutWertgarantieProduct(wertgarantieProduct, customer, matchingShopProduct, date, heimdallClient, idGenerator, client);
+        }
     }));
 
 

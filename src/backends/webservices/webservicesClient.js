@@ -204,7 +204,7 @@ exports.getNewContractNumber = async function getNewContractNumber(session, http
     formData.append('SHAPING', 'DEFAULT');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0")
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     return result.RESULT.NEWCONTRACTNUMBER;
 };
 

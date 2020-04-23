@@ -1,5 +1,5 @@
 const webservicesProductOffersAssembler = require('./webservicesProductOffersAssembler');
-const productOffersRepository = require('../../productoffers/productOffersRepository');
+const productOffersRepository = require('./webserviceProductOffersRepository');
 const clientService = require('../../clientconfig/clientService');
 
 exports.triggerProductOffersAssembly = async function triggerProductOffersAssembly(req, res, next) {
@@ -20,7 +20,7 @@ exports.triggerProductOffersAssemblyForClient = async function triggerProductOff
         if (!client) {
             return res.status(400).send("nothing found for client id: " + req.params.clientId);
         }
-        await webservicesProductOffersAssembler.updateAllProductOffersForClient(client)
+        await webservicesProductOffersAssembler.updateAllProductOffersForClient(client);
         return res.status(200).send("product offers updated for client: " + client.id);
     } catch (error) {
         return next(error);
@@ -44,4 +44,4 @@ exports.getProductOffersForClient = async function getProductOffersForClient(req
     } catch (error) {
         return next(error);
     }
-}
+};

@@ -42,7 +42,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
             }
         });
 
-        const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
                     price: 139999,

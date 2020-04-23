@@ -1,3 +1,3 @@
 module.exports = {
-    testRegex: "/fixtures/.*\.fixture\..*"
+    testRegex: "/fixtures/.*.fixture..*"
 };

@@ -1,43 +1,4 @@
-exports.completeAssembledProductOffers = [
-    {
-        name: "Komplettschutz",
-        id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-        clientId: "testClientId",
-        applicationCode: "GU WG DE KS 0419",
-        productType: "KOMPLETTSCHUTZ_2019",
-        defaultPaymentInterval: "monthly",
-        risks: ["KOMPLETTSCHUTZ"],
-        documents: [
-            {
-                documentId: "1234",
-                documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                documentType: "LN"
-            }
-        ],
-        advantages: [],
-        devices: this.intervalPremiumsForKS
-    },
-    {
-        name: "Komplettschutz mit Premium-Option",
-        id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
-        clientId: "testClientId",
-        applicationCode: "GU WG DE KS 0419",
-        productType: "KOMPLETTSCHUTZ_2019",
-        defaultPaymentInterval: "monthly",
-        risks: ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"],
-        documents: [
-            {
-                documentId: "1234",
-                documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                documentType: "LN"
-            }
-        ],
-        advantages: [],
-        devices: this.intervalPremiumsForKS
-    }
-];
-
-exports.intervalPremiumsForKS = [
+const intervalPremiumsForKS = [
     {
         "objectCode": "9025",
         "objectCodeExternal": "Smartphone",
@@ -219,5 +180,44 @@ exports.intervalPremiumsForKS = [
                 ]
             }
         ]
+    }
+];
+
+exports.completeWebserviceProductOffers = [
+    {
+        name: "Komplettschutz",
+        id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+        clientId: "testClientId",
+        applicationCode: "GU WG DE KS 0419",
+        productType: "KOMPLETTSCHUTZ_2019",
+        defaultPaymentInterval: "monthly",
+        risks: ["KOMPLETTSCHUTZ"],
+        documents: [
+            {
+                documentId: "1234",
+                documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                documentType: "LN"
+            }
+        ],
+        advantages: [],
+        devices: intervalPremiumsForKS
+    },
+    {
+        name: "Komplettschutz mit Premium-Option",
+        id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
+        clientId: "testClientId",
+        applicationCode: "GU WG DE KS 0419",
+        productType: "KOMPLETTSCHUTZ_2019",
+        defaultPaymentInterval: "monthly",
+        risks: ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"],
+        documents: [
+            {
+                documentId: "1234",
+                documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                documentType: "LN"
+            }
+        ],
+        advantages: [],
+        devices: intervalPremiumsForKS
     }
 ];

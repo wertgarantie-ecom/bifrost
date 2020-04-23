@@ -2,41 +2,65 @@ const {create} = require('xmlbuilder2');
 const dateformat = require('dateformat');
 const uuid = require('uuid');
 const _webservicesClient = require('./webservicesClient');
-const _productOffersRepository = require('../../productoffers/productOffersRepository');
+const _productOffersRepository = require('./webserviceProductOffersRepository');
 const _ = require('lodash');
 
-exports.submitInsuranceProposal = async function submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, satznummerGenerator = uuid) {
-    const session = await webservicesClient.login(clientConfig);
-    const contractnumber = await webservicesClient.getNewContractNumber(session);
-    const satznummer = satznummerGenerator();
-    // hole productoffer für wertgarantieProductId
-    const productOffersForClient = productOffersRepository.findByClientId(clientConfig.id);
-    const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
+exports.submitInsuranceProposal = async function submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
+    try {
+        const session = await webservicesClient.login(clientConfig);
+        const contractnumber = await webservicesClient.getNewContractNumber(session);
+        const satznummer = idGenerator();
+        const productOffersForClient = productOffersRepository.findByClientId(clientConfig.id);
+        const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
+        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
 
-    // Wertgarantie Object Code ermitteln --> Ne, wir können Mapping nutzen: http://www.wertgarantie.de/XMLSchema/sst_antrag/ --> AntragKommunikation
-    // erstelle SET XML INTERFACE XML
-    const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
+        const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
 
-    const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
-
-    return {
-        contractnumber: contractnumber,
-        satznummer: satznummer,
-        statusCode: submitResult.STATUS_TEXT,
-        webservicesMessage: submitResult.STATUS_CODE
+        return {
+            id: idGenerator(),
+            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
+            deviceClass: wertgarantieProduct.deviceClass,
+            devicePrice: wertgarantieProduct.devicePrice,
+            success: true,
+            message: "successfully transmitted insurance proposal",
+            shopProduct: wertgarantieProduct.shopProductName,
+            contractNumber: contractnumber,
+            transactionNumber: satznummer,
+            backend: "webservices",
+            resultCode: submitResult.STATUS_TEXT
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            id: idGenerator(),
+            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
+            deviceClass: wertgarantieProduct.deviceClass,
+            devicePrice: wertgarantieProduct.devicePrice,
+            success: false,
+            message: e.message,
+            shopProduct: wertgarantieProduct.shopProductName,
+            backend: "webservices",
+        };
     }
 };
 
-function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer) {
-    const date = dateformat(new Date(), 'dd.mm.yyyy');
+function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer, date = new Date()) {
+    function findObjectCode(externalObjectCode, productOffer) {
+        return _.find(productOffer.devices, device => device.objectCodeExternal === externalObjectCode).objectCode;
+    }
+
+    const formattedDate = dateformat(date, 'dd.mm.yyyy');
+    const objectCode = findObjectCode(shopProduct.deviceClass, productOffer);
     const proposalJson = {
         "Antraege": {
             "Herkunft": "WG_E-COMMERCE_COMPONENTS",
-            "Exportdatum": date,
+            "Exportdatum": formattedDate,
             "Antrag": {
                 "Vertragsnummer": contractNumber,
                 "Satznummer": satznummer,
-                "Antragsdatum": date,
+                "Antragsdatum": formattedDate,
                 "Vermittlernummer": activePartnerNumber,
                 "Kundendaten": {
                     "Anrede": customer.salutation,
@@ -51,9 +75,8 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
                 "Kommunikation": {
                     "Position": 1,
                     "Hersteller": shopProduct.manufacturer,
-                    "Mapping": "TEST_KUNDE",
-                    "Geraetetyp": shopProduct.deviceClass,
-                    "Kaufdatum": date,
+                    "Geraetetyp": objectCode,
+                    "Kaufdatum": formattedDate,
                     "Kaufpreis": ((shopProduct.price / 100) + "").replace(".", ","),
                     "Risiken": {
                         "Risiko": productOffer.risks.map(risk => {
