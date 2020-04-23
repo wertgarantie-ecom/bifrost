@@ -9,6 +9,21 @@ exports.createAndPersistDefaultClient = async function createAndPersistDefaultCl
     return await clientService.addNewClient(addNewClientRequest);
 };
 
+exports.validCustomer = function validCustomer() {
+    return {
+        company: "INNOQ",
+        salutation: "Herr",
+        firstname: "Max",
+        lastname: "Mustermann",
+        street: "Unter den Linden",
+        zip: "52345",
+        city: "Köln",
+        country: "Deutschland",
+        email: "max.mustermann1234@test.com"
+    }
+};
+
+
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
     const {clientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
     const sessionId = uuid();
