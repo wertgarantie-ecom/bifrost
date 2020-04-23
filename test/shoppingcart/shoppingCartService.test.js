@@ -106,6 +106,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         products: [
             {
                 wertgarantieProductId: "2",
+                wertgarantieProductName: "Komplettschutz",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "100000",
                 shopProductName: "IPhone X",
@@ -181,7 +182,9 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
                     "shopProduct": "IPhone X",
                     "activationCode": "123456",
                     "contractNumber": "28850277",
-                    "transactionNumber": "28850279"
+                    "transactionNumber": "28850279",
+                    "backend": "heimdall",
+                    "wertgarantieProductName": "Komplettschutz"
                 }
             ]
         });
@@ -380,7 +383,8 @@ test("checkout call with multiple products", async () => {
                 "message": "successfully transmitted insurance proposal",
                 "shopProduct": "Super Bike 3000",
                 "contractNumber": "28850277",
-                "transactionNumber": "28850279"
+                "transactionNumber": "28850279",
+                "backend": "heimdall"
             },
             {
                 "id": "37347358-1fc1-4840-992a-5d30bac1641d",
@@ -391,7 +395,8 @@ test("checkout call with multiple products", async () => {
                 "message": "successfully transmitted insurance proposal",
                 "shopProduct": "Super Bike 3000",
                 "contractNumber": "28850277",
-                "transactionNumber": "28850279"
+                "transactionNumber": "28850279",
+                "backend": "heimdall"
             }
         ]
     });
@@ -409,6 +414,7 @@ test("checkout call with multiple products where one is not found in shop cart",
         products: [
             {
                 wertgarantieProductId: "2",
+                wertgarantieProductName: "Komplettschutz",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "100000",
                 shopProductName: "Super Bike 3000",
@@ -416,6 +422,7 @@ test("checkout call with multiple products where one is not found in shop cart",
             },
             {
                 wertgarantieProductId: "2",
+                wertgarantieProductName: "Basis",
                 deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                 devicePrice: "120000",
                 shopProductName: "Super Bike 3000",
@@ -462,6 +469,7 @@ test("checkout call with multiple products where one is not found in shop cart",
                 {
                     "id": "37347358-1fc1-4840-992a-5d30bac1641d",
                     "wertgarantieProductId": "2",
+                    "wertgarantieProductName": "Komplettschutz",
                     "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                     "devicePrice": "100000",
                     "success": true,
@@ -469,11 +477,13 @@ test("checkout call with multiple products where one is not found in shop cart",
                     "shopProduct": "Super Bike 3000",
                     "activationCode": "123456",
                     "contractNumber": "28850277",
-                    "transactionNumber": "28850279"
+                    "transactionNumber": "28850279",
+                    "backend": "heimdall"
                 },
                 {
                     "id": "a409e32a-053d-406c-b8c5-016bbab413dc",
                     "wertgarantieProductId": "2",
+                    "wertgarantieProductName": "Basis",
                     "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
                     "devicePrice": "120000",
                     "success": false,
