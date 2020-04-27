@@ -7,10 +7,14 @@ test("should login", async () => {
     const client = {
         "id": "8d0f763a-5e5a-41da-9fa8-8b2a8a11fde6",
         "name": "Handyflash DEV",
-        "heimdallClientId": "test-handyflash-heimdall-clientId",
-        "webservices": {
-            "username": "test-handyflash-user",
-            "password": "test-handyflash-password"
+        "backends": {
+            "heimdall": {
+                "clientId": "test-handyflash-heimdall-clientId"
+            },
+            "webservices": {
+                "username": "test-handyflash-user",
+                "password": "test-handyflash-password"
+            }
         },
         "activePartnerNumber": 33333,
         "secrets": [
@@ -31,7 +35,7 @@ test("should login", async () => {
         }
     });
 
-    const loginResult = await webservicesClient.login(client, mockHttpClient);
+    const loginResult = await webservicesClient.login(client.backends.webservices, mockHttpClient);
     expect(loginResult).toBe("DG21585900354UV7KZ5FX4MH7ST7K85DY42G8Z33OR4GP4EA9B57Q3583712XV4JA9DLI")
 });
 
@@ -39,10 +43,14 @@ test("should catch error when login did not succeed", async () => {
     const client = {
         "id": "8d0f763a-5e5a-41da-9fa8-8b2a8a11fde6",
         "name": "Handyflash DEV",
-        "heimdallClientId": "test-handyflash-heimdall-clientId",
-        "webservices": {
-            "username": "test-handyflash-user",
-            "password": "test-handyflash-password"
+        "backends": {
+            "heimdall": {
+                "clientId": "test-handyflash-heimdall-clientId"
+            },
+            "webservices": {
+                "username": "test-handyflash-user",
+                "password": "test-handyflash-password"
+            },
         },
         "activePartnerNumber": 33333,
         "secrets": [
@@ -62,7 +70,7 @@ test("should catch error when login did not succeed", async () => {
         }
     });
     try {
-        await webservicesClient.login(client, mockHttpClient);
+        await webservicesClient.login(client.backends.webservices, mockHttpClient);
         fail("should have thrown an error due to failed login");
     } catch (error) {
         expect(error.name).toEqual('WebserviceError');

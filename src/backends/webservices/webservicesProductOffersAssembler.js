@@ -10,7 +10,7 @@ const productOfferSchema = require('./webserviceProductOffersSchema').productOff
 
 async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {
     const productData = await webservicesClient.getAgentData(session, clientConfig);
-    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE && productOfferConfig.applicationCode === product.APPLICATION_CODE, false));
+    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.backends.webservices.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE && productOfferConfig.applicationCode === product.APPLICATION_CODE, false));
 }
 
 async function updateProductOffersForAllClients(clients) {
@@ -28,7 +28,7 @@ async function updateProductOffersForAllClients(clients) {
 }
 
 async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, productOfferRepository = _productOfferRepository, documentRepository = _documentRespository) {
-    if (!clientConfig.productOffersConfigurations) {
+    if (!clientConfig.backends.webservices.productOffersConfigurations || clientConfig.backends.webservices.productOffersConfigurations.length < 1) {
         return undefined;
     }
     const productOffers = await assembleAllProductOffersForClient(clientConfig, uuid, webservicesClient, documentRepository);
@@ -47,9 +47,10 @@ async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webse
 }
 
 async function assembleAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
-    const session = await webservicesClient.login(clientConfig);
+    const webservicesClientConfig = clientConfig.backends.webservices;
+    const session = await webservicesClient.login(webservicesClientConfig);
     const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, clientConfig, webservicesClient);
-    return await Promise.all(clientConfig.productOffersConfigurations
+    return await Promise.all(webservicesClientConfig.productOffersConfigurations
         .map(config => assembleProductOffer(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)))
         .then(offers => offers.filter(offer => offer !== undefined));
 }

@@ -7,12 +7,27 @@ describe('should add new client with valid data', () => {
     let newClientId = undefined;
     const addNewClientRequest = {
         name: "test",
-        heimdallClientId: uuid(),
-        webservices: {
-            username: 'test-user',
-            password: 'test-password',
+        backends: {
+            heimdall: {
+                clientId: uuid(),
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
+            },
+            webservices: {
+                username: 'test-user',
+                password: 'test-password',
+                productOffersConfigurations: []
+            },
         },
-        activePartnerNumber: 12345,
+        activePartnerNumber: 12345
     };
     it('should add new client', async () => {
         return request(app)
@@ -22,14 +37,14 @@ describe('should add new client with valid data', () => {
             .send(addNewClientRequest)
             .expect(200)
             .then(response => {
-                const {id, name, secrets, publicClientIds, heimdallClientId, webservices, activePartnerNumber} = response.body;
+                const {id, name, secrets, publicClientIds, backends, activePartnerNumber} = response.body;
                 newClientId = id;
                 expect(addNewClientRequest.name).toEqual(name);
                 expect(secrets.length).toBeGreaterThan(0);
                 expect(publicClientIds.length).toBeGreaterThan(0);
-                expect(addNewClientRequest.heimdallClientId).toEqual(heimdallClientId);
-                expect(addNewClientRequest.webservices.username).toEqual(webservices.username);
-                expect(addNewClientRequest.webservices.password).toEqual(webservices.password);
+                expect(addNewClientRequest.backends.heimdall.clientId).toEqual(backends.heimdall.clientId);
+                expect(addNewClientRequest.backends.webservices.username).toEqual(backends.webservices.username);
+                expect(addNewClientRequest.backends.webservices.password).toEqual(backends.webservices.password);
                 expect(addNewClientRequest.activePartnerNumber).toEqual(activePartnerNumber);
             });
     });
@@ -63,10 +78,15 @@ describe('should add new client with valid data', () => {
 describe('should handle duplicate constraint exception', () => {
     const validData = {
         name: "test",
-        heimdallClientId: uuid(),
-        webservices: {
-            username: 'test-user',
-            password: 'test-password',
+        backends: {
+            heimdall: {
+                clientId: uuid()
+            },
+            webservices: {
+                username: 'test-user',
+                password: 'test-password',
+                productOffersConfigurations: []
+            }
         },
         activePartnerNumber: 12345,
         secrets: [
@@ -86,14 +106,14 @@ describe('should handle duplicate constraint exception', () => {
             .send(validData)
             .expect(200)
             .then(response => {
-                const {id, name, secrets, publicClientIds, heimdallClientId, webservicesUsername, webservicesPassword, activePartnerNumber} = response.body;
+                const {id, name, secrets, publicClientIds, backends, activePartnerNumber} = response.body;
                 validData.id = id;
                 expect(validData.name).toEqual(name);
                 expect(validData.secrets.sort()).toEqual(secrets);
                 expect(validData.publicClientIds.sort()).toEqual(publicClientIds);
-                expect(validData.heimdallClientId).toEqual(heimdallClientId);
-                expect(validData.webservicesUsername).toEqual(webservicesUsername);
-                expect(validData.webservicesPassword).toEqual(webservicesPassword);
+                expect(validData.backends.heimdall.clientId).toEqual(backends.heimdall.clientId);
+                expect(validData.backends.webservices.username).toEqual(backends.webservices.username);
+                expect(validData.backends.webservices.password).toEqual(backends.webservices.password);
                 expect(validData.activePartnerNumber).toEqual(activePartnerNumber);
             });
     });

@@ -7,10 +7,24 @@ describe("should find persisted client properties by given secret", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        heimdallClientId: uuid(),
-        webservices: {
-            username: "webserviceUser",
-            password: "webservicePassword"
+        backends: {
+            heimdall: {
+                clientId: uuid(),
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
+            },
+            webservices: {
+                username: "webserviceUser",
+                password: "webservicePassword"
+            },
         },
         activePartnerNumber: 1234,
         secrets: [
@@ -38,10 +52,24 @@ describe("should find persisted client properties by given public client id", ()
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        heimdallClientId: uuid(),
-        webservices: {
-            username: "webserviceUser",
-            password: "webservicePassword"
+        backends: {
+            heimdall: {
+                clientId: uuid(),
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
+            },
+            webservices: {
+                username: "webserviceUser",
+                password: "webservicePassword"
+            },
         },
         activePartnerNumber: 1234,
         secrets: [
@@ -67,10 +95,24 @@ describe("should delete client data for client id", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
-        heimdallClientId: uuid(),
-        webservices: {
-            username: "webserviceUser",
-            password: "webservicePassword"
+        backends: {
+            heimdall: {
+                clientId: uuid(),
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
+            },
+            webservices: {
+                username: "webserviceUser",
+                password: "webservicePassword"
+            },
         },
         activePartnerNumber: 1234,
         secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
@@ -98,78 +140,92 @@ describe("should delete client data for client id", () => {
 });
 
 describe("should handle client config for product offers", () => {
-       const clientData = {
-           id: uuid(),
-           name: "bikeShop",
-           heimdallClientId: uuid(),
-           webservices: {
-               username: "webserviceUser",
-               password: "webservicePassword"
-           },
-           activePartnerNumber: 1234,
-           secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
-           publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
-           productOffersConfigurations: [
-               {
-                   name: "Komplettschutz",
-                   productType: "KOMPLETTSCHUTZ_2019",
-                   applicationCode: "GU WG DE KS 0419",
-                   basicRiskType: "KOMPLETTSCHUTZ",
-                   deviceClasses: [
-                       {
-                           objectCode: "9025",
-                           objectCodeExternal: "Smartphone",
-                           priceRanges: [
-                               {
-                                   minClose: 0,
-                                   maxOpen: 300
-                               },
-                               {
-                                   minClose: 300,
-                                   maxOpen: 800
-                               },
-                               {
-                                   minClose: 800,
-                                   maxOpen: 1800
-                               }
-                           ]
-                       },
-                       {
-                           objectCode: "73",
-                           objectCodeExternal: "Mobilfunk",
-                           priceRanges: [
-                               {
-                                   minClose: 0,
-                                   maxOpen: 300
-                               },
-                               {
-                                   minClose: 300,
-                                   maxOpen: 800
-                               },
-                               {
-                                   minClose: 800,
-                                   maxOpen: 1800
-                               }
-                           ]
-                       }
+    const clientData = {
+        id: uuid(),
+        name: "bikeShop",
+        backends: {
+            heimdall: {
+                clientId: uuid(),
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
+            },
+            webservices: {
+                username: "webserviceUser",
+                password: "webservicePassword",
+                productOffersConfigurations: [
+                    {
+                        name: "Komplettschutz",
+                        productType: "KOMPLETTSCHUTZ_2019",
+                        applicationCode: "GU WG DE KS 0419",
+                        basicRiskType: "KOMPLETTSCHUTZ",
+                        deviceClasses: [
+                            {
+                                objectCode: "9025",
+                                objectCodeExternal: "Smartphone",
+                                priceRanges: [
+                                    {
+                                        minClose: 0,
+                                        maxOpen: 300
+                                    },
+                                    {
+                                        minClose: 300,
+                                        maxOpen: 800
+                                    },
+                                    {
+                                        minClose: 800,
+                                        maxOpen: 1800
+                                    }
+                                ]
+                            },
+                            {
+                                objectCode: "73",
+                                objectCodeExternal: "Mobilfunk",
+                                priceRanges: [
+                                    {
+                                        minClose: 0,
+                                        maxOpen: 300
+                                    },
+                                    {
+                                        minClose: 300,
+                                        maxOpen: 800
+                                    },
+                                    {
+                                        minClose: 800,
+                                        maxOpen: 1800
+                                    }
+                                ]
+                            }
 
-                   ],
-                   documentTypes: {
-                       legalDocuments: [
-                           {
-                               type: documentTypes.LEGAL_NOTICE,
-                               pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                           }
-                       ],
-                       comparisonDocuments: []
-                   },
-                   advantages: [],
-                   risks: []
-               }
-           ]
-       };
-   test("persist and retrieve product offers config for client", async () => {
-       const persistResult = await clientRepository.persist(clientData);
-       expect(persistResult).toEqual(clientData);
-   });
+                        ],
+                        documentTypes: {
+                            legalDocuments: [
+                                {
+                                    type: documentTypes.LEGAL_NOTICE,
+                                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                                }
+                            ],
+                            comparisonDocuments: []
+                        },
+                        advantages: [],
+                        risks: []
+                    }
+                ]
+            },
+        },
+        activePartnerNumber: 1234,
+        secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
+        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
+    };
+    test("persist and retrieve product offers config for client", async () => {
+        const persistResult = await clientRepository.persist(clientData);
+        expect(persistResult).toEqual(clientData);
+    });
 });

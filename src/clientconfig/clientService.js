@@ -43,12 +43,10 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
     const clientData = {
         id: uuid(),
         name: createClientRequest.name,
-        heimdallClientId: createClientRequest.heimdallClientId,
-        webservices: createClientRequest.webservices,
+        backends: createClientRequest.backends,
         activePartnerNumber: createClientRequest.activePartnerNumber,
         secrets: createClientRequest.secrets || ['secret:' + uuid()],
-        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
-        productOffersConfigurations: createClientRequest.productOffersConfigurations
+        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()]
     };
     const validationResult = jsonschema.validate(clientData, newClientSchema);
     if (!validationResult.valid) {

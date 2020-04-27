@@ -10,7 +10,7 @@ const legalDocumentsResponse = require('../backends/webservices/webservicesRespo
 
 exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
     nock(process.env.HEIMDALL_URI)
-        .get("/api/v1/auth/client/" + clientData.heimdallClientId)
+        .get("/api/v1/auth/client/" + clientData.backends.heimdall.clientId)
         .reply(200, {
             payload: {
                 access_token: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjVmMjk1NzQ2ZjE5Mzk3OTZmYmMzMjYxm..."

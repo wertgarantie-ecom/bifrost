@@ -31,7 +31,7 @@ instance.interceptors.response.use((response) => {
 });
 
 async function getBearerToken(client, hpptClient) {
-    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + client.heimdallClientId;
+    const heimdallAuthUrl = heimdallUri + "/api/v1/auth/client/" + client.backends.heimdall.clientId;
     const request = {
         method: 'get',
         url: heimdallAuthUrl,

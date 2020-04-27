@@ -16,23 +16,52 @@ module.exports.newClientSchema = {
         "name": {
             "type": "string",
         },
-        "heimdallClientId": {
-            "type": "string"
-        },
-        "webservices": {
+        "backends": {
+            "required": [
+                "webservices"
+            ],
             "type": "object",
             "properties": {
-                "username": {
-                    "type": "string"
+                "webservices": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "productOffersConfigurations": productOffersConfigSchema
+                    },
+                    "required": [
+                        "username",
+                        "password",
+                        "productOffersConfigurations"
+                    ]
                 },
-                "password": {
-                    "type": "string"
+                "heimdall": {
+                    "type": "object",
+                    "properties": {
+                        "clientId": {
+                            "type": "string"
+                        },
+                        "deviceClassMappings": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "shopDeviceClass": {
+                                        "type": "string"
+                                    },
+                                    "heimdallDeviceClass": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            },
-            "required": [
-                "username",
-                "password"
-            ]
+            }
         },
         "activePartnerNumber": {
             "type": "integer"
@@ -48,7 +77,6 @@ module.exports.newClientSchema = {
             "items": {
                 "type": "string"
             }
-        },
-        "productOffersConfigurations": productOffersConfigSchema
+        }
     }
 };

@@ -7,10 +7,14 @@ describe("webservices roundtrip", () => {
     const clientConfig = {
         "id": "8d0f763a-5e5a-41da-9fa8-8b2a8a11fde6",
         "name": "Handyflash DEV",
-        "heimdallClientId": "test-handyflash-heimdall-clientId",
-        "webservices": {
-            "username": "test-handyflash-user",
-            "password": "test-handyflash-password"
+        "backends": {
+            "heimdall": {
+                "clientId": "test-handyflash-heimdall-clientId"
+            },
+            "webservices": {
+                "username": "test-handyflash-user",
+                "password": "test-handyflash-password"
+            }
         },
         "activePartnerNumber": 33333,
         "secrets": [
@@ -27,7 +31,7 @@ describe("webservices roundtrip", () => {
     nockHelper.nockWebservicesLogin(session);
 
     test("should execute proper login call", async () => {
-        const retrievedSession = await webservicesClient.login(clientConfig);
+        const retrievedSession = await webservicesClient.login(clientConfig.backends.webservices);
         expect(retrievedSession).toEqual(session);
     });
 
