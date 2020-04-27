@@ -153,7 +153,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
 });
 
 const mockRepository = {
-    persist: () => undefined
+    persist: (result) => result
 };
 
 
