@@ -4,6 +4,7 @@ module.exports.requestWithSignedShoppingCartSchema = {
     properties: {
         signedShoppingCart: {
             type: "object",
+            additionalProperties: false,
             properties: {
                 signature: {
                     type: "string",
@@ -12,49 +13,70 @@ module.exports.requestWithSignedShoppingCartSchema = {
                 shoppingCart: {
                     type: "object",
                     properties: {
-                        clientId: {
+                        publicClientId: {
                             type: "string",
                             required: true
                         },
-                        termsAndConditionsConfirmed: {
-                            type: "boolean",
-                            required: true
+                        confirmations: {
+                            termsAndConditionsConfirmed: {
+                                type: "boolean",
+                                required: true
+                            },
+                            legalAgeConfirmed: {
+                                type: "boolean",
+                                required: true
+                            },
                         },
-                        legalAgeConfirmed: {
-                            type: "boolean",
-                            required: true
-                        },
-                        products: {
+                        orders: {
                             type: "array",
                             items: [
                                 {
                                     type: "object",
                                     properties: {
-                                        wertgarantieProductId: {
-                                            type: "string",
-                                            required: true
+                                        shopProduct: {
+                                            type: "object",
+                                            properties: {
+                                                model: {
+                                                    type: "string"
+                                                },
+                                                price: {
+                                                    type: "integer"
+                                                },
+                                                deviceClass: {
+                                                    type: "string"
+                                                }
+                                            },
+                                            required: [
+                                                "model",
+                                                "price",
+                                                "deviceClass"
+                                            ]
                                         },
-                                        wertgarantieProductName: {
-                                            type: "string",
-                                            required: true
-                                        },
-                                        deviceClass: {
-                                            type: "string",
-                                            required: true
-                                        },
-                                        devicePrice: {
-                                            type: "integer",
-                                            required: true
-                                        },
-                                        shopProductName: {
-                                            type: "string",
-                                            required: true
-                                        },
-                                        orderId: {
-                                            type: "uuid",
-                                            required: true
+                                        wertgarantieProduct: {
+                                            type: "object",
+                                            properties: {
+                                                id: {
+                                                    type: "string"
+                                                },
+                                                name: {
+                                                    type: "string"
+                                                },
+                                                paymentInterval: {
+                                                    type: "string"
+                                                },
+                                            },
+                                            required: [
+                                                "id",
+                                                "name",
+                                                "paymentInterval"
+                                            ]
                                         }
-                                    }
+                                    },
+                                    required: [
+                                        "shopProduct",
+                                        "wertgarantieProduct"
+                                    ],
+                                    additionalProperties: false
                                 }
                             ]
                         }

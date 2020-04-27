@@ -46,6 +46,43 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
             "legalAgeConfirmed": false,
             "termsAndConditionsConfirmed": false
         };
+    const test = {
+    shopProduct: {
+        model: "model",
+            price: 1200,
+            shopDeviceClass: "shopDeviceClass",
+    },
+    wertgarantieProduct: {
+        id: "wertgarantieProductId",
+            name: "Komplettschutz Basis",
+            paymentInterval: "monthly",
+    }};
+
+
+
+    const newShoppingCart = {
+        "sessionId": sessionId,
+        "publicClientId": clientId,
+        "orders": [
+            {
+                id: "orderId",
+                shopProduct: {
+                    model: "model",
+                    price: 1200,
+                    shopDeviceClass: "shopDeviceClass",
+                },
+                wertgarantieProduct: {
+                    id: "wertgarantieProductId",
+                    name: "Komplettschutz Basis",
+                    paymentInterval: "monthly",
+                }
+            }
+        ],
+        confirmations: {
+            "legalAgeConfirmed": false,
+            "termsAndConditionsConfirmed": false
+        }
+    };
 
     return signatureService.signShoppingCart(shoppingCart);
 };
