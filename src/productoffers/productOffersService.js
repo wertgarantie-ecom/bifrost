@@ -2,15 +2,15 @@ const _heimdallClient = require('../backends/heimdall/heimdallClient');
 const _webserviceProductOffersRepository = require('../backends/webservices/webserviceProductOffersRepository');
 const _ = require('lodash');
 
-async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
+async function getProductOffers(clientConfig, shopDeviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
         return {
             generalDocuments: [],
-            productOffers: webserviceProductOffersToGeneralProductOffers(clientProductOffers, deviceClass, price)
+            productOffers: webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClass, price)
         };
     } else {
-        const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, deviceClass, price);
+        const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, shopDeviceClass, price);
         return {
             generalDocuments: [],
             productOffers: heimdallProductOffersToGeneralProductOffers(heimdallResponse)
@@ -72,10 +72,10 @@ function toDefaultPaymentInterval(heimdallPaymentInterval) {
 
 }
 
-function filterProductOffers(productOffers, deviceClass, price) {
-    const filteredProductOffers = _.filter(productOffers, offer => hasDeviceClassAndIsInLimit(offer, deviceClass, price));
+function filterProductOffers(productOffers, shopDeviceClass, price) {
+    const filteredProductOffers = _.filter(productOffers, offer => hasDeviceClassAndIsInLimit(offer, shopDeviceClass, price));
     filteredProductOffers.map(productOffer => {
-        productOffer.device = _.find(productOffer.devices, device => device.objectCodeExternal === deviceClass);
+        productOffer.device = _.find(productOffer.devices, deviceConfiguration => deviceConfiguration.objectCodeExternal === shopDeviceClass);
         delete productOffer.devices;
     });
     return filteredProductOffers
@@ -114,8 +114,8 @@ function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
     return intervalPrices;
 }
 
-function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, deviceClass, price) {
-    const filteredProductOffers = filterProductOffers(webservicesProductOffers, deviceClass, price);
+function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, shopDeviceClass, price) {
+    const filteredProductOffers = filterProductOffers(webservicesProductOffers, shopDeviceClass, price);
     return filteredProductOffers.map(webservicesProductOffer => {
         return {
             id: webservicesProductOffer.id,

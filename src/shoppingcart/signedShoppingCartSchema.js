@@ -38,15 +38,19 @@ module.exports.requestWithSignedShoppingCartSchema = {
                                             type: "string",
                                             required: true
                                         },
-                                        deviceClass: {
+                                        wertgarantieDeviceClass: {
                                             type: "string",
                                             required: true
                                         },
-                                        devicePrice: {
+                                        shopDeviceClass: {
+                                            type: "string",
+                                            required: true
+                                        },
+                                        shopDevicePrice: {
                                             type: "integer",
                                             required: true
                                         },
-                                        shopProductName: {
+                                        shopProductModel: {
                                             type: "string",
                                             required: true
                                         },

@@ -3,20 +3,31 @@ const _ = require('lodash');
 const checkoutRepository = require('./CheckoutRepository');
 const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutService');
 const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
+const clientService = require('../clientconfig/clientService');
 
+function findWertgarantieDeviceClass(clientConfig, shopDeviceClass) {
+    return _.find(clientConfig.productOffersConfigurations.deviceClasses, deviceClassConfiguration => deviceClassConfiguration.objectCodeExternal === shopDeviceClass).objectCode;
+}
 
-exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
+exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientConfig, orderId) {
+    const wertgarantieDeviceClass = findWertgarantieDeviceClass(clientConfig, productToAdd.shopDeviceClass);
     productToAdd.orderId = orderId;
-    const updatedShoppingCart = shoppingCart || newShoppingCart(clientId);
-    updatedShoppingCart.products.push(productToAdd);
+    const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.clientId);
+    updatedShoppingCart.products.push({
+        shopDeviceClass: productToAdd.deviceClass,
+        shopDevicePrice: productToAdd.devicePrice,
+        shopDeviceModel: productToAdd.shopProductName,
+        wertgarantieDeviceClass: wertgarantieDeviceClass
+    });
     updatedShoppingCart.termsAndConditionsConfirmed = false;
     updatedShoppingCart.legalAgeConfirmed = false;
     return updatedShoppingCart;
 };
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, clientId) {
+exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId) {
     const orderId = uuid();
-    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId);
+    const clientConfig = clientService.findClientForPublicClientId(publicClientId);
+    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientConfig, orderId);
 };
 
 exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute) {
@@ -43,6 +54,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
                 id: idGenerator(),
                 wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
                 wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
+                wertgarantieDeviceClass: wertgarantieProduct.wertgarantieDeviceClass,
                 deviceClass: wertgarantieProduct.deviceClass,
                 devicePrice: wertgarantieProduct.devicePrice,
                 success: false,
@@ -56,7 +68,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
             wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            wertgarantieDeviceClass: wertgarantieProduct.deviceClass,
+            wertgarantieDeviceClass: wertgarantieProduct.wertgarantieDeviceClass,
             shopDevicePrice: matchingShopProduct.price,
             shopDeviceClass: matchingShopProduct.deviceClass,
             shopDeviceModel: matchingShopProduct.model,

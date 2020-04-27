@@ -21,7 +21,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                     {
                         "wertgarantieProductId": wertgarantieProductId,
                         "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
+                        "wertgarantieDeviceClass": "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
                         "devicePrice": 139999,
                         "deviceCurrency": "EUR",
                         "shopProductName": "SuperBike 3000",
