@@ -57,11 +57,11 @@ axiosWithSimpleLogging.interceptors.response.use((response) => {
     return AxiosLogger.errorLogger(error);
 });
 
-exports.login = async function login(clientData, httpClient = axiosWithCompleteLogging) {
+exports.login = async function login(webservicesClientConfig, httpClient = axiosWithCompleteLogging) {
     const formData = new FormData();
     formData.append('FUNCTION', 'LOGIN');
-    formData.append('USER', clientData.webservices.username);
-    formData.append('PASSWORD', clientData.webservices.password);
+    formData.append('USER', webservicesClientConfig.username);
+    formData.append('PASSWORD', webservicesClientConfig.password);
     formData.append('COMPANY', 'WG');
     formData.append('API', 'JSON');
 

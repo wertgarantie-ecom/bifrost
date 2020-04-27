@@ -16,23 +16,46 @@ module.exports.newClientSchema = {
         "name": {
             "type": "string",
         },
-        "heimdallClientId": {
-            "type": "string"
-        },
-        "webservices": {
+        "backends": {
             "type": "object",
             "properties": {
-                "username": {
-                    "type": "string"
+                "webservices": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "productOffersConfigurations": productOffersConfigSchema
+                    },
+                    "required": [
+                        "username",
+                        "password",
+                        "productOffersConfigurations"
+                    ]
                 },
-                "password": {
-                    "type": "string"
+                "heimdall": {
+                    "type": "object",
+                    "properties": {
+                        "clientId": {
+                            "type": "string"
+                        },
+                        "deviceClassMapping": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                    "heimdallDeviceClass": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            },
-            "required": [
-                "username",
-                "password"
-            ]
+            }
         },
         "activePartnerNumber": {
             "type": "integer"
@@ -48,7 +71,6 @@ module.exports.newClientSchema = {
             "items": {
                 "type": "string"
             }
-        },
-        "productOffersConfigurations": productOffersConfigSchema
+        }
     }
 };
