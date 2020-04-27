@@ -20,7 +20,7 @@ exports.persist = async function persist(checkoutData) {
         await Promise.all(checkoutData.purchases.map(purchase => {
             const purchaseQuery = {
                 name: 'insert-purchases',
-                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, wertgarantiedeviceclass, shopdeviceclass, shopdeviceprice, shopdevicemodel, success, message, contractnumber, transactionnumber, activationcode, backend) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);',
+                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, wertgarantiedeviceclass, shopdeviceclass, shopdeviceprice, shopdevicemodel, success, message, contractnumber, transactionnumber, activationcode, backend, resultcode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15);',
                 values: [
                     purchase.id,
                     checkoutData.sessionId,
@@ -35,7 +35,8 @@ exports.persist = async function persist(checkoutData) {
                     purchase.contractNumber,
                     purchase.transactionNumber,
                     purchase.activationCode,
-                    purchase.backend
+                    purchase.backend,
+                    purchase.resultCode
                 ]
             };
             return client.query(purchaseQuery);
@@ -68,12 +69,13 @@ function toPurchases(rows) {
             wertgarantieDeviceClass: row.wertgarantiedeviceclass,
             shopDeviceClass: row.shopdeviceclass,
             shopDevicePrice: row.shopdeviceprice,
-            shopDeviceName: row.shopdevicename,
+            shopDeviceModel: row.shopdevicemodel,
             success: row.success,
             message: row.message,
-            contractNumber: row.contractnumber,
-            transactionNumber: row.transactionnumber,
-            activationCode: row.activationcode,
+            contractNumber: row.contractnumber || undefined,
+            transactionNumber: row.transactionnumber || undefined,
+            activationCode: row.activationcode || undefined,
+            resultCode: row.resultcode || undefined,
             backend: row.backend
         }
     })
