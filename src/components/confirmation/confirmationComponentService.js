@@ -22,7 +22,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     };
 
     let avbHref;
-    const client = await clientService.findClientForPublicClientId(shoppingCart.clientId);
+    const client = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
     for (var i = 0; i < shoppingCart.orders.length; i++) {
         const wertgarantieProduct = shoppingCart.orders[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, productOfferService, productImageService);

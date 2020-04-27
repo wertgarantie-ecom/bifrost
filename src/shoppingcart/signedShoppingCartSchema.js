@@ -1,5 +1,5 @@
-const shoppingCartProductSchema = require('./addShoppingCartProductSchema').addShoppingCartProductSchema;
-shoppingCartProductSchema.properties.wertgarantieProduct.required.push("deviceClass");
+const _ = require('lodash');
+const shoppingCartProductSchema = _.cloneDeep(require('./addShoppingCartProductSchema').addShoppingCartProductSchema);
 shoppingCartProductSchema.required.push("id");
 
 module.exports.requestWithSignedShoppingCartSchema = {

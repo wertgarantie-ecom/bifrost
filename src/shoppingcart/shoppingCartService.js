@@ -6,18 +6,18 @@ const webservicesInsuranceProposalService = require('../backends/webservices/web
 const ClientError = require('../errors/ClientError');
 
 
-exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, clientId, orderId) {
+exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, publicClientId, orderId) {
     requestBody.orderId = orderId;
-    const updatedShoppingCart = shoppingCart || newShoppingCart(clientId);
+    const updatedShoppingCart = shoppingCart || newShoppingCart(publicClientId);
     updatedShoppingCart.orders.push(requestBody);
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
     updatedShoppingCart.confirmations.legalAgeConfirmed = false;
     return updatedShoppingCart;
 };
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, clientId) {
+exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId) {
     const orderId = uuid();
-    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId);
+    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, publicClientId, orderId);
 };
 
 exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute) {

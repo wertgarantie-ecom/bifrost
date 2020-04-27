@@ -1,8 +1,10 @@
 const moment = require('moment');
 const uuid = require('uuid');
 const _heimdallClient = require('./heimdallClient');
+const _ = require('lodash');
 
 module.exports.checkout = async function checkout(clientConfig, wertgarantieProduct, customer, shopSubmittedPurchase, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
+    const heimdallDeviceClass = _.find(clientConfig.backend.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === shopSubmittedPurchase.deviceClass).heimdallDeviceClass;
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, shopSubmittedPurchase, date);
     try {
         const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, clientConfig);
@@ -10,7 +12,7 @@ module.exports.checkout = async function checkout(clientConfig, wertgarantieProd
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.id,
             wertgarantieProductName: wertgarantieProduct.name,
-            deviceClass: wertgarantieProduct.deviceClass,
+            deviceClass: heimdallDeviceClass,
             devicePrice: shopSubmittedPurchase.price,
             success: true,
             message: "successfully transmitted insurance proposal",
@@ -25,7 +27,7 @@ module.exports.checkout = async function checkout(clientConfig, wertgarantieProd
             id: idGenerator(),
             wertgarantieProductId: wertgarantieProduct.id,
             wertgarantieProductName: wertgarantieProduct.name,
-            deviceClass: wertgarantieProduct.deviceClass,
+            deviceClass: heimdallDeviceClass,
             devicePrice: shopSubmittedPurchase.price,
             success: false,
             message: e.message,

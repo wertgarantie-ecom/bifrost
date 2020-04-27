@@ -95,7 +95,7 @@ describe("Check Checkout via after sales component ", () => {
         const wertgarantieShoppingCart =
             {
                 "sessionId": sessionId + "",
-                "clientId": clientData.publicClientIds[0],
+                "publicClientId": clientData.publicClientIds[0],
                 "products": [
                     {
                         "wertgarantieProductId": wertgarantieProductId,
