@@ -25,52 +25,76 @@ function mockClientService(clientData) {
 const testShoppingCart = {
     clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     signature: "signature",
-    products: [
+    orders: [
         {
-            wertgarantieProductId: "9338a770-0d0d-4203-8d54-583a03bdebf3",
-            shopProductId: "1",
-            deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-            devicePrice: "1000",
-            shopProductName: "Super Bike",
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a",
+            shopProduct: {
+                model: "Super Bike",
+                price: 100000,
+                deviceClass: "Bike"
+            },
+            wertgarantieProduct: {
+                id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            }
         },
         {
-            wertgarantieProductId: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-            shopProductId: "1",
-            deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-            devicePrice: "1000",
-            shopProductName: "Super Bike",
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            orderId: "28ff0413-bcfd-48f8-b003-04b57762067a",
+            shopProduct: {
+                model: "Super Bike",
+                price: 100000,
+                deviceClass: "Bike"
+            },
+            wertgarantieProduct: {
+                id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            }
         }
     ],
-    legalAgeConfirmed: true,
-    termsAndConditionsConfirmed: true
+    confirmations: {
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
+    }
 };
 
 const expectedResponse = {
     shoppingCart: {
-        "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        "publicClientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         "signature": "signature",
-        "products": [
+        "orders": [
             {
-                "wertgarantieProductId": "9338a770-0d0d-4203-8d54-583a03bdebf3",
-                "shopProductId": "1",
-                "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                "devicePrice": "1000",
-                "shopProductName": "Super Bike",
-                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
+                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a",
+                "shopProduct": {
+                    "model": "Super Bike",
+                    "deviceClass": "Bike",
+                    "price": 100000
+                },
+                "wertgarantieProduct": {
+                    "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                    "name": "Komplettschutz",
+                    "paymentInterval": "monthly"
+                }
             },
             {
-                "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-                "shopProductId": "1",
-                "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                "devicePrice": "1000",
-                "shopProductName": "Super Bike",
-                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
+                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a",
+                "shopProduct": {
+                    "model": "Super Bike",
+                    "deviceClass": "Bike",
+                    "price": 100000
+                },
+                "wertgarantieProduct": {
+                    "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+                    "name": "Komplettschutz",
+                    "paymentInterval": "monthly"
+                }
             }
         ],
-        "legalAgeConfirmed": true,
-        "termsAndConditionsConfirmed": true
+        "confirmations": {
+            "legalAgeConfirmed": true,
+            "termsAndConditionsConfirmed": true
+        }
     },
     legalAgeConfirmed: true,
     termsAndConditionsConfirmed: true,

@@ -22,7 +22,7 @@ test('should handle shopping cart confirmation', async function () {
         .set('Accept', 'application/json');
 
     expect(result.status).toBe(200);
-    expect(result.body.signedShoppingCart.shoppingCart.legalAgeConfirmed).toBe(true);
+    expect(result.body.signedShoppingCart.shoppingCart.confirmations.legalAgeConfirmed).toBe(true);
 });
 
 describe('should handle shopping cart confirmation rejection', function () {
@@ -42,7 +42,7 @@ describe('should handle shopping cart confirmation rejection', function () {
             .set('Accept', 'application/json');
 
         expect(result.status).toBe(200);
-        expect(result.body.signedShoppingCart.shoppingCart.legalAgeConfirmed).toBe(false);
+        expect(result.body.signedShoppingCart.shoppingCart.confirmations.legalAgeConfirmed).toBe(false);
     });
 });
 
@@ -51,7 +51,7 @@ test("should return valid confirmation data", async () => {
     const clientData = await testhelper.createAndPersistDefaultClient();
 
     const signedShoppingCart = testhelper.createSignedShoppingCart({
-        clientId: clientData.publicClientIds[0],
+        publicClientId: clientData.publicClientIds[0],
         devicePrice: parseFloat(getProductOffersResponse.payload[0].price) * 100
     });
 

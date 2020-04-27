@@ -7,22 +7,27 @@ const nockhelper = require('../helper/nockHelper');
 
 test('should return shopping cart with selected product included', async () => {
     const client = await testhelper.createAndPersistDefaultClient();
-
+    const wertgarantieProductId = uuid();
     const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
         .send({
-            "productId": 12,
-            "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
-            "devicePrice": 4500,
-            "deviceCurrency": "EUR",
-            "shopProductName": "Phone X"
+            shopProduct: {
+                model: "Phone X",
+                price: 4500,
+                deviceClass: "Smartphone"
+            },
+            wertgarantieProduct: {
+                id: wertgarantieProductId,
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            }
         });
     expect(result.status).toBe(200);
 
     const shoppingCart = result.body.signedShoppingCart.shoppingCart;
-    expect(shoppingCart.products.length).toBe(1);
-    expect(shoppingCart.legalAgeConfirmed).toBe(false);
-    expect(shoppingCart.termsAndConditionsConfirmed).toBe(false);
-    expect(shoppingCart.products[0].deviceClass).toEqual("17fd707a-f9c0-11e9-9694-cf549fcf64e2");
+    expect(shoppingCart.orders.length).toBe(1);
+    expect(shoppingCart.confirmations.legalAgeConfirmed).toBe(false);
+    expect(shoppingCart.confirmations.termsAndConditionsConfirmed).toBe(false);
+    expect(shoppingCart.orders[0].shopProduct.deviceClass).toEqual("Smartphone");
 });
 
 test('should fail when invalid request params are submitted', async () => {

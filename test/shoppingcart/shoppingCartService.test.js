@@ -8,41 +8,53 @@ const validCustomer = require('../../integration-test/helper/fixtureHelper').val
 
 function validProduct() {
     return {
-        wertgarantieProductId: 1234,
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 12.0,
-        deviceCurrency: "EUR",
-        shopProductName: "Phone X",
-        orderId: "9fd47b8a-f984-11e9-adcf-afabcc521083"
-    }
+        orderId: "9fd47b8a-f984-11e9-adcf-afabcc521083",
+        shopProduct: {
+            model: "Phone X",
+            deviceClass: "Smartphone",
+            price: 1200
+        },
+        wertgarantieProduct: {
+            id: "1234",
+            name: "Komplettschutz",
+            paymentInterval: "monthly"
+        }
+    };
 }
 
-const includedProduct = {
-    wertgarantieProductId: 4543545,
-    deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-    devicePrice: 12.0,
-    deviceCurrency: "EUR",
-    shopProductName: "Phone X",
-    orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163"
+const includedOrder = {
+    orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163",
+    shopProduct: {
+        model: "Phone X",
+        deviceClass: "Smartphone",
+        price: 1200
+    },
+    wertgarantieProduct: {
+        id: "4543545",
+        name: "Komplettschutz",
+        paymentInterval: "monthly"
+    }
 };
 const validShoppingCart = {
     clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-    products: [includedProduct],
-    legalAgeConfirmed: true,
-    termsAndConditionsConfirmed: true
+    orders: [includedOrder],
+    confirmations: {
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
+    }
 };
 
 test("should create and fill new shopping cart if no cart is given", () => {
-    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([validProduct()]);
 });
 
 test("new created shopping cart should have given clientId", () => {
     const clientId = uuid();
-    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").clientId).toEqual(clientId);
+    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").publicClientId).toEqual(clientId);
 });
 
 test("should add product to existing shopping cart", () => {
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([includedProduct, validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([includedOrder, validProduct()]);
 });
 
 
@@ -50,9 +62,13 @@ test("should allow duplicate products", () => {
     let clientId = uuid();
     const validShoppingCart = {
         clientId: clientId,
-        products: [validProduct()]
+        orders: [validProduct()],
+        confirmations: {
+            legalAgeConfirmed: false,
+            termsAndConditionsConfirmed: false
+        }
     };
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct(), validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([validProduct(), validProduct()]);
 });
 
 test("should confirm valid shopping cart", () => {
@@ -60,11 +76,14 @@ test("should confirm valid shopping cart", () => {
     const validShoppingCart = {
         clientId: clientId,
         products: [validProduct()],
-        confirmed: false
+        confirmations: {
+            legalAgeConfirmed: false,
+            termsAndConditionsConfirmed: true
+        }
     };
-    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "confirmed");
+    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "legalAgeConfirmed");
 
-    expect(confirmedShoppingCart.confirmed).toEqual(true);
+    expect(confirmedShoppingCart.confirmations.legalAgeConfirmed).toEqual(true);
 });
 
 test("should unconfirm valid shopping cart", () => {
@@ -72,17 +91,21 @@ test("should unconfirm valid shopping cart", () => {
     const validShoppingCart = {
         clientId: clientId,
         products: [validProduct()],
-        confirmed: false
+        confirmations: {
+            legalAgeConfirmed: true,
+            termsAndConditionsConfirmed: true
+        }
     };
-    const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, clientId);
+    const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, "termsAndConditionsConfirmed");
 
-    expect(confirmedShoppingCart.confirmed).toEqual(false);
+    expect(confirmedShoppingCart.confirmations.legalAgeConfirmed).toEqual(true);
+    expect(confirmedShoppingCart.confirmations.termsAndConditionsConfirmed).toEqual(false);
 });
 
 test("added product should always reject confirmation", () => {
     const shoppingCartWithAddedProduct = addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083");
-    expect(shoppingCartWithAddedProduct.termsAndConditionsConfirmed).toEqual(false);
-    expect(shoppingCartWithAddedProduct.legalAgeConfirmed).toEqual(false);
+    expect(shoppingCartWithAddedProduct.confirmations.termsAndConditionsConfirmed).toEqual(false);
+    expect(shoppingCartWithAddedProduct.confirmations.legalAgeConfirmed).toEqual(false);
 });
 
 

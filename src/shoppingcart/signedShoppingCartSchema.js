@@ -1,3 +1,5 @@
+const shoppingCartProductSchema = require('./addShoppingCartProductSchema').addShoppingCartProductSchema;
+
 module.exports.requestWithSignedShoppingCartSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
@@ -29,56 +31,7 @@ module.exports.requestWithSignedShoppingCartSchema = {
                         },
                         orders: {
                             type: "array",
-                            items: [
-                                {
-                                    type: "object",
-                                    properties: {
-                                        shopProduct: {
-                                            type: "object",
-                                            properties: {
-                                                model: {
-                                                    type: "string"
-                                                },
-                                                price: {
-                                                    type: "integer"
-                                                },
-                                                deviceClass: {
-                                                    type: "string"
-                                                }
-                                            },
-                                            required: [
-                                                "model",
-                                                "price",
-                                                "deviceClass"
-                                            ]
-                                        },
-                                        wertgarantieProduct: {
-                                            type: "object",
-                                            properties: {
-                                                id: {
-                                                    type: "string"
-                                                },
-                                                name: {
-                                                    type: "string"
-                                                },
-                                                paymentInterval: {
-                                                    type: "string"
-                                                },
-                                            },
-                                            required: [
-                                                "id",
-                                                "name",
-                                                "paymentInterval"
-                                            ]
-                                        }
-                                    },
-                                    required: [
-                                        "shopProduct",
-                                        "wertgarantieProduct"
-                                    ],
-                                    additionalProperties: false
-                                }
-                            ]
+                            items: shoppingCartProductSchema
                         }
                     }
                 }

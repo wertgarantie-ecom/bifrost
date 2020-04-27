@@ -5,12 +5,12 @@ const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutS
 const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 
 
-exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientId, orderId) {
-    productToAdd.orderId = orderId;
+exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, clientId, orderId) {
+    requestBody.orderId = orderId;
     const updatedShoppingCart = shoppingCart || newShoppingCart(clientId);
-    updatedShoppingCart.products.push(productToAdd);
-    updatedShoppingCart.termsAndConditionsConfirmed = false;
-    updatedShoppingCart.legalAgeConfirmed = false;
+    updatedShoppingCart.orders.push(requestBody);
+    updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
+    updatedShoppingCart.confirmations.legalAgeConfirmed = false;
     return updatedShoppingCart;
 };
 
@@ -21,13 +21,13 @@ exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCar
 
 exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute) {
     const clone = _.cloneDeep(shoppingCart);
-    clone[confirmationAttribute] = true;
+    clone.confirmations[confirmationAttribute] = true;
     return clone;
 };
 
 exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmationAttribute) {
     const clone = _.cloneDeep(shoppingCart);
-    clone[confirmationAttribute] = false;
+    clone.confirmations[confirmationAttribute] = false;
     return clone;
 };
 
@@ -81,10 +81,12 @@ function findIndex(shopCartProducts, wertgarantieProduct) {
 function newShoppingCart(clientId) {
     return {
         "sessionId": uuid(),
-        "clientId": clientId,
-        "products": [],
-        "termsAndConditionsConfirmed": false,
-        "legalAgeConfirmed": false
+        "publicClientId": clientId,
+        "orders": [],
+        "confirmations": {
+            "termsAndConditionsConfirmed": false,
+            "legalAgeConfirmed": false
+        }
     };
 }
 
@@ -92,13 +94,13 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(o
     if (!shoppingCart) {
         return undefined;
     }
-    for (var i = 0; i < shoppingCart.products.length; i++) {
-        if (shoppingCart.products[i].orderId === orderId) {
-            shoppingCart.products.splice(i, 1);
+    for (var i = 0; i < shoppingCart.orders.length; i++) {
+        if (shoppingCart.orders[i].orderId === orderId) {
+            shoppingCart.orders.splice(i, 1);
             i--;
         }
     }
-    return shoppingCart.products.length > 0 ? shoppingCart : undefined;
+    return shoppingCart.orders.length > 0 ? shoppingCart : undefined;
 };
 
 class InvalidPublicClientIdError extends Error {

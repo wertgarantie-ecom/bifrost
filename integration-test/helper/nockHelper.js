@@ -20,7 +20,7 @@ exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
 
 exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, response = defaultProductOffersResponse, responseStatus = 200) {
     nock(process.env.HEIMDALL_URI)
-        .get(`/api/v1/product-offers?device_class=${signedShoppingCart.shoppingCart.products[0].deviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.products[0].devicePrice / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
+        .get(`/api/v1/product-offers?device_class=${signedShoppingCart.shoppingCart.orders[0].shopProduct.deviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.orders[0].shopProduct.devicePrice / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
         .reply(responseStatus, response);
 };
 

@@ -82,7 +82,7 @@ app.use(function (err, req, res, next) {
     } else if (err.name === 'ProductOffersError') {
         err.status = 400;
     }
-    console.error(err);
+    console.error(JSON.stringify(err, null, 2));
     res.status(err.status || 500).json({
         error: err.name,
         message: err.message

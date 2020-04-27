@@ -6,7 +6,7 @@ const nockhelper = require('../../helper/nockHelper');
 test('should return proper product data', async () => {
     const clientData = await testhelper.createAndPersistDefaultClient();
     const signedShoppingCart = testhelper.createSignedShoppingCart({
-        clientId: clientData.publicClientIds[0],
+        publicClientData: clientData.publicClientIds[0],
         deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
         devicePrice: 120000
     });

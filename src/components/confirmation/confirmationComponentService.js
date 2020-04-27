@@ -13,21 +13,21 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
         return undefined;
     }
     const result = {
-        termsAndConditionsConfirmed: shoppingCart.termsAndConditionsConfirmed,
-        legalAgeConfirmed: shoppingCart.legalAgeConfirmed,
+        termsAndConditionsConfirmed: shoppingCart.confirmations.termsAndConditionsConfirmed,
+        legalAgeConfirmed: shoppingCart.confirmations.legalAgeConfirmed,
         headerTitle: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmText: "Bitte bestätige noch kurz:",
-        products: [],
+        orders: [],
         shoppingCart: shoppingCart
     };
 
     let avbHref;
     const client = await clientService.findClientForPublicClientId(shoppingCart.clientId);
-    for (var i = 0; i < shoppingCart.products.length; i++) {
-        const wertgarantieProduct = shoppingCart.products[i];
+    for (var i = 0; i < shoppingCart.orders.length; i++) {
+        const wertgarantieProduct = shoppingCart.orders[i];
         const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, productOfferService, productImageService);
         if (confirmationProductData) {
-            result.products.push(confirmationProductData.product);
+            result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
         }
     }
@@ -39,7 +39,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
                                     meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`;
     result.legalAgeConfirmationText = `Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.`;
     result.pleaseConfirmText = `Bitte bestätige die oben stehenden Bedingungen um fortzufahren.`;
-    if (result.products.length <= 0) {
+    if (result.orders.length <= 0) {
         return undefined;
     }
     return result;

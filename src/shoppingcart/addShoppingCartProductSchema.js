@@ -1,5 +1,4 @@
 module.exports.addShoppingCartProductSchema = {
-    $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
     properties: {
         shopProduct: {
