@@ -466,17 +466,20 @@
 						{
 							"key": "OBJECT_CODE",
 							"value": "9025",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						},
 						{
 							"key": "PURCHASE_PRICE",
 							"value": "1000",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						},
 						{
 							"key": "DATE",
 							"value": "31.03.2020",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						},
 						{
 							"key": "EXTENDED_RESULT",
