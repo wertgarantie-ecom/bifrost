@@ -6,7 +6,8 @@ const webservicesInsuranceProposalService = require('../backends/webservices/web
 const clientService = require('../clientconfig/clientService');
 
 function findWertgarantieDeviceClass(clientConfig, shopDeviceClass) {
-    return _.find(clientConfig.productOffersConfigurations.deviceClasses, deviceClassConfiguration => deviceClassConfiguration.objectCodeExternal === shopDeviceClass).objectCode;
+    const clientConfigDevice = _.find(clientConfig.productOffersConfigurations.deviceClasses, deviceClassConfiguration => deviceClassConfiguration.objectCodeExternal === shopDeviceClass);
+    return clientConfigDevice.objectCode;
 }
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, clientConfig, orderId) {
@@ -14,10 +15,11 @@ exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartW
     productToAdd.orderId = orderId;
     const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.clientId);
     updatedShoppingCart.products.push({
-        shopDeviceClass: productToAdd.deviceClass,
+        wertgarantieProductId:
+        wertgarantieDeviceClass: wertgarantieDeviceClass,
+        shopDeviceClass: productToAdd.shopDeviceClass,
         shopDevicePrice: productToAdd.devicePrice,
-        shopDeviceModel: productToAdd.shopProductName,
-        wertgarantieDeviceClass: wertgarantieDeviceClass
+        shopDeviceModel: productToAdd.shopProductName
     });
     updatedShoppingCart.termsAndConditionsConfirmed = false;
     updatedShoppingCart.legalAgeConfirmed = false;

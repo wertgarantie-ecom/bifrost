@@ -78,10 +78,131 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
     return {
         id: "testClientId",
         name: "testClient",
-        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
+        heimdall: {
+            clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
+            deviceClassMapping: {
+                "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade"
+            }
+        },
         webservices: {
             username: "testusername",
             password: "testpassword",
+            productOffersConfigurations: [
+                {
+                    name: "Komplettschutz",
+                    productType: "KOMPLETTSCHUTZ_2019",
+                    applicationCode: "GU WG DE KS 0419",
+                    basicRiskType: "KOMPLETTSCHUTZ",
+                    defaultPaymentInterval: "monthly",
+                    deviceClasses: [
+                        {
+                            objectCode: "9025",
+                            objectCodeExternal: "Smartphone",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30000
+                                },
+                                {
+                                    minClose: 30000,
+                                    maxOpen: 80000
+                                },
+                                {
+                                    minClose: 80000,
+                                    maxOpen: 180000
+                                }
+                            ]
+                        },
+                        {
+                            objectCode: "73",
+                            objectCodeExternal: "Mobilfunk",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30000
+                                },
+                                {
+                                    minClose: 30000,
+                                    maxOpen: 80000
+                                },
+                                {
+                                    minClose: 80000,
+                                    maxOpen: 180000
+                                }
+                            ]
+                        }
+
+                    ],
+                    documents: {
+                        legalDocuments: [
+                            {
+                                type: documentTypes.LEGAL_NOTICE,
+                                pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            }
+                        ],
+                        comparisonDocuments: []
+                    },
+                    advantages: [],
+                    risks: []
+                },
+                {
+                    name: "Komplettschutz mit Premium-Option",
+                    productType: "KOMPLETTSCHUTZ_2019",
+                    applicationCode: "GU WG DE KS 0419",
+                    basicRiskType: "KOMPLETTSCHUTZ",
+                    defaultPaymentInterval: "monthly",
+                    deviceClasses: [
+                        {
+                            objectCode: "9025",
+                            objectCodeExternal: "Smartphone",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30000
+                                },
+                                {
+                                    minClose: 30000,
+                                    maxOpen: 80000
+                                },
+                                {
+                                    minClose: 80000,
+                                    maxOpen: 180000
+                                }
+                            ]
+                        },
+                        {
+                            objectCode: "73",
+                            objectCodeExternal: "Mobilfunk",
+                            priceRanges: [
+                                {
+                                    minClose: 0,
+                                    maxOpen: 30000
+                                },
+                                {
+                                    minClose: 30000,
+                                    maxOpen: 80000
+                                },
+                                {
+                                    minClose: 80000,
+                                    maxOpen: 180000
+                                }
+                            ]
+                        }
+
+                    ],
+                    documents: {
+                        legalDocuments: [
+                            {
+                                type: documentTypes.LEGAL_NOTICE,
+                                pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                            }
+                        ],
+                        comparisonDocuments: []
+                    },
+                    advantages: [],
+                    risks: ["DIEBSTAHLSCHUTZ"]
+                }
+            ]
         },
         publicClientIds: [
             "public:" + uuid()
@@ -90,122 +211,6 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
             "secret:" + uuid()
         ],
         activePartnerNumber: 12345,
-        productOffersConfigurations: [
-            {
-                name: "Komplettschutz",
-                productType: "KOMPLETTSCHUTZ_2019",
-                applicationCode: "GU WG DE KS 0419",
-                basicRiskType: "KOMPLETTSCHUTZ",
-                defaultPaymentInterval: "monthly",
-                deviceClasses: [
-                    {
-                        objectCode: "9025",
-                        objectCodeExternal: "Smartphone",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    },
-                    {
-                        objectCode: "73",
-                        objectCodeExternal: "Mobilfunk",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    }
-
-                ],
-                documents: {
-                    legalDocuments: [
-                        {
-                            type: documentTypes.LEGAL_NOTICE,
-                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                        }
-                    ],
-                    comparisonDocuments: []
-                },
-                advantages: [],
-                risks: []
-            },
-            {
-                name: "Komplettschutz mit Premium-Option",
-                productType: "KOMPLETTSCHUTZ_2019",
-                applicationCode: "GU WG DE KS 0419",
-                basicRiskType: "KOMPLETTSCHUTZ",
-                defaultPaymentInterval: "monthly",
-                deviceClasses: [
-                    {
-                        objectCode: "9025",
-                        objectCodeExternal: "Smartphone",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    },
-                    {
-                        objectCode: "73",
-                        objectCodeExternal: "Mobilfunk",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    }
-
-                ],
-                documents: {
-                    legalDocuments: [
-                        {
-                            type: documentTypes.LEGAL_NOTICE,
-                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                        }
-                    ],
-                    comparisonDocuments: []
-                },
-                advantages: [],
-                risks: ["DIEBSTAHLSCHUTZ"]
-            }
-        ]
     }
 };
 
