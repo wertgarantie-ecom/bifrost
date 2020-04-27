@@ -8,9 +8,9 @@ const jsonschema = require('jsonschema');
 const productOfferSchema = require('./webserviceProductOffersSchema').productOfferSchema;
 
 
-async function selectRelevantWebservicesProducts(session, webservicesClientConfig, webservicesClient = _webservicesClient) {
-    const productData = await webservicesClient.getAgentData(session, webservicesClientConfig);
-    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => webservicesClientConfig.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE && productOfferConfig.applicationCode === product.APPLICATION_CODE, false));
+async function selectRelevantWebservicesProducts(session, clientConfig, webservicesClient = _webservicesClient) {
+    const productData = await webservicesClient.getAgentData(session, clientConfig);
+    return _.filter(productData.RESULT.PRODUCT_LIST.PRODUCT, product => clientConfig.backends.webservices.productOffersConfigurations.reduce((acc, productOfferConfig) => acc || productOfferConfig.productType === product.PRODUCT_TYPE && productOfferConfig.applicationCode === product.APPLICATION_CODE, false));
 }
 
 async function updateProductOffersForAllClients(clients) {
@@ -49,7 +49,7 @@ async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webse
 async function assembleAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const webservicesClientConfig = clientConfig.backends.webservices;
     const session = await webservicesClient.login(webservicesClientConfig);
-    const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, webservicesClientConfig, webservicesClient);
+    const allWebservicesProductsForClient = await selectRelevantWebservicesProducts(session, clientConfig, webservicesClient);
     return await Promise.all(webservicesClientConfig.productOffersConfigurations
         .map(config => assembleProductOffer(session, config, clientConfig.id, allWebservicesProductsForClient, uuid, webservicesClient, documentRepository)))
         .then(offers => offers.filter(offer => offer !== undefined));

@@ -10,10 +10,16 @@ describe("should find persisted client properties by given secret", () => {
         backends: {
             heimdall: {
                 clientId: uuid(),
-                deviceClassMapping: {
-                    "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade",
-                    "Bike": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                }
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
             },
             webservices: {
                 username: "webserviceUser",
@@ -49,10 +55,16 @@ describe("should find persisted client properties by given public client id", ()
         backends: {
             heimdall: {
                 clientId: uuid(),
-                deviceClassMapping: {
-                    "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade",
-                    "Bike": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                }
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
             },
             webservices: {
                 username: "webserviceUser",
@@ -86,10 +98,16 @@ describe("should delete client data for client id", () => {
         backends: {
             heimdall: {
                 clientId: uuid(),
-                deviceClassMapping: {
-                    "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade",
-                    "Bike": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                }
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
             },
             webservices: {
                 username: "webserviceUser",
@@ -128,10 +146,16 @@ describe("should handle client config for product offers", () => {
         backends: {
             heimdall: {
                 clientId: uuid(),
-                deviceClassMapping: {
-                    "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade",
-                    "Bike": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                }
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
             },
             webservices: {
                 username: "webserviceUser",

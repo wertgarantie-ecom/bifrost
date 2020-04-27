@@ -17,6 +17,9 @@ module.exports.newClientSchema = {
             "type": "string",
         },
         "backends": {
+            "required": [
+                "webservices"
+            ],
             "type": "object",
             "properties": {
                 "webservices": {
@@ -42,11 +45,14 @@ module.exports.newClientSchema = {
                         "clientId": {
                             "type": "string"
                         },
-                        "deviceClassMapping": {
-                            "type": "object",
-                            "additionalProperties": {
+                        "deviceClassMappings": {
+                            "type": "array",
+                            "items": {
                                 "type": "object",
                                 "properties": {
+                                    "shopDeviceClass": {
+                                        "type": "string"
+                                    },
                                     "heimdallDeviceClass": {
                                         "type": "string"
                                     }

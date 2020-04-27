@@ -67,12 +67,16 @@ const allRelevantWebservicesProducts = [{
 
 test('should selectRelevantWertgarantieProducts', async () => {
     const clientConfig = {
-        productOffersConfigurations: [
-            {
-                applicationCode: "GU WG DE KS 0419",
-                productType: "KOMPLETTSCHUTZ_2019"
+        backends: {
+            webservices: {
+                productOffersConfigurations: [
+                    {
+                        applicationCode: "GU WG DE KS 0419",
+                        productType: "KOMPLETTSCHUTZ_2019"
+                    }
+                ]
             }
-        ]
+        }
     };
     const result = await webservicesService.selectRelevantWebservicesProducts(session, clientConfig, mockWebservicesClient);
     expect(result).toEqual(allRelevantWebservicesProducts);
@@ -696,10 +700,128 @@ test.skip('call webservices dev', async () => {
     const clientConfig = {
         "id": uuid(),
         "name": "handyflash",
-        "heimdallClientId": "0831cc8d-f5b8-4cfc-9c6c-6a08248348f2",
-        "webservices": {
-            username: "test-phone-user",
-            password: "test-phone-password"
+        backends: {
+            heimdall: {
+                clientId: "0831cc8d-f5b8-4cfc-9c6c-6a08248348f2"
+            },
+            "webservices": {
+                username: "test-phone-user",
+                password: "test-phone-password",
+                productOffersConfigurations: [
+                    {
+                        name: "Komplettschutz",
+                        productType: "KOMPLETTSCHUTZ_2019",
+                        applicationCode: "GU WG DE KS 0419",
+                        basicRiskType: "KOMPLETTSCHUTZ",
+                        deviceClasses: [
+                            {
+                                objectCode: "9025",
+                                objectCodeExternal: "Smartphone",
+                                priceRanges: [
+                                    {
+                                        minClose: 0,
+                                        maxOpen: 30000
+                                    },
+                                    {
+                                        minClose: 30000,
+                                        maxOpen: 80000
+                                    },
+                                    {
+                                        minClose: 80000,
+                                        maxOpen: 180000
+                                    }
+                                ]
+                            },
+                            {
+                                objectCode: "73",
+                                objectCodeExternal: "Mobilfunk",
+                                priceRanges: [
+                                    {
+                                        minClose: 0,
+                                        maxOpen: 30000
+                                    },
+                                    {
+                                        minClose: 30000,
+                                        maxOpen: 80000
+                                    },
+                                    {
+                                        minClose: 80000,
+                                        maxOpen: 180000
+                                    }
+                                ]
+                            }
+
+                        ],
+                        documents: {
+                            legalDocuments: [
+                                {
+                                    type: documentTypes.LEGAL_NOTICE,
+                                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                                }
+                            ],
+                            comparisonDocuments: []
+                        },
+                        advantages: ["Das schon toll hier", "alles wird gut", "Corona Party!!!"],
+                        risks: []
+                    },
+                    {
+                        name: "Komplettschutz mit Premium-Option",
+                        productType: "KOMPLETTSCHUTZ_2019",
+                        applicationCode: "GU WG DE KS 0419",
+                        basicRiskType: "KOMPLETTSCHUTZ",
+                        deviceClasses: [
+                            {
+                                objectCode: "9025",
+                                objectCodeExternal: "Smartphone",
+                                priceRanges: [
+                                    {
+                                        minClose: 0,
+                                        maxOpen: 30000
+                                    },
+                                    {
+                                        minClose: 30000,
+                                        maxOpen: 80000
+                                    },
+                                    {
+                                        minClose: 80000,
+                                        maxOpen: 180000
+                                    }
+                                ]
+                            },
+                            {
+                                objectCode: "73",
+                                objectCodeExternal: "Mobilfunk",
+                                priceRanges: [
+                                    {
+                                        minClose: 0,
+                                        maxOpen: 30000
+                                    },
+                                    {
+                                        minClose: 30000,
+                                        maxOpen: 80000
+                                    },
+                                    {
+                                        minClose: 80000,
+                                        maxOpen: 180000
+                                    }
+                                ]
+                            }
+
+                        ],
+                        documents: {
+                            legalDocuments: [
+                                {
+                                    type: documentTypes.LEGAL_NOTICE,
+                                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
+                                }
+                            ],
+                            comparisonDocuments: []
+                        },
+                        advantages: ["total geiler diebstahlschutz", "was gegen Wasser", "mit Soße"],
+                        risks: ["DIEBSTAHLSCHUTZ"]
+                    }
+                ]
+            },
         },
         "activePartnerNumber": "1400689",
         "secrets": [
@@ -708,120 +830,6 @@ test.skip('call webservices dev', async () => {
         "publicClientIds": [
             "public:" + uuid()
         ],
-        productOffersConfigurations: [
-            {
-                name: "Komplettschutz",
-                productType: "KOMPLETTSCHUTZ_2019",
-                applicationCode: "GU WG DE KS 0419",
-                basicRiskType: "KOMPLETTSCHUTZ",
-                deviceClasses: [
-                    {
-                        objectCode: "9025",
-                        objectCodeExternal: "Smartphone",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    },
-                    {
-                        objectCode: "73",
-                        objectCodeExternal: "Mobilfunk",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    }
-
-                ],
-                documents: {
-                    legalDocuments: [
-                        {
-                            type: documentTypes.LEGAL_NOTICE,
-                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                        }
-                    ],
-                    comparisonDocuments: []
-                },
-                advantages: ["Das schon toll hier", "alles wird gut", "Corona Party!!!"],
-                risks: []
-            },
-            {
-                name: "Komplettschutz mit Premium-Option",
-                productType: "KOMPLETTSCHUTZ_2019",
-                applicationCode: "GU WG DE KS 0419",
-                basicRiskType: "KOMPLETTSCHUTZ",
-                deviceClasses: [
-                    {
-                        objectCode: "9025",
-                        objectCodeExternal: "Smartphone",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    },
-                    {
-                        objectCode: "73",
-                        objectCodeExternal: "Mobilfunk",
-                        priceRanges: [
-                            {
-                                minClose: 0,
-                                maxOpen: 30000
-                            },
-                            {
-                                minClose: 30000,
-                                maxOpen: 80000
-                            },
-                            {
-                                minClose: 80000,
-                                maxOpen: 180000
-                            }
-                        ]
-                    }
-
-                ],
-                documents: {
-                    legalDocuments: [
-                        {
-                            type: documentTypes.LEGAL_NOTICE,
-                            pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                        }
-                    ],
-                    comparisonDocuments: []
-                },
-                advantages: ["total geiler diebstahlschutz", "was gegen Wasser", "mit Soße"],
-                risks: ["DIEBSTAHLSCHUTZ"]
-            }
-        ]
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
     const client = await require('../../../src/clientconfig/ClientRepository').persist(clientConfig);

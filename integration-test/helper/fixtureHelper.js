@@ -56,10 +56,16 @@ exports.createDefaultClient = function createDefaultClient() {
         backends: {
             heimdall: {
                 clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-                deviceClassMapping: {
-                    "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade",
-                    "Bike": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                }
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
             },
             webservices: {
                 username: "testusername",
@@ -90,10 +96,16 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         backends: {
             heimdall: {
                 clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-                deviceClassMapping: {
-                    "Smartphone": "1dfd4549-9bdc-4285-9047-e5088272dade",
-                    "Bike": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                }
+                deviceClassMappings: [
+                    {
+                        shopDeviceClass: "Smartphone",
+                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                    },
+                    {
+                        shopDeviceClass: "Bike",
+                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    }
+                ]
             },
             webservices: {
                 username: "testusername",

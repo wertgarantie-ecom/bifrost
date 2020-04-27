@@ -116,10 +116,14 @@ test.skip('execute vs webservices dev', async () => {
     process.env.WEBSERVICES_URI = "https://webtest.serviceeu.com/mdp/ws/dev";
     const clientConfig = {
         name: "testclient",
-        heimdallClientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-        webservices: {
-            username: "plz fill me",
-            password: "plz fill me",
+        backends: {
+            heimdall: {
+                clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31"
+            },
+            webservices: {
+                username: "plz fill me",
+                password: "plz fill me"
+            },
         },
         publicClientIds: [
             "public:idontcare"
