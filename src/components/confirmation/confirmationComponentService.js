@@ -45,9 +45,9 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     return result;
 };
 
-async function getConfirmationProductData(wertgarantieProduct, client, productOfferService = _productOfferService, productImageService = defaultProductImageService) {
-    const productOffers = (await productOfferService.getProductOffers(client, wertgarantieProduct.deviceClass, wertgarantieProduct.devicePrice)).productOffers;
-    const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
+async function getConfirmationProductData(order, client, productOfferService = _productOfferService, productImageService = defaultProductImageService) {
+    const productOffers = (await productOfferService.getProductOffers(client, order.deviceClass, order.devicePrice)).productOffers;
+    const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
         const productOfferFormatter = productOfferFormattingService.fromProductOffer(matchingOffer);
@@ -63,9 +63,9 @@ async function getConfirmationProductData(wertgarantieProduct, client, productOf
                 top3: advantageCategories.top3,
                 productInformationSheetUri: productInformationSheet.uri,
                 productInformationSheetText: productInformationSheet.name,
-                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(wertgarantieProduct.deviceClass, 1)[0],
-                shopProductShortName: wertgarantieProduct.shopProductName,
-                orderId: wertgarantieProduct.orderId
+                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.deviceClass, 1)[0],
+                shopProductShortName: order.shopProduct.model,
+                orderId: order.orderId
             },
             avbHref: productOfferFormatter.getDocument(documentTypes.LEGAL_NOTICE).uri
         };

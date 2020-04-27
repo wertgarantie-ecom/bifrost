@@ -60,49 +60,14 @@ const testShoppingCart = {
 };
 
 const expectedResponse = {
-    shoppingCart: {
-        "publicClientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        "signature": "signature",
-        "orders": [
-            {
-                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a",
-                "shopProduct": {
-                    "model": "Super Bike",
-                    "deviceClass": "Bike",
-                    "price": 100000
-                },
-                "wertgarantieProduct": {
-                    "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
-                    "name": "Komplettschutz",
-                    "paymentInterval": "monthly"
-                }
-            },
-            {
-                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a",
-                "shopProduct": {
-                    "model": "Super Bike",
-                    "deviceClass": "Bike",
-                    "price": 100000
-                },
-                "wertgarantieProduct": {
-                    "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-                    "name": "Komplettschutz",
-                    "paymentInterval": "monthly"
-                }
-            }
-        ],
-        "confirmations": {
-            "legalAgeConfirmed": true,
-            "termsAndConditionsConfirmed": true
-        }
-    },
+    shoppingCart: testShoppingCart,
     legalAgeConfirmed: true,
     termsAndConditionsConfirmed: true,
     headerTitle: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
     legalAgeConfirmationText: "Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.",
     pleaseConfirmText: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
     confirmText: 'Bitte bestätige noch kurz:',
-    products: [
+    orders: [
         {
             paymentInterval: "monatl.",
             price: "ab 8,00 €",
@@ -125,7 +90,7 @@ const expectedResponse = {
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            orderId: "28ff0413-bcfd-48f8-b003-04b57762067a"
         },
     ],
     generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
@@ -137,6 +102,7 @@ const expectedResponse = {
 
 
 test("should return proper confirmation component data for one product", async () => {
+    console.log("test");
     const confirmationData = await service.prepareConfirmationData(
         testShoppingCart,
         productOffersMock,
