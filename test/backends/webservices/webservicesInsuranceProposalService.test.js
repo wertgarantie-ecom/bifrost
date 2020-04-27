@@ -96,18 +96,11 @@ test("should submit insurance proposal", async () => {
 
     const result = await webservicesInsuranceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, purchasedProduct, clientConfig, mockWebservicesClient, mockWebservicesProductOffersRepository, satznummerGenerator);
     expect(result).toEqual({
-        "backend": "webservices",
         "contractNumber": "12345678",
-        "deviceClass": undefined,
-        "devicePrice": undefined,
-        "id": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
         "message": "successfully transmitted insurance proposal",
         "resultCode": "Verarbeitet",
-        "shopProduct": undefined,
         "success": true,
-        "transactionNumber": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
-        "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-        "wertgarantieProductName": undefined,
+        "transactionNumber": "dd2209dc-fa26-444d-b1ce-2995b9340aac"
     });
 });
 

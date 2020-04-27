@@ -6,44 +6,20 @@ const _productOffersRepository = require('./webserviceProductOffersRepository');
 const _ = require('lodash');
 
 exports.submitInsuranceProposal = async function submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
-    try {
-        const session = await webservicesClient.login(clientConfig);
-        const contractnumber = await webservicesClient.getNewContractNumber(session);
-        const satznummer = idGenerator();
-        const productOffersForClient = productOffersRepository.findByClientId(clientConfig.id);
-        const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
-        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
-
-        const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
-
-        return {
-            id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
-            success: true,
-            message: "successfully transmitted insurance proposal",
-            shopProduct: wertgarantieProduct.shopProductName,
-            contractNumber: contractnumber,
-            transactionNumber: satznummer,
-            backend: "webservices",
-            resultCode: submitResult.STATUS_TEXT
-        };
-    } catch (e) {
-        console.error(e);
-        return {
-            id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
-            success: false,
-            message: e.message,
-            shopProduct: wertgarantieProduct.shopProductName,
-            backend: "webservices",
-        };
-    }
+    const session = await webservicesClient.login(clientConfig);
+    const contractnumber = await webservicesClient.getNewContractNumber(session);
+    const satznummer = idGenerator();
+    const productOffersForClient = productOffersRepository.findByClientId(clientConfig.id);
+    const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
+    const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
+    const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
+    return {
+        success: true,
+        message: "successfully transmitted insurance proposal",
+        contractNumber: contractnumber,
+        transactionNumber: satznummer,
+        resultCode: submitResult.STATUS_TEXT
+    };
 };
 
 function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer, date = new Date()) {

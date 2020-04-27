@@ -36,7 +36,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
         throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
     }
 
-    const purchaseResults = await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
+    const purchaseResults = await Promise.all(wertgarantieCart.products.map(async wertgarantieProduct => {
         const shopProductIndex = findIndex(purchasedShopProducts, wertgarantieProduct);
         if (shopProductIndex === -1) {
             return {
@@ -52,11 +52,35 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        if (process.env.BACKEND === 'webservices') {
-            return webservicesInsuranceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, client);
-        } else {
-            return heimdallCheckoutService.checkout(client, wertgarantieProduct, customer, matchingShopProduct);
+        const purchaseResult = {
+            id: idGenerator(),
+            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
+            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
+            wertgarantieDeviceClass: wertgarantieProduct.deviceClass,
+            shopDevicePrice: matchingShopProduct.price,
+            shopDeviceClass: matchingShopProduct.deviceClass,
+            shopDeviceModel: matchingShopProduct.model,
+        };
+        try {
+            let callResult;
+            if (process.env.BACKEND === 'webservices') {
+                purchaseResult.backend = "webservices";
+                callResult = await webservicesInsuranceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, client);
+            } else {
+                purchaseResult.backend = "heimdall";
+                callResult = await heimdallCheckoutService.checkout(client, wertgarantieProduct, customer, matchingShopProduct);
+            }
+            purchaseResult.success = callResult.success;
+            purchaseResult.message = callResult.message;
+            purchaseResult.resultCode = callResult.resultCode;
+            purchaseResult.contractNumber = callResult.contractnumber;
+            purchaseResult.transactionNumber = callResult.transactionNumber;
+        } catch (e) {
+            purchaseResult.success = false;
+            purchaseResult.message = e.message;
+            console.error(e);
         }
+        return purchaseResult;
     }));
 
 
@@ -67,9 +91,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
         purchases: [...purchaseResults]
     };
 
-    await repository.persist(checkoutData);
-
-    return checkoutData;
+    return await repository.persist(checkoutData);
 };
 
 function findIndex(shopCartProducts, wertgarantieProduct) {

@@ -20,25 +20,28 @@ exports.persist = async function persist(checkoutData) {
         await Promise.all(checkoutData.purchases.map(purchase => {
             const purchaseQuery = {
                 name: 'insert-purchases',
-                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, activationcode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);',
+                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, wertgarantiedeviceclass, shopdeviceclass, shopdeviceprice, shopdevicemodel, success, message, contractnumber, transactionnumber, activationcode, backend) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);',
                 values: [
                     purchase.id,
                     checkoutData.sessionId,
                     purchase.wertgarantieProductId,
                     purchase.wertgarantieProductName,
-                    purchase.deviceClass,
-                    purchase.devicePrice,
+                    purchase.wertgarantieDeviceClass,
+                    purchase.shopDeviceClass,
+                    purchase.shopDevicePrice,
+                    purchase.shopDeviceModel,
                     purchase.success,
                     purchase.message,
-                    purchase.shopProduct,
                     purchase.contractNumber,
                     purchase.transactionNumber,
-                    purchase.activationCode
+                    purchase.activationCode,
+                    purchase.backend
                 ]
             };
             return client.query(purchaseQuery);
         }));
         await client.query('COMMIT');
+        return findBySessionId(checkoutData.sessionId);
     } catch (error) {
         await client.query('ROLLBACK');
         throw error;
@@ -62,19 +65,21 @@ function toPurchases(rows) {
             id: row.id,
             wertgarantieProductId: row.wertgarantieproductid,
             wertgarantieProductName: row.wertgarantieproductname,
-            deviceClass: row.deviceclass,
-            devicePrice: row.deviceprice,
+            wertgarantieDeviceClass: row.wertgarantiedeviceclass,
+            shopDeviceClass: row.shopdeviceclass,
+            shopDevicePrice: row.shopdeviceprice,
+            shopDeviceName: row.shopdevicename,
             success: row.success,
             message: row.message,
-            shopProduct: row.shopproduct,
             contractNumber: row.contractnumber,
             transactionNumber: row.transactionnumber,
-            activationCode: row.activationcode
+            activationCode: row.activationcode,
+            backend: row.backend
         }
     })
 }
 
-exports.findBySessionId = async function findBySessionId(sessionID) {
+async function findBySessionId(sessionID) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-session-id',
@@ -91,4 +96,6 @@ exports.findBySessionId = async function findBySessionId(sessionID) {
     } else {
         return undefined;
     }
-};
+}
+
+exports.findBySessionId = findBySessionId;

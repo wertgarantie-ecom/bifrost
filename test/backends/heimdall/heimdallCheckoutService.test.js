@@ -59,22 +59,15 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
     expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][1]).toEqual(client);
 
     await expect(result).toEqual({
-        "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
-        "wertgarantieProductId": "2",
-        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-        "devicePrice": "100000",
         "success": true,
         "message": "successfully transmitted insurance proposal",
-        "shopProduct": "IPhone X",
         "activationCode": "123456",
         "contractNumber": "28850277",
-        "transactionNumber": "28850279",
-        "backend": "heimdall",
-        "wertgarantieProductName": "Komplettschutz"
+        "transactionNumber": "28850279"
     });
 });
 
-test("failing heimdall checkout call should be handled gracefully", async () => {
+test("failing heimdall checkout call should throw error", async () => {
     const wertgarantieProduct = {
         wertgarantieProductId: "2",
         wertgarantieProductName: "Komplettschutz",
@@ -100,22 +93,15 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
         })
     };
 
-    const result = await checkoutService.checkout(undefined, wertgarantieProduct, customer, shopProduct,
-        undefined,
-        mockHeimdallClient,
-        () => "bda6d0f8-bbfa-4ede-a8c4-4a95ad0b3f75");
-    const expectedResult = {
-        "id": "bda6d0f8-bbfa-4ede-a8c4-4a95ad0b3f75",
-        "wertgarantieProductId": "2",
-        "wertgarantieProductName": "Komplettschutz",
-        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-        "devicePrice": "1000",
-        "success": false,
-        "message": "failing call",
-        "shopProduct": "IPhone X",
-        "backend": "heimdall"
-    };
-    expect(result).toEqual(expectedResult);
+    try {
+        await checkoutService.checkout(undefined, wertgarantieProduct, customer, shopProduct,
+            undefined,
+            mockHeimdallClient,
+            () => "bda6d0f8-bbfa-4ede-a8c4-4a95ad0b3f75");
+        fail("should throw error");
+    } catch (e) {
+        //expected
+    }
 });
 
 const mockHeimdallClientSuccess = () => {

@@ -105,12 +105,13 @@ describe("Checkout Shopping Cart", () => {
         expect(body.clientId).toEqual(clientData.publicClientIds[0]);
         expect(purchase.wertgarantieProductId).toEqual("10");
         expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
-        expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
-        expect(purchase.devicePrice).toEqual(139999);
+        expect(purchase.wertgarantieDeviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
+        expect(purchase.shopDevicePrice).toEqual(139999);
+        expect(purchase.shopDeviceModel).toEqual("SuperBike 3000");
+        expect(purchase.shopDeviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
+        expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.success).toBe(true);
         expect(purchase.message).toEqual("successfully transmitted insurance proposal");
-        expect(purchase.shopProduct).toEqual("SuperBike 3000");
-        expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
         expect(purchase.activationCode).toEqual("4db56dacfbhce");
         done();
@@ -123,7 +124,7 @@ describe("Checkout Shopping Cart", () => {
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(sessionId);
         expect(body.clientId).toEqual(clientData.publicClientIds[0]);
-        expect(purchase.wertgarantieProductId).toEqual(10);
+        expect(purchase.wertgarantieProductId).toEqual("10");
         expect(purchase.wertgarantieProductName).toEqual("Basic");
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
         expect(purchase.devicePrice).toEqual(139999);

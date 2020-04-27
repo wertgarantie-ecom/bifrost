@@ -4,35 +4,14 @@ const _heimdallClient = require('./heimdallClient');
 
 module.exports.checkout = async function checkout(clientConfig, wertgarantieProduct, customer, matchingShopProduct, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
     const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
-    try {
-        const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, clientConfig);
-        return {
-            id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
-            success: true,
-            message: "successfully transmitted insurance proposal",
-            shopProduct: wertgarantieProduct.shopProductName,
-            contractNumber: responseBody.payload.contract_number,
-            transactionNumber: responseBody.payload.transaction_number,
-            activationCode: responseBody.payload.activation_code,
-            backend: "heimdall"
-        };
-    } catch (e) {
-        return {
-            id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
-            success: false,
-            message: e.message,
-            shopProduct: wertgarantieProduct.shopProductName,
-            backend: "heimdall"
-        };
-    }
+    const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, clientConfig);
+    return {
+        success: true,
+        message: "successfully transmitted insurance proposal",
+        contractNumber: responseBody.payload.contract_number,
+        transactionNumber: responseBody.payload.transaction_number,
+        activationCode: responseBody.payload.activation_code
+    };
 };
 
 
