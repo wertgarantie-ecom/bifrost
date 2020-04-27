@@ -200,13 +200,14 @@ describe('add phone test shop client', () => {
             backends: {
                 heimdall: {
                     clientId: "test-bike-heimdall-clientId"
+                },
+                webservices: {
+                    username: "test-bike-user",
+                    password: "test-bike-password",
+                    productOffersConfigurations: []
                 }
             },
-            webservices: {
-                username: "test-bike-user",
-                password: "test-bike-password",
-                productOffersConfigurations: []
-            },
+
             activePartnerNumber: 22222,
             secrets: [
                 "secret:test-bike-secret"
