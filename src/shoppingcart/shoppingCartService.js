@@ -3,6 +3,7 @@ const _ = require('lodash');
 const checkoutRepository = require('./CheckoutRepository');
 const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutService');
 const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
+const ClientError = require('../errors/ClientError');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, clientId, orderId) {
@@ -31,39 +32,40 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieCart, client, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
-    if (!(wertgarantieCart.termsAndConditionsConfirmed && wertgarantieCart.legalAgeConfirmed)) {
-        throw new UnconfirmedShoppingCartError("The wertgarantie shopping hasn't been confirmed by the user")
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shoppingCart, clientConfig, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
+    const confirmations = shoppingCart.confirmations;
+    if (!(confirmations && confirmations.termsAndConditionsConfirmed && confirmations.legalAgeConfirmed)) {
+        throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user")
     }
 
-    const purchaseResults = await Promise.all(wertgarantieCart.products.map(wertgarantieProduct => {
-        const shopProductIndex = findIndex(purchasedShopProducts, wertgarantieProduct);
+    const purchaseResults = await Promise.all(shoppingCart.orders.map(order => {
+        const shopProductIndex = findIndex(purchasedShopProducts, order);
         if (shopProductIndex === -1) {
             return {
                 id: idGenerator(),
-                wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-                wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-                deviceClass: wertgarantieProduct.deviceClass,
-                devicePrice: wertgarantieProduct.devicePrice,
+                wertgarantieProductId: order.wertgarantieProduct.id,
+                wertgarantieProductName: order.wertgarantieProduct.name,
+                deviceClass: order.shopProduct.deviceClass,
+                devicePrice: order.shopProduct.price,
                 success: false,
                 message: "couldn't find matching product in shop cart for wertgarantie product",
-                shopProduct: wertgarantieProduct.shopProductName,
+                shopProduct: order.shopProduct.model,
                 availableShopProducts: purchasedShopProducts || []
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
         if (process.env.BACKEND === 'webservices') {
-            return webservicesInsuranceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, client);
+            return webservicesInsuranceProposalService.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
         } else {
-            return heimdallCheckoutService.checkout(client, wertgarantieProduct, customer, matchingShopProduct);
+            return heimdallCheckoutService.checkout(clientConfig, order, customer, matchingShopProduct);
         }
     }));
 
 
     const checkoutData = {
-        sessionId: wertgarantieCart.sessionId,
+        sessionId: shoppingCart.sessionId,
         traceId: "563e6720-5f07-42ad-99c3-a5104797f083",
-        clientId: wertgarantieCart.clientId,
+        clientId: clientConfig.id,
         purchases: [...purchaseResults]
     };
 
@@ -72,10 +74,12 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     return checkoutData;
 };
 
-function findIndex(shopCartProducts, wertgarantieProduct) {
-    return _.findIndex(shopCartProducts, shopProduct => shopProduct.model === wertgarantieProduct.shopProductName
-        && shopProduct.price === wertgarantieProduct.devicePrice
-        && shopProduct.deviceClass === wertgarantieProduct.deviceClass);
+function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
+    const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;
+    return _.findIndex(shopSubmittedPurchases, shopSubmittedPurchase =>
+        shopSubmittedPurchase.model === wertgarantieSubmittedPurchase.model
+        && shopSubmittedPurchase.price === wertgarantieSubmittedPurchase.price
+        && shopSubmittedPurchase.deviceClass === wertgarantieSubmittedPurchase.deviceClass);
 }
 
 function newShoppingCart(clientId) {

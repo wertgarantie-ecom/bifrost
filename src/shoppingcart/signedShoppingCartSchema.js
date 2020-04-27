@@ -1,4 +1,6 @@
 const shoppingCartProductSchema = require('./addShoppingCartProductSchema').addShoppingCartProductSchema;
+shoppingCartProductSchema.properties.wertgarantieProduct.required.push("deviceClass");
+shoppingCartProductSchema.required.push("id");
 
 module.exports.requestWithSignedShoppingCartSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
@@ -14,7 +16,17 @@ module.exports.requestWithSignedShoppingCartSchema = {
                 },
                 shoppingCart: {
                     type: "object",
+                    additionalProperties: false,
+                    required: [
+                        "sessionId",
+                        "publicClientId",
+                        "confirmations",
+                        "orders"
+                    ],
                     properties: {
+                        sessionId: {
+                            type: "string"
+                        },
                         publicClientId: {
                             type: "string",
                             required: true
@@ -38,4 +50,5 @@ module.exports.requestWithSignedShoppingCartSchema = {
             }
         }
     }
-};
+}
+;

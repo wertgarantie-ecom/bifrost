@@ -1,6 +1,9 @@
 module.exports.addShoppingCartProductSchema = {
     type: "object",
     properties: {
+        id: {
+            type: "string"
+        },
         shopProduct: {
             type: "object",
             properties: {
@@ -32,6 +35,9 @@ module.exports.addShoppingCartProductSchema = {
                 paymentInterval: {
                     type: "string"
                 },
+                deviceClass: {
+                    type: "string"
+                }
             },
             required: [
                 "id",

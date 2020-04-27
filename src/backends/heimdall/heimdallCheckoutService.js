@@ -2,19 +2,19 @@ const moment = require('moment');
 const uuid = require('uuid');
 const _heimdallClient = require('./heimdallClient');
 
-module.exports.checkout = async function checkout(clientConfig, wertgarantieProduct, customer, matchingShopProduct, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
-    const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date);
+module.exports.checkout = async function checkout(clientConfig, wertgarantieProduct, customer, shopSubmittedPurchase, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
+    const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, shopSubmittedPurchase, date);
     try {
         const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, clientConfig);
         return {
             id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
+            wertgarantieProductId: wertgarantieProduct.id,
+            wertgarantieProductName: wertgarantieProduct.name,
             deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
+            devicePrice: shopSubmittedPurchase.price,
             success: true,
             message: "successfully transmitted insurance proposal",
-            shopProduct: wertgarantieProduct.shopProductName,
+            shopProduct: shopSubmittedPurchase.model,
             contractNumber: responseBody.payload.contract_number,
             transactionNumber: responseBody.payload.transaction_number,
             activationCode: responseBody.payload.activation_code,
@@ -23,22 +23,22 @@ module.exports.checkout = async function checkout(clientConfig, wertgarantieProd
     } catch (e) {
         return {
             id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
+            wertgarantieProductId: wertgarantieProduct.id,
+            wertgarantieProductName: wertgarantieProduct.name,
             deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
+            devicePrice: shopSubmittedPurchase.price,
             success: false,
             message: e.message,
-            shopProduct: wertgarantieProduct.shopProductName,
+            shopProduct: shopSubmittedPurchase.model,
             backend: "heimdall"
         };
     }
 };
 
 
-function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShopProduct, date) {
+function prepareHeimdallCheckoutData(wertgarantieProduct, customer, shopSubmittedPurchase, date) {
     return {
-        productId: wertgarantieProduct.wertgarantieProductId,
+        productId: wertgarantieProduct.id,
         customer_company: customer.company,
         customer_salutation: customer.salutation,
         customer_firstname: customer.firstname,
@@ -49,13 +49,13 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, matchingShop
         customer_country: customer.country,
         customer_email: customer.email,
         customer_birthdate: "1911-11-11",
-        device_manufacturer: matchingShopProduct.manufacturer,
-        device_model: matchingShopProduct.model,
-        device_class: matchingShopProduct.deviceClass,
-        device_purchase_price: parseFloat(matchingShopProduct.price) / 100,
+        device_manufacturer: shopSubmittedPurchase.manufacturer,
+        device_model: shopSubmittedPurchase.model,
+        device_class: shopSubmittedPurchase.deviceClass,
+        device_purchase_price: parseFloat(shopSubmittedPurchase.price) / 100,
         device_purchase_date: formatDate(date),
         device_condition: 1,
-        device_os: matchingShopProduct.deviceOS,
+        device_os: shopSubmittedPurchase.deviceOS,
         payment_method: "jährlich",
         payment_type: "bank_transfer",
         terms_and_conditions_accepted: true

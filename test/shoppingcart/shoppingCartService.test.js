@@ -1,9 +1,10 @@
 const addProductToShoppingCartWithOrderId = require('../../src/shoppingcart/shoppingCartService').addProductToShoppingCartWithOrderId;
 const shoppingCartService = require('../../src/shoppingcart/shoppingCartService');
 const signatureService = require('../../src/shoppingcart/signatureService');
-const UnconfirmedShoppingCartError = require('../../src/shoppingcart/shoppingCartService').UnconfirmedShoppingCartError;
+const ClientError = require('../../src/errors/ClientError');
 const uuid = require('uuid');
 const validCustomer = require('../../integration-test/helper/fixtureHelper').validCustomer;
+const clientConfig = require('../../integration-test/helper/fixtureHelper').createDefaultClient();
 
 
 function validProduct() {
@@ -113,17 +114,24 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     const wertgarantieShoppingCart = {
         sessionId: "619f7fda-d77e-4be1-b73c-db145402bcab",
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        products: [
+        orders: [
             {
-                wertgarantieProductId: "2",
-                deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
-                devicePrice: "1000",
-                shopProductName: "IPhone X",
-                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+                wertgarantieProduct: {
+                    id: "2",
+                    name: "Basis"
+                },
+                shopProduct: {
+                    price: "1000",
+                    model: "IPhone X",
+                    deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                },
+                id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        legalAgeConfirmed: true,
-        termsAndConditionsConfirmed: true
+        confirmations: {
+            legalAgeConfirmed: true,
+            termsAndConditionsConfirmed: true
+        }
     };
 
     const purchasedProducts = [
@@ -135,7 +143,6 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         }
     ];
     const customer = validCustomer();
-    const secretClientId = "bikesecret1";
 
     const mockClient = jest.fn(() => {
         throw new Error("you should never call me");
@@ -144,7 +151,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
         wertgarantieShoppingCart,
-        secretClientId,
+        clientConfig,
         mockClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
         mockRepository);
@@ -152,11 +159,12 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     expect(result).toEqual({
         "sessionId": "619f7fda-d77e-4be1-b73c-db145402bcab",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
-        "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        "clientId": clientConfig.id,
         "purchases": [
             {
                 "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
                 "wertgarantieProductId": "2",
+                "wertgarantieProductName": "Basis",
                 "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
                 "devicePrice": "1000",
                 "success": false,
@@ -187,17 +195,19 @@ function generateIds(ids) {
 test("checkout call executed without confirmation", async () => {
     const wertgarantieShoppingCart = {
         clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        products: [
+        orders: [
             {
-                wertgarantieProductId: "2",
-                shopProductId: "1",
-                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                devicePrice: "1000",
-                shopProductName: "Super Bike",
-                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+                wertgarantieProduct: {
+                    id: "2"
+                },
+                shopProduct: {
+                    price: "1000",
+                    deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    model: "Super Bike"
+                },
+                id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
-        ],
-        confirmed: false
+        ]
     };
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
@@ -218,7 +228,7 @@ test("checkout call executed without confirmation", async () => {
         await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId);
         expect.fail();
     } catch (e) {
-        expect(e).toBeInstanceOf(UnconfirmedShoppingCartError);
+        expect(e).toBeInstanceOf(ClientError);
     }
 });
 

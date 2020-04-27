@@ -55,6 +55,7 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
 
 exports.createDefaultClient = function createDefaultClient() {
     return {
+        id: uuid(),
         name: "testclient",
         backends: {
             heimdall: {

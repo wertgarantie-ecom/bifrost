@@ -55,20 +55,26 @@ describe("Checkout Shopping Cart", () => {
         const wertgarantieShoppingCart =
             {
                 "sessionId": sessionId + "",
-                "clientId": clientData.publicClientIds[0],
-                "products": [
+                "publicClientId": clientData.publicClientIds[0],
+                "orders": [
                     {
-                        "wertgarantieProductId": wertgarantieProductId,
-                        "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                        "devicePrice": 139999,
-                        "deviceCurrency": "EUR",
-                        "shopProductName": "SuperBike 3000",
-                        "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
+                        wertgarantieProduct: {
+                            "id": wertgarantieProductId,
+                            "name": wertgarantieProductName,
+                            "paymentInterval": "monthly"
+                        },
+                        shopProduct: {
+                            "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                            "price": 139999,
+                            "model": "SuperBike 3000",
+                        },
+                        "id": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
                     }
                 ],
-                "legalAgeConfirmed": true,
-                "termsAndConditionsConfirmed": true
+                confirmations: {
+                    "legalAgeConfirmed": true,
+                    "termsAndConditionsConfirmed": true
+                }
             };
 
         nockhelper.nockHeimdallLogin(clientData);
@@ -107,7 +113,6 @@ describe("Checkout Shopping Cart", () => {
         const body = result.body;
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
-        expect(body.clientId).toEqual(clientData.publicClientIds[0]);
         expect(purchase.wertgarantieProductId).toEqual("10");
         expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");

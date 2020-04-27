@@ -3,12 +3,9 @@ const validCustomer = require('../../../integration-test/helper/fixtureHelper').
 
 test("shopping cart checkout should checkout wertgarantie product if referenced shop product was also purchased", async () => {
     const wertgarantieProduct = {
-        wertgarantieProductId: "2",
-        wertgarantieProductName: "Komplettschutz",
-        deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-        devicePrice: "100000",
-        shopProductName: "IPhone X",
-        orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+        id: "2",
+        name: "Komplettschutz",
+        deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
     };
 
     const purchasedShopProduct = {
@@ -76,16 +73,13 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
 
 test("failing heimdall checkout call should be handled gracefully", async () => {
     const wertgarantieProduct = {
-        wertgarantieProductId: "2",
-        wertgarantieProductName: "Komplettschutz",
-        deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-        devicePrice: "1000",
-        shopProductName: "IPhone X",
-        orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+        id: "2",
+        name: "Komplettschutz",
+        deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
     };
 
     const shopProduct = {
-        price: "1000",
+        price: 1000,
         manufacturer: "Apple Inc",
         deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
         model: "IPhone X",
@@ -109,7 +103,7 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
         "wertgarantieProductId": "2",
         "wertgarantieProductName": "Komplettschutz",
         "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-        "devicePrice": "1000",
+        "devicePrice": 1000,
         "success": false,
         "message": "failing call",
         "shopProduct": "IPhone X",
