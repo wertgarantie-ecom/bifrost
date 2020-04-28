@@ -7,7 +7,7 @@ const ClientError = require('../errors/ClientError');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, publicClientId, orderId) {
-    requestBody.orderId = orderId;
+    requestBody.id = orderId;
     const updatedShoppingCart = shoppingCart || newShoppingCart(publicClientId);
     updatedShoppingCart.orders.push(requestBody);
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
@@ -99,7 +99,7 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(o
         return undefined;
     }
     for (var i = 0; i < shoppingCart.orders.length; i++) {
-        if (shoppingCart.orders[i].orderId === orderId) {
+        if (shoppingCart.orders[i].id === orderId) {
             shoppingCart.orders.splice(i, 1);
             i--;
         }

@@ -6,6 +6,7 @@ const advertisingTextResponse = require('../backends/webservices/webservicesResp
 const insurancePremiumResponse = require('../backends/webservices/webservicesResponses').insurancePremiumResponse;
 const comparisonDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleComparisonDocumentsResponse;
 const legalDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleLegalDocuments;
+const _ = require('lodash');
 
 
 exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
@@ -18,9 +19,10 @@ exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
         });
 };
 
-exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, response = defaultProductOffersResponse, responseStatus = 200) {
+exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, clientConfig, response = defaultProductOffersResponse, responseStatus = 200) {
+    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === signedShoppingCart.shoppingCart.orders[0].shopProduct.deviceClass).heimdallDeviceClass;
     nock(process.env.HEIMDALL_URI)
-        .get(`/api/v1/product-offers?device_class=${signedShoppingCart.shoppingCart.orders[0].shopProduct.deviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.orders[0].shopProduct.devicePrice / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
+        .get(`/api/v1/product-offers?device_class=${heimdallDeviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.orders[0].shopProduct.price / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
         .reply(responseStatus, response);
 };
 

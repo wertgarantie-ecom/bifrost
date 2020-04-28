@@ -27,7 +27,7 @@ const testShoppingCart = {
     signature: "signature",
     orders: [
         {
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a",
+            id: "18ff0413-bcfd-48f8-b003-04b57762067a",
             shopProduct: {
                 model: "Super Bike",
                 price: 100000,
@@ -40,7 +40,7 @@ const testShoppingCart = {
             }
         },
         {
-            orderId: "28ff0413-bcfd-48f8-b003-04b57762067a",
+            id: "28ff0413-bcfd-48f8-b003-04b57762067a",
             shopProduct: {
                 model: "Super Bike",
                 price: 100000,

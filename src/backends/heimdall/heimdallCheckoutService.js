@@ -3,15 +3,15 @@ const uuid = require('uuid');
 const _heimdallClient = require('./heimdallClient');
 const _ = require('lodash');
 
-module.exports.checkout = async function checkout(clientConfig, wertgarantieProduct, customer, shopSubmittedPurchase, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
-    const heimdallDeviceClass = _.find(clientConfig.backend.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === shopSubmittedPurchase.deviceClass).heimdallDeviceClass;
-    const requestBody = prepareHeimdallCheckoutData(wertgarantieProduct, customer, shopSubmittedPurchase, date);
+module.exports.checkout = async function checkout(clientConfig, order, customer, shopSubmittedPurchase, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
+    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === shopSubmittedPurchase.deviceClass).heimdallDeviceClass;
+    const requestBody = prepareHeimdallCheckoutData(order, customer, shopSubmittedPurchase, date, heimdallDeviceClass);
     try {
         const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, clientConfig);
         return {
             id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.id,
-            wertgarantieProductName: wertgarantieProduct.name,
+            wertgarantieProductId: order.wertgarantieProduct.id,
+            wertgarantieProductName: order.wertgarantieProduct.name,
             deviceClass: heimdallDeviceClass,
             devicePrice: shopSubmittedPurchase.price,
             success: true,
@@ -25,8 +25,8 @@ module.exports.checkout = async function checkout(clientConfig, wertgarantieProd
     } catch (e) {
         return {
             id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.id,
-            wertgarantieProductName: wertgarantieProduct.name,
+            wertgarantieProductId: order.wertgarantieProduct.id,
+            wertgarantieProductName: order.wertgarantieProduct.name,
             deviceClass: heimdallDeviceClass,
             devicePrice: shopSubmittedPurchase.price,
             success: false,
@@ -38,9 +38,9 @@ module.exports.checkout = async function checkout(clientConfig, wertgarantieProd
 };
 
 
-function prepareHeimdallCheckoutData(wertgarantieProduct, customer, shopSubmittedPurchase, date) {
+function prepareHeimdallCheckoutData(order, customer, shopSubmittedPurchase, date, heimdallDeviceClass) {
     return {
-        productId: wertgarantieProduct.id,
+        productId: order.wertgarantieProduct.id,
         customer_company: customer.company,
         customer_salutation: customer.salutation,
         customer_firstname: customer.firstname,
@@ -53,7 +53,7 @@ function prepareHeimdallCheckoutData(wertgarantieProduct, customer, shopSubmitte
         customer_birthdate: "1911-11-11",
         device_manufacturer: shopSubmittedPurchase.manufacturer,
         device_model: shopSubmittedPurchase.model,
-        device_class: shopSubmittedPurchase.deviceClass,
+        device_class: heimdallDeviceClass,
         device_purchase_price: parseFloat(shopSubmittedPurchase.price) / 100,
         device_purchase_date: formatDate(date),
         device_condition: 1,

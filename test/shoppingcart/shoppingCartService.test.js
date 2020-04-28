@@ -9,7 +9,7 @@ const clientConfig = require('../../integration-test/helper/fixtureHelper').crea
 
 function validProduct() {
     return {
-        orderId: "9fd47b8a-f984-11e9-adcf-afabcc521083",
+        id: "9fd47b8a-f984-11e9-adcf-afabcc521083",
         shopProduct: {
             model: "Phone X",
             deviceClass: "Smartphone",
@@ -24,7 +24,7 @@ function validProduct() {
 }
 
 const includedOrder = {
-    orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163",
+    id: "5f507954-fed1-45c9-aaa6-30f216d6f163",
     shopProduct: {
         model: "Phone X",
         deviceClass: "Smartphone",
@@ -37,7 +37,7 @@ const includedOrder = {
     }
 };
 const validShoppingCart = {
-    clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+    publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     orders: [includedOrder],
     confirmations: {
         legalAgeConfirmed: true,
@@ -50,8 +50,8 @@ test("should create and fill new shopping cart if no cart is given", () => {
 });
 
 test("new created shopping cart should have given clientId", () => {
-    const clientId = uuid();
-    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").publicClientId).toEqual(clientId);
+    const publicClientId = "public:" + uuid();
+    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), publicClientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").publicClientId).toEqual(publicClientId);
 });
 
 test("should add product to existing shopping cart", () => {
@@ -60,22 +60,22 @@ test("should add product to existing shopping cart", () => {
 
 
 test("should allow duplicate products", () => {
-    let clientId = uuid();
+    const publicClientId = "public:" + uuid();
     const validShoppingCart = {
-        clientId: clientId,
+        publicClientId: publicClientId,
         orders: [validProduct()],
         confirmations: {
             legalAgeConfirmed: false,
             termsAndConditionsConfirmed: false
         }
     };
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([validProduct(), validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), publicClientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([validProduct(), validProduct()]);
 });
 
 test("should confirm valid shopping cart", () => {
-    let clientId = uuid();
+    const publicClientId = "public:" + uuid();
     const validShoppingCart = {
-        clientId: clientId,
+        publicClientId: publicClientId,
         products: [validProduct()],
         confirmations: {
             legalAgeConfirmed: false,
@@ -88,9 +88,9 @@ test("should confirm valid shopping cart", () => {
 });
 
 test("should unconfirm valid shopping cart", () => {
-    let clientId = uuid();
+    const publicClientId = "public:" + uuid();
     const validShoppingCart = {
-        clientId: clientId,
+        publicClientId: publicClientId,
         products: [validProduct()],
         confirmations: {
             legalAgeConfirmed: true,
@@ -113,12 +113,13 @@ test("added product should always reject confirmation", () => {
 test("on checkout call shop price differs from wertgarantie price", async () => {
     const wertgarantieShoppingCart = {
         sessionId: "619f7fda-d77e-4be1-b73c-db145402bcab",
-        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         orders: [
             {
                 wertgarantieProduct: {
                     id: "2",
-                    name: "Basis"
+                    name: "Basis",
+                    paymentInterval: "monthly"
                 },
                 shopProduct: {
                     price: "1000",
@@ -194,7 +195,7 @@ function generateIds(ids) {
 
 test("checkout call executed without confirmation", async () => {
     const wertgarantieShoppingCart = {
-        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         orders: [
             {
                 wertgarantieProduct: {

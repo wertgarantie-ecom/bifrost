@@ -54,26 +54,26 @@ describe("Checkout Shopping Cart", () => {
         const wertgarantieProductName = 'Basic';
         const wertgarantieShoppingCart =
             {
-                "sessionId": sessionId + "",
-                "publicClientId": clientData.publicClientIds[0],
-                "orders": [
+                sessionId: sessionId + "",
+                publicClientId: clientData.publicClientIds[0],
+                orders: [
                     {
                         wertgarantieProduct: {
-                            "id": wertgarantieProductId,
-                            "name": wertgarantieProductName,
-                            "paymentInterval": "monthly"
+                            id: wertgarantieProductId,
+                            name: wertgarantieProductName,
+                            paymentInterval: "monthly"
                         },
                         shopProduct: {
-                            "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                            "price": 139999,
-                            "model": "SuperBike 3000",
+                            deviceClass: "Bike",
+                            price: 139999,
+                            model: "SuperBike 3000",
                         },
-                        "id": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
+                        id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
                     }
                 ],
                 confirmations: {
-                    "legalAgeConfirmed": true,
-                    "termsAndConditionsConfirmed": true
+                    legalAgeConfirmed: true,
+                    termsAndConditionsConfirmed: true
                 }
             };
 
@@ -92,7 +92,7 @@ describe("Checkout Shopping Cart", () => {
                 purchasedProducts: [{
                     price: 139999,
                     manufacturer: "Super Bike Inc.",
-                    deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    deviceClass: "Bike",
                     model: "SuperBike 3000"
                 }],
                 customer: {
@@ -119,6 +119,7 @@ describe("Checkout Shopping Cart", () => {
         expect(purchase.devicePrice).toEqual(139999);
         expect(purchase.success).toBe(true);
         expect(purchase.message).toEqual("successfully transmitted insurance proposal");
+        expect(purchase.backend).toEqual("heimdall");
         expect(purchase.shopProduct).toEqual("SuperBike 3000");
         expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
@@ -132,7 +133,7 @@ describe("Checkout Shopping Cart", () => {
         const body = result.body;
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(sessionId);
-        expect(body.clientId).toEqual(clientData.publicClientIds[0]);
+        expect(body.clientId).toEqual(clientData.id);
         expect(purchase.wertgarantieProductId).toEqual(10);
         expect(purchase.wertgarantieProductName).toEqual("Basic");
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");

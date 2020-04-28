@@ -25,7 +25,7 @@ exports.validCustomer = function validCustomer() {
 
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {publicClientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
+    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
     const sessionId = uuid();
     const shoppingCart = {
         sessionId: sessionId,
@@ -69,6 +69,10 @@ exports.createDefaultClient = function createDefaultClient() {
                     {
                         shopDeviceClass: "Bike",
                         heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    },
+                    {
+                        shopDeviceClass: "Test",
+                        heimdallDeviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d"
                     }
                 ]
             },

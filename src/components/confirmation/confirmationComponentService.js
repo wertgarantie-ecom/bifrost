@@ -24,8 +24,8 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     let avbHref;
     const client = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
     for (var i = 0; i < shoppingCart.orders.length; i++) {
-        const wertgarantieProduct = shoppingCart.orders[i];
-        const confirmationProductData = await getConfirmationProductData(wertgarantieProduct, client, productOfferService, productImageService);
+        const order = shoppingCart.orders[i];
+        const confirmationProductData = await getConfirmationProductData(order, client, productOfferService, productImageService);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
@@ -46,7 +46,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
 };
 
 async function getConfirmationProductData(order, client, productOfferService = _productOfferService, productImageService = defaultProductImageService) {
-    const productOffers = (await productOfferService.getProductOffers(client, order.deviceClass, order.devicePrice)).productOffers;
+    const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price)).productOffers;
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
@@ -63,9 +63,9 @@ async function getConfirmationProductData(order, client, productOfferService = _
                 top3: advantageCategories.top3,
                 productInformationSheetUri: productInformationSheet.uri,
                 productInformationSheetText: productInformationSheet.name,
-                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.deviceClass, 1)[0],
+                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.shopProduct.deviceClass, 1)[0],
                 shopProductShortName: order.shopProduct.model,
-                orderId: order.orderId
+                orderId: order.id
             },
             avbHref: productOfferFormatter.getDocument(documentTypes.LEGAL_NOTICE).uri
         };

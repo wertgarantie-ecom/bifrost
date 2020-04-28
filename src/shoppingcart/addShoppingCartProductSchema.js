@@ -34,9 +34,6 @@ module.exports.addShoppingCartProductSchema = {
                 },
                 paymentInterval: {
                     type: "string"
-                },
-                deviceClass: {
-                    type: "string"
                 }
             },
             required: [

@@ -7,18 +7,18 @@ test('should return proper product data', async () => {
     const clientData = await testhelper.createAndPersistDefaultClient();
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientData: clientData.publicClientIds[0],
-        deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
+        deviceClass: "Test",
         devicePrice: 120000
     });
 
     nockhelper.nockHeimdallLogin(clientData);
-    nockhelper.getNockedHeimdallProductOffers(signedShoppingCart);
+    nockhelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
 
     const expectedStatusCode = 200;
     const result = await request(app).get('/wertgarantie/components/selection-popup').query({
-        deviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d",
+        deviceClass: "Test",
         devicePrice: 120000,
-        clientId: clientData.publicClientIds[0] + "",
+        clientId: clientData.publicClientIds[0],
     });
 
     expect(result.status).toBe(expectedStatusCode);
