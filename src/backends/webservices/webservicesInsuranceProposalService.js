@@ -5,42 +5,45 @@ const _webservicesClient = require('./webservicesClient');
 const _productOffersRepository = require('./webserviceProductOffersRepository');
 const _ = require('lodash');
 
-exports.submitInsuranceProposal = async function submitInsuranceProposal(wertgarantieProduct, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
+exports.submitInsuranceProposal = async function submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
     try {
-        const session = await webservicesClient.login(clientConfig);
+        const session = await webservicesClient.login(clientConfig.backends.webservices);
         const contractnumber = await webservicesClient.getNewContractNumber(session);
         const satznummer = idGenerator();
-        const productOffersForClient = productOffersRepository.findByClientId(clientConfig.id);
-        const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === wertgarantieProduct.wertgarantieProductId);
+        const productOffersForClient = await productOffersRepository.findByClientId(clientConfig.id);
+        const productOffer = _.find(productOffersForClient, productOffer => productOffer.id === order.wertgarantieProduct.id);
+        if (!productOffer) {
+            throw new Error("No product offer for wertgarantie product id " + order.wertgarantieProduct.id);
+        }
         const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
 
         const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
 
         return {
             id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
+            wertgarantieProductId: order.wertgarantieProduct.id,
+            wertgarantieProductName: order.wertgarantieProduct.name,
+            deviceClass: order.shopProduct.deviceClass,
+            devicePrice: order.shopProduct.price,
             success: true,
             message: "successfully transmitted insurance proposal",
-            shopProduct: wertgarantieProduct.shopProductName,
+            shopProduct: order.shopProduct.model,
             contractNumber: contractnumber,
             transactionNumber: satznummer,
             backend: "webservices",
-            resultCode: submitResult.STATUS_TEXT
+            backendResponseInfo: submitResult.STATUS_TEXT
         };
     } catch (e) {
         console.error(e);
         return {
             id: idGenerator(),
-            wertgarantieProductId: wertgarantieProduct.wertgarantieProductId,
-            wertgarantieProductName: wertgarantieProduct.wertgarantieProductName,
-            deviceClass: wertgarantieProduct.deviceClass,
-            devicePrice: wertgarantieProduct.devicePrice,
+            wertgarantieProductId: order.wertgarantieProduct.id,
+            wertgarantieProductName: order.wertgarantieProduct.name,
+            deviceClass: order.shopProduct.deviceClass,
+            devicePrice: order.shopProduct.price,
             success: false,
             message: e.message,
-            shopProduct: wertgarantieProduct.shopProductName,
+            shopProduct: order.shopProduct.model,
             backend: "webservices",
         };
     }

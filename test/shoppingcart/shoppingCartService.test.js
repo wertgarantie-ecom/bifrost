@@ -124,7 +124,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 shopProduct: {
                     price: "1000",
                     model: "IPhone X",
-                    deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                    deviceClass: "Smartphone",
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
@@ -139,7 +139,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         {
             price: "1200.93",
             manufacturer: "Apple Inc",
-            deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+            deviceClass: "Smartphone",
             model: "IPhone X",
         }
     ];
@@ -166,7 +166,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
                 "wertgarantieProductId": "2",
                 "wertgarantieProductName": "Basis",
-                "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                "deviceClass": "Smartphone",
                 "devicePrice": "1000",
                 "success": false,
                 "message": "couldn't find matching product in shop cart for wertgarantie product",
@@ -175,7 +175,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                     {
                         "price": "1200.93",
                         "manufacturer": "Apple Inc",
-                        "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                        "deviceClass": "Smartphone",
                         "model": "IPhone X"
                     }
                 ]
@@ -203,7 +203,7 @@ test("checkout call executed without confirmation", async () => {
                 },
                 shopProduct: {
                     price: "1000",
-                    deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    deviceClass: "Bike",
                     model: "Super Bike"
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
@@ -217,7 +217,7 @@ test("checkout call executed without confirmation", async () => {
         {
             price: "1000",
             manufacturer: "Apple Inc",
-            deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+            deviceClass: "Smartphone",
             model: "IPhone X",
             productId: "1"
         }

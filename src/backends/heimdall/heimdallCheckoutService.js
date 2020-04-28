@@ -19,8 +19,8 @@ module.exports.checkout = async function checkout(clientConfig, order, customer,
             shopProduct: shopSubmittedPurchase.model,
             contractNumber: responseBody.payload.contract_number,
             transactionNumber: responseBody.payload.transaction_number,
-            activationCode: responseBody.payload.activation_code,
-            backend: "heimdall"
+            backend: "heimdall",
+            backendResponseInfo: responseBody.payload.activation_code
         };
     } catch (e) {
         return {

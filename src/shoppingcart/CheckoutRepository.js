@@ -20,7 +20,7 @@ exports.persist = async function persist(checkoutData) {
         await Promise.all(checkoutData.purchases.map(purchase => {
             const purchaseQuery = {
                 name: 'insert-purchases',
-                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, activationcode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);',
+                text: 'INSERT INTO purchase (id, sessionid, wertgarantieproductid, wertgarantieproductname, deviceclass, deviceprice, success, message, shopproduct, contractnumber, transactionnumber, backend, backendresponseinfo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);',
                 values: [
                     purchase.id,
                     checkoutData.sessionId,
@@ -33,7 +33,8 @@ exports.persist = async function persist(checkoutData) {
                     purchase.shopProduct,
                     purchase.contractNumber,
                     purchase.transactionNumber,
-                    purchase.activationCode
+                    purchase.backend,
+                    purchase.backendResponseInfo
                 ]
             };
             return client.query(purchaseQuery);
@@ -69,7 +70,8 @@ function toPurchases(rows) {
             shopProduct: row.shopproduct,
             contractNumber: row.contractnumber,
             transactionNumber: row.transactionnumber,
-            activationCode: row.activationcode
+            backend: row.backend,
+            backendResponseInfo: row.backendresponseinfo
         }
     })
 }

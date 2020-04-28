@@ -82,7 +82,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         "success": true,
         "message": "successfully transmitted insurance proposal",
         "shopProduct": "IPhone X",
-        "activationCode": "123456",
+        "backendResponseInfo": "123456",
         "contractNumber": "28850277",
         "transactionNumber": "28850279",
         "backend": "heimdall",
