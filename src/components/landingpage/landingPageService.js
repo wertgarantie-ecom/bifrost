@@ -1,4 +1,4 @@
-exports.prepareLandingPageData = async function prepareLandingPageData(tariffCalculatorService = _tariffCalculatorService) {
+exports.prepareLandingPageData = async function prepareLandingPageData() {
     // const tariffCalculatorHtml = await tariffCalculatorService.getTariffCalculatorHtml();
 
     return {
