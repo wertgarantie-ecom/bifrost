@@ -7,9 +7,12 @@ const ClientError = require('../errors/ClientError');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, publicClientId, orderId) {
-    requestBody.id = orderId;
     const updatedShoppingCart = shoppingCart || newShoppingCart(publicClientId);
-    updatedShoppingCart.orders.push(requestBody);
+    updatedShoppingCart.orders.push({
+        id: orderId,
+        shopProduct: requestBody.shopProduct,
+        wertgarantieProduct: requestBody.wertgarantieProduct
+    });
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
     updatedShoppingCart.confirmations.legalAgeConfirmed = false;
     return updatedShoppingCart;

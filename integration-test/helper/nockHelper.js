@@ -6,6 +6,8 @@ const advertisingTextResponse = require('../backends/webservices/webservicesResp
 const insurancePremiumResponse = require('../backends/webservices/webservicesResponses').insurancePremiumResponse;
 const comparisonDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleComparisonDocumentsResponse;
 const legalDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleLegalDocuments;
+const getNewContractNumber = require('../backends/webservices/webservicesResponses').getNewContractNumber;
+const successfulInsuranceProposal = require('../backends/webservices/webservicesResponses').successfulInsuranceProposal;
 const _ = require('lodash');
 
 
@@ -71,3 +73,15 @@ exports.nockGetLegalDocuments = function nockGetLegalDocuments() {
         .post("/callservice.pl")
         .reply(200, legalDocumentsResponse);
 };
+
+exports.nockGetNewContractNumber = function nockGetNewContractNumber(contractNumber) {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl", /form-data; name="FUNCTION"[^]*GET_NEW_CONTRACTNUMBER/m)
+        .reply(200, getNewContractNumber(contractNumber))
+};
+
+exports.nockSubmitInsuranceProposal = function nockSubmitInsuranceProposal() {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl", /form-data; name="FUNCTION"[^]*SET_XML_INTERFACE/m)
+        .reply(200, successfulInsuranceProposal)
+}

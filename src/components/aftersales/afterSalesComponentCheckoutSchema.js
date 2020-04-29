@@ -1,5 +1,5 @@
-const signedShoppingCartSchema = require('../../shoppingcart/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
-const checkoutSchema = require('../../shoppingcart/checkoutSchema').checkoutSchema;
+const signedShoppingCartSchema = require('../../shoppingcart/schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const checkoutSchema = require('../../shoppingcart/schemas/checkoutSchema').checkoutSchema;
 
 module.exports.afterSalesComponentCheckoutSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",

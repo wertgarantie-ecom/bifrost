@@ -1,8 +1,6 @@
-const _ = require('lodash');
-const shoppingCartProductSchema = _.cloneDeep(require('./addShoppingCartProductSchema').addShoppingCartProductSchema);
-shoppingCartProductSchema.required.push("id");
+const orderSchema = require('./orderSchema');
 
-module.exports.requestWithSignedShoppingCartSchema = {
+exports.requestWithSignedShoppingCartSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
     properties: {
@@ -32,23 +30,25 @@ module.exports.requestWithSignedShoppingCartSchema = {
                             required: true
                         },
                         confirmations: {
-                            termsAndConditionsConfirmed: {
-                                type: "boolean",
-                                required: true
-                            },
-                            legalAgeConfirmed: {
-                                type: "boolean",
-                                required: true
-                            },
+                            type: "object",
+                            properties: {
+                                termsAndConditionsConfirmed: {
+                                    type: "boolean",
+                                    required: true
+                                },
+                                legalAgeConfirmed: {
+                                    type: "boolean",
+                                    required: true
+                                }
+                            }
                         },
                         orders: {
                             type: "array",
-                            items: shoppingCartProductSchema
+                            items: orderSchema
                         }
                     }
                 }
             }
         }
     }
-}
-;
+};

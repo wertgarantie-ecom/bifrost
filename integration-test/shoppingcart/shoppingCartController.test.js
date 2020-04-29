@@ -52,30 +52,29 @@ describe("Checkout Shopping Cart", () => {
         clientData = await testhelper.createAndPersistDefaultClient();
         const wertgarantieProductId = "10";
         const wertgarantieProductName = 'Basic';
-        const wertgarantieShoppingCart =
-            {
-                sessionId: sessionId + "",
-                publicClientId: clientData.publicClientIds[0],
-                orders: [
-                    {
-                        wertgarantieProduct: {
-                            id: wertgarantieProductId,
-                            name: wertgarantieProductName,
-                            paymentInterval: "monthly"
-                        },
-                        shopProduct: {
-                            deviceClass: "Bike",
-                            price: 139999,
-                            model: "SuperBike 3000",
-                        },
-                        id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
-                    }
-                ],
-                confirmations: {
-                    legalAgeConfirmed: true,
-                    termsAndConditionsConfirmed: true
+        const wertgarantieShoppingCart = {
+            sessionId: sessionId + "",
+            publicClientId: clientData.publicClientIds[0],
+            orders: [
+                {
+                    wertgarantieProduct: {
+                        id: wertgarantieProductId,
+                        name: wertgarantieProductName,
+                        paymentInterval: "monthly"
+                    },
+                    shopProduct: {
+                        deviceClass: "Bike",
+                        price: 139999,
+                        model: "SuperBike 3000",
+                    },
+                    id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
                 }
-            };
+            ],
+            confirmations: {
+                legalAgeConfirmed: true,
+                termsAndConditionsConfirmed: true
+            }
+        };
 
         nockhelper.nockHeimdallLogin(clientData);
         nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
@@ -194,4 +193,26 @@ test("should handle invalid JSON in wertgarantieShoppingCart with status 400", a
         });
 
     expect(result.status).toBe(400);
+});
+
+test("should add multiple orders to shopping cart", async () => {
+    const client = await testhelper.createAndPersistDefaultClient();
+    const signedShoppingCart = testhelper.createSignedShoppingCart();
+    const wertgarantieProductId = uuid();
+    const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
+        .send({
+            shopProduct: {
+                model: "Phone X",
+                price: 4500,
+                deviceClass: "Smartphone"
+            },
+            wertgarantieProduct: {
+                id: wertgarantieProductId,
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            },
+            signedShoppingCart: signedShoppingCart
+        });
+
+    expect(result.body.signedShoppingCart.shoppingCart.orders.length).toBe(2);
 });

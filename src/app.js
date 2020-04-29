@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 const validate = require('express-jsonschema').validate;
 const bodyParser = require('body-parser');
-const requestWithSignedShoppingCartSchema = require('./shoppingcart/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const requestWithSignedShoppingCartSchema = require('./shoppingcart/schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
 const localeRequestFilter = require('./routes/localeRequestFilter');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');

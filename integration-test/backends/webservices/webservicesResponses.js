@@ -377,3 +377,21 @@ exports.successfulInsuranceProposal = {
     "STATUSCODE": "0",
     "PAGE": "1"
 };
+
+exports.getNewContractNumber = function getNewContractNumber(contractNumber = "12345678") {
+    return {
+        "RESULT":
+            {
+                "NEWCONTRACTNUMBER": contractNumber
+            },
+        "LANGUAGE": "DE",
+        "MAXAMOUNT": "1",
+        "AMOUNT": "30",
+        "STATUS": "OK",
+        "REQUEST_ID": "98889205",
+        "ORDERBY": {},
+        "SORT": {},
+        "STATUSCODE": "0",
+        "PAGE": "1"
+    }
+}
