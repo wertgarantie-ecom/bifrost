@@ -7,22 +7,27 @@ const nockhelper = require('../helper/nockHelper');
 
 test('should return shopping cart with selected product included', async () => {
     const client = await testhelper.createAndPersistDefaultClient();
-
+    const wertgarantieProductId = uuid();
     const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
         .send({
-            "productId": 12,
-            "deviceClass": "17fd707a-f9c0-11e9-9694-cf549fcf64e2",
-            "devicePrice": 4500,
-            "deviceCurrency": "EUR",
-            "shopProductName": "Phone X"
+            shopProduct: {
+                model: "Phone X",
+                price: 4500,
+                deviceClass: "Smartphone"
+            },
+            wertgarantieProduct: {
+                id: wertgarantieProductId,
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            }
         });
     expect(result.status).toBe(200);
 
     const shoppingCart = result.body.signedShoppingCart.shoppingCart;
-    expect(shoppingCart.products.length).toBe(1);
-    expect(shoppingCart.legalAgeConfirmed).toBe(false);
-    expect(shoppingCart.termsAndConditionsConfirmed).toBe(false);
-    expect(shoppingCart.products[0].deviceClass).toEqual("17fd707a-f9c0-11e9-9694-cf549fcf64e2");
+    expect(shoppingCart.orders.length).toBe(1);
+    expect(shoppingCart.confirmations.legalAgeConfirmed).toBe(false);
+    expect(shoppingCart.confirmations.termsAndConditionsConfirmed).toBe(false);
+    expect(shoppingCart.orders[0].shopProduct.deviceClass).toEqual("Smartphone");
 });
 
 test('should fail when invalid request params are submitted', async () => {
@@ -47,24 +52,29 @@ describe("Checkout Shopping Cart", () => {
         clientData = await testhelper.createAndPersistDefaultClient();
         const wertgarantieProductId = "10";
         const wertgarantieProductName = 'Basic';
-        const wertgarantieShoppingCart =
-            {
-                "sessionId": sessionId + "",
-                "clientId": clientData.publicClientIds[0],
-                "products": [
-                    {
-                        "wertgarantieProductId": wertgarantieProductId,
-                        "wertgarantieProductName": wertgarantieProductName,
-                        "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                        "devicePrice": 139999,
-                        "deviceCurrency": "EUR",
-                        "shopProductName": "SuperBike 3000",
-                        "orderId": "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
-                    }
-                ],
-                "legalAgeConfirmed": true,
-                "termsAndConditionsConfirmed": true
-            };
+        const wertgarantieShoppingCart = {
+            sessionId: sessionId + "",
+            publicClientId: clientData.publicClientIds[0],
+            orders: [
+                {
+                    wertgarantieProduct: {
+                        id: wertgarantieProductId,
+                        name: wertgarantieProductName,
+                        paymentInterval: "monthly"
+                    },
+                    shopProduct: {
+                        deviceClass: "Bike",
+                        price: 139999,
+                        model: "SuperBike 3000",
+                    },
+                    id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
+                }
+            ],
+            confirmations: {
+                legalAgeConfirmed: true,
+                termsAndConditionsConfirmed: true
+            }
+        };
 
         nockhelper.nockHeimdallLogin(clientData);
         nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
@@ -81,7 +91,7 @@ describe("Checkout Shopping Cart", () => {
                 purchasedProducts: [{
                     price: 139999,
                     manufacturer: "Super Bike Inc.",
-                    deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+                    deviceClass: "Bike",
                     model: "SuperBike 3000"
                 }],
                 customer: {
@@ -102,17 +112,20 @@ describe("Checkout Shopping Cart", () => {
         const body = result.body;
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(wertgarantieShoppingCart.sessionId);
-        expect(body.clientId).toEqual(clientData.publicClientIds[0]);
         expect(purchase.wertgarantieProductId).toEqual("10");
         expect(purchase.wertgarantieProductName).toEqual(wertgarantieProductName);
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
         expect(purchase.devicePrice).toEqual(139999);
         expect(purchase.success).toBe(true);
         expect(purchase.message).toEqual("successfully transmitted insurance proposal");
+        expect(purchase.backend).toEqual("heimdall");
         expect(purchase.shopProduct).toEqual("SuperBike 3000");
         expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
-        expect(purchase.activationCode).toEqual("4db56dacfbhce");
+        expect(purchase.backend).toEqual("heimdall");
+        expect(purchase.backendResponseInfo).toEqual({
+            activationCode: "4db56dacfbhce"
+        });
         done();
     });
 
@@ -122,17 +135,20 @@ describe("Checkout Shopping Cart", () => {
         const body = result.body;
         const purchase = body.purchases[0];
         expect(body.sessionId).toEqual(sessionId);
-        expect(body.clientId).toEqual(clientData.publicClientIds[0]);
-        expect(purchase.wertgarantieProductId).toEqual(10);
+        expect(body.clientId).toEqual(clientData.id);
+        expect(purchase.wertgarantieProductId).toEqual("10");
         expect(purchase.wertgarantieProductName).toEqual("Basic");
         expect(purchase.deviceClass).toEqual("6bdd2d93-45d0-49e1-8a0c-98eb80342222");
         expect(purchase.devicePrice).toEqual(139999);
         expect(purchase.success).toBe(true);
         expect(purchase.message).toEqual("successfully transmitted insurance proposal");
         expect(purchase.shopProduct).toEqual("SuperBike 3000");
-        expect(purchase.contractNumber).toEqual(1234);
-        expect(purchase.transactionNumber).toEqual(28850277);
-        expect(purchase.activationCode).toEqual("4db56dacfbhce");
+        expect(purchase.contractNumber).toEqual("1234");
+        expect(purchase.transactionNumber).toEqual("28850277");
+        expect(purchase.backend).toEqual("heimdall");
+        expect(purchase.backendResponseInfo).toEqual({
+            activationCode: "4db56dacfbhce"
+        });
         done();
     });
 });
@@ -181,4 +197,26 @@ test("should handle invalid JSON in wertgarantieShoppingCart with status 400", a
         });
 
     expect(result.status).toBe(400);
+});
+
+test("should add multiple orders to shopping cart", async () => {
+    const client = await testhelper.createAndPersistDefaultClient();
+    const signedShoppingCart = testhelper.createSignedShoppingCart();
+    const wertgarantieProductId = uuid();
+    const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
+        .send({
+            shopProduct: {
+                model: "Phone X",
+                price: 4500,
+                deviceClass: "Smartphone"
+            },
+            wertgarantieProduct: {
+                id: wertgarantieProductId,
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            },
+            signedShoppingCart: signedShoppingCart
+        });
+
+    expect(result.body.signedShoppingCart.shoppingCart.orders.length).toBe(2);
 });

@@ -35,7 +35,7 @@ exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, 
 };
 
 exports.checkout = async function checkout(shoppingCart, webshopData) {
-    const clientData = await clientService.findClientForPublicClientId(shoppingCart.clientId);
+    const clientData = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
     const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientData, shoppingCart.sessionId);
     if (!sessionIdValid) {
         throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");

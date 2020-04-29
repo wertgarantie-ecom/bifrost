@@ -6,6 +6,9 @@ const advertisingTextResponse = require('../backends/webservices/webservicesResp
 const insurancePremiumResponse = require('../backends/webservices/webservicesResponses').insurancePremiumResponse;
 const comparisonDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleComparisonDocumentsResponse;
 const legalDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleLegalDocuments;
+const getNewContractNumber = require('../backends/webservices/webservicesResponses').getNewContractNumber;
+const successfulInsuranceProposal = require('../backends/webservices/webservicesResponses').successfulInsuranceProposal;
+const _ = require('lodash');
 
 
 exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
@@ -18,9 +21,10 @@ exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
         });
 };
 
-exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, response = defaultProductOffersResponse, responseStatus = 200) {
+exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, clientConfig, response = defaultProductOffersResponse, responseStatus = 200) {
+    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === signedShoppingCart.shoppingCart.orders[0].shopProduct.deviceClass).heimdallDeviceClass;
     nock(process.env.HEIMDALL_URI)
-        .get(`/api/v1/product-offers?device_class=${signedShoppingCart.shoppingCart.products[0].deviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.products[0].devicePrice / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
+        .get(`/api/v1/product-offers?device_class=${heimdallDeviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.orders[0].shopProduct.price / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
         .reply(responseStatus, response);
 };
 
@@ -69,3 +73,15 @@ exports.nockGetLegalDocuments = function nockGetLegalDocuments() {
         .post("/callservice.pl")
         .reply(200, legalDocumentsResponse);
 };
+
+exports.nockGetNewContractNumber = function nockGetNewContractNumber(contractNumber) {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl", /form-data; name="FUNCTION"[^]*GET_NEW_CONTRACTNUMBER/m)
+        .reply(200, getNewContractNumber(contractNumber))
+};
+
+exports.nockSubmitInsuranceProposal = function nockSubmitInsuranceProposal() {
+    nock(process.env.WEBSERVICES_URI)
+        .post("/callservice.pl", /form-data; name="FUNCTION"[^]*SET_XML_INTERFACE/m)
+        .reply(200, successfulInsuranceProposal)
+}

@@ -1,118 +1,149 @@
 const addProductToShoppingCartWithOrderId = require('../../src/shoppingcart/shoppingCartService').addProductToShoppingCartWithOrderId;
 const shoppingCartService = require('../../src/shoppingcart/shoppingCartService');
 const signatureService = require('../../src/shoppingcart/signatureService');
-const UnconfirmedShoppingCartError = require('../../src/shoppingcart/shoppingCartService').UnconfirmedShoppingCartError;
+const ClientError = require('../../src/errors/ClientError');
 const uuid = require('uuid');
 const validCustomer = require('../../integration-test/helper/fixtureHelper').validCustomer;
+const clientConfig = require('../../integration-test/helper/fixtureHelper').createDefaultClient();
 
 
 function validProduct() {
     return {
-        wertgarantieProductId: 1234,
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 12.0,
-        deviceCurrency: "EUR",
-        shopProductName: "Phone X",
-        orderId: "9fd47b8a-f984-11e9-adcf-afabcc521083"
-    }
+        id: "9fd47b8a-f984-11e9-adcf-afabcc521083",
+        shopProduct: {
+            model: "Phone X",
+            deviceClass: "Smartphone",
+            price: 1200
+        },
+        wertgarantieProduct: {
+            id: "1234",
+            name: "Komplettschutz",
+            paymentInterval: "monthly"
+        }
+    };
 }
 
-const includedProduct = {
-    wertgarantieProductId: 4543545,
-    deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-    devicePrice: 12.0,
-    deviceCurrency: "EUR",
-    shopProductName: "Phone X",
-    orderId: "5f507954-fed1-45c9-aaa6-30f216d6f163"
+const includedOrder = {
+    id: "5f507954-fed1-45c9-aaa6-30f216d6f163",
+    shopProduct: {
+        model: "Phone X",
+        deviceClass: "Smartphone",
+        price: 1200
+    },
+    wertgarantieProduct: {
+        id: "4543545",
+        name: "Komplettschutz",
+        paymentInterval: "monthly"
+    }
 };
 const validShoppingCart = {
-    clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-    products: [includedProduct],
-    legalAgeConfirmed: true,
-    termsAndConditionsConfirmed: true
+    publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+    orders: [includedOrder],
+    confirmations: {
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
+    }
 };
 
 test("should create and fill new shopping cart if no cart is given", () => {
-    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([validProduct()]);
 });
 
 test("new created shopping cart should have given clientId", () => {
-    const clientId = uuid();
-    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").clientId).toEqual(clientId);
+    const publicClientId = "public:" + uuid();
+    expect(addProductToShoppingCartWithOrderId(undefined, validProduct(), publicClientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").publicClientId).toEqual(publicClientId);
 });
 
 test("should add product to existing shopping cart", () => {
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([includedProduct, validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([includedOrder, validProduct()]);
 });
 
 
 test("should allow duplicate products", () => {
-    let clientId = uuid();
+    const publicClientId = "public:" + uuid();
     const validShoppingCart = {
-        clientId: clientId,
-        products: [validProduct()]
+        publicClientId: publicClientId,
+        orders: [validProduct()],
+        confirmations: {
+            legalAgeConfirmed: false,
+            termsAndConditionsConfirmed: false
+        }
     };
-    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), clientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").products).toEqual([validProduct(), validProduct()]);
+    expect(addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), publicClientId, "9fd47b8a-f984-11e9-adcf-afabcc521083").orders).toEqual([validProduct(), validProduct()]);
 });
 
 test("should confirm valid shopping cart", () => {
-    let clientId = uuid();
+    const publicClientId = "public:" + uuid();
     const validShoppingCart = {
-        clientId: clientId,
+        publicClientId: publicClientId,
         products: [validProduct()],
-        confirmed: false
+        confirmations: {
+            legalAgeConfirmed: false,
+            termsAndConditionsConfirmed: true
+        }
     };
-    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "confirmed");
+    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "legalAgeConfirmed");
 
-    expect(confirmedShoppingCart.confirmed).toEqual(true);
+    expect(confirmedShoppingCart.confirmations.legalAgeConfirmed).toEqual(true);
 });
 
 test("should unconfirm valid shopping cart", () => {
-    let clientId = uuid();
+    const publicClientId = "public:" + uuid();
     const validShoppingCart = {
-        clientId: clientId,
+        publicClientId: publicClientId,
         products: [validProduct()],
-        confirmed: false
+        confirmations: {
+            legalAgeConfirmed: true,
+            termsAndConditionsConfirmed: true
+        }
     };
-    const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, clientId);
+    const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, "termsAndConditionsConfirmed");
 
-    expect(confirmedShoppingCart.confirmed).toEqual(false);
+    expect(confirmedShoppingCart.confirmations.legalAgeConfirmed).toEqual(true);
+    expect(confirmedShoppingCart.confirmations.termsAndConditionsConfirmed).toEqual(false);
 });
 
 test("added product should always reject confirmation", () => {
     const shoppingCartWithAddedProduct = addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083");
-    expect(shoppingCartWithAddedProduct.termsAndConditionsConfirmed).toEqual(false);
-    expect(shoppingCartWithAddedProduct.legalAgeConfirmed).toEqual(false);
+    expect(shoppingCartWithAddedProduct.confirmations.termsAndConditionsConfirmed).toEqual(false);
+    expect(shoppingCartWithAddedProduct.confirmations.legalAgeConfirmed).toEqual(false);
 });
 
 
 test("on checkout call shop price differs from wertgarantie price", async () => {
     const wertgarantieShoppingCart = {
         sessionId: "619f7fda-d77e-4be1-b73c-db145402bcab",
-        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        products: [
+        publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        orders: [
             {
-                wertgarantieProductId: "2",
-                deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
-                devicePrice: "1000",
-                shopProductName: "IPhone X",
-                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+                wertgarantieProduct: {
+                    id: "2",
+                    name: "Basis",
+                    paymentInterval: "monthly"
+                },
+                shopProduct: {
+                    price: "1000",
+                    model: "IPhone X",
+                    deviceClass: "Smartphone",
+                },
+                id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
         ],
-        legalAgeConfirmed: true,
-        termsAndConditionsConfirmed: true
+        confirmations: {
+            legalAgeConfirmed: true,
+            termsAndConditionsConfirmed: true
+        }
     };
 
     const purchasedProducts = [
         {
             price: "1200.93",
             manufacturer: "Apple Inc",
-            deviceClass: "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+            deviceClass: "Smartphone",
             model: "IPhone X",
         }
     ];
     const customer = validCustomer();
-    const secretClientId = "bikesecret1";
 
     const mockClient = jest.fn(() => {
         throw new Error("you should never call me");
@@ -121,7 +152,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
         wertgarantieShoppingCart,
-        secretClientId,
+        clientConfig,
         mockClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
         mockRepository);
@@ -129,12 +160,13 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     expect(result).toEqual({
         "sessionId": "619f7fda-d77e-4be1-b73c-db145402bcab",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
-        "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        "clientId": clientConfig.id,
         "purchases": [
             {
                 "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
                 "wertgarantieProductId": "2",
-                "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                "wertgarantieProductName": "Basis",
+                "deviceClass": "Smartphone",
                 "devicePrice": "1000",
                 "success": false,
                 "message": "couldn't find matching product in shop cart for wertgarantie product",
@@ -143,7 +175,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                     {
                         "price": "1200.93",
                         "manufacturer": "Apple Inc",
-                        "deviceClass": "bb3a615d-e92f-4d24-a4cc-22f8a87fc544",
+                        "deviceClass": "Smartphone",
                         "model": "IPhone X"
                     }
                 ]
@@ -163,18 +195,20 @@ function generateIds(ids) {
 
 test("checkout call executed without confirmation", async () => {
     const wertgarantieShoppingCart = {
-        clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        products: [
+        publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+        orders: [
             {
-                wertgarantieProductId: "2",
-                shopProductId: "1",
-                deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                devicePrice: "1000",
-                shopProductName: "Super Bike",
-                orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+                wertgarantieProduct: {
+                    id: "2"
+                },
+                shopProduct: {
+                    price: "1000",
+                    deviceClass: "Bike",
+                    model: "Super Bike"
+                },
+                id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
-        ],
-        confirmed: false
+        ]
     };
 
     const signedWertgarantieCart = signatureService.signShoppingCart(wertgarantieShoppingCart);
@@ -183,7 +217,7 @@ test("checkout call executed without confirmation", async () => {
         {
             price: "1000",
             manufacturer: "Apple Inc",
-            deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
+            deviceClass: "Smartphone",
             model: "IPhone X",
             productId: "1"
         }
@@ -195,7 +229,7 @@ test("checkout call executed without confirmation", async () => {
         await shoppingCartService.checkoutShoppingCart(purchasedProducts, customer, signedWertgarantieCart, secretClientId);
         expect.fail();
     } catch (e) {
-        expect(e).toBeInstanceOf(UnconfirmedShoppingCartError);
+        expect(e).toBeInstanceOf(ClientError);
     }
 });
 

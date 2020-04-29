@@ -12,22 +12,14 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(req, 
     if (!client) {
         return res.status(400).send({
             message: "Unknown Client Id"
-        })
+        });
     }
-    const wertgarantieProductToAdd = {
-        wertgarantieProductId: req.body.productId,
-        wertgarantieProductName: req.body.productName,
-        deviceClass: req.body.deviceClass,
-        devicePrice: parseInt(req.body.devicePrice),
-        deviceCurrency: req.body.deviceCurrency,
-        shopProductName: req.body.shopProductName
-    };
-    const shoppingCart = service.addProductToShoppingCart(req.shoppingCart, wertgarantieProductToAdd, publicClientId);
+    const shoppingCart = service.addProductToShoppingCart(req.shoppingCart, req.body, publicClientId);
 
     res.status(200).send({
         shoppingCart: shoppingCart,
         message: "Added product to shopping cart",
-        addedProduct: wertgarantieProductToAdd
+        addedProduct: req.body
     });
 };
 

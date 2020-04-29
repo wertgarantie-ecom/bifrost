@@ -9,7 +9,13 @@ describe('add phone test shop client', () => {
             name: "Test Shop Handy",
             backends: {
                 heimdall: {
-                    clientId: "test-phone-heimdall-clientId"
+                    clientId: "test-phone-heimdall-clientId",
+                    deviceClassMappings: [
+                        {
+                            shopDeviceClass: "Smartphone",
+                            heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                        }
+                    ]
                 },
                 webservices: {
                     username: "test-phone-user",
@@ -241,7 +247,13 @@ describe('add phone test shop client', () => {
             name: "Handyflash DEV",
             backends: {
                 heimdall: {
-                    clientId: "test-handyflash-heimdall-clientId"
+                    clientId: "test-handyflash-heimdall-clientId",
+                    deviceClassMappings: [
+                        {
+                            shopDeviceClass: "Smartphone",
+                            heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                        }
+                    ]
                 },
                 webservices: {
                     username: "test-handyflash-user",

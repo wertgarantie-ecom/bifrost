@@ -62,8 +62,17 @@ test("should return valid insurance proposal XML", () => {
 
 test("should submit insurance proposal", async () => {
     const clientConfig = fixtureHelper.createDefaultClient();
-    const wertgarantieProduct = {
-        wertgarantieProductId: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d"
+    const productOrder = {
+        shopProduct: {
+            deviceClass: "Smartphone",
+            price: 139999,
+            model: "Smartphone 11x"
+        },
+        wertgarantieProduct: {
+            id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+            name: "Komplettschutz",
+            paymentInterval: "monthly"
+        }
     };
     const purchasedProduct = {
         price: 139999,
@@ -94,20 +103,23 @@ test("should submit insurance proposal", async () => {
         findByClientId: () => testProductOffers.completeWebserviceProductOffers
     };
 
-    const result = await webservicesInsuranceProposalService.submitInsuranceProposal(wertgarantieProduct, customer, purchasedProduct, clientConfig, mockWebservicesClient, mockWebservicesProductOffersRepository, satznummerGenerator);
+    const result = await webservicesInsuranceProposalService.submitInsuranceProposal(productOrder, customer, purchasedProduct, clientConfig, mockWebservicesClient, mockWebservicesProductOffersRepository, satznummerGenerator);
     expect(result).toEqual({
         "backend": "webservices",
         "contractNumber": "12345678",
-        "deviceClass": undefined,
-        "devicePrice": undefined,
+        "deviceClass": "Smartphone",
+        "devicePrice": 139999,
         "id": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
         "message": "successfully transmitted insurance proposal",
-        "resultCode": "Verarbeitet",
-        "shopProduct": undefined,
+        "shopProduct": "Smartphone 11x",
         "success": true,
         "transactionNumber": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
         "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-        "wertgarantieProductName": undefined,
+        "wertgarantieProductName": "Komplettschutz",
+        "backendResponseInfo": {
+            "statusText": "Verarbeitet",
+            "statusCode": "3"
+        }
     });
 });
 

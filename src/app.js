@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 const validate = require('express-jsonschema').validate;
 const bodyParser = require('body-parser');
-const requestWithSignedShoppingCartSchema = require('./shoppingcart/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const requestWithSignedShoppingCartSchema = require('./shoppingcart/schemas/signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
 const localeRequestFilter = require('./routes/localeRequestFilter');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
@@ -82,7 +82,11 @@ app.use(function (err, req, res, next) {
     } else if (err.name === 'ProductOffersError') {
         err.status = 400;
     }
-    console.error(err);
+    if (err.validations) {
+        console.error(JSON.stringify(err, null, 2));
+    } else {
+        console.error(err);
+    }
     res.status(err.status || 500).json({
         error: err.name,
         message: err.message

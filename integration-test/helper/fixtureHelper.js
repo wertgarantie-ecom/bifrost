@@ -25,33 +25,38 @@ exports.validCustomer = function validCustomer() {
 
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {clientId = "public:" + uuid(), deviceClass = "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d", devicePrice = 139999, shopProductId = "1", wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
+    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
     const sessionId = uuid();
-    const shoppingCart =
-        {
-            "sessionId": sessionId,
-            "clientId": clientId,
-            "products": [
-                {
-                    "wertgarantieProductId": wertgarantieProductId,
-                    "wertgarantieProductName": wertgarantieProductName,
-                    "shopProductId": shopProductId,
-                    "deviceClass": deviceClass,
-                    "devicePrice": devicePrice,
-                    "deviceCurrency": "EUR",
-                    "shopProductName": "E-Mountainbike Premium 3000",
-                    "orderId": "e0accedd-b087-46df-899e-91229eb43747"
-                }
-            ],
-            "legalAgeConfirmed": false,
-            "termsAndConditionsConfirmed": false
-        };
+    const shoppingCart = {
+        sessionId: sessionId,
+        publicClientId: publicClientId,
+        orders: [
+            {
+                shopProduct: {
+                    model: "E-Mountainbike Premium 3000",
+                    price: devicePrice,
+                    deviceClass: deviceClass,
+                },
+                wertgarantieProduct: {
+                    id: wertgarantieProductId,
+                    name: wertgarantieProductName,
+                    paymentInterval: "monthly"
+                },
+                id: uuid()
+            }
+        ],
+        confirmations: {
+            legalAgeConfirmed: false,
+            termsAndConditionsConfirmed: false
+        }
+    };
 
     return signatureService.signShoppingCart(shoppingCart);
 };
 
 exports.createDefaultClient = function createDefaultClient() {
     return {
+        id: uuid(),
         name: "testclient",
         backends: {
             heimdall: {
@@ -64,6 +69,10 @@ exports.createDefaultClient = function createDefaultClient() {
                     {
                         shopDeviceClass: "Bike",
                         heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                    },
+                    {
+                        shopDeviceClass: "Test",
+                        heimdallDeviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d"
                     }
                 ]
             },

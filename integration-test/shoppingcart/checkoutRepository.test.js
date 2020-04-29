@@ -10,29 +10,31 @@ describe("test persist and find by session in checkout repository", () => {
     const purchases = [
         {
             id: purchase1Id,
-            wertgarantieProductId: 10,
+            wertgarantieProductId: "10",
             wertgarantieProductName: "Basic",
             deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
             devicePrice: 139999,
             success: true,
             message: "what a nice purchase",
             shopProduct: "iPhone X",
-            contractNumber: 23479998,
-            transactionNumber: 7524545,
-            activationCode: "a447s7s6666f"
+            contractNumber: "23479998",
+            transactionNumber: "7524545",
+            backend: "heimdall",
+            backendResponseInfo: "a447s7s6666f"
         },
         {
             id: purchase2Id,
-            wertgarantieProductId: 10,
+            wertgarantieProductId: "10",
             wertgarantieProductName: "Premiun",
             deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
             devicePrice: 139999,
             success: true,
             message: "it's awesome",
             shopProduct: "iPhone X",
-            contractNumber: 23479999,
-            transactionNumber: 7524546,
-            activationCode: "a447s7s6666g"
+            contractNumber: "23479999",
+            transactionNumber: "7524546",
+            backend: "heimdall",
+            backendResponseInfo: "a447s7s6666g"
         }
     ];
 

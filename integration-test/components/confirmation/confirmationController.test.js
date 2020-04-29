@@ -22,7 +22,7 @@ test('should handle shopping cart confirmation', async function () {
         .set('Accept', 'application/json');
 
     expect(result.status).toBe(200);
-    expect(result.body.signedShoppingCart.shoppingCart.legalAgeConfirmed).toBe(true);
+    expect(result.body.signedShoppingCart.shoppingCart.confirmations.legalAgeConfirmed).toBe(true);
 });
 
 describe('should handle shopping cart confirmation rejection', function () {
@@ -42,7 +42,7 @@ describe('should handle shopping cart confirmation rejection', function () {
             .set('Accept', 'application/json');
 
         expect(result.status).toBe(200);
-        expect(result.body.signedShoppingCart.shoppingCart.legalAgeConfirmed).toBe(false);
+        expect(result.body.signedShoppingCart.shoppingCart.confirmations.legalAgeConfirmed).toBe(false);
     });
 });
 
@@ -51,12 +51,12 @@ test("should return valid confirmation data", async () => {
     const clientData = await testhelper.createAndPersistDefaultClient();
 
     const signedShoppingCart = testhelper.createSignedShoppingCart({
-        clientId: clientData.publicClientIds[0],
-        devicePrice: parseFloat(getProductOffersResponse.payload[0].price) * 100
+        publicClientId: clientData.publicClientIds[0],
     });
 
+
     nockHelper.nockHeimdallLogin(clientData);
-    nockHelper.getNockedHeimdallProductOffers(signedShoppingCart);
+    nockHelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
 
     const response = await request.agent(app).put('/wertgarantie/components/confirmation')
         .send({signedShoppingCart: signedShoppingCart});
@@ -65,5 +65,5 @@ test("should return valid confirmation data", async () => {
     expect(response.body.shoppingCart).toEqual(undefined);
     expect(response.body.legalAgeConfirmed).toEqual(false);
     expect(response.body.termsAndConditionsConfirmed).toEqual(false);
-    expect(response.body.products.length).toEqual(1);
+    expect(response.body.orders.length).toEqual(1);
 });

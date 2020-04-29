@@ -25,60 +25,49 @@ function mockClientService(clientData) {
 const testShoppingCart = {
     clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     signature: "signature",
-    products: [
+    orders: [
         {
-            wertgarantieProductId: "9338a770-0d0d-4203-8d54-583a03bdebf3",
-            shopProductId: "1",
-            deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-            devicePrice: "1000",
-            shopProductName: "Super Bike",
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+            shopProduct: {
+                model: "Super Bike",
+                price: 100000,
+                deviceClass: "Bike"
+            },
+            wertgarantieProduct: {
+                id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            }
         },
         {
-            wertgarantieProductId: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-            shopProductId: "1",
-            deviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-            devicePrice: "1000",
-            shopProductName: "Super Bike",
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            id: "28ff0413-bcfd-48f8-b003-04b57762067a",
+            shopProduct: {
+                model: "Super Bike",
+                price: 100000,
+                deviceClass: "Bike"
+            },
+            wertgarantieProduct: {
+                id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+                name: "Komplettschutz",
+                paymentInterval: "monthly"
+            }
         }
     ],
-    legalAgeConfirmed: true,
-    termsAndConditionsConfirmed: true
+    confirmations: {
+        legalAgeConfirmed: true,
+        termsAndConditionsConfirmed: true
+    }
 };
 
 const expectedResponse = {
-    shoppingCart: {
-        "clientId": "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-        "signature": "signature",
-        "products": [
-            {
-                "wertgarantieProductId": "9338a770-0d0d-4203-8d54-583a03bdebf3",
-                "shopProductId": "1",
-                "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                "devicePrice": "1000",
-                "shopProductName": "Super Bike",
-                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
-            },
-            {
-                "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-                "shopProductId": "1",
-                "deviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222",
-                "devicePrice": "1000",
-                "shopProductName": "Super Bike",
-                "orderId": "18ff0413-bcfd-48f8-b003-04b57762067a"
-            }
-        ],
-        "legalAgeConfirmed": true,
-        "termsAndConditionsConfirmed": true
-    },
+    shoppingCart: testShoppingCart,
     legalAgeConfirmed: true,
     termsAndConditionsConfirmed: true,
     headerTitle: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
     legalAgeConfirmationText: "Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.",
     pleaseConfirmText: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
     confirmText: 'Bitte bestätige noch kurz:',
-    products: [
+    orders: [
         {
             paymentInterval: "monatl.",
             price: "ab 8,00 €",
@@ -101,7 +90,7 @@ const expectedResponse = {
             productInformationSheetText: "Produktinformationsblatt",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
-            orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
+            orderId: "28ff0413-bcfd-48f8-b003-04b57762067a"
         },
     ],
     generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
@@ -113,6 +102,7 @@ const expectedResponse = {
 
 
 test("should return proper confirmation component data for one product", async () => {
+    console.log("test");
     const confirmationData = await service.prepareConfirmationData(
         testShoppingCart,
         productOffersMock,
