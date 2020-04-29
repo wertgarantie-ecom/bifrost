@@ -123,7 +123,9 @@ describe("Checkout Shopping Cart", () => {
         expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
         expect(purchase.backend).toEqual("heimdall");
-        expect(purchase.backendResponseInfo).toEqual("4db56dacfbhce");
+        expect(purchase.backendResponseInfo).toEqual({
+            activationCode: "4db56dacfbhce"
+        });
         done();
     });
 
@@ -144,7 +146,9 @@ describe("Checkout Shopping Cart", () => {
         expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
         expect(purchase.backend).toEqual("heimdall");
-        expect(purchase.backendResponseInfo).toEqual("4db56dacfbhce");
+        expect(purchase.backendResponseInfo).toEqual({
+            activationCode: "4db56dacfbhce"
+        });
         done();
     });
 });

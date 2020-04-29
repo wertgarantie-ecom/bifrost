@@ -50,7 +50,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         () => "2fcb053d-873c-4046-87e4-bbd75566901d");
 
     expect(mockHeimdallClient.sendWertgarantieProductCheckout.mock.calls[0][0]).toEqual({
-        productId: "2",
+        productId: 2,
         customer_company: 'INNOQ',
         customer_salutation: 'Herr',
         customer_firstname: 'Max',
@@ -82,7 +82,9 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         "success": true,
         "message": "successfully transmitted insurance proposal",
         "shopProduct": "IPhone X",
-        "backendResponseInfo": "123456",
+        "backendResponseInfo": {
+            "activationCode": "123456"
+        },
         "contractNumber": "28850277",
         "transactionNumber": "28850279",
         "backend": "heimdall",

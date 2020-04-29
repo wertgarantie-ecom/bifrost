@@ -31,7 +31,10 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
             contractNumber: contractnumber,
             transactionNumber: satznummer,
             backend: "webservices",
-            backendResponseInfo: submitResult.STATUS_TEXT
+            backendResponseInfo: {
+                statusText: submitResult.STATUS_TEXT,
+                statusCode: submitResult.STATUS_CODE
+            }
         };
     } catch (e) {
         console.error(e);

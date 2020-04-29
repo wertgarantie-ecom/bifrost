@@ -116,7 +116,10 @@ test("should submit insurance proposal", async () => {
         "transactionNumber": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
         "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
         "wertgarantieProductName": "Komplettschutz",
-        "backendResponseInfo": "Verarbeitet"
+        "backendResponseInfo": {
+            "statusText": "Verarbeitet",
+            "statusCode": "3"
+        }
     });
 });
 

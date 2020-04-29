@@ -20,7 +20,9 @@ module.exports.checkout = async function checkout(clientConfig, order, customer,
             contractNumber: responseBody.payload.contract_number,
             transactionNumber: responseBody.payload.transaction_number,
             backend: "heimdall",
-            backendResponseInfo: responseBody.payload.activation_code
+            backendResponseInfo: {
+                activationCode: responseBody.payload.activation_code
+            }
         };
     } catch (e) {
         return {
@@ -40,7 +42,7 @@ module.exports.checkout = async function checkout(clientConfig, order, customer,
 
 function prepareHeimdallCheckoutData(order, customer, shopSubmittedPurchase, date, heimdallDeviceClass) {
     return {
-        productId: order.wertgarantieProduct.id,
+        productId: parseInt(order.wertgarantieProduct.id),
         customer_company: customer.company,
         customer_salutation: customer.salutation,
         customer_firstname: customer.firstname,

@@ -71,13 +71,13 @@ exports.getProductOffers = async function getProductOffers(clientConfig, deviceC
     return response.payload;
 };
 
-exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(data, client, httpClient = instance) {
-    const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + data.productId + "/checkout";
+exports.sendWertgarantieProductCheckout = async function sendWertgarantieProductCheckout(requestBody, client, httpClient = instance) {
+    const heimdallCheckoutUrl = process.env.HEIMDALL_URI + "/api/v1/products/" + requestBody.productId + "/checkout";
     const bearerToken = await getBearerToken(client, httpClient);
     const request = {
         method: 'post',
         url: heimdallCheckoutUrl,
-        data: data,
+        data: requestBody,
         withCredentials: true,
         headers: {
             "Authorization": bearerToken,

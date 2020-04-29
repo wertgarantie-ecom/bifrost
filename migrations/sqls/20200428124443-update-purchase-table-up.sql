@@ -7,3 +7,6 @@ ADD COLUMN backend text;
 
 ALTER TABLE purchase
 RENAME activationCode TO backendResponseInfo;
+
+ALTER TABLE purchase
+ADD COLUMN backendResponseInfoJson jsonb;
