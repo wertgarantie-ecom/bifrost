@@ -41,10 +41,10 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
-        infoSheetText: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).name,
-        infoSheetUri: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).uri,
-        detailsDocText: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).name,
-        detailsDocUri: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).uri,
+        infoSheetText: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).name, // GTCI
+        infoSheetUri: displayableProductOffer.getDocument(documentTypes.LEGAL_NOTICE).uri, // GTCI --> naming hier auch ändern infoSheet und detailsDoc is scheiße
+        detailsDocText: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).name, // IPID
+        detailsDocUri: displayableProductOffer.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET).uri, // IPID
         priceFormatted: displayableProductOffer.getPriceFormatted(),
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(),
         imageLink: imageLink

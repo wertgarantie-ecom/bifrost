@@ -314,24 +314,29 @@ exports.multipleLegalDocuments = {
     "RESULT": {
         "DOCUMENT": [
             {
-                "FILENAME": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                "CONTENT": "JVBERi0xLjYNJcjIyMjIyMgNNCAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDk0MjY+PnN0cmVhbQ0K"
+                "DOCUMENT_TYPE": "GDPR",
+                "FILENAME": "GDPR.pdf",
+                "CONTENT": "JVBERi0xLjQNJeLjz9MNCjcgMCBvYmoNPDwvTGluZWFyaXplZCAxL0wgMzg5MjkvTyA5L0UgMjgwMjkvTi"
             },
             {
-                "FILENAME": "Elektro BOC 1118_RECHTSDOKUMENTE.PDF",
-                "CONTENT": "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE4MTEyOTE1MDYwNCswMScwMCcpL0Ny"
+                "DOCUMENT_TYPE": "GTCI",
+                "FILENAME": "GTCI.pdf",
+                "CONTENT": "JVBERi0xLjYNJeLjz9MNCjExIDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDM3Mj"
             },
             {
-                "FILENAME": "GU WG DE RAD KS 0818_RECHTSDOKUMENTE.PDF",
-                "CONTENT": "JVBERi0xLjQKJeLjz9MKCjkwIDAgb2JqCjw8IC9MaW5lYXJpemVkIDEgL0wgMTM2MDc3MSAvSCBbIDk1MiAxOTQgXSAv"
+                "DOCUMENT_TYPE": "IPID",
+                "FILENAME": "IPID.pdf",
+                "CONTENT": "JVBERi0xLjYNJeLjz9MNCjI2IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDkyNTM0L08gMjgvRSA0MTYyNS9OIDIvV"
             },
             {
-                "FILENAME": "Werbetext2",
-                "CONTENT": "inkl. Neukaufbeteiligung"
+                "DOCUMENT_TYPE": "POLICY",
+                "FILENAME": "POLICY.pdf",
+                "CONTENT": "JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL"
             },
             {
-                "FILENAME": "GU WG DE KS 0918_RECHTSDOKUMENTE.PDF",
-                "CONTENT": "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE4MTAxMDE1NDQzMCswMScwMCcpL0Ny"
+                "DOCUMENT_TYPE": "SEPA",
+                "FILENAME": "SEPA.pdf",
+                "CONTENT": "JVBERi0xLjYNJeLjz9MNCjcgMCBvYmoNPDwvTGluZWFyaXplZCAxL0wgMTcwMjYvTyA5L0UgMTMxMTYvTiAxL1QgMTY3Mzc"
             }
         ]
     },
