@@ -188,6 +188,7 @@ exports.getLegalDocuments = async function getLegalDocuments(session, applicatio
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
+    formData.append('DOCUMENT_TYPE', 'EINZELN');
     const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.DOCUMENT)) {
         result.RESULT.DOCUMENT = [result.RESULT.DOCUMENT];

@@ -5,81 +5,75 @@ const app = require('../src/app');
 describe('add phone test shop client', () => {
     test('should add phone test shop client configuration', async (done) => {
         const validData = {
-            id: "433295ef-ec5d-45d2-8701-d530e44fcf88",
-            name: "Test Shop Handy",
-            backends: {
-                heimdall: {
-                    clientId: "test-phone-heimdall-clientId",
-                    deviceClassMappings: [
+            "id": "433295ef-ec5d-45d2-8701-d530e44fcf88",
+            "name": "Test Shop Handy",
+            "backends": {
+                "heimdall": {
+                    "clientId": "test-phone-heimdall-clientId",
+                    "deviceClassMappings": [
                         {
-                            shopDeviceClass: "Smartphone",
-                            heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                            "shopDeviceClass": "Smartphone",
+                            "heimdallDeviceClass": "1dfd4549-9bdc-4285-9047-e5088272dade"
                         }
                     ]
                 },
-                webservices: {
-                    username: "test-phone-user",
-                    password: "test-phone-password",
-                    productOffersConfigurations: [
+                "webservices": {
+                    "username": "test-phone-user",
+                    "password": "test-phone-password",
+                    "productOffersConfigurations": [
                         {
-                            name: "Komplettschutz",
-                            productType: "KOMPLETTSCHUTZ_2019",
-                            applicationCode: "GU WG DE KS 0419",
-                            basicRiskType: "KOMPLETTSCHUTZ",
-                            defaultPaymentInterval: "monthly",
-                            deviceClasses: [
+                            "name": "Komplettschutz",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
                                 {
-                                    objectCode: "9025",
-                                    objectCodeExternal: "Smartphone",
-                                    priceRanges: [
+                                    "objectCode": "9025",
+                                    "objectCodeExternal": "Smartphone",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 },
                                 {
-                                    objectCode: "73",
-                                    objectCodeExternal: "Mobilfunk",
-                                    priceRanges: [
+                                    "objectCode": "73",
+                                    "objectCodeExternal": "Mobilfunk",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 }
 
                             ],
-                            documents: {
-                                legalDocuments: [
-                                    {
-                                        type: documentTypes.LEGAL_NOTICE,
-                                        pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                                    },
-                                    {
-                                        type: documentTypes.PRODUCT_INFORMATION_SHEET,
-                                        pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
-                                    }
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
                                 ],
-                                comparisonDocuments: []
+                                "comparisonDocuments": []
                             },
-                            advantages: [
+                            "advantages": [
                                 "Für private und berufliche Nutzung",
                                 "Unsachgemäße Handhabung",
                                 "Weltweiter Schutz",
@@ -90,67 +84,61 @@ describe('add phone test shop client', () => {
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung"
                             ],
-                            risks: []
+                            "risks": []
                         },
                         {
-                            name: "Komplettschutz mit Premium-Option",
-                            productType: "KOMPLETTSCHUTZ_2019",
-                            applicationCode: "GU WG DE KS 0419",
-                            basicRiskType: "KOMPLETTSCHUTZ",
-                            defaultPaymentInterval: "monthly",
-                            deviceClasses: [
+                            "name": "Komplettschutz mit Premium-Option",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
                                 {
-                                    objectCode: "9025",
-                                    objectCodeExternal: "Smartphone",
-                                    priceRanges: [
+                                    "objectCode": "9025",
+                                    "objectCodeExternal": "Smartphone",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 },
                                 {
-                                    objectCode: "73",
-                                    objectCodeExternal: "Mobilfunk",
-                                    priceRanges: [
+                                    "objectCode": "73",
+                                    "objectCodeExternal": "Mobilfunk",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 }
 
                             ],
-                            documents: {
-                                legalDocuments: [
-                                    {
-                                        type: documentTypes.LEGAL_NOTICE,
-                                        pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                                    },
-                                    {
-                                        type: documentTypes.PRODUCT_INFORMATION_SHEET,
-                                        pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
-                                    }
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
                                 ],
-                                comparisonDocuments: []
+                                "comparisonDocuments": []
                             },
-                            advantages: [
+                            "advantages": [
                                 "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
                                 "Diebstahlschutz",
                                 "Keine Selbstbeteiligung im Schadensfall",
@@ -165,17 +153,16 @@ describe('add phone test shop client', () => {
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung"
                             ],
-                            risks: ["DIEBSTAHLSCHUTZ"]
+                            "risks": ["DIEBSTAHLSCHUTZ"]
                         }
                     ]
-
                 },
             },
-            activePartnerNumber: 11111,
-            secrets: [
+            "activePartnerNumber": 11111,
+            "secrets": [
                 "secret:test-phone-secret"
             ],
-            publicClientIds: [
+            "publicClientIds": [
                 "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"
             ],
         };
@@ -201,24 +188,29 @@ describe('add phone test shop client', () => {
     test('should add bike test shop client configuration', async (done) => {
 
         const validData = {
-            id: "ad0a99e6-a165-4eda-91fc-564fb3f935b4",
-            name: "Test Shop Bike",
-            backends: {
-                heimdall: {
-                    clientId: "test-bike-heimdall-clientId"
+            "id": "ad0a99e6-a165-4eda-91fc-564fb3f935b4",
+            "name": "Test Shop Bike",
+            "backends": {
+                "heimdall": {
+                    "clientId": "test-bike-heimdall-clientId",
+                    "deviceClassMappings": [
+                        {
+                            "shopDeviceClass": "Bike",
+                            "heimdallDeviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
+                        }
+                    ]
                 },
-                webservices: {
-                    username: "test-bike-user",
-                    password: "test-bike-password",
-                    productOffersConfigurations: []
+                "webservices": {
+                    "username": "test-bike-user",
+                    "password": "test-bike-password",
+                    "productOffersConfigurations": []
                 }
             },
-
-            activePartnerNumber: 22222,
-            secrets: [
+            "activePartnerNumber": 22222,
+            "secrets": [
                 "secret:test-bike-secret"
             ],
-            publicClientIds: [
+            "publicClientIds": [
                 "public:5a576bd2-1953-4d20-80de-4de00d65fdc7"
             ]
         };
@@ -243,81 +235,75 @@ describe('add phone test shop client', () => {
 
     test('should add Handyflash DEV test client configuration', async (done) => {
         const validData = {
-            id: "9302410c-fbbe-44e3-a628-0d42d3944078",
-            name: "Handyflash DEV",
-            backends: {
-                heimdall: {
-                    clientId: "test-handyflash-heimdall-clientId",
-                    deviceClassMappings: [
+            "id": "9302410c-fbbe-44e3-a628-0d42d3944078",
+            "name": "Handyflash DEV",
+            "backends": {
+                "heimdall": {
+                    "clientId": "test-handyflash-heimdall-clientId",
+                    "deviceClassMappings": [
                         {
-                            shopDeviceClass: "Smartphone",
-                            heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
+                            "shopDeviceClass": "Smartphone",
+                            "heimdallDeviceClass": "1dfd4549-9bdc-4285-9047-e5088272dade"
                         }
                     ]
                 },
-                webservices: {
-                    username: "test-handyflash-user",
-                    password: "test-handyflash-password",
-                    productOffersConfigurations: [
+                "webservices": {
+                    "username": "test-handyflash-user",
+                    "password": "test-handyflash-password",
+                    "productOffersConfigurations": [
                         {
-                            name: "Komplettschutz",
-                            productType: "KOMPLETTSCHUTZ_2019",
-                            applicationCode: "GU WG DE KS 0419",
-                            basicRiskType: "KOMPLETTSCHUTZ",
-                            defaultPaymentInterval: "monthly",
-                            deviceClasses: [
+                            "name": "Komplettschutz",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
                                 {
-                                    objectCode: "9025",
-                                    objectCodeExternal: "Smartphone",
-                                    priceRanges: [
+                                    "objectCode": "9025",
+                                    "objectCodeExternal": "Smartphone",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 },
                                 {
-                                    objectCode: "73",
-                                    objectCodeExternal: "Mobilfunk",
-                                    priceRanges: [
+                                    "objectCode": "73",
+                                    "objectCodeExternal": "Mobilfunk",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 }
 
                             ],
-                            documents: {
-                                legalDocuments: [
-                                    {
-                                        type: documentTypes.LEGAL_NOTICE,
-                                        pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                                    },
-                                    {
-                                        type: documentTypes.PRODUCT_INFORMATION_SHEET,
-                                        pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
-                                    }
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
                                 ],
-                                comparisonDocuments: []
+                                "comparisonDocuments": []
                             },
-                            advantages: [
+                            "advantages": [
                                 "Für private und berufliche Nutzung",
                                 "Unsachgemäße Handhabung",
                                 "Weltweiter Schutz",
@@ -328,67 +314,61 @@ describe('add phone test shop client', () => {
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung"
                             ],
-                            risks: []
+                            "risks": []
                         },
                         {
-                            name: "Komplettschutz mit Premium-Option",
-                            productType: "KOMPLETTSCHUTZ_2019",
-                            applicationCode: "GU WG DE KS 0419",
-                            basicRiskType: "KOMPLETTSCHUTZ",
-                            defaultPaymentInterval: "monthly",
-                            deviceClasses: [
+                            "name": "Komplettschutz mit Premium-Option",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
                                 {
-                                    objectCode: "9025",
-                                    objectCodeExternal: "Smartphone",
-                                    priceRanges: [
+                                    "objectCode": "9025",
+                                    "objectCodeExternal": "Smartphone",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 },
                                 {
-                                    objectCode: "73",
-                                    objectCodeExternal: "Mobilfunk",
-                                    priceRanges: [
+                                    "objectCode": "73",
+                                    "objectCodeExternal": "Mobilfunk",
+                                    "priceRanges": [
                                         {
-                                            minClose: 0,
-                                            maxOpen: 30001
+                                            "minClose": 0,
+                                            "maxOpen": 30001
                                         },
                                         {
-                                            minClose: 30001,
-                                            maxOpen: 80001
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
                                         },
                                         {
-                                            minClose: 80001,
-                                            maxOpen: 180001
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
                                         }
                                     ]
                                 }
 
                             ],
-                            documents: {
-                                legalDocuments: [
-                                    {
-                                        type: documentTypes.LEGAL_NOTICE,
-                                        pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                                    },
-                                    {
-                                        type: documentTypes.PRODUCT_INFORMATION_SHEET,
-                                        pattern: "GU WG DE KS 0419_PRODUKTINFORMATIONSBLATT.PDF"
-                                    }
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
                                 ],
-                                comparisonDocuments: []
+                                "comparisonDocuments": []
                             },
-                            advantages: [
+                            "advantages": [
                                 "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
                                 "Diebstahlschutz",
                                 "Keine Selbstbeteiligung im Schadensfall",
@@ -403,16 +383,16 @@ describe('add phone test shop client', () => {
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung"
                             ],
-                            risks: ["DIEBSTAHLSCHUTZ"]
+                            "risks": ["DIEBSTAHLSCHUTZ"]
                         }
                     ]
                 }
             },
-            activePartnerNumber: 33333,
-            secrets: [
+            "activePartnerNumber": 33333,
+            "secrets": [
                 "secret:test-handyflash-secret"
             ],
-            publicClientIds: [
+            "publicClientIds": [
                 "public:b9f303d0-74e1-11ea-b9e9-034d1bd36e8d"
             ],
         };

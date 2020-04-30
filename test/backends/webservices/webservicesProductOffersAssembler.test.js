@@ -133,10 +133,8 @@ test('should getLegalDocuments', async () => {
     const productOfferConfig = {
         documents: {
             legalDocuments: [
-                {
-                    type: documentTypes.LEGAL_NOTICE,
-                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                }
+                documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
             ],
         }
     };
@@ -146,10 +144,13 @@ test('should getLegalDocuments', async () => {
     };
 
     const result = await webservicesService.getLegalDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
-    expect(result.length).toBe(1);
-    expect(result[0].documentTitle).toEqual("GU WG DE KS 0419_RECHTSDOKUMENTE.PDF");
-    expect(result[0].documentType).toEqual(documentTypes.LEGAL_NOTICE);
+    expect(result.length).toBe(2);
+    expect(result[0].documentTitle).toEqual("GTCI.pdf");
+    expect(result[0].documentType).toEqual(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE);
     expect(result[0].documentId).toEqual("legalDocumentID");
+    expect(result[1].documentTitle).toEqual("IPID.pdf");
+    expect(result[1].documentType).toEqual(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
+    expect(result[1].documentId).toEqual("legalDocumentID");
 });
 
 test('should getDocuments', async () => {
@@ -158,10 +159,8 @@ test('should getDocuments', async () => {
         productType: "KOMPLETTSCHUTZ_2019",
         documents: {
             legalDocuments: [
-                {
-                    type: documentTypes.LEGAL_NOTICE,
-                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                }
+                documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
             ],
             comparisonDocuments: []
         }
@@ -170,10 +169,13 @@ test('should getDocuments', async () => {
         persist: () => "legalDocumentID"
     };
     const result = await webservicesService.getDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
-    expect(result.length).toBe(1);
-    expect(result[0].documentTitle).toEqual("GU WG DE KS 0419_RECHTSDOKUMENTE.PDF");
-    expect(result[0].documentType).toEqual(documentTypes.LEGAL_NOTICE);
+    expect(result.length).toBe(2);
+    expect(result[0].documentTitle).toEqual("GTCI.pdf");
+    expect(result[0].documentType).toEqual(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE);
     expect(result[0].documentId).toEqual("legalDocumentID");
+    expect(result[1].documentTitle).toEqual("IPID.pdf");
+    expect(result[1].documentType).toEqual(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
+    expect(result[1].documentId).toEqual("legalDocumentID");
 });
 
 test('should findMaxPriceForDeviceClass', async () => {
@@ -330,10 +332,8 @@ test('should assemble product offers for client', async () => {
         ],
         documents: {
             legalDocuments: [
-                {
-                    type: documentTypes.LEGAL_NOTICE,
-                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                }
+                documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
             ],
             comparisonDocuments: []
         },
@@ -342,7 +342,7 @@ test('should assemble product offers for client', async () => {
     };
 
     const uuid = () => "productOfferUuid";
-    const documentId = 1234;
+    const documentId = "1234";
     const documentRepository = {
         persist: () => documentId
     };
@@ -358,8 +358,13 @@ test('should assemble product offers for client', async () => {
         documents: [
             {
                 documentId: documentId,
-                documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                documentType: "LN"
+                documentTitle: "GTCI.pdf",
+                documentType: "GTCI"
+            },
+            {
+                documentId: documentId,
+                documentTitle: "IPID.pdf",
+                documentType: "IPID"
             }
         ],
         advantages: [],
@@ -388,9 +393,14 @@ test('should update all product offers for client', async () => {
             risks: ["KOMPLETTSCHUTZ"],
             documents: [
                 {
-                    documentId: "1234",
-                    documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                    documentType: "LN"
+                    documentTitle: "GTCI.pdf",
+                    documentType: "GTCI",
+                    documentId: "1234"
+                },
+                {
+                    documentTitle: "IPID.pdf",
+                    documentType: "IPID",
+                    documentId: "1234"
                 }
             ],
             advantages: [],
@@ -406,9 +416,14 @@ test('should update all product offers for client', async () => {
             risks: ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"],
             documents: [
                 {
-                    documentId: "1234",
-                    documentTitle: "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
-                    documentType: "LN"
+                    documentTitle: "GTCI.pdf",
+                    documentType: "GTCI",
+                    documentId: "1234"
+                },
+                {
+                    documentTitle: "IPID.pdf",
+                    documentType: "IPID",
+                    documentId: "1234"
                 }
             ],
             advantages: [],

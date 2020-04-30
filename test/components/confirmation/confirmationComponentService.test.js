@@ -74,8 +74,8 @@ const expectedResponse = {
             includedTax: "(inkl. 1,28 € VerSt**)",
             productTitle: 'Komplettschutz',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
-            productInformationSheetUri: 'http://localhost:3000/documents/justnotthere',
-            productInformationSheetText: "Produktinformationsblatt",
+            IPIDUri: 'http://localhost:3000/documents/justnotthere',
+            IPIDText: "Informationsblatt für Versicherungsprodukte",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
@@ -86,14 +86,14 @@ const expectedResponse = {
             includedTax: "(inkl. 1,59 € VerSt**)",
             productTitle: 'Komplettschutz mit Premium-Option',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
-            productInformationSheetUri: "http://localhost:3000/documents/justnotthere",
-            productInformationSheetText: "Produktinformationsblatt",
+            IPIDUri: "http://localhost:3000/documents/justnotthere",
+            IPIDText: "Informationsblatt für Versicherungsprodukte",
             productBackgroundImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             orderId: "28ff0413-bcfd-48f8-b003-04b57762067a"
         },
     ],
-    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://localhost:3000/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
+    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://localhost:3000/documents/justnotthere">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
         '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
         '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
         '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +

@@ -167,10 +167,8 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         ],
                         documents: {
                             legalDocuments: [
-                                {
-                                    type: documentTypes.LEGAL_NOTICE,
-                                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                                }
+                                documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
                             ],
                             comparisonDocuments: []
                         },
@@ -224,10 +222,8 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         ],
                         documents: {
                             legalDocuments: [
-                                {
-                                    type: documentTypes.LEGAL_NOTICE,
-                                    pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
-                                }
+                                documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
                             ],
                             comparisonDocuments: []
                         },

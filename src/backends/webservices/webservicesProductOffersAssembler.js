@@ -144,15 +144,15 @@ async function getDevicePremiums(session, productOfferConfig, webservicesProduct
 async function getLegalDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
     const allLegalDocuments = await webservicesClient.getLegalDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
     return await Promise.all(productOfferConfig.documents.legalDocuments.map(async legalDocumentConfig => {
-        const document = _.find(allLegalDocuments.RESULT.DOCUMENT, (document) => document.FILENAME.match(legalDocumentConfig.pattern));
+        const document = _.find(allLegalDocuments.RESULT.DOCUMENT, (document) => document.DOCUMENT_TYPE.match(legalDocumentConfig));
         if (!document) {
             return undefined;
         }
-        document.type = legalDocumentConfig.type;
+        document.type = legalDocumentConfig;
         const documentID = await documentRespository.persist(document);
         return {
             documentTitle: document.FILENAME,
-            documentType: legalDocumentConfig.type,
+            documentType: legalDocumentConfig,
             documentId: documentID
         };
     }));
