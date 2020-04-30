@@ -50,6 +50,7 @@ basicAuthUsers.users[user] = password;
 router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
 router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients);
 router.get("/clients/:clientId", basicAuth(basicAuthUsers), clientController.getClientById);
+router.put("/clients/:clientId/backends/webservices", basicAuth(basicAuthUsers), clientController.updateWebservicesBackendConfig);
 router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.deleteClient);
 
 // webservices product offers

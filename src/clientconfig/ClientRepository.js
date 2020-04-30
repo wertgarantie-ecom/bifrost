@@ -7,7 +7,9 @@ exports.persist = async function persist(clientData) {
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: "INSERT INTO client (id, name, backends, activePartnerNumber) VALUES ($1 , $2, $3, $4);",
+            text: `INSERT INTO client (id, name, backends, activePartnerNumber) VALUES ($1 , $2, $3, $4)
+                   ON CONFLICT (id)
+                   DO UPDATE SET name = $2, backends = $3, activePartnerNumber = $4;`,
             values: [
                 clientData.id,
                 clientData.name,
@@ -19,7 +21,7 @@ exports.persist = async function persist(clientData) {
         await Promise.all(clientData.secrets.map(secret => {
             const insertSecret = {
                 name: 'insert-client-secrets',
-                text: 'INSERT INTO ClientSecret (secret, clientid) VALUES ($1, $2);',
+                text: 'INSERT INTO ClientSecret (secret, clientid) VALUES ($1, $2) ON CONFLICT DO NOTHING;',
                 values: [
                     secret,
                     clientData.id
@@ -30,7 +32,7 @@ exports.persist = async function persist(clientData) {
         await Promise.all(clientData.publicClientIds.map(clientId => {
             const insertPublicId = {
                 name: 'insert-client-public-ids',
-                text: 'INSERT INTO ClientPublicId (publicid, clientid) VALUES ($1, $2);',
+                text: 'INSERT INTO ClientPublicId (publicid, clientid) VALUES ($1, $2) ON CONFLICT DO NOTHING;',
                 values: [
                     clientId,
                     clientData.id

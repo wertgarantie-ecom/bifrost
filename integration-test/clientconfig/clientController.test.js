@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../src/app');
 const uuid = require('uuid');
 const _ = require('lodash');
+const fixtureHelper = require('../helper/fixtureHelper');
 
 describe('should add new client with valid data', () => {
     let newClientId = undefined;
@@ -62,6 +63,22 @@ describe('should add new client with valid data', () => {
             });
     });
 
+    it('should update webservices backend config', async () => {
+        const newProductOffersConfig = fixtureHelper.createDefaultClientWithWebservicesConfiguration().backends.webservices.productOffersConfigurations;
+        const newWebservicesConfig = {
+            username: 'test-user-updated',
+            password: 'test-password-updated',
+            productOffersConfigurations: newProductOffersConfig
+        };
+        const updateResult = await request(app)
+            .put(`/wertgarantie/clients/${newClientId}/backends/webservices`)
+            .set('Accept', 'application/json')
+            .send(newWebservicesConfig)
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD);
+        expect(updateResult.status).toBe(200);
+        expect(updateResult.body.backends.webservices).toEqual(newWebservicesConfig);
+    });
+
     it('should delete client', async () => {
         return await request(app)
             .delete(`/wertgarantie/clients/${newClientId}`)
@@ -119,6 +136,7 @@ describe('should handle duplicate constraint exception', () => {
     });
 
     it('throw exception when trying to add same client data again', async () => {
+        validData.id = uuid();
         return await request(app)
             .post("/wertgarantie/clients")
             .set('Accept', 'application/json')

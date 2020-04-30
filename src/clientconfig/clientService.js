@@ -18,7 +18,7 @@ exports.updateWebservicesBackendConfig = async function updateWebservicesBackend
     const client = await findClientById(clientId);
     client.backends.webservices = newWebservicesConfig;
     return await _repository.persist(client);
-}
+};
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const client = await _repository.findClientForSecret(secret);
