@@ -3,12 +3,21 @@ const uuid = require('uuid');
 const jsonschema = require('jsonschema');
 const newClientSchema = require('./newClientSchema').newClientSchema;
 
-exports.findClientById = async function findClientById(id) {
+async function findClientById(id) {
     const client = await _repository.findClientById(id);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified ID: ${id}`);
     }
     return client;
+}
+
+exports.findClientById = findClientById;
+
+exports.updateWebservicesBackendConfig = async function updateWebservicesBackendConfig(clientId, newWebservicesConfig) {
+    validate(newWebservicesConfig, newClientSchema.properties.backends.properties.webservices);
+    const client = await findClientById(clientId);
+    client.backends.webservices = newWebservicesConfig;
+    return await _repository.update(client.id, client.backends);
 };
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
@@ -48,7 +57,12 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         secrets: createClientRequest.secrets || ['secret:' + uuid()],
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()]
     };
-    const validationResult = jsonschema.validate(clientData, newClientSchema);
+    validate(clientData, newClientSchema);
+    return await repository.insert(clientData);
+};
+
+function validate(object, schema) {
+    const validationResult = jsonschema.validate(object, schema);
     if (!validationResult.valid) {
         const error = new Error();
         error.name = "ValidationError";
@@ -57,8 +71,7 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         error.message = JSON.stringify(validationResult.errors, null, 2);
         throw error;
     }
-    return await repository.persist(clientData);
-};
+}
 
 class InvalidClientIdError extends Error {
     constructor(message) {

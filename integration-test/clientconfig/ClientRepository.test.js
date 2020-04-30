@@ -37,7 +37,7 @@ describe("should find persisted client properties by given secret", () => {
 
 
     test("should persist valid client data", async () => {
-        const persistResult = await clientRepository.persist(clientData);
+        const persistResult = await clientRepository.insert(clientData);
         expect(persistResult).toEqual(clientData);
     });
 
@@ -81,7 +81,7 @@ describe("should find persisted client properties by given public client id", ()
     };
 
     test("should persist valid client data", async () => {
-        await clientRepository.persist(clientData);
+        await clientRepository.insert(clientData);
     });
 
     test("should find persisted client data by given public id", async () => {
@@ -120,7 +120,7 @@ describe("should delete client data for client id", () => {
     };
 
     test("should persist valid client data", async () => {
-        await clientRepository.persist(clientData);
+        await clientRepository.insert(clientData);
     });
 
     test("could find persisted data", async () => {
@@ -225,7 +225,7 @@ describe("should handle client config for product offers", () => {
         publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
     };
     test("persist and retrieve product offers config for client", async () => {
-        const persistResult = await clientRepository.persist(clientData);
+        const persistResult = await clientRepository.insert(clientData);
         expect(persistResult).toEqual(clientData);
     });
 });

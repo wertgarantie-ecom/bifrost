@@ -1,6 +1,19 @@
 const Pool = require("../postgres").Pool;
 
-exports.persist = async function persist(clientData) {
+exports.update = async function updateBackendConfig(id, backendConfig) {
+    const pool = Pool.getInstance();
+    await pool.query({
+        name: 'upudate-backends-config',
+        text: "UPDATE client SET backends = $2 where client.id = $1;",
+        values: [
+            id,
+            backendConfig
+        ]
+    });
+    return await findClientById(id);
+};
+
+exports.insert = async function insert(clientData) {
     const pool = Pool.getInstance();
     const client = await pool.connect();
     try {
@@ -92,7 +105,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     }
 };
 
-exports.findClientById = async function findClientById(id) {
+async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
@@ -108,7 +121,9 @@ exports.findClientById = async function findClientById(id) {
     } else {
         return undefined;
     }
-};
+}
+
+exports.findClientById = findClientById;
 
 exports.deleteClientById = async function deleteClientById(id) {
     const pool = Pool.getInstance();

@@ -50,6 +50,16 @@ exports.getClientById = async function getClientById(req, res, next) {
     }
 };
 
+exports.updateWebservicesBackendConfig = async function updateWebservicesBackendConfig(req, res, next) {
+    const clientId = req.params.clientId;
+    const newBackendConfig = req.body;
+    try {
+        const updatedClient = await clientService.updateWebservicesBackendConfig(clientId, newBackendConfig); // if not deleted, exception is thrown
+        res.status(200).send(updatedClient);
+    } catch (e) {
+        next(e);
+    }
+};
 
 exports.deleteClient = async function deleteClient(req, res, next) {
     const idToDelete = req.params.clientId;

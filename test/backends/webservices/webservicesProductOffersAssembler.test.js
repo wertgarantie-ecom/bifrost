@@ -847,7 +847,7 @@ test.skip('call webservices dev', async () => {
         ],
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
-    const client = await require('../../../src/clientconfig/ClientRepository').persist(clientConfig);
+    const client = await require('../../../src/clientconfig/ClientRepository').insert(clientConfig);
     process.env.WEBSERVICES_URI = "http://localhost:3001/webservices";
     const offers = await webservicesService.updateAllProductOffersForClient(client);
     console.log(JSON.stringify(offers, null, 2));
