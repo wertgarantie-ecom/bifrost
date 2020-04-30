@@ -53,7 +53,7 @@ async function getConfirmationProductData(order, client, productOfferService = _
         const productOfferFormatter = productOfferFormattingService.fromProductOffer(matchingOffer);
         matchingOffer.payment = productOfferFormatter.getPaymentInterval();
         const advantageCategories = productOfferFormatter.getAdvantageCategories(productOffers);
-        const productInformationSheet = productOfferFormatter.getDocument(documentTypes.PRODUCT_INFORMATION_SHEET);
+        const IPID = productOfferFormatter.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
         return {
             product: {
                 paymentInterval: matchingOffer.payment,
@@ -61,13 +61,13 @@ async function getConfirmationProductData(order, client, productOfferService = _
                 includedTax: productOfferFormatter.getIncludedTaxFormatted(),
                 productTitle: matchingOffer.name,
                 top3: advantageCategories.top3,
-                productInformationSheetUri: productInformationSheet.uri,
-                productInformationSheetText: productInformationSheet.name,
+                IPIDUri: IPID.uri,
+                IPIDText: IPID.name,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.shopProduct.deviceClass, 1)[0],
                 shopProductShortName: order.shopProduct.model,
                 orderId: order.id
             },
-            avbHref: productOfferFormatter.getDocument(documentTypes.LEGAL_NOTICE).uri
+            avbHref: productOfferFormatter.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri
         };
     }
 

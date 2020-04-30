@@ -19,10 +19,10 @@ module.exports.productSelectionResponseSchema = {
                     "name",
                     "top3",
                     "advantages",
-                    "infoSheetText",
-                    "infoSheetUri",
-                    "detailsDocText",
-                    "detailsDocUri",
+                    "IPIDText",
+                    "IPIDUri",
+                    "GTCIText",
+                    "GTCIUri",
                     "priceFormatted",
                     "taxFormatted",
                     "imageLink"
@@ -52,16 +52,16 @@ module.exports.productSelectionResponseSchema = {
                             "type": "string",
                         }
                     },
-                    "infoSheetText": {
+                    "IPIDText": {
                         "type": "string",
                     },
-                    "infoSheetUri": {
+                    "IPIDUri": {
                         "type": "string",
                     },
-                    "detailsDocText": {
+                    "GTCIText": {
                         "type": "string",
                     },
-                    "detailsDocUri": {
+                    "GTCIUri": {
                         "type": "string",
                     },
                     "priceFormatted": {
