@@ -12,7 +12,7 @@ workflows:
             - build
       - deploy-staging:
           requires:
-            - deploy-dev
+            - build
       - deploy-prod:
           requires:
             - deploy-staging
