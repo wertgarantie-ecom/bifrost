@@ -7,7 +7,7 @@ const _productImageService = require('../../images/productImageService');
 
 function getAfterSalesDataForCheckoutData(checkoutData, productImageService = _productImageService) {
     const orderItems = [];
-    checkoutData.purchases.map(checkoutItem => {
+    checkoutData.purchases.filter(purchase => purchase.success).map(checkoutItem => {
         const imageLink = productImageService.getRandomImageLinksForDeviceClass(checkoutItem.deviceClass, 1)[0];
         orderItems.push({
             insuranceProductTitle: checkoutItem.wertgarantieProductName,
@@ -15,6 +15,9 @@ function getAfterSalesDataForCheckoutData(checkoutData, productImageService = _p
             imageLink: imageLink
         });
     });
+    if (orderItems.length === 0) {
+        return undefined;
+    }
 
     return {
         headerTitle: "Ihre Geräte wurden erfolgreich versichert!",

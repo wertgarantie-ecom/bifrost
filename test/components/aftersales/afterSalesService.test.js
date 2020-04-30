@@ -1,4 +1,5 @@
 const afterSalesService = require('../../../src/components/aftersales/afterSalesService');
+const uuid = require('uuid');
 
 test('should return proper after sales data for checkout data', async () => {
     const sessionId = "0b511572-3aa3-4706-8146-d109693cfe37";
@@ -41,4 +42,25 @@ test('should return proper after sales data for checkout data', async () => {
         "imageLink": "linkToProductImage"
     });
 });
+
+test('should not return data for failed purchases', async () => {
+    const sessionId = uuid;
+    const checkoutRepository = {
+        findBySessionId: () => {
+            return {
+                clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+                sessionId: sessionId,
+                traceId: "563e6720-5f07-42ad-99c3-a5104797f083",
+                purchases: [
+                    {
+                        success: false,
+                    }
+                ]
+            }
+        }
+    };
+
+    const result = await afterSalesService.prepareAfterSalesData(sessionId, checkoutRepository, undefined);
+    expect(result).toEqual(undefined);
+})
 
