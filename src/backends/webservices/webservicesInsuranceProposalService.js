@@ -92,7 +92,7 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
                         })
                     }
                 },
-                "ProduktDetails": {
+                "Produktdetails": {
                     "Antragskodierung": productOffer.applicationCode,
                     "Produkttyp": productOffer.productType
                 }
