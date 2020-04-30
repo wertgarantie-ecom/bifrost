@@ -103,7 +103,7 @@ function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
     webservicesProductOffer.device.intervals.map(interval => {
         const priceRangePremium = _.find(interval.priceRangePremiums, priceRangePremium => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen);
         if (!priceRangePremium) {
-            throw new ProductOffersError(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer, null, 2)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
+            throw new ProductOffersError(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
         }
         intervalPrices[mapIntervalCode(interval.intervalCode)] = {
             "price": priceRangePremium.insurancePremium,
