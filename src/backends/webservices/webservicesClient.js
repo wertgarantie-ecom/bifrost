@@ -58,26 +58,26 @@ axiosWithSimpleLogging.interceptors.response.use((response) => {
 });
 
 exports.login = async function login(webservicesClientConfig, httpClient = axiosWithCompleteLogging) {
-    const formData = new FormData();
-    formData.append('FUNCTION', 'LOGIN');
-    formData.append('USER', webservicesClientConfig.username);
-    formData.append('PASSWORD', webservicesClientConfig.password);
-    formData.append('COMPANY', 'WG');
-    formData.append('API', 'JSON');
+    const formDataMap = new Map();
+    formDataMap.set("FUNCTION", "LOGIN");
+    formDataMap.set("USER", webservicesClientConfig.username);
+    formDataMap.set("PASSWORD", webservicesClientConfig.password);
+    formDataMap.set("COMPANY", "WG");
+    formDataMap.set("API", "JSON");
 
-    const response = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/login.pl', httpClient, "0");
+    const response = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/login.pl', httpClient, "0");
     return response.SESSION;
 };
 
 exports.getAgentData = async function getAgentData(session, clientConfig, httpClient = axiosWithCompleteLogging) {
-    const formData = new FormData();
-    formData.append('FUNCTION', 'GET_AGENT_DATA');
-    formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    formData.append('EXTENDED_RESULT', "true");
-    formData.append('AGENT_NR', clientConfig.activePartnerNumber);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'GET_AGENT_DATA');
+    formDataMap.set('SHAPING', 'AVAILABLE_PRODUCTS');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    formDataMap.set('EXTENDED_RESULT', "true");
+    formDataMap.set('AGENT_NR', clientConfig.activePartnerNumber);
+    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
     }
@@ -98,14 +98,14 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
     if (!(session && applicationCode && productType)) {
         throw new Error(`request data not provided. Session: ${session}, applicationCode: ${applicationCode}, productType: ${productType}`);
     }
-    const formData = new FormData();
-    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
-    formData.append('SHAPING', 'ADVERTISING_TEXT');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    formData.append('APPLICATION_CODE', applicationCode);
-    formData.append('PRODUCT_TYPE', productType);
-    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'GET_PRODUCT_DATA');
+    formDataMap.set('SHAPING', 'ADVERTISING_TEXT');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    formDataMap.set('APPLICATION_CODE', applicationCode);
+    formDataMap.set('PRODUCT_TYPE', productType);
+    return await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
 exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
@@ -150,27 +150,27 @@ exports.getInsurancePremium = async function getInsurancePremium(session, applic
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, paymentInterval: ${paymentInterval}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, objectPrice: ${objectPrice}, riskTypes: ${riskTypes}`);
     }
     const xmlData = this.assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
-    const formData = new FormData();
-    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
-    formData.append('SHAPING', 'INSURANCE_PREMIUM');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    formData.append('DATA', xmlData);
-    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'GET_PRODUCT_DATA');
+    formDataMap.set('SHAPING', 'INSURANCE_PREMIUM');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    formDataMap.set('DATA', xmlData);
+    return await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
 exports.getComparisonDocuments = async function getComparisonDocuments(session, applicationCode, productType, httpClient = axiosWithSimpleLogging) {
     if (!(session && productType && applicationCode)) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
     }
-    const formData = new FormData();
-    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
-    formData.append('SHAPING', 'COMPARISON_DOCUMENTS');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    formData.append('APPLICATION_CODE', applicationCode);
-    formData.append('PRODUCT_TYPE', productType);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'GET_PRODUCT_DATA');
+    formDataMap.set('SHAPING', 'COMPARISON_DOCUMENTS');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    formDataMap.set('APPLICATION_CODE', applicationCode);
+    formDataMap.set('PRODUCT_TYPE', productType);
+    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.DOCUMENTS.DOCUMENT)) {
         result.RESULT.DOCUMENTS.DOCUMENT = [result.RESULT.DOCUMENTS.DOCUMENT];
     }
@@ -181,15 +181,15 @@ exports.getLegalDocuments = async function getLegalDocuments(session, applicatio
     if (!(session && productType && applicationCode)) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
     }
-    const formData = new FormData();
-    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
-    formData.append('SHAPING', 'LEGAL_DOCUMENTS');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    formData.append('APPLICATION_CODE', applicationCode);
-    formData.append('PRODUCT_TYPE', productType);
-    formData.append('DOCUMENT_TYPE', 'EINZELN');
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'GET_PRODUCT_DATA');
+    formDataMap.set('SHAPING', 'LEGAL_DOCUMENTS');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    formDataMap.set('APPLICATION_CODE', applicationCode);
+    formDataMap.set('PRODUCT_TYPE', productType);
+    formDataMap.set('DOCUMENT_TYPE', 'EINZELN');
+    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.DOCUMENT)) {
         result.RESULT.DOCUMENT = [result.RESULT.DOCUMENT];
     }
@@ -200,12 +200,12 @@ exports.getNewContractNumber = async function getNewContractNumber(session, http
     if (!session) {
         throw new Error(`request data not provided. Session: ${session}`);
     }
-    const formData = new FormData();
-    formData.append('FUNCTION', 'GET_NEW_CONTRACTNUMBER');
-    formData.append('SHAPING', 'DEFAULT');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'GET_NEW_CONTRACTNUMBER');
+    formDataMap.set('SHAPING', 'DEFAULT');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     return result.RESULT.NEWCONTRACTNUMBER;
 };
 
@@ -213,18 +213,22 @@ exports.sendInsuranceProposal = async function sendInsuranceProposal(session, in
     if (!session) {
         throw new Error(`request data not provided. Session: ${session}`);
     }
-    const formData = new FormData();
-    formData.append('FUNCTION', 'SET_XML_INTERFACE');
-    formData.append('SHAPING', 'DEFAULT');
-    formData.append('API', 'JSON');
-    formData.append('SESSION', session);
-    formData.append('DATA', insuranceProposalXML);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
+    const formDataMap = new Map();
+    formDataMap.set('FUNCTION', 'SET_XML_INTERFACE');
+    formDataMap.set('SHAPING', 'DEFAULT');
+    formDataMap.set('API', 'JSON');
+    formDataMap.set('SESSION', session);
+    formDataMap.set('DATA', insuranceProposalXML);
+    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     return result.RESULT;
 };
 
-async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {
+async function sendWebservicesRequest(formDataMap, uri, httpClient, expectedStatusCode) {
     let response;
+    const formData = new FormData();
+    formDataMap.forEach((value, key) => {
+        formData.append(key, value);
+    });
     const formHeaders = formData.getHeaders();
     const contentLength = formData.getLengthSync();
     const request = {
@@ -248,7 +252,7 @@ async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusC
             throw new WebserviceError(`Could not connect to Webservices: ${JSON.stringify(request)}, error: ${e}`);
         }
     }
-    throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${JSON.stringify(request)}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
+    throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${JSON.stringify(formDataMap)}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
 }
 
 class WebserviceError extends Error {
