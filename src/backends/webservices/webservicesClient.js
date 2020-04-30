@@ -59,28 +59,25 @@ axiosWithSimpleLogging.interceptors.response.use((response) => {
 
 exports.login = async function login(webservicesClientConfig, httpClient = axiosWithCompleteLogging) {
     const formData = new FormData();
-    const reqFunction = 'LOGIN';
-    formData.append('FUNCTION', reqFunction);
+    formData.append('FUNCTION', 'LOGIN');
     formData.append('USER', webservicesClientConfig.username);
     formData.append('PASSWORD', webservicesClientConfig.password);
     formData.append('COMPANY', 'WG');
     formData.append('API', 'JSON');
 
-    const response = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/login.pl', httpClient, "0", reqFunction);
+    const response = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/login.pl', httpClient, "0");
     return response.SESSION;
 };
 
 exports.getAgentData = async function getAgentData(session, clientConfig, httpClient = axiosWithCompleteLogging) {
     const formData = new FormData();
-    const reqFunction = 'GET_AGENT_DATA';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'AVAILABLE_PRODUCTS';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'GET_AGENT_DATA');
+    formData.append('SHAPING', 'AVAILABLE_PRODUCTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('EXTENDED_RESULT', "true");
     formData.append('AGENT_NR', clientConfig.activePartnerNumber);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
     }
@@ -102,15 +99,13 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
         throw new Error(`request data not provided. Session: ${session}, applicationCode: ${applicationCode}, productType: ${productType}`);
     }
     const formData = new FormData();
-    const reqFunction = 'GET_PRODUCT_DATA';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'ADVERTISING_TEXT';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'ADVERTISING_TEXT');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
-    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
 exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
@@ -156,14 +151,12 @@ exports.getInsurancePremium = async function getInsurancePremium(session, applic
     }
     const xmlData = this.assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
     const formData = new FormData();
-    const reqFunction = 'GET_PRODUCT_DATA';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'INSURANCE_PREMIUM';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'INSURANCE_PREMIUM');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('DATA', xmlData);
-    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    return await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
 exports.getComparisonDocuments = async function getComparisonDocuments(session, applicationCode, productType, httpClient = axiosWithSimpleLogging) {
@@ -171,15 +164,13 @@ exports.getComparisonDocuments = async function getComparisonDocuments(session, 
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
     }
     const formData = new FormData();
-    const reqFunction = 'GET_PRODUCT_DATA';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'COMPARISON_DOCUMENTS';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'COMPARISON_DOCUMENTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.DOCUMENTS.DOCUMENT)) {
         result.RESULT.DOCUMENTS.DOCUMENT = [result.RESULT.DOCUMENTS.DOCUMENT];
     }
@@ -191,16 +182,14 @@ exports.getLegalDocuments = async function getLegalDocuments(session, applicatio
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
     }
     const formData = new FormData();
-    const reqFunction = 'GET_PRODUCT_DATA';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'LEGAL_DOCUMENTS';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'GET_PRODUCT_DATA');
+    formData.append('SHAPING', 'LEGAL_DOCUMENTS');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('APPLICATION_CODE', applicationCode);
     formData.append('PRODUCT_TYPE', productType);
     formData.append('DOCUMENT_TYPE', 'EINZELN');
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.DOCUMENT)) {
         result.RESULT.DOCUMENT = [result.RESULT.DOCUMENT];
     }
@@ -212,13 +201,11 @@ exports.getNewContractNumber = async function getNewContractNumber(session, http
         throw new Error(`request data not provided. Session: ${session}`);
     }
     const formData = new FormData();
-    const reqFunction = 'GET_NEW_CONTRACTNUMBER';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'DEFAULT';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'GET_NEW_CONTRACTNUMBER');
+    formData.append('SHAPING', 'DEFAULT');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     return result.RESULT.NEWCONTRACTNUMBER;
 };
 
@@ -227,18 +214,16 @@ exports.sendInsuranceProposal = async function sendInsuranceProposal(session, in
         throw new Error(`request data not provided. Session: ${session}`);
     }
     const formData = new FormData();
-    const reqFunction = 'SET_XML_INTERFACE';
-    formData.append('FUNCTION', reqFunction);
-    const reqShaping = 'DEFAULT';
-    formData.append('SHAPING', reqShaping);
+    formData.append('FUNCTION', 'SET_XML_INTERFACE');
+    formData.append('SHAPING', 'DEFAULT');
     formData.append('API', 'JSON');
     formData.append('SESSION', session);
     formData.append('DATA', insuranceProposalXML);
-    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0", reqFunction, reqShaping);
+    const result = await sendWebservicesRequest(formData, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     return result.RESULT;
 };
 
-async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode, reqFunction, reqShaping = "-") {
+async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusCode) {
     let response;
     const formHeaders = formData.getHeaders();
     const contentLength = formData.getLengthSync();
@@ -263,7 +248,7 @@ async function sendWebservicesRequest(formData, uri, httpClient, expectedStatusC
             throw new WebserviceError(`Could not connect to Webservices: ${JSON.stringify(request)}, error: ${e}`);
         }
     }
-    throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${reqFunction}/${reqShaping}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
+    throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${JSON.stringify(request)}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
 }
 
 class WebserviceError extends Error {
