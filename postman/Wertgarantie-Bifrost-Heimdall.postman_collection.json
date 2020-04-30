@@ -963,6 +963,48 @@
 							"response": []
 						},
 						{
+							"name": "update webservice config for client",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"password\": \"PASSWORD\",\n    \"username\": \"USERNAME\",\n    \"productOffersConfigurations\": [\n        {\n            \"name\": \"Komplettschutz\",\n            \"risks\": [],\n            \"documents\": {\n                \"legalDocuments\": [\n                    \"GTCI\",\n                    \"IPID\"\n                ],\n                \"comparisonDocuments\": []\n            },\n            \"advantages\": [\n                \"Für private und berufliche Nutzung\",\n                \"Unsachgemäße Handhabung\",\n                \"Weltweiter Schutz\",\n                \"Volle Kostenübernahme bei Reparaturen\",\n                \"Bei Totalschaden zählt der Zeitwert\",\n                \"Für private und berufliche Nutzung\",\n                \"Weltweiter Schutz\",\n                \"Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte\",\n                \"Unsachgemäße Handhabung\"\n            ],\n            \"productType\": \"KOMPLETTSCHUTZ_2019\",\n            \"basicRiskType\": \"KOMPLETTSCHUTZ\",\n            \"deviceClasses\": [\n                {\n                    \"objectCode\": \"9025\",\n                    \"priceRanges\": [\n                        {\n                            \"maxOpen\": 30001,\n                            \"minClose\": 0\n                        },\n                        {\n                            \"maxOpen\": 80001,\n                            \"minClose\": 30001\n                        },\n                        {\n                            \"maxOpen\": 180001,\n                            \"minClose\": 80001\n                        }\n                    ],\n                    \"objectCodeExternal\": \"Smartphone\"\n                },\n                {\n                    \"objectCode\": \"73\",\n                    \"priceRanges\": [\n                        {\n                            \"maxOpen\": 30001,\n                            \"minClose\": 0\n                        },\n                        {\n                            \"maxOpen\": 80001,\n                            \"minClose\": 30001\n                        },\n                        {\n                            \"maxOpen\": 180001,\n                            \"minClose\": 80001\n                        }\n                    ],\n                    \"objectCodeExternal\": \"Mobilfunk\"\n                }\n            ],\n            \"applicationCode\": \"GU WG DE KS 0419\",\n            \"defaultPaymentInterval\": \"monthly\"\n        },\n        {\n            \"name\": \"Komplettschutz mit Premium-Option\",\n            \"risks\": [\n                \"DIEBSTAHLSCHUTZ\"\n            ],\n            \"documents\": {\n                \"legalDocuments\": [\n                    \"GTCI\",\n                    \"IPID\"\n                ],\n                \"comparisonDocuments\": []\n            },\n            \"advantages\": [\n                \"Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten\",\n                \"Diebstahlschutz\",\n                \"Keine Selbstbeteiligung im Schadensfall\",\n                \"einfacher Diebstahl\",\n                \"Für private und berufliche Nutzung\",\n                \"Unsachgemäße Handhabung\",\n                \"Weltweiter Schutz\",\n                \"Volle Kostenübernahme bei Reparaturen\",\n                \"Bei Totalschaden zählt der Zeitwert\",\n                \"Für private und berufliche Nutzung\",\n                \"Weltweiter Schutz\",\n                \"Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte\",\n                \"Unsachgemäße Handhabung\"\n            ],\n            \"productType\": \"KOMPLETTSCHUTZ_2019\",\n            \"basicRiskType\": \"KOMPLETTSCHUTZ\",\n            \"deviceClasses\": [\n                {\n                    \"objectCode\": \"9025\",\n                    \"priceRanges\": [\n                        {\n                            \"maxOpen\": 30001,\n                            \"minClose\": 0\n                        },\n                        {\n                            \"maxOpen\": 80001,\n                            \"minClose\": 30001\n                        },\n                        {\n                            \"maxOpen\": 180001,\n                            \"minClose\": 80001\n                        }\n                    ],\n                    \"objectCodeExternal\": \"Smartphone\"\n                },\n                {\n                    \"objectCode\": \"73\",\n                    \"priceRanges\": [\n                        {\n                            \"maxOpen\": 30001,\n                            \"minClose\": 0\n                        },\n                        {\n                            \"maxOpen\": 80001,\n                            \"minClose\": 30001\n                        },\n                        {\n                            \"maxOpen\": 180001,\n                            \"minClose\": 80001\n                        }\n                    ],\n                    \"objectCodeExternal\": \"Mobilfunk\"\n                }\n            ],\n            \"applicationCode\": \"GU WG DE KS 0419\",\n            \"defaultPaymentInterval\": \"monthly\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/clients/:clientId/backends/webservices",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"clients",
+										":clientId",
+										"backends",
+										"webservices"
+									],
+									"variable": [
+										{
+											"key": "clientId",
+											"value": "1d24f1c0-81be-46bb-a1e5-31b8e3412462"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "delete client configuration",
 							"request": {
 								"method": "DELETE",
