@@ -17,7 +17,7 @@ exports.updateWebservicesBackendConfig = async function updateWebservicesBackend
     validate(newWebservicesConfig, newClientSchema.properties.backends.properties.webservices);
     const client = await findClientById(clientId);
     client.backends.webservices = newWebservicesConfig;
-    return await _repository.persist(client);
+    return await _repository.update(client.id, client.backends);
 };
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
@@ -58,7 +58,7 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()]
     };
     validate(clientData, newClientSchema);
-    return await repository.persist(clientData);
+    return await repository.insert(clientData);
 };
 
 function validate(object, schema) {

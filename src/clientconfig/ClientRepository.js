@@ -1,15 +1,26 @@
 const Pool = require("../postgres").Pool;
 
-exports.persist = async function persist(clientData) {
+exports.update = async function updateBackendConfig(id, backendConfig) {
+    const pool = Pool.getInstance();
+    await pool.query({
+        name: 'upudate-backends-config',
+        text: "UPDATE client SET backends = $2 where client.id = $1;",
+        values: [
+            id,
+            backendConfig
+        ]
+    });
+    return await findClientById(id);
+};
+
+exports.insert = async function insert(clientData) {
     const pool = Pool.getInstance();
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: `INSERT INTO client (id, name, backends, activePartnerNumber) VALUES ($1 , $2, $3, $4)
-                   ON CONFLICT (id)
-                   DO UPDATE SET name = $2, backends = $3, activePartnerNumber = $4;`,
+            text: "INSERT INTO client (id, name, backends, activePartnerNumber) VALUES ($1 , $2, $3, $4);",
             values: [
                 clientData.id,
                 clientData.name,
@@ -21,7 +32,7 @@ exports.persist = async function persist(clientData) {
         await Promise.all(clientData.secrets.map(secret => {
             const insertSecret = {
                 name: 'insert-client-secrets',
-                text: 'INSERT INTO ClientSecret (secret, clientid) VALUES ($1, $2) ON CONFLICT DO NOTHING;',
+                text: 'INSERT INTO ClientSecret (secret, clientid) VALUES ($1, $2);',
                 values: [
                     secret,
                     clientData.id
@@ -32,7 +43,7 @@ exports.persist = async function persist(clientData) {
         await Promise.all(clientData.publicClientIds.map(clientId => {
             const insertPublicId = {
                 name: 'insert-client-public-ids',
-                text: 'INSERT INTO ClientPublicId (publicid, clientid) VALUES ($1, $2) ON CONFLICT DO NOTHING;',
+                text: 'INSERT INTO ClientPublicId (publicid, clientid) VALUES ($1, $2);',
                 values: [
                     clientId,
                     clientData.id
@@ -94,7 +105,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     }
 };
 
-exports.findClientById = async function findClientById(id) {
+async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
@@ -110,7 +121,9 @@ exports.findClientById = async function findClientById(id) {
     } else {
         return undefined;
     }
-};
+}
+
+exports.findClientById = findClientById;
 
 exports.deleteClientById = async function deleteClientById(id) {
     const pool = Pool.getInstance();
