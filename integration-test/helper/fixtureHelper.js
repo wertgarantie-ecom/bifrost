@@ -91,6 +91,21 @@ exports.createDefaultClient = function createDefaultClient() {
     };
 };
 
+exports.getValidPurchase = function getValidPurchase() {
+    return {
+        wertgarantieProductId: "10",
+        wertgarantieProductName: "Basic",
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        devicePrice: 139999,
+        success: true,
+        message: "what a nice purchase",
+        shopProduct: "iPhone X",
+        contractNumber: "23479998",
+        transactionNumber: "7524545",
+        backend: "heimdall",
+        backendResponseInfo: "a447s7s6666f"
+    }
+}
 
 exports.createAndPersistDefaultClientWithWebservicesConfiguration = async function createAndPersistDefaultClientWithWebservicesConfiguratio() {
     const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();

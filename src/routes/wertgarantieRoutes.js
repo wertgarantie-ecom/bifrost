@@ -4,7 +4,7 @@ const googleController = require("../components/googlerating/googleController.js
 const selectionPopUpController = require("../components/selectionpopup/selectionPopUpController");
 const shoppingCartController = require("../shoppingcart/shoppingCartController.js");
 const confirmationController = require("../components/confirmation/confirmationController.js");
-const purchaseController = require("../shoppingcart/checkoutController.js");
+const checkoutController = require("../shoppingcart/checkoutController.js");
 const clientController = require("../clientconfig/clientController.js");
 const afterSalesController = require("../components/aftersales/afterSalesController.js");
 const landingPageController = require("../components/landingpage/landingPageController");
@@ -34,7 +34,8 @@ router.get("/components/landing-page", landingPageController.getLandingPageData)
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
 
 // purchases
-router.get("/purchases/:sessionId", purchaseController.findPurchaseById);
+router.get("/checkouts", checkoutController.findAllCheckouts);
+router.get("/checkouts/:sessionId", checkoutController.findPurchaseById);
 
 // shopping cart
 router.post("/shoppingCart/:clientId", validate({body: addShoppingCartProductSchema}), shoppingCartController.addProductToShoppingCart);
