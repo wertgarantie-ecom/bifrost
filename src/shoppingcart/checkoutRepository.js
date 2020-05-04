@@ -36,7 +36,7 @@ function toCheckoutData(rows) {
             }
         });
     } else {
-        return undefined;
+        return [];
     }
 }
 
