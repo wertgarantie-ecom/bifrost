@@ -46,7 +46,6 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
             }
         ],
         confirmations: {
-            legalAgeConfirmed: false,
             termsAndConditionsConfirmed: false
         }
     };

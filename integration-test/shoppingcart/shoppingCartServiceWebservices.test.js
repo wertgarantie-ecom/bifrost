@@ -30,7 +30,6 @@ describe("should submit insurance proposal and persist purchase data", () => {
             }
         ],
         confirmations: {
-            legalAgeConfirmed: true,
             termsAndConditionsConfirmed: true
         }
     };

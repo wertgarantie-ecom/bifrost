@@ -14,7 +14,6 @@ exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartW
         wertgarantieProduct: requestBody.wertgarantieProduct
     });
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
-    updatedShoppingCart.confirmations.legalAgeConfirmed = false;
     return updatedShoppingCart;
 };
 
@@ -37,8 +36,8 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
 
 exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shoppingCart, clientConfig, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
     const confirmations = shoppingCart.confirmations;
-    if (!(confirmations && confirmations.termsAndConditionsConfirmed && confirmations.legalAgeConfirmed)) {
-        throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user")
+    if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
+        throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
     }
 
     const purchaseResults = await Promise.all(shoppingCart.orders.map(order => {
@@ -91,8 +90,7 @@ function newShoppingCart(clientId) {
         "publicClientId": clientId,
         "orders": [],
         "confirmations": {
-            "termsAndConditionsConfirmed": false,
-            "legalAgeConfirmed": false
+            "termsAndConditionsConfirmed": false
         }
     };
 }

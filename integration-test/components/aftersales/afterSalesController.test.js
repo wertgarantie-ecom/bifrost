@@ -33,7 +33,6 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                     }
                 ],
                 confirmations: {
-                    legalAgeConfirmed: true,
                     termsAndConditionsConfirmed: true
 
                 }
@@ -120,7 +119,6 @@ describe("Check Checkout via after sales component ", () => {
                     }
                 ],
                 confirmations: {
-                    legalAgeConfirmed: true,
                     termsAndConditionsConfirmed: true
 
                 }

@@ -35,10 +35,6 @@ exports.requestWithSignedShoppingCartSchema = {
                                 termsAndConditionsConfirmed: {
                                     type: "boolean",
                                     required: true
-                                },
-                                legalAgeConfirmed: {
-                                    type: "boolean",
-                                    required: true
                                 }
                             }
                         },

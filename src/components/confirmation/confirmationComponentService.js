@@ -14,7 +14,6 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     }
     const result = {
         termsAndConditionsConfirmed: shoppingCart.confirmations.termsAndConditionsConfirmed,
-        legalAgeConfirmed: shoppingCart.confirmations.legalAgeConfirmed,
         headerTitle: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
         confirmText: "Bitte bestätige noch kurz:",
         orders: [],
@@ -37,7 +36,6 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
                                     zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
                                     einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 
                                     meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`;
-    result.legalAgeConfirmationText = `Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.`;
     result.pleaseConfirmText = `Bitte bestätige die oben stehenden Bedingungen um fortzufahren.`;
     if (result.orders.length <= 0) {
         return undefined;

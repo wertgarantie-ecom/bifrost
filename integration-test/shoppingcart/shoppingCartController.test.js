@@ -25,7 +25,6 @@ test('should return shopping cart with selected product included', async () => {
 
     const shoppingCart = result.body.signedShoppingCart.shoppingCart;
     expect(shoppingCart.orders.length).toBe(1);
-    expect(shoppingCart.confirmations.legalAgeConfirmed).toBe(false);
     expect(shoppingCart.confirmations.termsAndConditionsConfirmed).toBe(false);
     expect(shoppingCart.orders[0].shopProduct.deviceClass).toEqual("Smartphone");
 });
@@ -71,7 +70,6 @@ describe("Checkout Shopping Cart", () => {
                 }
             ],
             confirmations: {
-                legalAgeConfirmed: true,
                 termsAndConditionsConfirmed: true
             }
         };

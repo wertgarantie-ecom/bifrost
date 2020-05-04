@@ -54,17 +54,14 @@ const testShoppingCart = {
         }
     ],
     confirmations: {
-        legalAgeConfirmed: true,
         termsAndConditionsConfirmed: true
     }
 };
 
 const expectedResponse = {
     shoppingCart: testShoppingCart,
-    legalAgeConfirmed: true,
     termsAndConditionsConfirmed: true,
     headerTitle: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
-    legalAgeConfirmationText: "Hiermit bestätige ich, dass ich mindestens 18 Jahre alt bin.",
     pleaseConfirmText: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
     confirmText: 'Bitte bestätige noch kurz:',
     orders: [

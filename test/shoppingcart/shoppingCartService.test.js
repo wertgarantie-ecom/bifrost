@@ -40,7 +40,6 @@ const validShoppingCart = {
     publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     orders: [includedOrder],
     confirmations: {
-        legalAgeConfirmed: true,
         termsAndConditionsConfirmed: true
     }
 };
@@ -65,7 +64,6 @@ test("should allow duplicate products", () => {
         publicClientId: publicClientId,
         orders: [validProduct()],
         confirmations: {
-            legalAgeConfirmed: false,
             termsAndConditionsConfirmed: false
         }
     };
@@ -78,13 +76,12 @@ test("should confirm valid shopping cart", () => {
         publicClientId: publicClientId,
         products: [validProduct()],
         confirmations: {
-            legalAgeConfirmed: false,
             termsAndConditionsConfirmed: true
         }
     };
-    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "legalAgeConfirmed");
+    const confirmedShoppingCart = shoppingCartService.confirmAttribute(validShoppingCart, "termsAndConditionsConfirmed");
 
-    expect(confirmedShoppingCart.confirmations.legalAgeConfirmed).toEqual(true);
+    expect(confirmedShoppingCart.confirmations.termsAndConditionsConfirmed).toEqual(true);
 });
 
 test("should unconfirm valid shopping cart", () => {
@@ -93,20 +90,17 @@ test("should unconfirm valid shopping cart", () => {
         publicClientId: publicClientId,
         products: [validProduct()],
         confirmations: {
-            legalAgeConfirmed: true,
             termsAndConditionsConfirmed: true
         }
     };
     const confirmedShoppingCart = shoppingCartService.unconfirmAttribute(validShoppingCart, "termsAndConditionsConfirmed");
 
-    expect(confirmedShoppingCart.confirmations.legalAgeConfirmed).toEqual(true);
     expect(confirmedShoppingCart.confirmations.termsAndConditionsConfirmed).toEqual(false);
 });
 
 test("added product should always reject confirmation", () => {
     const shoppingCartWithAddedProduct = addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083");
     expect(shoppingCartWithAddedProduct.confirmations.termsAndConditionsConfirmed).toEqual(false);
-    expect(shoppingCartWithAddedProduct.confirmations.legalAgeConfirmed).toEqual(false);
 });
 
 
@@ -130,7 +124,6 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
             }
         ],
         confirmations: {
-            legalAgeConfirmed: true,
             termsAndConditionsConfirmed: true
         }
     };
