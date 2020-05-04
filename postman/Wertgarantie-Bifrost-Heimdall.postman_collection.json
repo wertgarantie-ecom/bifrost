@@ -1189,6 +1189,36 @@
 					"_postman_isSubFolder": true
 				},
 				{
+					"name": "Checkout Data",
+					"item": [
+						{
+							"name": "get all checkout data",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/checkouts?limit=2",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"checkouts"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "GET wg google rating",
 					"request": {
 						"method": "GET",
