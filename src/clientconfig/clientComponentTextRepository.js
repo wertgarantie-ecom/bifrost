@@ -3,10 +3,12 @@ const Pool = require("../postgres").Pool;
 exports.persist = async function persist(componentTextJson, clientId, componentName) {
     const pool = Pool.getInstance();
     await pool.query({
-        name: `insert-client-component-text`,
+        name: `insert-client-component-text-${componentName}`,
         text: `INSERT INTO client_component_texts (clientId, ${componentName}) VALUES (
-                $1, $2
-            );`,
+                $1, $2)
+                ON CONFLICT (clientId) 
+                DO UPDATE
+                SET ${componentName} = $2;`,
         values: [
             clientId,
             componentTextJson
@@ -18,7 +20,7 @@ exports.persist = async function persist(componentTextJson, clientId, componentN
 async function findByClientIdAndComponent(clientId, componentName) {
     const pool = Pool.getInstance();
     const result = await pool.query({
-        name: `find-component-text-by-clientid-and-component-name`,
+        name: `find-component-text-by-clientid-for-${componentName}`,
         text: `SELECT ${componentName} FROM client_component_texts WHERE clientId = $1;`,
         values: [
             clientId

@@ -1,29 +1,39 @@
-const productImageService = require('../../images/productImageService');
+const _productImageService = require('../../images/productImageService');
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
 const documentTypes = require("../../documents/documentTypes").documentTypes;
-const defaultClientService = require('../../clientconfig/clientService');
+const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
+const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
+const component = require('../components').components.selectionPopUp;
+const Globalize = require('../globalize').Globalize;
 const jsonschema = require('jsonschema');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
                                                                                  clientId,
+                                                                                 locale = "de",
                                                                                  productOffersService = _productOffersService,
-                                                                                 imageService = productImageService,
-                                                                                 clientService = defaultClientService) {
+                                                                                 productImageService = _productImageService,
+                                                                                 clientService = _clientService,
+                                                                                 clientComponentTextService = _clientComponentTextService) {
+    const globalize = Globalize.getInstance(locale);
     const client = await clientService.findClientForPublicClientId(clientId);
+
+    const componentTexts = await clientComponentTextService.getComponentTexts(client.id, component.name);
+    globalize.loadMessages(componentTexts);
+
     const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
     const productOffers = productOffersData.productOffers;
     const products = [];
     let imageLinks = [];
-    imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
     productOffers.forEach((offer, idx) => {
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers);
         products.push(product);
     });
     const data = {
-        title: "Vergessen Sie nicht Ihren Rundumschutz",
+        title: globalize.formatMessage("title"),
         products: products
     };
     return jsonschema.validate(data, schema);
