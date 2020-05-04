@@ -1,4 +1,5 @@
 const checkoutRepository = require('../../src/shoppingcart/checkoutRepository');
+const fixtureHelper = require('../helper/fixtureHelper');
 const uuid = require('uuid');
 
 describe("test persist and find by session in checkout repository", () => {
@@ -6,8 +7,8 @@ describe("test persist and find by session in checkout repository", () => {
     const sessionId2 = uuid();
     const clientId = "public:" + uuid();
     const traceId = uuid();
-    const purchasesSession1 = [purchaseWithId(uuid()), purchaseWithId(uuid())];
-    const purchasesSession2 = [purchaseWithId(uuid()), purchaseWithId(uuid())];
+    const purchasesSession1 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
+    const purchasesSession2 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
 
     test('Repository should persist checkout data', async () => {
         const checkoutData = {
@@ -53,35 +54,20 @@ describe("test persist and find by session in checkout repository", () => {
 
     test('should retrieve all persisted sessions', async () => {
         const result = await checkoutRepository.findAll(2);
-        const expectedResult = [{
-            clientId: clientId,
-            sessionId: sessionId1,
-            traceId: traceId,
-            purchases: purchasesSession1
-        }, {
-            clientId: clientId,
-            sessionId: sessionId1,
-            traceId: traceId,
-            purchases: purchasesSession2
-        }];
+        const expectedResult = [
+            {
+                clientId: clientId,
+                sessionId: sessionId2,
+                traceId: traceId,
+                purchases: purchasesSession2
+            },
+            {
+                clientId: clientId,
+                sessionId: sessionId1,
+                traceId: traceId,
+                purchases: purchasesSession1
+            }
+        ];
         expect(result).toEqual(expectedResult);
     });
-
 });
-
-function purchaseWithId(id) {
-    return {
-        id: id,
-        wertgarantieProductId: "10",
-        wertgarantieProductName: "Basic",
-        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-        devicePrice: 139999,
-        success: true,
-        message: "what a nice purchase",
-        shopProduct: "iPhone X",
-        contractNumber: "23479998",
-        transactionNumber: "7524545",
-        backend: "heimdall",
-        backendResponseInfo: "a447s7s6666f"
-    }
-}

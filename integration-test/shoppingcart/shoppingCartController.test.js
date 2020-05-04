@@ -130,7 +130,7 @@ describe("Checkout Shopping Cart", () => {
     });
 
     test("should find checkout data by session id", async (done) => {
-        const result = await request(app).get("/wertgarantie/purchases/" + sessionId);
+        const result = await request(app).get("/wertgarantie/checkouts/" + sessionId);
         expect(result.status).toBe(200);
         const body = result.body;
         const purchase = body.purchases[0];

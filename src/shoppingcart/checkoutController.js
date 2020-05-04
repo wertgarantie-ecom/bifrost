@@ -10,8 +10,15 @@ exports.findPurchaseById = async function findPurchaseById(req, res) {
     }
 };
 
-exports.findAllCheckouts = async function findAllCheckouts(req, res) {
-    const limit = req.params.query || 50;
-    const result = await checkoutRespository.findAllCheckouts(limit);
-    res.send(result);
+exports.findAllCheckouts = async function findAllCheckouts(req, res, next) {
+    const limit = req.query.limit || 50;
+    try {
+        const result = await checkoutRespository.findAll(limit);
+        if (result) {
+            return res.status(200).send(result);
+        }
+        return res.sendStatus(204);
+    } catch (error) {
+        return next(error);
+    }
 };
