@@ -41,16 +41,6 @@ describe("test persist and find by session in checkout repository", () => {
         await checkoutRepository.persist(checkoutData);
     });
 
-    test('could find second checkout data', async () => {
-        const result = await checkoutRepository.findBySessionId(sessionId2);
-        const expectedResult = {
-            clientId: clientId,
-            sessionId: sessionId2,
-            traceId: traceId,
-            purchases: purchasesSession2
-        };
-        expect(result).toEqual(expectedResult);
-    });
 
     test('should retrieve all persisted sessions', async () => {
         const result = await checkoutRepository.findAll(2);
@@ -71,3 +61,8 @@ describe("test persist and find by session in checkout repository", () => {
         expect(result).toEqual(expectedResult);
     });
 });
+
+test('find by session id should return undefined in case of no checkout data avalable', async () => {
+    const result = await checkoutRepository.findBySessionId(uuid());
+    expect(result).toEqual(undefined);
+})
