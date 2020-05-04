@@ -1,4 +1,4 @@
-const defaultCheckoutRepository = require('../../shoppingcart/CheckoutRepository');
+const defaultCheckoutRepository = require('../../shoppingcart/checkoutRepository');
 const signatureService = require('../../shoppingcart/signatureService');
 const ClientError = require('../../errors/ClientError');
 const shoppingCartService = require('../../shoppingcart/shoppingCartService');

@@ -1,62 +1,87 @@
-const checkoutRepository = require('../../src/shoppingcart/CheckoutRepository');
+const checkoutRepository = require('../../src/shoppingcart/checkoutRepository');
 const uuid = require('uuid');
 
 describe("test persist and find by session in checkout repository", () => {
-    const sessionId = uuid();
+    const sessionId1 = uuid();
+    const sessionId2 = uuid();
     const clientId = "public:" + uuid();
     const traceId = uuid();
-    const purchase1Id = uuid();
-    const purchase2Id = uuid();
-    const purchases = [
-        {
-            id: purchase1Id,
-            wertgarantieProductId: "10",
-            wertgarantieProductName: "Basic",
-            deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-            devicePrice: 139999,
-            success: true,
-            message: "what a nice purchase",
-            shopProduct: "iPhone X",
-            contractNumber: "23479998",
-            transactionNumber: "7524545",
-            backend: "heimdall",
-            backendResponseInfo: "a447s7s6666f"
-        },
-        {
-            id: purchase2Id,
-            wertgarantieProductId: "10",
-            wertgarantieProductName: "Premiun",
-            deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
-            devicePrice: 139999,
-            success: true,
-            message: "it's awesome",
-            shopProduct: "iPhone X",
-            contractNumber: "23479999",
-            transactionNumber: "7524546",
-            backend: "heimdall",
-            backendResponseInfo: "a447s7s6666g"
-        }
-    ];
+    const purchasesSession1 = [purchaseWithId(uuid()), purchaseWithId(uuid())];
+    const purchasesSession2 = [purchaseWithId(uuid()), purchaseWithId(uuid())];
 
-    test('Repository should persist and retrieve checkout data ', async (done) => {
+    test('Repository should persist checkout data', async () => {
         const checkoutData = {
-            sessionId: sessionId,
+            sessionId: sessionId1,
             clientId: clientId,
             traceId: traceId,
-            purchases: purchases
+            purchases: purchasesSession1
         };
         await checkoutRepository.persist(checkoutData);
-        done()
     });
-    test('Repository should successfully retrieve data from DB', async (done) => {
-        const result = await checkoutRepository.findBySessionId(sessionId);
+
+    test('Repository should successfully retrieve data from DB by session id', async () => {
+        const result = await checkoutRepository.findBySessionId(sessionId1);
         const expectedResult = {
             clientId: clientId,
-            sessionId: sessionId,
+            sessionId: sessionId1,
             traceId: traceId,
-            purchases: purchases
+            purchases: purchasesSession1
         };
         expect(result).toEqual(expectedResult);
-        done();
-    })
+    });
+
+    test('repository should persist second checkout data with different session id', async () => {
+        const checkoutData = {
+            sessionId: sessionId2,
+            clientId: clientId,
+            traceId: traceId,
+            purchases: purchasesSession2
+        };
+        await checkoutRepository.persist(checkoutData);
+    });
+
+    test('could find second checkout data', async () => {
+        const result = await checkoutRepository.findBySessionId(sessionId2);
+        const expectedResult = {
+            clientId: clientId,
+            sessionId: sessionId2,
+            traceId: traceId,
+            purchases: purchasesSession2
+        };
+        expect(result).toEqual(expectedResult);
+    });
+
+    test('should retrieve all persisted sessions', async () => {
+        const result = await checkoutRepository.findAll(2);
+        const expectedResult = [{
+            clientId: clientId,
+            sessionId: sessionId1,
+            traceId: traceId,
+            purchases: purchasesSession1
+        }, {
+            clientId: clientId,
+            sessionId: sessionId1,
+            traceId: traceId,
+            purchases: purchasesSession2
+        }];
+        expect(result).toEqual(expectedResult);
+    });
+
 });
+
+function purchaseWithId(id) {
+    return {
+        id: id,
+        wertgarantieProductId: "10",
+        wertgarantieProductName: "Basic",
+        deviceClass: "0dc47b8a-f984-11e9-adcf-afabcc521093",
+        devicePrice: 139999,
+        success: true,
+        message: "what a nice purchase",
+        shopProduct: "iPhone X",
+        contractNumber: "23479998",
+        transactionNumber: "7524545",
+        backend: "heimdall",
+        backendResponseInfo: "a447s7s6666f"
+    }
+}

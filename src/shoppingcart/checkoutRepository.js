@@ -1,4 +1,15 @@
 const Pool = require("../postgres").Pool;
+const _ = require('lodash');
+
+exports.findAll = async function findAllCheckouts(limit) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'find-all-checkout-data',
+        text: 'select * from checkout c, purchase p where c.sessionid = p.sessionid order by c.timestamp desc limit $1;',
+        values: [limit]
+    });
+    return toCheckoutData(result.rows);
+}
 
 
 exports.persist = async function persist(checkoutData) {
@@ -48,33 +59,56 @@ exports.persist = async function persist(checkoutData) {
     }
 };
 
-function toCheckoutData(row) {
-    return {
-        clientId: row.clientid,
-        sessionId: row.sessionid,
-        traceId: row.traceid,
-        purchases: []
+function toCheckoutData(rows) {
+    function groupedRowsToCheckoutData(rows) {
+
+        function rowToCheckoutData(row) {
+            return {
+                clientId: row.clientid,
+                sessionId: row.sessionid,
+                traceId: row.traceid,
+                purchases: []
+            }
+        }
+
+        function toPurchases(rows) {
+            return rows.map(row => {
+                return {
+                    id: row.id,
+                    wertgarantieProductId: row.wertgarantieproductid,
+                    wertgarantieProductName: row.wertgarantieproductname,
+                    deviceClass: row.deviceclass,
+                    devicePrice: row.deviceprice,
+                    success: row.success,
+                    message: row.message,
+                    shopProduct: row.shopproduct,
+                    contractNumber: row.contractnumber,
+                    transactionNumber: row.transactionnumber,
+                    backend: row.backend,
+                    backendResponseInfo: row.backendresponseinfojson
+                }
+            })
+        }
+
+        if (rows.length > 0) {
+            const checkoutData = rowToCheckoutData(rows[0]);
+            const purchases = toPurchases(rows);
+            checkoutData.purchases.push(...purchases);
+            return checkoutData;
+        } else {
+            return undefined;
+        }
     }
+
+    if (rows.length === 0) {
+        return [];
+    }
+
+    const rowsBySessionId = _.groupBy(rows, 'sessionid');
+    const checkoutData = Object.entries(rowsBySessionId).map(([sessionId, rows]) => groupedRowsToCheckoutData(rows));
+    return _.compact(checkoutData);
 }
 
-function toPurchases(rows) {
-    return rows.map(row => {
-        return {
-            id: row.id,
-            wertgarantieProductId: row.wertgarantieproductid,
-            wertgarantieProductName: row.wertgarantieproductname,
-            deviceClass: row.deviceclass,
-            devicePrice: row.deviceprice,
-            success: row.success,
-            message: row.message,
-            shopProduct: row.shopproduct,
-            contractNumber: row.contractnumber,
-            transactionNumber: row.transactionnumber,
-            backend: row.backend,
-            backendResponseInfo: row.backendresponseinfojson
-        }
-    })
-}
 
 exports.findBySessionId = async function findBySessionId(sessionID) {
     const pool = Pool.getInstance();
@@ -85,12 +119,6 @@ exports.findBySessionId = async function findBySessionId(sessionID) {
             'WHERE c.sessionid = $1',
         values: [sessionID]
     });
-    if (result.rowCount > 0) {
-        const checkoutData = toCheckoutData(result.rows[0]);
-        const purchases = toPurchases(result.rows);
-        checkoutData.purchases.push(...purchases);
-        return checkoutData;
-    } else {
-        return undefined;
-    }
+    const checkoutData = toCheckoutData(result.rows);
+    return checkoutData.length === 0 ? undefined : checkoutData[0];
 };

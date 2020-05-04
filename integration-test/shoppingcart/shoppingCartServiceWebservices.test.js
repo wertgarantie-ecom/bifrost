@@ -3,7 +3,7 @@ const webservicesProductOffersAssembler = require('../../src/backends/webservice
 const mockWebservicesClient = require('../../test/helpers/webserviceMockClient').createMockWebserviceClient();
 const fixtureHelper = require('../helper/fixtureHelper');
 const nockHelper = require('../helper/nockHelper');
-const checkoutRepository = require('../../src/shoppingcart/CheckoutRepository');
+const checkoutRepository = require('../../src/shoppingcart/checkoutRepository');
 
 beforeAll(() => {
    process.env = Object.assign(process.env, {BACKEND: "webservices"});

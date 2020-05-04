@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const _ = require('lodash');
-const checkoutRepository = require('./CheckoutRepository');
+const checkoutRepository = require('./checkoutRepository');
 const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutService');
 const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 const ClientError = require('../errors/ClientError');
