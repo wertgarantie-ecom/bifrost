@@ -94,7 +94,7 @@ test("should submit insurance proposal", async () => {
     const mockWebservicesClient = {
         login: () => "session",
         getNewContractNumber: () => "12345678",
-        sendInsuranceProposal: () => webservicesResponses.successfulInsuranceProposal.RESULT
+        sendInsuranceProposal: () => webservicesResponses.successfulInsuranceProposal
     };
 
     const satznummerGenerator = () => "dd2209dc-fa26-444d-b1ce-2995b9340aac";
@@ -118,7 +118,8 @@ test("should submit insurance proposal", async () => {
         "wertgarantieProductName": "Komplettschutz",
         "backendResponseInfo": {
             "statusText": "Verarbeitet",
-            "statusCode": "3"
+            "statusCode": "3",
+            "requestId": "98889510"
         }
     });
 });

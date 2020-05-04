@@ -219,8 +219,7 @@ exports.sendInsuranceProposal = async function sendInsuranceProposal(session, in
     formDataMap.set('API', 'JSON');
     formDataMap.set('SESSION', session);
     formDataMap.set('DATA', insuranceProposalXML);
-    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
-    return result.RESULT;
+    return await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
 async function sendWebservicesRequest(formDataMap, uri, httpClient, expectedStatusCode) {

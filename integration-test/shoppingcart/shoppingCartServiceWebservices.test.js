@@ -6,7 +6,7 @@ const nockHelper = require('../helper/nockHelper');
 const checkoutRepository = require('../../src/shoppingcart/checkoutRepository');
 
 beforeAll(() => {
-   process.env = Object.assign(process.env, {BACKEND: "webservices"});
+    process.env = Object.assign(process.env, {BACKEND: "webservices"});
 });
 
 describe("should submit insurance proposal and persist purchase data", () => {
@@ -73,5 +73,10 @@ describe("should submit insurance proposal and persist purchase data", () => {
         expect(purchase.deviceClass).toEqual(wertgarantieShoppingCart.orders[0].shopProduct.deviceClass);
         expect(purchase.success).toBe(true);
         expect(purchase.contractNumber).toEqual(contractNumber);
+        expect(purchase.backendResponseInfo).toEqual({
+            "requestId": "98889510",
+            "statusCode": "3",
+            "statusText": "Verarbeitet"
+        })
     });
 });
