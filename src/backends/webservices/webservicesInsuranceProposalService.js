@@ -82,7 +82,7 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
                 "Kommunikation": {
                     "Position": 1,
                     "Hersteller": shopProduct.manufacturer,
-                    "Geraetetyp": objectCode,
+                    "Geraetekennzeichen": objectCode,
                     "Kaufdatum": formattedDate,
                     "Kaufpreis": ((shopProduct.price / 100) + "").replace(".", ","),
                     "Risiken": {
@@ -96,7 +96,10 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
                 "Produktdetails": {
                     "Antragskodierung": productOffer.applicationCode,
                     "Produkttyp": productOffer.productType
-                }
+                },
+               "Zahlung": {
+                   "Selbstzahler" : true
+               }
             }
         }
     };
