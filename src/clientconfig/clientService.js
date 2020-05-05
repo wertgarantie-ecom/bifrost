@@ -1,4 +1,4 @@
-const _repository = require('./ClientRepository');
+const _repository = require('./clientRepository');
 const uuid = require('uuid');
 const validate = require('../framework/validation/validator').validate;
 const newClientSchema = require('./newClientSchema').newClientSchema;
