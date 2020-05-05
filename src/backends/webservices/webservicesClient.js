@@ -226,7 +226,7 @@ async function sendWebservicesRequest(formDataMap, uri, httpClient, expectedStat
     let response;
     const formData = new FormData();
     formDataMap.forEach((value, key) => {
-        formData.append(key, value);
+        formData.append(key, Buffer.from(value, 'utf8'), {header: {contentType: 'text/plain; charset=UTF-8'}})
     });
     const formHeaders = formData.getHeaders();
     const contentLength = formData.getLengthSync();
