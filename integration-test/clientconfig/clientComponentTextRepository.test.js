@@ -26,7 +26,7 @@ describe("should persist and retrieve component texts", () => {
     test("should add texts for different component for same client", async () => {
         const confirmationTexts = {
             de: {
-                title: "HERZLICHEN GLÜCKWUNSCH, DU HAST DEN BESTEN SCHUTZ FÜR DEINEN EINKAUF AUSGEWÄHLT.\n",
+                title: "HERZLICHEN GLÜCKWUNSCH, DU HAST DEN BESTEN SCHUTZ FÜR DEINEN EINKAUF AUSGEWÄHLT.",
                 subtitle: "BITTE BESTÄTIGE NOCH KURZ:",
                 shopName: "Handyflash"
             }
