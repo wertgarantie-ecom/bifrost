@@ -1,6 +1,6 @@
 const _repository = require('./ClientRepository');
 const uuid = require('uuid');
-const jsonschema = require('jsonschema');
+const validate = require('../framework/validation/validator').validate;
 const newClientSchema = require('./newClientSchema').newClientSchema;
 
 async function findClientById(id) {
@@ -61,17 +61,6 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
     return await repository.insert(clientData);
 };
 
-function validate(object, schema) {
-    const validationResult = jsonschema.validate(object, schema);
-    if (!validationResult.valid) {
-        const error = new Error();
-        error.name = "ValidationError";
-        error.errors = validationResult.errors;
-        error.instance = validationResult.instance;
-        error.message = JSON.stringify(validationResult.errors, null, 2);
-        throw error;
-    }
-}
 
 class InvalidClientIdError extends Error {
     constructor(message) {

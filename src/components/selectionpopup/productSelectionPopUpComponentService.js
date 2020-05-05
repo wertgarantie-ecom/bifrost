@@ -6,7 +6,7 @@ const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const component = require('../components').components.selectionPopUp;
-const Globalize = require('../globalize').Globalize;
+const Globalize = require('../../framework/globalize').Globalize;
 const jsonschema = require('jsonschema');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,

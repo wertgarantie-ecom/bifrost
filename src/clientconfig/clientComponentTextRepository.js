@@ -1,4 +1,4 @@
-const Pool = require("../postgres").Pool;
+const Pool = require("../framework/postgres").Pool;
 
 exports.persist = async function persist(componentTextJson, clientId, componentName) {
     const pool = Pool.getInstance();

@@ -1,9 +1,10 @@
 const _repository = require('./clientComponentTextRepository');
 const components = require('../components/components').components;
 const clientService = require('./clientService');
-const jsonschemaValidator = require('jsonschema');
+const validate = require('../framework/validation/validator').validate;
+const Globalize = require('../framework/globalize').Globalize;
 
-exports.saveNewComponentTextsForClientId = async function saveNewComponetTexts(clientId, componentName, componentTexts, repository = _repository) {
+exports.saveNewComponentTextsForClientId = async function saveNewComponentTexts(clientId, componentName, componentTexts, repository = _repository) {
     if (!(clientId && componentName && componentTexts && components[componentName])) {
         const errorDetails = {
             clientId: clientId,
@@ -14,14 +15,11 @@ exports.saveNewComponentTextsForClientId = async function saveNewComponetTexts(c
         throw new Error(`Could not save new texts for ${componentName} component. Details: ${JSON.stringify(errorDetails)}`);
     }
     const client = await clientService.findClientById(clientId);
-    const validationResult = jsonschemaValidator.validate(componentTexts, components[componentName].textsSchema);
-    if (!validationResult.valid) {
-        const error = new Error();
-        error.name = "ValidationError";
-        error.errors = validationResult.errors;
-        error.instance = validationResult.instance;
-        error.message = JSON.stringify(validationResult.errors, null, 2);
-        throw error;
-    }
+    validate(componentTexts, components[componentName].textsSchema);
     return repository.persist(componentTexts, client.id, componentName)
 };
+
+exports.getComponentTexts = async function getComponentTexts(clientId, componentName, locale = 'de', repository = _repository) {
+    const componentTextsJson = await repository.findByClientIdAndComponent(clientId, componentName);
+    Globalize.getInstance(locale).loadMessages(componentTextsJson);
+}

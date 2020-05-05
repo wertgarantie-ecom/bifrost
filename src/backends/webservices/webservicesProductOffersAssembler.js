@@ -4,7 +4,7 @@ const _ = require('lodash');
 const _uuid = require('uuid');
 const clientService = require('../../clientconfig/clientService');
 const _productOfferRepository = require('./webserviceProductOffersRepository');
-const jsonschema = require('jsonschema');
+const validate = require('../../framework/validation/validator').validate;
 const productOfferSchema = require('./webserviceProductOffersSchema').productOfferSchema;
 
 
@@ -33,15 +33,7 @@ async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webse
     }
     const productOffers = await assembleAllProductOffersForClient(clientConfig, uuid, webservicesClient, documentRepository);
     productOffers.forEach(offer => {
-        const validationResult = jsonschema.validate(offer, productOfferSchema);
-        if (!validationResult.valid) {
-            const error = new Error();
-            error.name = "ValidationError";
-            error.errors = validationResult.errors;
-            error.instance = validationResult.instance;
-            error.message = JSON.stringify(validationResult.errors, null, 2);
-            throw error;
-        }
+        validate(offer, productOfferSchema);
     });
     return productOfferRepository.persist(productOffers);
 }
