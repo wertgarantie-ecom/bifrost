@@ -6,7 +6,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 const bodyParser = require('body-parser');
-const localeRequestFilter = require('./routes/localeRequestFilter');
+const localeParser = require('express-locale')();
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -20,6 +20,7 @@ const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(localeParser);
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -40,7 +41,6 @@ app.use(sslRedirect(['prod', 'dev', 'staging']));
 app.use(require('./shoppingcart/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
 app.use('/heroku', require('./heroku/herokuController'));
-app.use('/wertgarantie/', localeRequestFilter.getBrowserLocale);
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', checkSessionIdCheckout);
 app.use('/wertgarantie/', validateShoppingCartRequest);

@@ -28,7 +28,7 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale);
         products.push(product);
     });
-    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
+const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const data = {
         title: popUpTexts.title,
         subtitle: popUpTexts.subtitle,

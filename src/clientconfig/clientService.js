@@ -4,11 +4,7 @@ const validate = require('../framework/validation/validator').validate;
 const newClientSchema = require('./newClientSchema').newClientSchema;
 
 async function findClientById(id) {
-    const client = await _repository.findClientById(id);
-    if (!client) {
-        throw new InvalidClientIdError(`Could not find Client for specified ID: ${id}`);
-    }
-    return client;
+    return await _repository.findClientById(id);
 }
 
 exports.findClientById = findClientById;
@@ -16,6 +12,9 @@ exports.findClientById = findClientById;
 exports.updateWebservicesBackendConfig = async function updateWebservicesBackendConfig(clientId, newWebservicesConfig) {
     validate(newWebservicesConfig, newClientSchema.properties.backends.properties.webservices);
     const client = await findClientById(clientId);
+    if (!client) {
+        throw new InvalidClientIdError(`Could not find Client for specified ID: ${clientId}`);
+    }
     client.backends.webservices = newWebservicesConfig;
     return await _repository.update(client.id, client.backends);
 };
@@ -50,7 +49,7 @@ exports.findAllClients = async function findAllClients() {
 
 exports.addNewClient = async function addNewClient(createClientRequest, repository = _repository) {
     const clientData = {
-        id: uuid(),
+        id: createClientRequest.id || uuid(),
         name: createClientRequest.name,
         backends: createClientRequest.backends,
         activePartnerNumber: createClientRequest.activePartnerNumber,

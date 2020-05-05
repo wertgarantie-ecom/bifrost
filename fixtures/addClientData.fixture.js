@@ -168,12 +168,11 @@ describe('add phone test shop client', () => {
         };
 
         const response = await request(app)
-            .get(`/wertgarantie/clients?publicClientId=${validData.publicClientIds[0]}`)
+            .get(`/wertgarantie/clients/${validData.id}`)
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .set('Accept', 'application/json')
             .send(validData);
 
-        console.log(JSON.stringify(response.body, null, 2));
         if (response.status !== 200) {
             await request(app)
                 .post("/wertgarantie/clients")
@@ -182,6 +181,22 @@ describe('add phone test shop client', () => {
                 .send(validData)
                 .expect(200);
         }
+
+        await request(app)
+            .post(`/wertgarantie/clients/${validData.id}/component-texts`)
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+            .send({
+                component: "selectionpopup",
+                locale: "de",
+                componentTexts: {
+                    title: "Vergessen Sie nicht Ihren Rundumschutz",
+                    subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+                    footerText: "Versicherung ist Vertrauenssache, deshalb setzt %s neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
+                    partnerShop: "Testshop"
+                }
+            })
+            .expect(200)
+
         done();
     });
 
