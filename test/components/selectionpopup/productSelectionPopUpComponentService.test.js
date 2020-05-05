@@ -29,7 +29,7 @@ test("should return proper product response", async () => {
         partnerShop: "Testshop"
     };
     const mockComponentTextsService = {
-        getComponentTexts: () => componentTextsJson
+        getComponentTextsForClientAndLocal: () => componentTextsJson
     };
     const result = await service.prepareProductSelectionData("Smartphone",
         "devicePrice",

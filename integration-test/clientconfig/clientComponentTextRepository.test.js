@@ -13,12 +13,12 @@ describe("should persist and retrieve component texts", () => {
 
     test("should persist texts for selection popup", async () => {
         client = await fixtureHelper.createAndPersistDefaultClientWithWebservicesConfiguration();
-        const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, locale, components.selectionPopUp.name);
+        const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, locale, components.selectionpopup.name);
         expect(persistResult).toEqual(selectionPopUpTexts);
     });
 
     test("should find selection popup texts for client", async () => {
-        const result = await clientComponentTextRepository.findByClientIdAndComponent(client.id, locale, components.selectionPopUp.name);
+        const result = await clientComponentTextRepository.findByClientIdAndLocaleAndComponent(client.id, locale, components.selectionpopup.name);
         expect(result).toEqual(selectionPopUpTexts);
     });
 
@@ -42,7 +42,7 @@ describe("should persist and retrieve component texts", () => {
                 shopName: "Handyflash DE"
             }
         }
-        const persistResult = await clientComponentTextRepository.persist(newSelectionPopupTexts, client.id, locale, components.selectionPopUp.name);
+        const persistResult = await clientComponentTextRepository.persist(newSelectionPopupTexts, client.id, locale, components.selectionpopup.name);
         expect(persistResult).toEqual(newSelectionPopupTexts);
     });
 });
