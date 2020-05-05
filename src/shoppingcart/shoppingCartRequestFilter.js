@@ -4,16 +4,31 @@ const ClientError = require('../errors/ClientError');
 const isBase64 = require('is-base64');
 const isUUID = require('is-uuid');
 const SESSION_ID_HEADER = 'X-wertgarantie-session-id';
+const afterSalesComponentCheckoutSchema = require('../components/aftersales/afterSalesComponentCheckoutSchema').afterSalesComponentCheckoutSchema;
+const validate = require('../framework/validation/validator').validate;
 
 exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
     const signedShoppingCart = req.body.signedShoppingCart;
     const options = {allowEmpty: false};
     if (isBase64(signedShoppingCart, options)) {
         const buffer = Buffer.from(signedShoppingCart, 'base64');
-        const signedShoppingCartString = buffer.toString('utf-8');
+        const signedShoppingCartString = buffer.toString('utf8');
         req.body.signedShoppingCart = JSON.parse(signedShoppingCartString);
     }
     next();
+};
+
+exports.filterAndValidateBase64EncodedWebshopData = function filterAndValidateBase64EncodedWebshopData(req, res, next) {
+    const webshopData = req.body.webshopData;
+    const buffer = Buffer.from(webshopData, 'base64');
+    const webshopDataDecoded = JSON.parse(buffer.toString('utf8'));
+    try {
+        validate(webshopDataDecoded, afterSalesComponentCheckoutSchema);
+        req.body.webshopData = webshopDataDecoded;
+    } catch (error) {
+        return next(error);
+    }
+    return next();
 };
 
 exports.checkSessionIdCheckout = async function checkSessionIdCheckout(req, res, next, findBySessionId = _findBySessionId) {

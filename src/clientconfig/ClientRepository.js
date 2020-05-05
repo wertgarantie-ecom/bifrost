@@ -1,4 +1,4 @@
-const Pool = require("../postgres").Pool;
+const Pool = require("../framework/postgres").Pool;
 
 exports.update = async function updateBackendConfig(id, backendConfig) {
     const pool = Pool.getInstance();

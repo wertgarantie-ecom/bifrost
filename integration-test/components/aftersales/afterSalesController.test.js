@@ -153,10 +153,11 @@ describe("Check Checkout via after sales component ", () => {
                 message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
             }
         });
+        const base64WebshopData = Buffer.from(JSON.stringify(webshopData)).toString('base64');
 
         const result = await request(app).post("/wertgarantie/components/after-sales/checkout")
             .send({
-                webshopData: webshopData,
+                webshopData: base64WebshopData,
                 signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart)
             });
         const resultBody = result.body;

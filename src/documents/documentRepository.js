@@ -1,4 +1,4 @@
-const Pool = require("../postgres").Pool;
+const Pool = require("../framework/postgres").Pool;
 const CryptoJS = require('crypto-js');
 
 exports.persist = async function persist(document) {

@@ -1,4 +1,4 @@
-const Pool = require('./src/postgres').Pool;
+const Pool = require('./src/framework/postgres').Pool;
 module.exports = async () => {
     console.log("starting integration test teardown");
     console.log("teardown pool");
