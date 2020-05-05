@@ -1,6 +1,6 @@
 const shopProductSchema = require('./shopProductSchema').shopProductSchema;
 const wertgarantieProductSchema = require('./wertgarantieProductSchema').wertgarantieProductSchema;
-const signedShoppingCartSchema = require('./signedShoppingCartSchema').requestWithSignedShoppingCartSchema.properties.signedShoppingCart;
+const signedShoppingCartSchema = require('./signedShoppingCartSchema').signedSchoppingCartSchema;
 
 exports.addShoppingCartProductSchema = {
     type: "object",

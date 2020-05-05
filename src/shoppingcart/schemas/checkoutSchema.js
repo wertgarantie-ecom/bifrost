@@ -1,4 +1,4 @@
-const signedShoppingCartSchema = require('./signedShoppingCartSchema').requestWithSignedShoppingCartSchema;
+const signedShoppingCartSchema = require('./signedShoppingCartSchema').signedSchoppingCartSchema;
 
 module.exports.checkoutSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
@@ -75,7 +75,7 @@ module.exports.checkoutSchema = {
                 "email"
             ]
         },
-        signedShoppingCart: signedShoppingCartSchema.properties.signedShoppingCart
+        signedShoppingCart: signedShoppingCartSchema
     },
     required: [
         "purchasedProducts",

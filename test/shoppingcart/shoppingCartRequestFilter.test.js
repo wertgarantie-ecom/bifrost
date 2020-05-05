@@ -46,7 +46,7 @@ test("should remove shopping carts which were already purchased", async () => {
     expect(mockResponseHeaders).toContain('X-wertgarantie-shopping-cart-delete=true');
 });
 
-test('should throw ClientError on invalid signatures', async () => {
+test('should delete shopping cart on invalid signature', async () => {
     const mockRequest = {
         body: {
             signedShoppingCart: {
@@ -56,8 +56,12 @@ test('should throw ClientError on invalid signatures', async () => {
     };
 
     var next = jest.fn();
-    requestFilter.validateShoppingCart(mockRequest, {}, next, () => false);
-    expect(next.mock.calls[0][0].name).toBe("ClientError")
+    const setHeaderMock = jest.fn();
+    const res = {
+        set: setHeaderMock
+    };
+    requestFilter.validateShoppingCart(mockRequest, res, next, () => false);
+    expect(setHeaderMock.mock.calls[0][0]).toBe('X-wertgarantie-shopping-cart-delete');
 });
 
 test('should call next if no shopping cart is given', async () => {

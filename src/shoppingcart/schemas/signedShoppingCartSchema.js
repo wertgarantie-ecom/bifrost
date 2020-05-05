@@ -1,48 +1,43 @@
 const orderSchema = require('./orderSchema');
 
-exports.requestWithSignedShoppingCartSchema = {
+exports.signedSchoppingCartSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
+    additionalProperties: false,
     properties: {
-        signedShoppingCart: {
+        signature: {
+            type: "string",
+            required: true
+        },
+        shoppingCart: {
             type: "object",
             additionalProperties: false,
+            required: [
+                "sessionId",
+                "publicClientId",
+                "confirmations",
+                "orders"
+            ],
             properties: {
-                signature: {
+                sessionId: {
+                    type: "string"
+                },
+                publicClientId: {
                     type: "string",
                     required: true
                 },
-                shoppingCart: {
+                confirmations: {
                     type: "object",
-                    additionalProperties: false,
-                    required: [
-                        "sessionId",
-                        "publicClientId",
-                        "confirmations",
-                        "orders"
-                    ],
                     properties: {
-                        sessionId: {
-                            type: "string"
-                        },
-                        publicClientId: {
-                            type: "string",
+                        termsAndConditionsConfirmed: {
+                            type: "boolean",
                             required: true
-                        },
-                        confirmations: {
-                            type: "object",
-                            properties: {
-                                termsAndConditionsConfirmed: {
-                                    type: "boolean",
-                                    required: true
-                                }
-                            }
-                        },
-                        orders: {
-                            type: "array",
-                            items: orderSchema
                         }
                     }
+                },
+                orders: {
+                    type: "array",
+                    items: orderSchema
                 }
             }
         }

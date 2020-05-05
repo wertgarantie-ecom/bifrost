@@ -6,6 +6,7 @@ const isUUID = require('is-uuid');
 const SESSION_ID_HEADER = 'X-wertgarantie-session-id';
 const afterSalesComponentCheckoutSchema = require('../components/aftersales/afterSalesComponentCheckoutSchema').afterSalesComponentCheckoutSchema;
 const validate = require('../framework/validation/validator').validate;
+const signedShoppingCartSchema = require('./schemas/signedShoppingCartSchema').signedSchoppingCartSchema;
 
 exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
     const signedShoppingCart = req.body.signedShoppingCart;
@@ -58,9 +59,19 @@ exports.validateShoppingCart = function validateShoppingCart(req, res, next, ver
     }
 
     const signedShoppingCart = req.body.signedShoppingCart;
+
+    try {
+        validate(signedShoppingCart, signedShoppingCartSchema);
+    } catch (err) {
+        deleteShoppingCart(req, res)
+        console.error("invalid shopping cart provided: " + JSON.stringify(err, null, 2));
+        return next();
+    }
+
     if (!verifyShoppingCart(signedShoppingCart)) {
-        const clientError = new ClientError(`invalid signature: ${signedShoppingCart.signature}`);
-        return next(clientError);
+        deleteShoppingCart(req, res)
+        console.error("shopping cart with invalid signature" + JSON.stringify(signedShoppingCart, null, 2));
+        return next()
     } else {
         req.shoppingCart = signedShoppingCart.shoppingCart;
         return next();

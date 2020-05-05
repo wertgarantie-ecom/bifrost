@@ -31,8 +31,13 @@ function sendErrorResponse(res, error, errorMessage) {
 }
 
 exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart(req, res, next) {
+    if (res.get("X-wertgarantie-shopping-cart-delete")) {
+        return res.status(400).send({
+            message: `Invalid shopping cart provided. Checkout call will not be processed`
+        })
+    }
     if (!req.shoppingCart) {
-        res.status(200).send({
+        return res.status(200).send({
             message: `No Wertgarantie products were provided for checkout call. In this case, the API call to Wertgarantie-Bifrost is not needed.`
         });
     } else {
@@ -43,7 +48,7 @@ exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart
                 sendErrorResponse(res, new ClientError(errorMessage));
             }
             const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, req.shoppingCart, client);
-            res.status(200).send(result);
+            return res.status(200).send(result);
         } catch (error) {
             if (error instanceof SyntaxError) { //JSON.parse fails
                 sendErrorResponse(res, error, "Corrupt JSON provided as wertgarantie shopping cart. Checkout call will not be processed.");
