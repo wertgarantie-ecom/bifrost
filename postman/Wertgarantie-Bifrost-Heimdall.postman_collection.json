@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "8f8d38fa-192f-440c-a5db-556796dc8857",
-		"name": "Wertgarantie-Bifrost-Heimdall copy",
+		"name": "Wertgarantie-Bifrost-Heimdall",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -1271,7 +1271,7 @@
 									"variable": [
 										{
 											"key": "clientId",
-											"value": "0af733fe-a99d-4114-8cad-ba81ede3af8a"
+											"value": "05a6e450-b114-42d7-8a3d-6ef329b4c0ce"
 										}
 									]
 								}
@@ -1324,7 +1324,7 @@
 									"variable": [
 										{
 											"key": "clientId",
-											"value": "0af733fe-a99d-4114-8cad-ba81ede3af8a"
+											"value": "05a6e450-b114-42d7-8a3d-6ef329b4c0ce"
 										}
 									]
 								}
@@ -1430,17 +1430,19 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{host}}/checkouts?limit=2",
+									"raw": "{{host}}/clients/:clientId/component-texts",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
-										"checkouts"
+										"clients",
+										":clientId",
+										"component-texts"
 									],
-									"query": [
+									"variable": [
 										{
-											"key": "limit",
-											"value": "2"
+											"key": "clientId",
+											"value": "05a6e450-b114-42d7-8a3d-6ef329b4c0ce"
 										}
 									]
 								}
