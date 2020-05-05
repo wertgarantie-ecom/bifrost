@@ -12,7 +12,8 @@ const webservicesController = require("../backends/webservices/webservicesContro
 const documentsController = require("../documents/documentsController");
 const checkoutSchema = require("../shoppingcart/schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
-const afterSalesComponentCheckoutSchema = require("../components/aftersales/afterSalesComponentCheckoutSchema").afterSalesComponentCheckoutSchema;
+// const afterSalesComponentCheckoutSchema = require("../components/aftersales/afterSalesComponentCheckoutSchema").afterSalesComponentCheckoutSchema;
+const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 
@@ -26,7 +27,7 @@ router.delete("/components/confirmation/product", confirmationController.removeP
 router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
 
 router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData);
-router.post("/components/after-sales/checkout", validate({body: afterSalesComponentCheckoutSchema}), afterSalesController.componentCheckout);
+router.post("/components/after-sales/checkout", filterAndValidateBase64EncodedWebshopData, afterSalesController.componentCheckout);
 
 router.get("/components/landing-page", landingPageController.getLandingPageData);
 

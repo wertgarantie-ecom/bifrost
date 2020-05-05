@@ -75,14 +75,10 @@ module.exports.checkoutSchema = {
                 "email"
             ]
         },
-        secretClientId: {
-            type: "string"
-        },
         signedShoppingCart: signedShoppingCartSchema.properties.signedShoppingCart
     },
     required: [
         "purchasedProducts",
-        "customer",
-        "secretClientId"
+        "customer"
     ]
 };

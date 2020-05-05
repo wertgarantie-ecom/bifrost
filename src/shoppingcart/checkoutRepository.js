@@ -1,4 +1,4 @@
-const Pool = require("../postgres").Pool;
+const Pool = require("../framework/postgres").Pool;
 
 exports.persist = async function persist(checkoutData) {
     const pool = Pool.getInstance();
