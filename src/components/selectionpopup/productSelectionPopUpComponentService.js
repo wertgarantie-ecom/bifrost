@@ -5,9 +5,9 @@ const documentTypes = require("../../documents/documentTypes").documentTypes;
 const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
-const component = require('../components').components.selectionPopUp;
-const Globalize = require('../../framework/globalize').Globalize;
-const jsonschema = require('jsonschema');
+const component = require('../components').components.selectionpopup;
+const validate = require('../../framework/validation/validator').validate;
+const util = require('util');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
@@ -17,11 +17,7 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
                                                                                  productImageService = _productImageService,
                                                                                  clientService = _clientService,
                                                                                  clientComponentTextService = _clientComponentTextService) {
-    const globalize = Globalize.getInstance(locale);
     const client = await clientService.findClientForPublicClientId(clientId);
-
-    const componentTexts = await clientComponentTextService.getComponentTexts(client.id, component.name);
-    globalize.loadMessages(componentTexts);
 
     const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
     const productOffers = productOffersData.productOffers;
@@ -29,17 +25,20 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
     productOffers.forEach((offer, idx) => {
-        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers);
+        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale);
         products.push(product);
     });
+    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const data = {
-        title: globalize.formatMessage("title"),
-        products: products
+        title: popUpTexts.title,
+        subtitle: popUpTexts.subtitle,
+        products: products,
+        footerText: util.format(popUpTexts.footerText, popUpTexts.partnerShop)
     };
-    return jsonschema.validate(data, schema);
+    return validate(data, schema);
 };
 
-function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers) {
+function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale) {
     const displayableProductOffer = productService.fromProductOffer(productOffer);
     productOffer.payment = displayableProductOffer.getPaymentInterval();
 
@@ -55,8 +54,8 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         GTCIUri: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri, // GTCI --> naming hier auch ändern infoSheet und detailsDoc is scheiße
         IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).name, // IPID
         IPIDUri: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri, // IPID
-        priceFormatted: displayableProductOffer.getPriceFormatted(),
-        taxFormatted: displayableProductOffer.getIncludedTaxFormatted(),
+        priceFormatted: displayableProductOffer.getPriceFormatted(locale),
+        taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
         imageLink: imageLink
     }
 }

@@ -56,7 +56,8 @@ router.get("/clients/:clientId", basicAuth(basicAuthUsers), clientController.get
 router.put("/clients/:clientId/backends/webservices", basicAuth(basicAuthUsers), clientController.updateWebservicesBackendConfig);
 router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.deleteClient);
 
-router.post("/clients/:clientId/component-texts/:componentName", clientComponentTextController.saveComponentTextForClient);
+router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), clientComponentTextController.saveComponentTextForClient);
+router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);

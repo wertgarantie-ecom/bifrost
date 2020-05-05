@@ -4,10 +4,18 @@ module.exports.productSelectionResponseSchema = {
     "type": "object",
     "required": [
         "title",
+        "subtitle",
+        "footerText",
         "products"
     ],
     "properties": {
         "title": {
+            "type": "string",
+        },
+        "subtitle": {
+            "type": "string",
+        },
+        "partnerShop": {
             "type": "string",
         },
         "products": {

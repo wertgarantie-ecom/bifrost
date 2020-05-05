@@ -39,17 +39,15 @@ exports.fromProductOffer = function fromProductOffer(productOffer) {
             }
         },
 
-        getIncludedTaxFormatted() {
+        getIncludedTaxFormatted(locale = "de") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const globalizer = Globalize.getInstance();
-            const formattedTax = globalizer.currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
+            const formattedTax = Globalize(locale).currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
             return "(inkl. " + formattedTax + " VerSt**)"
         },
 
-        getPriceFormatted() {
+        getPriceFormatted(locale = "de") {
             const intervalData = productOffer.prices[productOffer.defaultPaymentInterval];
-            const globalizer = Globalize.getInstance();
-            const formattedPrice = globalizer.currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
+            const formattedPrice = Globalize(locale).currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
             return "ab " + formattedPrice;
         },
 

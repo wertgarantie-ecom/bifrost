@@ -2,9 +2,8 @@ const _repository = require('./clientComponentTextRepository');
 const components = require('../components/components').components;
 const clientService = require('./clientService');
 const validate = require('../framework/validation/validator').validate;
-const Globalize = require('../framework/globalize').Globalize;
 
-exports.saveNewComponentTextsForClientId = async function saveNewComponentTexts(clientId, componentName, componentTexts, repository = _repository) {
+exports.saveNewComponentTextsForClientId = async function saveNewComponentTexts(clientId, locale, componentName, componentTexts, repository = _repository) {
     if (!(clientId && componentName && componentTexts && components[componentName])) {
         const errorDetails = {
             clientId: clientId,
@@ -16,10 +15,13 @@ exports.saveNewComponentTextsForClientId = async function saveNewComponentTexts(
     }
     const client = await clientService.findClientById(clientId);
     validate(componentTexts, components[componentName].textsSchema);
-    return repository.persist(componentTexts, client.id, componentName)
+    return repository.persist(componentTexts, client.id, locale, componentName)
 };
 
-exports.getComponentTexts = async function getComponentTexts(clientId, componentName, locale = 'de', repository = _repository) {
-    const componentTextsJson = await repository.findByClientIdAndComponent(clientId, componentName);
-    Globalize.getInstance(locale).loadMessages(componentTextsJson);
-}
+exports.getComponentTextsForClientAndLocal = async function getComponentTextsForClientAndLocal(clientId, componentName, locale = 'de', repository = _repository) {
+    return repository.findByClientIdAndLocaleAndComponent(clientId, locale, componentName);
+};
+
+exports.getAllComponentTextsForClient = async function getAllComponentTextsForClient(clientId, repository = _repository) {
+    return repository.findAllByClientId(clientId);
+};

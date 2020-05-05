@@ -4,17 +4,17 @@ exports.components = {
     rating: {
         name: "rating"
     },
-    landingPage: {
+    landingpage: {
         name: "landingpage"
     },
-    selectionPopUp: {
+    selectionpopup: {
         name: "selectionpopup",
         textsSchema: selectionPopUpTextsSchema
     },
     confirmation: {
         name: "confirmation"
     },
-    afterSales: {
+    aftersales: {
         name: "aftersales"
     }
 }

@@ -3,23 +3,22 @@ const fixtureHelper = require('../helper/fixtureHelper');
 const components = require('../../src/components/components').components;
 
 describe("should persist and retrieve component texts", () => {
+    const locale = "de";
     const selectionPopUpTexts = {
-        de: {
-            title: "Wird oft dazugebucht",
-            subtitle: "Wählen Sie den Schutz, der Ihren Bedürfnissen am besten entspricht:",
-            shopName: "Handyflash"
-        }
+        title: "Wird oft dazugebucht",
+        subtitle: "Wählen Sie den Schutz, der Ihren Bedürfnissen am besten entspricht:",
+        shopName: "Handyflash"
     };
     let client;
 
     test("should persist texts for selection popup", async () => {
         client = await fixtureHelper.createAndPersistDefaultClientWithWebservicesConfiguration();
-        const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, components.selectionPopUp.name);
+        const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, locale, components.selectionPopUp.name);
         expect(persistResult).toEqual(selectionPopUpTexts);
     });
 
     test("should find selection popup texts for client", async () => {
-        const result = await clientComponentTextRepository.findByClientIdAndComponent(client.id, components.selectionPopUp.name);
+        const result = await clientComponentTextRepository.findByClientIdAndComponent(client.id, locale, components.selectionPopUp.name);
         expect(result).toEqual(selectionPopUpTexts);
     });
 
@@ -31,7 +30,7 @@ describe("should persist and retrieve component texts", () => {
                 shopName: "Handyflash"
             }
         };
-        const persistResult = await clientComponentTextRepository.persist(confirmationTexts, client.id, components.confirmation.name);
+        const persistResult = await clientComponentTextRepository.persist(confirmationTexts, client.id, locale, components.confirmation.name);
         expect(persistResult).toEqual(confirmationTexts);
     });
 
@@ -43,7 +42,7 @@ describe("should persist and retrieve component texts", () => {
                 shopName: "Handyflash DE"
             }
         }
-        const persistResult = await clientComponentTextRepository.persist(newSelectionPopupTexts, client.id, components.selectionPopUp.name);
+        const persistResult = await clientComponentTextRepository.persist(newSelectionPopupTexts, client.id, locale, components.selectionPopUp.name);
         expect(persistResult).toEqual(newSelectionPopupTexts);
     });
 });

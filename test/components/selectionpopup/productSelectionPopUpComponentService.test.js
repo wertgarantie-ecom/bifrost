@@ -22,15 +22,26 @@ test("should return proper product response", async () => {
     const mockProductOfferService = {
         getProductOffers: () => productOffersTestResponses.productOffers
     };
+    const componentTextsJson = {
+        title: "Vergessen Sie nicht Ihren Rundumschutz",
+        subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+        footerText: "Versicherung ist Vertrauenssache, deshalb setzt %s neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
+        partnerShop: "Testshop"
+    };
+    const mockComponentTextsService = {
+        getComponentTexts: () => componentTextsJson
+    };
     const result = await service.prepareProductSelectionData("Smartphone",
         "devicePrice",
         "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
         undefined,
         mockProductOfferService,
         productImagesServiceMock,
-        mockClientService(clientData));
+        mockClientService(clientData),
+        mockComponentTextsService);
     const expectedResult = {
         title: "Vergessen Sie nicht Ihren Rundumschutz",
+        subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
         products: [{
             advantages: ["Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
             IPIDText: "Informationsblatt für Versicherungsprodukte",
@@ -59,7 +70,8 @@ test("should return proper product response", async () => {
             priceFormatted: "ab 9,95 €",
             taxFormatted: "(inkl. 1,59 € VerSt**)",
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
-        }]
+        }],
+        footerText: "Versicherung ist Vertrauenssache, deshalb setzt Testshop neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
     };
     expect(result.valid).toEqual(true);
     expect(result.instance).toEqual(expectedResult);
