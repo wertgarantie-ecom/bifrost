@@ -114,7 +114,7 @@ exports.createAndPersistDefaultClientWithWebservicesConfiguration = async functi
 
 exports.createDefaultClientWithWebservicesConfiguration = function createDefaultClientWithWebservicesConfiguration() {
     return {
-        id: "testClientId",
+        id: uuid(),
         name: "testClient",
         backends: {
             heimdall: {

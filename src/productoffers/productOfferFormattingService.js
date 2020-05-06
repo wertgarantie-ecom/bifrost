@@ -1,19 +1,19 @@
 const _ = require("lodash");
 const Globalize = require('../framework/globalize').Globalize;
-const documentTypes = require('../documents/documentTypes').documentTypes;
+const format = require('util').format;
 
-exports.fromProductOffer = function fromProductOffer(productOffer) {
+exports.fromProductOffer = function fromProductOffer(productOffer, componentTexts) {
     return {
         getPaymentInterval() {
             switch (productOffer.defaultPaymentInterval) {
                 case "monthly":
-                    return "monatl.";
+                    return componentTexts.productTexts.paymentIntervals.monthly;
                 case "quarterly":
-                    return "pro Quartal";
+                    return componentTexts.productTexts.paymentIntervals.quarterly;
                 case "halfYearly":
-                    return "halbjährl.";
+                    return componentTexts.productTexts.paymentIntervals.halfYearly;
                 case "yearly":
-                    return "jährl.";
+                    return componentTexts.productTexts.paymentIntervals.yearly;
             }
         },
 
@@ -39,34 +39,20 @@ exports.fromProductOffer = function fromProductOffer(productOffer) {
             }
         },
 
-        getIncludedTaxFormatted() {
+        getIncludedTaxFormatted(locale = "de") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const globalizer = Globalize.getInstance();
-            const formattedTax = globalizer.currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
-            return "(inkl. " + formattedTax + " VerSt**)"
+            const formattedTax = Globalize(locale).currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
+            return format(componentTexts.productTexts.taxInformation, formattedTax);
         },
 
-        getPriceFormatted() {
+        getPriceFormatted(locale = "de") {
             const intervalData = productOffer.prices[productOffer.defaultPaymentInterval];
-            const globalizer = Globalize.getInstance();
-            const formattedPrice = globalizer.currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
-            return "ab " + formattedPrice;
+            return Globalize(locale).currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
         },
 
         getDocument(documentType) {
             function documentTypeToDescription(documentType) {
-                switch (documentType) {
-                    case documentTypes.PRODUCT_INFORMATION_SHEET:
-                        return "Produktinformationsblatt";
-                    case documentTypes.LEGAL_NOTICE:
-                        return "Rechtsdokumente";
-                    case documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION:
-                        return "Informationsblatt für Versicherungsprodukte";
-                    case documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE:
-                        return "Allgemeine Versicherungsbedingungen";
-                    case documentTypes.COMPARISON:
-                        return "Vergleichsdokument";
-                }
+                return componentTexts.documents[documentType];
             }
 
             const document = _.find(productOffer.documents, ["type", documentType]);

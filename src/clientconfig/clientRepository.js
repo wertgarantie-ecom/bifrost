@@ -66,7 +66,6 @@ exports.insert = async function insert(clientData) {
     }
 };
 
-// read
 exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({

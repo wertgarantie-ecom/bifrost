@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const googleController = require("../components/googlerating/googleController.js");
+const googleController = require("../components/googlerating/googleController");
 const selectionPopUpController = require("../components/selectionpopup/selectionPopUpController");
-const shoppingCartController = require("../shoppingcart/shoppingCartController.js");
-const confirmationController = require("../components/confirmation/confirmationController.js");
-const checkoutController = require("../shoppingcart/checkoutController.js");
-const clientController = require("../clientconfig/clientController.js");
-const afterSalesController = require("../components/aftersales/afterSalesController.js");
+const shoppingCartController = require("../shoppingcart/shoppingCartController");
+const confirmationController = require("../components/confirmation/confirmationController");
+const checkoutController = require("../shoppingcart/checkoutController");
+const clientController = require("../clientconfig/clientController");
+const clientComponentTextController = require("../clientconfig/clientComponentTextController");
+const afterSalesController = require("../components/aftersales/afterSalesController");
 const landingPageController = require("../components/landingpage/landingPageController");
 const webservicesController = require("../backends/webservices/webservicesController");
 const documentsController = require("../documents/documentsController");
@@ -54,6 +55,9 @@ router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients
 router.get("/clients/:clientId", basicAuth(basicAuthUsers), clientController.getClientById);
 router.put("/clients/:clientId/backends/webservices", basicAuth(basicAuthUsers), clientController.updateWebservicesBackendConfig);
 router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.deleteClient);
+
+router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), clientComponentTextController.saveComponentTextForClient);
+router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);

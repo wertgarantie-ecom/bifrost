@@ -13,5 +13,4 @@ function validate(object, schema) {
     return validationResult
 }
 
-
 exports.validate = validate;

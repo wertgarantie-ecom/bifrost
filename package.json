@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "axios": "^0.19.0",
+    "axios-logger": "^2.3.0",
     "cldr": "^5.6.0",
     "cldr-data": "^36.0.0",
     "cors": "^2.8.5",
@@ -36,6 +37,7 @@
     "express-basic-auth": "^1.2.0",
     "express-healthcheck": "^0.1.0",
     "express-jsonschema": "^1.1.6",
+    "express-locale": "^2.0.0",
     "express-mung": "^0.5.1",
     "form-data": "^3.0.0",
     "globalize": "^1.5.0",
@@ -53,8 +55,7 @@
     "request": "^2.88.0",
     "testcontainers": "^2.2.0",
     "uuid": "^3.3.3",
-    "xmlbuilder2": "^2.1.1",
-    "axios-logger": "^2.3.0"
+    "xmlbuilder2": "^2.1.1"
   },
   "devDependencies": {
     "eslint": "^6.3.0",

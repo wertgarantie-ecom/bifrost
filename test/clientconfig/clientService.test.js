@@ -60,7 +60,10 @@ test('should create client with valid offers config', async () => {
     const repository = {
         insert: (client) => client
     };
-    const newClient = await clientService.addNewClient(data, repository);
+    const clientComponentTextService = {
+        addDefaultTextsForAllComponents: () => "voll kuhl"
+    };
+    const newClient = await clientService.addNewClient(data, repository, clientComponentTextService);
 
     expect(newClient.productOffersConfigurations).toEqual(data.productOffersConfigurations);
 });

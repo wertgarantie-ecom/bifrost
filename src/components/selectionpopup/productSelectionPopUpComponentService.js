@@ -1,36 +1,48 @@
-const productImageService = require('../../images/productImageService');
+const _productImageService = require('../../images/productImageService');
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
 const documentTypes = require("../../documents/documentTypes").documentTypes;
-const defaultClientService = require('../../clientconfig/clientService');
+const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
-const jsonschema = require('jsonschema');
+const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
+const componentName = "selectionpopup";
+const validate = require('../../framework/validation/validator').validate;
+const util = require('util');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
                                                                                  clientId,
+                                                                                 locale = "de",
                                                                                  productOffersService = _productOffersService,
-                                                                                 imageService = productImageService,
-                                                                                 clientService = defaultClientService) {
+                                                                                 productImageService = _productImageService,
+                                                                                 clientService = _clientService,
+                                                                                 clientComponentTextService = _clientComponentTextService) {
     const client = await clientService.findClientForPublicClientId(clientId);
+
     const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
     const productOffers = productOffersData.productOffers;
     const products = [];
     let imageLinks = [];
-    imageLinks = imageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
     productOffers.forEach((offer, idx) => {
-        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers);
+        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
         products.push(product);
     });
+
+    this.products = products;
+
     const data = {
-        title: "Vergessen Sie nicht Ihren Rundumschutz",
+        texts: popUpTexts,
         products: products
     };
-    return jsonschema.validate(data, schema);
+    data.texts.footerHtml = util.format(popUpTexts.footerHtml, popUpTexts.partnerShop);
+
+    return validate(data, schema);
 };
 
-function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers) {
-    const displayableProductOffer = productService.fromProductOffer(productOffer);
+function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {
+    const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);
     productOffer.payment = displayableProductOffer.getPaymentInterval();
 
     const advantageCategories = displayableProductOffer.getAdvantageCategories(allProductOffers);
@@ -43,10 +55,10 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
         GTCIText: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).name, // GTCI
         GTCIUri: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri, // GTCI --> naming hier auch ändern infoSheet und detailsDoc is scheiße
-        IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).name, // IPID
+        IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,).name, // IPID
         IPIDUri: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri, // IPID
-        priceFormatted: displayableProductOffer.getPriceFormatted(),
-        taxFormatted: displayableProductOffer.getIncludedTaxFormatted(),
+        priceFormatted: displayableProductOffer.getPriceFormatted(locale),
+        taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
         imageLink: imageLink
     }
 }

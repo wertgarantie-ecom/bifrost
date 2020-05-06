@@ -1,4 +1,4 @@
-const clientRepository = require('../../src/clientconfig/ClientRepository');
+const clientRepository = require('../../src/clientconfig/clientRepository');
 const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
 

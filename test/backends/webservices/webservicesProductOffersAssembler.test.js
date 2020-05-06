@@ -386,7 +386,7 @@ test('should update all product offers for client', async () => {
         {
             name: "Komplettschutz",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
-            clientId: "testClientId",
+            clientId: clientConfig.id,
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
             defaultPaymentInterval: "monthly",
@@ -409,7 +409,7 @@ test('should update all product offers for client', async () => {
         {
             name: "Komplettschutz mit Premium-Option",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
-            clientId: "testClientId",
+            clientId: clientConfig.id,
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
             defaultPaymentInterval: "monthly",
@@ -847,7 +847,7 @@ test.skip('call webservices dev', async () => {
         ],
     };
     process.env.DATABASE_URL = "postgresql://admin:bifrost@localhost:5432/bifrost";
-    const client = await require('../../../src/clientconfig/ClientRepository').insert(clientConfig);
+    const client = await require('../../../src/clientconfig/clientRepository').insert(clientConfig);
     process.env.WEBSERVICES_URI = "http://localhost:3001/webservices";
     const offers = await webservicesService.updateAllProductOffersForClient(client);
     console.log(JSON.stringify(offers, null, 2));

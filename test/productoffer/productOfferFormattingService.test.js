@@ -1,5 +1,6 @@
 const service = require("../../src/productoffers/productOfferFormattingService");
 const documentTypes = require("../../src/documents/documentTypes").documentTypes;
+const defaultComponentTexts = require('../../src/clientconfig/defaultComponentTexts').defaultComponentTexts.selectionpopup.de;
 
 test("should extract correct document", () => {
     const productOffer = {
@@ -17,7 +18,7 @@ test("should extract correct document", () => {
         ]
     };
 
-    const document = service.fromProductOffer(productOffer).getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
+    const document = service.fromProductOffer(productOffer, defaultComponentTexts).getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
 
     expect(document.uri).toEqual("http://localhost:3000/documents/abc");
     expect(document.name).toEqual("Informationsblatt für Versicherungsprodukte");

@@ -2,10 +2,15 @@ const documentTypes = require('../src/documents/documentTypes').documentTypes;
 const request = require('supertest');
 const app = require('../src/app');
 
-describe('add phone test shop client', () => {
-    test('should add phone test shop client configuration', async (done) => {
+const phoneClientId = "433295ef-ec5d-45d2-8701-d530e44fcf88";
+const bikeClientId = "ad0a99e6-a165-4eda-91fc-564fb3f935b4";
+const handFlashClientId = "9302410c-fbbe-44e3-a628-0d42d3944078";
+
+describe('add phone test shop client config', () => {
+
+    test('should add phone test shop client configuration', async () => {
         const validData = {
-            "id": "433295ef-ec5d-45d2-8701-d530e44fcf88",
+            "id": phoneClientId,
             "name": "Test Shop Handy",
             "backends": {
                 "heimdall": {
@@ -168,12 +173,11 @@ describe('add phone test shop client', () => {
         };
 
         const response = await request(app)
-            .get(`/wertgarantie/clients?publicClientId=${validData.publicClientIds[0]}`)
+            .get(`/wertgarantie/clients/${validData.id}`)
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .set('Accept', 'application/json')
             .send(validData);
 
-        console.log(JSON.stringify(response.body, null, 2));
         if (response.status !== 200) {
             await request(app)
                 .post("/wertgarantie/clients")
@@ -182,13 +186,14 @@ describe('add phone test shop client', () => {
                 .send(validData)
                 .expect(200);
         }
-        done();
     });
+});
 
+describe('add bike test shop client config', () => {
     test('should add bike test shop client configuration', async (done) => {
 
         const validData = {
-            "id": "ad0a99e6-a165-4eda-91fc-564fb3f935b4",
+            "id": bikeClientId,
             "name": "Test Shop Bike",
             "backends": {
                 "heimdall": {
@@ -231,11 +236,13 @@ describe('add phone test shop client', () => {
                 .expect(200);
         }
         done();
-    });
+    })
+});
 
+describe('add Handyflash DEV/Local test client config', () => {
     test('should add Handyflash DEV test client configuration', async (done) => {
         const validData = {
-            "id": "9302410c-fbbe-44e3-a628-0d42d3944078",
+            "id": handFlashClientId,
             "name": "Handyflash DEV",
             "backends": {
                 "heimdall": {
@@ -414,11 +421,12 @@ describe('add phone test shop client', () => {
         }
         done();
     });
+})
 
-    test("update product offers for all clients", async (done) => {
-        await request(app).post(`/wertgarantie/productOffers`)
-            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD);
-        done();
-    });
 
+test("update product offers for all clients", async (done) => {
+    await request(app).post(`/wertgarantie/productOffers`)
+        .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD);
+    done();
 });
+
