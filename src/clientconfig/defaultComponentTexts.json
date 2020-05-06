@@ -11,7 +11,13 @@
       "showDetailsText": "Details anzeigen",
       "hideDetailsText": "Details ausblenden",
       "cancelButtonText": "Nein, danke",
-      "confirmButtonText": "Versicherung hinzufügen"
+      "confirmButtonText": "Versicherung hinzufügen",
+      "productTexts": {
+        "monthly": "monatl.",
+        "quarterly": "vierteljährl.",
+        "halfYearly": "habljährl.",
+        "yearly": "jährl."
+      }
     }
   },
   "landingpage": {

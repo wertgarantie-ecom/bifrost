@@ -2,18 +2,18 @@ const _ = require("lodash");
 const Globalize = require('../framework/globalize').Globalize;
 const documentTypes = require('../documents/documentTypes').documentTypes;
 
-exports.fromProductOffer = function fromProductOffer(productOffer) {
+exports.fromProductOffer = function fromProductOffer(productOffer, componentTexts) {
     return {
         getPaymentInterval() {
             switch (productOffer.defaultPaymentInterval) {
                 case "monthly":
-                    return "monatl.";
+                    return componentTexts.productTexts.monthly;
                 case "quarterly":
-                    return "pro Quartal";
+                    return componentTexts.productTexts.quarterly;
                 case "halfYearly":
-                    return "halbjährl.";
+                    return componentTexts.productTexts.halfYearly;
                 case "yearly":
-                    return "jährl.";
+                    return componentTexts.productTexts.yearly;
             }
         },
 
