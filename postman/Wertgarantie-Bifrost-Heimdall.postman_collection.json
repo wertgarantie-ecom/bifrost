@@ -1118,13 +1118,19 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{host}}/clients/0a4ac10c-ae80-4875-aff8-294b857419bd",
+									"raw": "{{host}}/clients/:clientId",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"clients",
-										"0a4ac10c-ae80-4875-aff8-294b857419bd"
+										":clientId"
+									],
+									"variable": [
+										{
+											"key": "clientId",
+											"value": "433295ef-ec5d-45d2-8701-d530e44fcf88"
+										}
 									]
 								}
 							},
@@ -1397,7 +1403,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"component\": \"selectionpopup\",\n    \"locale\": \"en\",\n    \"componentTexts\": {\n        \"title\": \"Don't let your guard down\",\n        \"subtitle\": \"Select the insurance product most appealing to you\",\n        \"footerText\": \"Insurance means trust! That is why %s relies on the award winning insurance company Wertgarantie along with more than 500.000 satisfied customers.\",\n        \"partnerShop\": \"Test Shop Handy\"\n    }\n}",
+									"raw": "{\n    \"component\": \"selectionpopup\",\n    \"locale\": \"de\",\n    \"componentTexts\": {\n        \"title\": \"Vergessen Sie nicht Ihren Rundumschutz\",\n        \"subtitle\": \"Wählen Sie die Versicherung aus, die Ihnen zusagt\",\n        \"footerHtml\": \"Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>\",\n        \"partnerShop\": \"Handyflash\",\n        \"detailsHeader\": \"Weitere Vorteile:\",\n        \"furtherInformation\": \"Weitere Informationen:\",\n        \"wertgarantieFurtherInfoHtml\": \"Mehr zur <a target=\\\"_blank\\\" href=\\\"%s\\\">Wertgarantie</a>\",\n        \"showDetailsText\": \"Details anzeigen\",\n        \"hideDetailsText\": \"Details ausblenden\",\n        \"cancelButtonText\": \"Nein, danke\",\n        \"confirmButtonText\": \"Versicherung hinzufügen\",\n        \"productTexts\": {\n            \"paymentIntervals\": {\n                \"monthly\": \"monatl.\",\n                \"quarterly\": \"vierteljährl.\",\n                \"halfYearly\": \"habljährl.\",\n                \"yearly\": \"jährl.\"\n            },\n            \"taxInformation\": \"(inkl. %s VerSt**)\"\n        },\n        \"documents\": {\n            \"PIS\": \"Produktinformationsblatt\",\n            \"IPID\": \"Informationsblatt für Versicherungsprodukte\",\n            \"GTCI\": \"Allgemeine Versicherungsbedingungen\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1417,7 +1423,7 @@
 									"variable": [
 										{
 											"key": "clientId",
-											"value": "05a6e450-b114-42d7-8a3d-6ef329b4c0ce"
+											"value": "3df9694e-95c3-491e-b5aa-bedc47fec803"
 										}
 									]
 								}
