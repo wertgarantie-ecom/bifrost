@@ -1,6 +1,6 @@
 const service = require('../../../src/components/selectionpopup/productSelectionPopUpComponentService');
 const productOffersTestResponses = require("../../productoffer/productOffersTestResponses");
-const selectionPopUpDefaultTexts = require('../../../src/clientconfig/defaultComponentTexts').selectionpopup.de;
+const selectionPopUpDefaultTexts = require('../../../src/clientconfig/defaultComponentTexts').defaultComponentTexts.selectionpopup.de;
 
 const productImagesServiceMock = {
     getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]

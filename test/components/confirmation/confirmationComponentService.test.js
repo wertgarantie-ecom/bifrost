@@ -1,5 +1,6 @@
 const service = require('../../../src/components/confirmation/confirmationComponentService');
 const productOffersTestResponse = require('../../productoffer/productOffersTestResponses').productOffers;
+const defaultConfirmationTextsDE = require('../../../src/clientconfig/defaultComponentTexts').defaultComponentTexts.confirmation.de;
 
 const productOffersMock = {
     getProductOffers: async () => productOffersTestResponse
@@ -67,7 +68,7 @@ const expectedResponse = {
     orders: [
         {
             paymentInterval: "monatl.",
-            price: "ab 8,00 €",
+            price: "8,00 €",
             includedTax: "(inkl. 1,28 € VerSt**)",
             productTitle: 'Komplettschutz',
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
@@ -79,7 +80,7 @@ const expectedResponse = {
         },
         {
             paymentInterval: "monatl.",
-            price: "ab 9,95 €",
+            price: "9,95 €",
             includedTax: "(inkl. 1,59 € VerSt**)",
             productTitle: 'Komplettschutz mit Premium-Option',
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
@@ -100,11 +101,16 @@ const expectedResponse = {
 
 test("should return proper confirmation component data for one product", async () => {
     console.log("test");
+    const clientComponentTextService = {
+        getComponentTextsForClientAndLocal: () => defaultConfirmationTextsDE
+    };
     const confirmationData = await service.prepareConfirmationData(
         testShoppingCart,
+        undefined,
         productOffersMock,
         productImageServiceMock,
-        mockClientService(clientData)
+        mockClientService(clientData),
+        clientComponentTextService
     );
     expect(confirmationData).toEqual(expectedResponse);
 });

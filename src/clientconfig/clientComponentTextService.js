@@ -2,7 +2,7 @@ const _repository = require('./clientComponentTextRepository');
 const components = require('../components/components').components;
 const clientService = require('./clientService');
 const validate = require('../framework/validation/validator').validate;
-const defaultTexts = require('./defaultComponentTexts');
+const defaultTexts = require('./defaultComponentTexts').defaultComponentTexts;
 const _ = require('lodash');
 
 function mergeComponentTextsWithDefault(componentTexts, componentName, locale) {

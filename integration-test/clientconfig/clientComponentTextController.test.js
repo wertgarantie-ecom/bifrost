@@ -27,7 +27,21 @@ describe("should persist, retrieve and alter component texts for client", () => 
         showDetailsText: "Details",
         hideDetailsText: "Details ausblenden",
         cancelButtonText: "Nein, danke",
-        confirmButtonText: "Versicherung hinzufügen"
+        confirmButtonText: "Versicherung hinzufügen",
+        documents: {
+            PIS: "Produktinformationsblatt",
+            IPID: "Informationsblatt für Versicherungsprodukte",
+            GTCI: "Allgemeine Versicherungsbedingungen"
+        },
+        productTexts: {
+            paymentIntervals: {
+                monthly: "monatl.",
+                quarterly: "vierteljährl.",
+                halfYearly: "habljährl.",
+                yearly: "jährl."
+            },
+            taxInformation: "(inkl. %s VerSt**)"
+        }
     };
 
     test("should insert german text for selection popup", async () => {

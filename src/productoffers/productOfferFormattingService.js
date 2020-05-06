@@ -7,13 +7,13 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
         getPaymentInterval() {
             switch (productOffer.defaultPaymentInterval) {
                 case "monthly":
-                    return componentTexts.productTexts.monthly;
+                    return componentTexts.productTexts.paymentIntervals.monthly;
                 case "quarterly":
-                    return componentTexts.productTexts.quarterly;
+                    return componentTexts.productTexts.paymentIntervals.quarterly;
                 case "halfYearly":
-                    return componentTexts.productTexts.halfYearly;
+                    return componentTexts.productTexts.paymentIntervals.halfYearly;
                 case "yearly":
-                    return componentTexts.productTexts.yearly;
+                    return componentTexts.productTexts.paymentIntervals.yearly;
             }
         },
 

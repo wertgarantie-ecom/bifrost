@@ -42,7 +42,7 @@ test('should return proper product data', async () => {
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
                 "name": "Basis",
                 "paymentInterval": "monatl.",
-                "priceFormatted": "ab 5,00 €",
+                "priceFormatted": "5,00 €",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     "Für private und berufliche Nutzung",
@@ -68,7 +68,7 @@ test('should return proper product data', async () => {
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
                 "name": "Premium",
                 "paymentInterval": "monatl.",
-                "priceFormatted": "ab 5,00 €",
+                "priceFormatted": "5,00 €",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     "Für private und berufliche Nutzung",
@@ -88,7 +88,21 @@ test('should return proper product data', async () => {
             "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
             "furtherInformation": "Weitere Informationen:",
             "title": "Vergessen Sie nicht Ihren Rundumschutz",
-            "wertgarantieFurtherInfo": "Mehr zur Wertgarantie"
+            "wertgarantieFurtherInfo": "Mehr zur Wertgarantie",
+            "documents": {
+                "GTCI": "Allgemeine Versicherungsbedingungen",
+                "IPID": "Informationsblatt für Versicherungsprodukte",
+                "PIS": "Produktinformationsblatt"
+            },
+            "productTexts": {
+                "paymentIntervals": {
+                    "monthly": "monatl.",
+                    "quarterly": "vierteljährl.",
+                    "halfYearly": "habljährl.",
+                    "yearly": "jährl."
+                },
+                "taxInformation": "(inkl. %s VerSt**)"
+            }
         }
     });
 });
