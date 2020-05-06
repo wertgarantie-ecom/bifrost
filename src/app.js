@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 const bodyParser = require('body-parser');
 const localeParser = require('express-locale')();
+const localeFilter = require('./framework/localeRequestFilter');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -20,7 +21,7 @@ const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(localeParser);
+app.use(localeParser, localeFilter);
 app.use(express.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 

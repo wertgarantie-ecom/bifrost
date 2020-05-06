@@ -386,7 +386,7 @@ test('should update all product offers for client', async () => {
         {
             name: "Komplettschutz",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
-            clientId: "testClientId",
+            clientId: clientConfig.id,
             applicationCode: "GU WG DE KS 0419",
             productType: "KOMPLETTSCHUTZ_2019",
             defaultPaymentInterval: "monthly",
