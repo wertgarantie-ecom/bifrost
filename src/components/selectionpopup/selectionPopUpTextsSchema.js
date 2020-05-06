@@ -8,7 +8,7 @@ exports.selectionPopUpTextsSchema = {
         "partnerShop",
         "detailsHeader",
         "furtherInformation",
-        "wertgarantieFurtherInfo",
+        "wertgarantieFurtherInfoHtml",
         "showDetailsText",
         "hideDetailsText",
         "cancelButtonText",
@@ -33,7 +33,7 @@ exports.selectionPopUpTextsSchema = {
         furtherInformation: {
             type: "string"
         },
-        wertgarantieFurtherInfo: {
+        wertgarantieFurtherInfoHtml: {
             type: "string"
         },
         showDetailsText: {

@@ -20,7 +20,7 @@ exports.defaultComponentTexts = {
             "partnerShop": "Testshop",
             "detailsHeader": "Weitere Vorteile:",
             "furtherInformation": "Weitere Informationen:",
-            "wertgarantieFurtherInfo": "Mehr zur Wertgarantie",
+            "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
             "showDetailsText": "Details anzeigen",
             "hideDetailsText": "Details ausblenden",
             "cancelButtonText": "Nein, danke",

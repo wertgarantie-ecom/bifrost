@@ -11,7 +11,7 @@ describe("should persist, retrieve and alter component texts for client", () => 
         partnerShop: "Testshop",
         detailsHeader: "Details",
         furtherInformation: "Weitere Informationen:",
-        wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+        wertgarantieFurtherInfoHtml: "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
         showDetailsText: "Details",
         cancelButtonText: "Nein, danke",
         confirmButtonText: "Versicherung hinzufügen"
@@ -23,7 +23,7 @@ describe("should persist, retrieve and alter component texts for client", () => 
         partnerShop: "Testshop",
         detailsHeader: "Details",
         furtherInformation: "Weitere Informationen:",
-        wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+        wertgarantieFurtherInfoHtml: "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
         showDetailsText: "Details",
         hideDetailsText: "Details ausblenden",
         cancelButtonText: "Nein, danke",

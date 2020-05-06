@@ -88,7 +88,7 @@ test('should return proper product data', async () => {
             "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
             "furtherInformation": "Weitere Informationen:",
             "title": "Vergessen Sie nicht Ihren Rundumschutz",
-            "wertgarantieFurtherInfo": "Mehr zur Wertgarantie",
+            "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
             "documents": {
                 "GTCI": "Allgemeine Versicherungsbedingungen",
                 "IPID": "Informationsblatt für Versicherungsprodukte",
