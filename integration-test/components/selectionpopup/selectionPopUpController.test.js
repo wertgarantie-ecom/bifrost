@@ -80,13 +80,13 @@ test('should return proper product data', async () => {
         "texts": {
             "cancelButtonText": "Nein, danke",
             "confirmButtonText": "Versicherung hinzufügen",
-            "detailsHeader": "Details",
+            "detailsHeader": "Weitere Vorteile:",
             "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testclient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
             "hideDetailsText": "Details ausblenden",
             "partnerShop": "testclient",
             "showDetailsText": "Details anzeigen",
             "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-            "termsAndConditions": "Allgemeine Versicherungsbedingungen",
+            "furtherInformation": "Weitere Informationen:",
             "title": "Vergessen Sie nicht Ihren Rundumschutz",
             "wertgarantieFurtherInfo": "Mehr zur Wertgarantie"
         }
