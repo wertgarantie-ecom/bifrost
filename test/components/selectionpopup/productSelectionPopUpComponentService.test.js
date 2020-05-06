@@ -25,8 +25,16 @@ test("should return proper product response", async () => {
     const componentTextsJson = {
         title: "Vergessen Sie nicht Ihren Rundumschutz",
         subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-        footerText: "Versicherung ist Vertrauenssache, deshalb setzt %s neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
-        partnerShop: "Testshop"
+        footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+        partnerShop: "Testshop",
+        detailsHeader: "Details",
+        termsAndConditions: "Allgemeine Versicherungsbedingungen",
+        wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+        showDetailsText: "Details anzeigen",
+        hideDetailsText: "Details ausblenden",
+        cancelButtonText: "Nein, danke",
+        confirmButtonText: "Versicherung hinzufügen"
+
     };
     const mockComponentTextsService = {
         getComponentTextsForClientAndLocal: () => componentTextsJson
@@ -40,8 +48,19 @@ test("should return proper product response", async () => {
         mockClientService(clientData),
         mockComponentTextsService);
     const expectedResult = {
-        title: "Vergessen Sie nicht Ihren Rundumschutz",
-        subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+        texts: {
+            title: "Vergessen Sie nicht Ihren Rundumschutz",
+            subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+            footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt Testshop neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+            partnerShop: "Testshop",
+            detailsHeader: "Details",
+            termsAndConditions: "Allgemeine Versicherungsbedingungen",
+            wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+            showDetailsText: "Details anzeigen",
+            hideDetailsText: "Details ausblenden",
+            cancelButtonText: "Nein, danke",
+            confirmButtonText: "Versicherung hinzufügen"
+        },
         products: [{
             advantages: ["Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
             IPIDText: "Informationsblatt für Versicherungsprodukte",
@@ -71,7 +90,7 @@ test("should return proper product response", async () => {
             taxFormatted: "(inkl. 1,59 € VerSt**)",
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
         }],
-        footerText: "Versicherung ist Vertrauenssache, deshalb setzt Testshop neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
+
     };
     expect(result.valid).toEqual(true);
     expect(result.instance).toEqual(expectedResult);

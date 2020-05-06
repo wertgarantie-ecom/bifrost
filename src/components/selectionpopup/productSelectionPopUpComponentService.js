@@ -5,7 +5,7 @@ const documentTypes = require("../../documents/documentTypes").documentTypes;
 const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
-const component = require('../components').components.selectionpopup;
+const componentName = "selectionpopup";
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 
@@ -28,13 +28,16 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale);
         products.push(product);
     });
-const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
+    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
+
+    this.products = products;
+
     const data = {
-        title: popUpTexts.title,
-        subtitle: popUpTexts.subtitle,
-        products: products,
-        footerText: util.format(popUpTexts.footerText, popUpTexts.partnerShop)
+        texts: popUpTexts,
+        products: products
     };
+    data.texts.footerHtml = util.format(popUpTexts.footerHtml, popUpTexts.partnerShop);
+
     return validate(data, schema);
 };
 

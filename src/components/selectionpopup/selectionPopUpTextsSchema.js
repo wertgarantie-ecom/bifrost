@@ -4,7 +4,15 @@ exports.selectionPopUpTextsSchema = {
     required: [
         "title",
         "subtitle",
-        "shopName"
+        "footerHtml",
+        "detailsHeader",
+        "termsAndConditions",
+        "wertgarantieFurtherInfo",
+        "showDetailsText",
+        "hideDetailsText",
+        "cancelButtonText",
+        "confirmButtonText",
+        "partnerShop"
     ],
     properties: {
         title: {
@@ -15,6 +23,33 @@ exports.selectionPopUpTextsSchema = {
         },
         shopName: {
             type: "string"
+        },
+        footerHtml: {
+            type: "string"
+        },
+        detailsHeader: {
+            type: "string"
+        },
+        termsAndConditions: {
+            type: "string"
+        },
+        wertgarantieFurtherInfo: {
+            type: "string"
+        },
+        showDetailsText: {
+            type: "string"
+        },
+        hideDetailsText: {
+            type: "string"
+        },
+        cancelButtonText: {
+            type: "string"
+        },
+        confirmButtonText: {
+            type: "string"
+        },
+        partnerShop: {
+            type: "string"
         }
     }
-}
+};

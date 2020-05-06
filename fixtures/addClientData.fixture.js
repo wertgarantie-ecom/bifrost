@@ -198,8 +198,15 @@ describe('add phone test shop client config', () => {
                 componentTexts: {
                     title: "Vergessen Sie nicht Ihren Rundumschutz",
                     subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-                    footerText: "Versicherung ist Vertrauenssache, deshalb setzt %s neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
-                    partnerShop: "Testshop"
+                    footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+                    partnerShop: "Testshop",
+                    detailsHeader: "Details",
+                    termsAndConditions: "Allgemeine Versicherungsbedingungen",
+                    wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+                    showDetailsText: "Details",
+                    hideDetailsText: "Details ausblenden",
+                    cancelButtonText: "Nein, danke",
+                    confirmButtonText: "Versicherung hinzufügen"
                 }
             })
             .expect(200)

@@ -2,6 +2,7 @@ const _repository = require('./clientRepository');
 const uuid = require('uuid');
 const validate = require('../framework/validation/validator').validate;
 const newClientSchema = require('./newClientSchema').newClientSchema;
+const _clientComponentTextService = require('./clientComponentTextService');
 
 async function findClientById(id) {
     return await _repository.findClientById(id);
@@ -47,7 +48,7 @@ exports.findAllClients = async function findAllClients() {
     return await _repository.findAllClients();
 };
 
-exports.addNewClient = async function addNewClient(createClientRequest, repository = _repository) {
+exports.addNewClient = async function addNewClient(createClientRequest, repository = _repository, clientComponentTextService = _clientComponentTextService) {
     const clientData = {
         id: createClientRequest.id || uuid(),
         name: createClientRequest.name,
@@ -57,7 +58,9 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()]
     };
     validate(clientData, newClientSchema);
-    return await repository.insert(clientData);
+    const persistedClientData = await repository.insert(clientData);
+    await clientComponentTextService.addDefaultTextsForAllComponents(clientData.id, clientData.name);
+    return persistedClientData;
 };
 
 

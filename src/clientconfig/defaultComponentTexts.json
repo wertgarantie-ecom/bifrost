@@ -1,0 +1,33 @@
+{
+  "selectionpopup": {
+    "de": {
+      "title": "Vergessen Sie nicht Ihren Rundumschutz",
+      "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+      "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+      "partnerShop": "Testshop",
+      "detailsHeader": "Details",
+      "termsAndConditions": "Allgemeine Versicherungsbedingungen",
+      "wertgarantieFurtherInfo": "Mehr zur Wertgarantie",
+      "showDetailsText": "Details anzeigen",
+      "hideDetailsText": "Details ausblenden",
+      "cancelButtonText": "Nein, danke",
+      "confirmButtonText": "Versicherung hinzufügen"
+    }
+  },
+  "landingpage": {
+    "de": {
+    }
+  },
+  "confirmation": {
+    "de": {
+    }
+  },
+  "rating": {
+    "de": {
+    }
+  },
+  "aftersales": {
+    "de": {
+    }
+  }
+}

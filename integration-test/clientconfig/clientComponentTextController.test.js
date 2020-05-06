@@ -7,8 +7,27 @@ describe("should persist, retrieve and alter component texts for client", () => 
     const initialComponentTexts = {
         title: "Vergessen Sie nicht Ihren Rundumschutz",
         subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-        footerText: "Versicherung ist Vertrauenssache, deshalb setzt %s neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
-        partnerShop: "Testshop"
+        footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+        partnerShop: "Testshop",
+        detailsHeader: "Details",
+        termsAndConditions: "Allgemeine Versicherungsbedingungen",
+        wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+        showDetailsText: "Details",
+        cancelButtonText: "Nein, danke",
+        confirmButtonText: "Versicherung hinzufügen"
+    };
+    const initialComponentTextsCompleted = {
+        title: "Vergessen Sie nicht Ihren Rundumschutz",
+        subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+        footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+        partnerShop: "Testshop",
+        detailsHeader: "Details",
+        termsAndConditions: "Allgemeine Versicherungsbedingungen",
+        wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
+        showDetailsText: "Details",
+        hideDetailsText: "Details ausblenden",
+        cancelButtonText: "Nein, danke",
+        confirmButtonText: "Versicherung hinzufügen"
     };
 
     test("should insert german text for selection popup", async () => {
@@ -21,13 +40,13 @@ describe("should persist, retrieve and alter component texts for client", () => 
                 componentTexts: initialComponentTexts
             });
         expect(result.status).toBe(200);
-        expect(result.body.newTexts).toEqual(initialComponentTexts);
+        expect(result.body.newTexts).toEqual(initialComponentTextsCompleted);
     });
 
     test("should upsert german texts for selection popup", async () => {
         const upsertTexts = {
             title: "Vergessen Sie nicht Ihren Rundumschutz",
-            subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+            subtitle: "Wählen Sie die Versicherung aus, die Sie am geilsten finden",
             footerText: "Versicherung ist Vertrauenssache, deshalb setzt %s neben 500.000 zufriedener Kunden auf die Wertgarantie, den Testsieger in Sachen Sicherheit, Service und Zufriedenheit.",
             partnerShop: "Testshop"
         };
@@ -39,6 +58,7 @@ describe("should persist, retrieve and alter component texts for client", () => 
                 componentTexts: upsertTexts
             });
         expect(result.status).toBe(200);
-        expect(result.body.newTexts).toEqual(upsertTexts);
+        expect(result.body.newTexts.subtitle).toEqual(upsertTexts.subtitle);
+        expect(result.body.newTexts.hideDetailsText).toEqual("Details ausblenden") // autocompleted through service
     });
 });

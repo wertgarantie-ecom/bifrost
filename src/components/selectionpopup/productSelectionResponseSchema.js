@@ -1,23 +1,15 @@
+const selectionPopUpTextsSchema = require("./selectionPopUpTextsSchema").selectionPopUpTextsSchema;
+
 module.exports.productSelectionResponseSchema = {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
     "type": "object",
     "required": [
-        "title",
-        "subtitle",
-        "footerText",
+        "texts",
         "products"
     ],
     "properties": {
-        "title": {
-            "type": "string",
-        },
-        "subtitle": {
-            "type": "string",
-        },
-        "partnerShop": {
-            "type": "string",
-        },
+        "texts": selectionPopUpTextsSchema,
         "products": {
             "type": "array",
             "items": {
