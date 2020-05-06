@@ -187,31 +187,6 @@ describe('add phone test shop client config', () => {
                 .expect(200);
         }
     });
-
-    test('configure component texts for phone client config', async () => {
-        await request(app)
-            .post(`/wertgarantie/clients/${phoneClientId}/component-texts`)
-            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
-            .send({
-                component: "selectionpopup",
-                locale: "de",
-                componentTexts: {
-                    title: "Vergessen Sie nicht Ihren Rundumschutz",
-                    subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-                    footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
-                    partnerShop: "Testshop",
-                    detailsHeader: "Details",
-                    termsAndConditions: "Allgemeine Versicherungsbedingungen",
-                    wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
-                    showDetailsText: "Details",
-                    hideDetailsText: "Details ausblenden",
-                    cancelButtonText: "Nein, danke",
-                    confirmButtonText: "Versicherung hinzufügen"
-                }
-            })
-            .expect(200)
-    })
-
 });
 
 describe('add bike test shop client config', () => {

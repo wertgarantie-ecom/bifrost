@@ -5,14 +5,14 @@ exports.selectionPopUpTextsSchema = {
         "title",
         "subtitle",
         "footerHtml",
+        "partnerShop",
         "detailsHeader",
-        "termsAndConditions",
+        "furtherInformation",
         "wertgarantieFurtherInfo",
         "showDetailsText",
         "hideDetailsText",
         "cancelButtonText",
-        "confirmButtonText",
-        "partnerShop"
+        "confirmButtonText"
     ],
     properties: {
         title: {
@@ -30,7 +30,7 @@ exports.selectionPopUpTextsSchema = {
         detailsHeader: {
             type: "string"
         },
-        termsAndConditions: {
+        furtherInformation: {
             type: "string"
         },
         wertgarantieFurtherInfo: {
