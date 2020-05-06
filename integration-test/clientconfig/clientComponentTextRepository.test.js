@@ -1,6 +1,5 @@
 const clientComponentTextRepository = require('../../src/clientconfig/clientComponentTextRepository');
 const fixtureHelper = require('../helper/fixtureHelper');
-const components = require('../../src/components/components').components;
 
 describe("should persist and retrieve component texts", () => {
     const locale = "de";
@@ -13,12 +12,12 @@ describe("should persist and retrieve component texts", () => {
 
     test("should persist texts for selection popup", async () => {
         client = await fixtureHelper.createAndPersistDefaultClientWithWebservicesConfiguration();
-        const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, locale, components.selectionpopup.name);
+        const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, locale, "selectionpopup");
         expect(persistResult).toEqual(selectionPopUpTexts);
     });
 
     test("should find selection popup texts for client", async () => {
-        const result = await clientComponentTextRepository.findByClientIdAndLocaleAndComponent(client.id, locale, components.selectionpopup.name);
+        const result = await clientComponentTextRepository.findByClientIdAndLocaleAndComponent(client.id, locale, "selectionpopup");
         expect(result).toEqual(selectionPopUpTexts);
     });
 
@@ -30,7 +29,7 @@ describe("should persist and retrieve component texts", () => {
                 shopName: "Handyflash"
             }
         };
-        const persistResult = await clientComponentTextRepository.persist(confirmationTexts, client.id, locale, components.confirmation.name);
+        const persistResult = await clientComponentTextRepository.persist(confirmationTexts, client.id, locale, "confirmation");
         expect(persistResult).toEqual(confirmationTexts);
     });
 
@@ -42,7 +41,7 @@ describe("should persist and retrieve component texts", () => {
                 shopName: "Handyflash DE"
             }
         }
-        const persistResult = await clientComponentTextRepository.persist(newSelectionPopupTexts, client.id, locale, components.selectionpopup.name);
+        const persistResult = await clientComponentTextRepository.persist(newSelectionPopupTexts, client.id, locale, "selectionpopup");
         expect(persistResult).toEqual(newSelectionPopupTexts);
     });
 });
