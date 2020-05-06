@@ -24,11 +24,11 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
     productOffers.forEach((offer, idx) => {
-        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale);
+        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
         products.push(product);
     });
-    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
 
     this.products = products;
 
@@ -41,8 +41,8 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     return validate(data, schema);
 };
 
-function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale) {
-    const displayableProductOffer = productService.fromProductOffer(productOffer);
+function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {
+    const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);
     productOffer.payment = displayableProductOffer.getPaymentInterval();
 
     const advantageCategories = displayableProductOffer.getAdvantageCategories(allProductOffers);
@@ -55,7 +55,7 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         excludedAdvantages: advantageCategories.excludedAdvantages || [],
         GTCIText: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).name, // GTCI
         GTCIUri: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri, // GTCI --> naming hier auch ändern infoSheet und detailsDoc is scheiße
-        IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).name, // IPID
+        IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,).name, // IPID
         IPIDUri: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri, // IPID
         priceFormatted: displayableProductOffer.getPriceFormatted(locale),
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),

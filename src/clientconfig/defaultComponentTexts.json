@@ -16,7 +16,13 @@
         "monthly": "monatl.",
         "quarterly": "vierteljährl.",
         "halfYearly": "habljährl.",
-        "yearly": "jährl."
+        "yearly": "jährl.",
+        "taxInformation": "(inkl. %s VerSt**)"
+      },
+      "documents": {
+        "PIS": "Produktinformationsblatt",
+        "IPID": "Informationsblatt für Versicherungsprodukte",
+        "GTCI": "Allgemeine Versicherungsbedingungen"
       }
     }
   },
@@ -26,6 +32,18 @@
   },
   "confirmation": {
     "de": {
+      "productTexts": {
+        "monthly": "monatl.",
+        "quarterly": "vierteljährl.",
+        "halfYearly": "habljährl.",
+        "yearly": "jährl.",
+        "taxInformation": "inkl. %s VerSt**"
+      },
+      "documents": {
+        "PIS": "Produktinformationsblatt",
+        "IPID": "Informationsblatt für Versicherungsprodukte",
+        "GTCI": "Allgemeine Versicherungsbedingungen"
+      }
     }
   },
   "rating": {

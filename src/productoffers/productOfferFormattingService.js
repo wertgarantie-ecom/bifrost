@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const Globalize = require('../framework/globalize').Globalize;
-const documentTypes = require('../documents/documentTypes').documentTypes;
+const format = require('util').format;
 
 exports.fromProductOffer = function fromProductOffer(productOffer, componentTexts) {
     return {
@@ -42,29 +42,17 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
         getIncludedTaxFormatted(locale = "de") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
             const formattedTax = Globalize(locale).currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
-            return "(inkl. " + formattedTax + " VerSt**)"
+            return format(componentTexts.productTexts.taxInformation, formattedTax);
         },
 
         getPriceFormatted(locale = "de") {
             const intervalData = productOffer.prices[productOffer.defaultPaymentInterval];
-            const formattedPrice = Globalize(locale).currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
-            return "ab " + formattedPrice;
+            return Globalize(locale).currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
         },
 
         getDocument(documentType) {
             function documentTypeToDescription(documentType) {
-                switch (documentType) {
-                    case documentTypes.PRODUCT_INFORMATION_SHEET:
-                        return "Produktinformationsblatt";
-                    case documentTypes.LEGAL_NOTICE:
-                        return "Rechtsdokumente";
-                    case documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION:
-                        return "Informationsblatt für Versicherungsprodukte";
-                    case documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE:
-                        return "Allgemeine Versicherungsbedingungen";
-                    case documentTypes.COMPARISON:
-                        return "Vergleichsdokument";
-                }
+                return componentTexts.documents[documentType];
             }
 
             const document = _.find(productOffer.documents, ["type", documentType]);

@@ -50,6 +50,43 @@ exports.selectionPopUpTextsSchema = {
         },
         partnerShop: {
             type: "string"
-        }
+        },
+        documents: {
+            type: "object",
+            properties: {
+                "PIS": {
+                    type: "string"
+                },
+                "IPID": {
+                    type: "string"
+                },
+                "GTCI": {
+                    type: "string"
+                }
+            },
+            required: [
+                "PIS", "IPID", "GTCI"
+            ]
+        },
+        productTexts: {
+            type: "object",
+            properties: {
+                "monthly": {
+                    type: "string"
+                },
+                "quarterly": {
+                    type: "string"
+                },
+                "halfYearly": {
+                    type: "string"
+                },
+                "yearly": {
+                    type: "string"
+                },
+                "taxInformation": {
+                    type: "string"
+                }
+            }
+        },
     }
 };

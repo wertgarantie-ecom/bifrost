@@ -1,5 +1,6 @@
 const service = require('../../../src/components/selectionpopup/productSelectionPopUpComponentService');
 const productOffersTestResponses = require("../../productoffer/productOffersTestResponses");
+const selectionPopUpDefaultTexts = require('../../../src/clientconfig/defaultComponentTexts').selectionpopup.de;
 
 const productImagesServiceMock = {
     getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
@@ -22,22 +23,8 @@ test("should return proper product response", async () => {
     const mockProductOfferService = {
         getProductOffers: () => productOffersTestResponses.productOffers
     };
-    const componentTextsJson = {
-        title: "Vergessen Sie nicht Ihren Rundumschutz",
-        subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-        footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
-        partnerShop: "Testshop",
-        detailsHeader: "Details",
-        furtherInformation: "Allgemeine Versicherungsbedingungen",
-        wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
-        showDetailsText: "Details anzeigen",
-        hideDetailsText: "Details ausblenden",
-        cancelButtonText: "Nein, danke",
-        confirmButtonText: "Versicherung hinzufügen"
-
-    };
     const mockComponentTextsService = {
-        getComponentTextsForClientAndLocal: () => componentTextsJson
+        getComponentTextsForClientAndLocal: () => selectionPopUpDefaultTexts
     };
     const result = await service.prepareProductSelectionData("Smartphone",
         "devicePrice",
@@ -48,19 +35,7 @@ test("should return proper product response", async () => {
         mockClientService(clientData),
         mockComponentTextsService);
     const expectedResult = {
-        texts: {
-            title: "Vergessen Sie nicht Ihren Rundumschutz",
-            subtitle: "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-            footerHtml: "Versicherung ist Vertrauenssache, deshalb setzt Testshop neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
-            partnerShop: "Testshop",
-            detailsHeader: "Details",
-            furtherInformation: "Allgemeine Versicherungsbedingungen",
-            wertgarantieFurtherInfo: "Mehr zur Wertgarantie",
-            showDetailsText: "Details anzeigen",
-            hideDetailsText: "Details ausblenden",
-            cancelButtonText: "Nein, danke",
-            confirmButtonText: "Versicherung hinzufügen"
-        },
+        texts: selectionPopUpDefaultTexts,
         products: [{
             advantages: ["Volle Kostenübernahme bei Reparaturen", "Bei Totalschaden zählt der Zeitwert", "Für private und berufliche Nutzung", "Weltweiter Schutz", "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte", "Unsachgemäße Handhabung"],
             IPIDText: "Informationsblatt für Versicherungsprodukte",
@@ -72,7 +47,7 @@ test("should return proper product response", async () => {
             GTCIUri: "http://localhost:3000/documents/justnotthere",
             name: "Komplettschutz",
             paymentInterval: "monatl.",
-            priceFormatted: "ab 8,00 €",
+            priceFormatted: "8,00 €",
             taxFormatted: "(inkl. 1,28 € VerSt**)",
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"]
         }, {
@@ -86,7 +61,7 @@ test("should return proper product response", async () => {
             GTCIUri: "http://localhost:3000/documents/justnotthere",
             name: "Komplettschutz mit Premium-Option",
             paymentInterval: "monatl.",
-            priceFormatted: "ab 9,95 €",
+            priceFormatted: "9,95 €",
             taxFormatted: "(inkl. 1,59 € VerSt**)",
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"]
         }],
