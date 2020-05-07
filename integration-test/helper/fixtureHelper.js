@@ -25,30 +25,31 @@ exports.validCustomer = function validCustomer() {
 
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
+    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic', model = "E-Mountainbike Premium 3000", quantity = 1} = data;
     const sessionId = uuid();
     const shoppingCart = {
         sessionId: sessionId,
         publicClientId: publicClientId,
-        orders: [
-            {
-                shopProduct: {
-                    model: "E-Mountainbike Premium 3000",
-                    price: devicePrice,
-                    deviceClass: deviceClass,
-                },
-                wertgarantieProduct: {
-                    id: wertgarantieProductId,
-                    name: wertgarantieProductName,
-                    paymentInterval: "monthly"
-                },
-                id: uuid()
-            }
-        ],
+        orders: [],
         confirmations: {
             termsAndConditionsConfirmed: false
         }
     };
+    for (var i = 0; i < quantity; i++) {
+        shoppingCart.orders.push({
+            shopProduct: {
+                model: model,
+                price: devicePrice,
+                deviceClass: deviceClass,
+            },
+            wertgarantieProduct: {
+                id: wertgarantieProductId,
+                name: wertgarantieProductName,
+                paymentInterval: "monthly"
+            },
+            id: uuid()
+        });
+    }
 
     return signatureService.signShoppingCart(shoppingCart);
 };
@@ -182,7 +183,9 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         documents: {
                             legalDocuments: [
                                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
+                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                documentTypes.RIGHT_OF_WITHDRAWAL
                             ],
                             comparisonDocuments: []
                         },
@@ -237,7 +240,9 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         documents: {
                             legalDocuments: [
                                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
+                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                documentTypes.RIGHT_OF_WITHDRAWAL
                             ],
                             comparisonDocuments: []
                         },
@@ -253,7 +258,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         secrets: [
             "secret:" + uuid()
         ],
-        activePartnerNumber: 12345,
+        activePartnerNumber: 12345
     }
 };
 

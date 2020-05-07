@@ -92,7 +92,9 @@ test('should return proper product data', async () => {
             "documents": {
                 "GTCI": "Allgemeine Versicherungsbedingungen",
                 "IPID": "Informationsblatt für Versicherungsprodukte",
-                "PIS": "Produktinformationsblatt"
+                "PIS": "Produktinformationsblatt",
+                "GDPR": "Datenschutz",
+                "ROW": "Widerrufsrecht"
             },
             "productTexts": {
                 "paymentIntervals": {

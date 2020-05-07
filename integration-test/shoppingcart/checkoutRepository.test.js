@@ -10,7 +10,7 @@ describe("test persist and find by session in checkout repository", () => {
     const purchasesSession1 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
     const purchasesSession2 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
 
-    test('Repository should persist checkout data', async () => {
+    test('Repository should persist checkout data', async (done) => {
         const checkoutData = {
             sessionId: sessionId1,
             clientId: clientId,
@@ -18,9 +18,10 @@ describe("test persist and find by session in checkout repository", () => {
             purchases: purchasesSession1
         };
         await checkoutRepository.persist(checkoutData);
+        done();
     });
 
-    test('Repository should successfully retrieve data from DB by session id', async () => {
+    test('Repository should successfully retrieve data from DB by session id', async (done) => {
         const result = await checkoutRepository.findBySessionId(sessionId1);
         const expectedResult = {
             clientId: clientId,
@@ -29,9 +30,10 @@ describe("test persist and find by session in checkout repository", () => {
             purchases: purchasesSession1
         };
         expect(result).toEqual(expectedResult);
+        done();
     });
 
-    test('repository should persist second checkout data with different session id', async () => {
+    test('repository should persist second checkout data with different session id', async (done) => {
         const checkoutData = {
             sessionId: sessionId2,
             clientId: clientId,
@@ -39,10 +41,11 @@ describe("test persist and find by session in checkout repository", () => {
             purchases: purchasesSession2
         };
         await checkoutRepository.persist(checkoutData);
+        done();
     });
 
 
-    test('should retrieve all persisted sessions', async () => {
+    test('should retrieve all persisted sessions', async (done) => {
         const result = await checkoutRepository.findAll(2);
         const expectedResult = [
             {
@@ -59,10 +62,12 @@ describe("test persist and find by session in checkout repository", () => {
             }
         ];
         expect(result).toEqual(expectedResult);
+        done();
     });
 });
 
-test('find by session id should return undefined in case of no checkout data avalable', async () => {
+test('find by session id should return undefined in case of no checkout data avalable', async (done) => {
     const result = await checkoutRepository.findBySessionId(uuid());
     expect(result).toEqual(undefined);
+    done();
 })

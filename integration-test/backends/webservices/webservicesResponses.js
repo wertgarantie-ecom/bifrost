@@ -337,6 +337,11 @@ exports.multipleLegalDocuments = {
                 "DOCUMENT_TYPE": "SEPA",
                 "FILENAME": "SEPA.pdf",
                 "CONTENT": "JVBERi0xLjYNJeLjz9MNCjcgMCBvYmoNPDwvTGluZWFyaXplZCAxL0wgMTcwMjYvTyA5L0UgMTMxMTYvTiAxL1QgMTY3Mzc"
+            },
+            {
+                "DOCUMENT_TYPE": "ROW",
+                "FILENAME": "Widerrufsbelehrung für Komplettschutz.pdf",
+                "CONTENT": "JVBERi0xLjYNJeLjz9MNCjIyIDAgb2JqDTw8L0ZpbHRlci9GbGF0ZURlY"
             }
         ]
     },

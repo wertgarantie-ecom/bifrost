@@ -5,7 +5,10 @@ const _productImageService = require('../../images/productImageService');
 const defaultClientService = require('../../clientconfig/clientService');
 const componentName = "confirmation";
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
+const confirmationResponseSchema = require('./confirmationResponseSchema').confirmationResponseSchema;
+const validator = require('../../framework/validation/validator');
 const _ = require('lodash');
+const util = require('util');
 
 exports.prepareConfirmationData = async function prepareConfirmationData(shoppingCart,
                                                                          locale = 'de',
@@ -16,43 +19,48 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     if (!shoppingCart) {
         return undefined;
     }
+    const client = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
+    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
     const result = {
+        texts: {
+            title: componentTexts.title,
+            subtitle: componentTexts.subtitle,
+        },
         termsAndConditionsConfirmed: shoppingCart.confirmations.termsAndConditionsConfirmed,
-        headerTitle: "Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.",
-        confirmText: "Bitte bestätige noch kurz:",
         orders: [],
         shoppingCart: shoppingCart
     };
 
     let avbHref;
-    const client = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
+    let rowHref;
+    let GDPRHref;
+    let IPIDHref;
+
     for (var i = 0; i < shoppingCart.orders.length; i++) {
         const order = shoppingCart.orders[i];
-        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, clientComponentTextService);
+        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
+            rowHref = confirmationProductData.rowHref;
+            GDPRHref = confirmationProductData.GDPRHref;
+            IPIDHref = confirmationProductData.product.IPIDUri;
         }
     }
 
-    result.generalConfirmationText = `Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="${avbHref}">(AVB)</a> und die Bestimmungen zum Datenschutz. 
-                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich 
-                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit 
-                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung 
-                                    meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.`;
-    result.pleaseConfirmText = `Bitte bestätige die oben stehenden Bedingungen um fortzufahren.`;
+    result.texts.confirmationTextTermsAndConditions = util.format(componentTexts.confirmationTextTermsAndConditions, avbHref, GDPRHref, rowHref, IPIDHref);
+    result.texts.confirmationPrompt = componentTexts.confirmationPrompt;
     if (result.orders.length <= 0) {
         return undefined;
     }
-    return result;
+    return validator.validate(result, confirmationResponseSchema);
 };
 
-async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts) {
     const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price)).productOffers;
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
-        const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
         const productOfferFormatter = productOfferFormattingService.fromProductOffer(matchingOffer, componentTexts);
         matchingOffer.payment = productOfferFormatter.getPaymentInterval();
         const advantageCategories = productOfferFormatter.getAdvantageCategories(productOffers);
@@ -70,7 +78,9 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
                 shopProductShortName: order.shopProduct.model,
                 orderId: order.id
             },
-            avbHref: productOfferFormatter.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri
+            avbHref: productOfferFormatter.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri,
+            rowHref: productOfferFormatter.getDocument(documentTypes.RIGHT_OF_WITHDRAWAL).uri,
+            GDPRHref: productOfferFormatter.getDocument(documentTypes.GENERAL_DATA_PROTECTION_REGULATION).uri
         };
     }
 

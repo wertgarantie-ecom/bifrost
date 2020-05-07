@@ -48,6 +48,16 @@ exports.productOffers = {
                     "uri": "http://localhost:3000/documents/justnotthere",
                     "type": "IPID",
                     "name": "IPID.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "GDPR",
+                    "name": "GDPR.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "ROW",
+                    "name": "Widerrufsbelehrung für Komplettschutz.pdf.PDF"
                 }
             ]
         },
@@ -102,6 +112,16 @@ exports.productOffers = {
                     "uri": "http://localhost:3000/documents/justnotthere",
                     "type": "GTCI",
                     "name": "GTCI.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "GDPR",
+                    "name": "GDPR.PDF"
+                },
+                {
+                    "uri": "http://localhost:3000/documents/justnotthere",
+                    "type": "ROW",
+                    "name": "Widerrufsbelehrung für Komplettschutz.pdf.PDF"
                 }
             ]
         }
