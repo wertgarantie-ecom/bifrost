@@ -25,30 +25,31 @@ exports.validCustomer = function validCustomer() {
 
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic', model = "E-Mountainbike Premium 3000"} = data;
+    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic', model = "E-Mountainbike Premium 3000", quantity = 1} = data;
     const sessionId = uuid();
     const shoppingCart = {
         sessionId: sessionId,
         publicClientId: publicClientId,
-        orders: [
-            {
-                shopProduct: {
-                    model: model,
-                    price: devicePrice,
-                    deviceClass: deviceClass,
-                },
-                wertgarantieProduct: {
-                    id: wertgarantieProductId,
-                    name: wertgarantieProductName,
-                    paymentInterval: "monthly"
-                },
-                id: uuid()
-            }
-        ],
+        orders: [],
         confirmations: {
             termsAndConditionsConfirmed: false
         }
     };
+    for (var i = 0; i < quantity; i++) {
+        shoppingCart.orders.push({
+            shopProduct: {
+                model: model,
+                price: devicePrice,
+                deviceClass: deviceClass,
+            },
+            wertgarantieProduct: {
+                id: wertgarantieProductId,
+                name: wertgarantieProductName,
+                paymentInterval: "monthly"
+            },
+            id: uuid()
+        });
+    }
 
     return signatureService.signShoppingCart(shoppingCart);
 };

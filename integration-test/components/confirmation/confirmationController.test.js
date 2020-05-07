@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../../../src/app');
-const nockHelper = require('../../helper/nockHelper');
 const testhelper = require('../../helper/fixtureHelper');
 const webservicesProductOffersAssembler = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
 const mockWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClient();
@@ -64,10 +63,6 @@ test("should return valid confirmation data", async () => {
         wertgarantieProductName: productOffers[0].name
     });
 
-
-    nockHelper.nockHeimdallLogin(clientData);
-    nockHelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
-
     const response = await request.agent(app).put('/wertgarantie/components/confirmation')
         .send({signedShoppingCart: signedShoppingCart});
     expect(response.status).toBe(200);
@@ -80,5 +75,35 @@ test("should return valid confirmation data", async () => {
         subtitle: "Bitte bestätige noch kurz:",
         confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"undefined/wertgarantie/documents/e2289cb6c7e945f4e79bab6b250cb0be34a9960e\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"undefined/wertgarantie/documents/6a9715485af877495e38b24b093d603436c433eb\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
         confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren."
-    })
+    });
+});
+
+test("should remove order from shopping cart", async () => {
+    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
+    const signedShoppingCart = testhelper.createSignedShoppingCart({
+        publicClientId: clientData.publicClientIds[0],
+        deviceClass: "Smartphone",
+        model: "Test Handy",
+        wertgarantieProductId: productOffers[0].id,
+        wertgarantieProductName: productOffers[0].name,
+        quantity: 2
+    });
+
+    const response = await request.agent(app).delete('/wertgarantie/components/confirmation/product')
+        .send({
+            orderId: signedShoppingCart.shoppingCart.orders[0].id,
+            signedShoppingCart: signedShoppingCart
+        });
+    expect(response.status).toBe(200);
+    expect(response.body.signedShoppingCart.shoppingCart.orders.length).toEqual(1);
+    expect(response.body.signedShoppingCart.shoppingCart.orders[0]).toEqual(signedShoppingCart.shoppingCart.orders[1]);
+    expect(response.body.termsAndConditionsConfirmed).toEqual(false);
+    expect(response.body.orders.length).toEqual(1);
+    expect(response.body.texts).toEqual({
+        title: "Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!",
+        subtitle: "Bitte bestätige noch kurz:",
+        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"undefined/wertgarantie/documents/e2289cb6c7e945f4e79bab6b250cb0be34a9960e\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"undefined/wertgarantie/documents/6a9715485af877495e38b24b093d603436c433eb\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+        confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren."
+    });
 });
