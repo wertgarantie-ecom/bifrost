@@ -4,6 +4,7 @@ const checkoutRepository = require('./checkoutRepository');
 const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutService');
 const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 const ClientError = require('../errors/ClientError');
+const mailSender = require('../mails/mailSender');
 
 
 exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, publicClientId, orderId) {
@@ -72,9 +73,18 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     };
 
     await repository.persist(checkoutData);
+    sendCustomerCheckoutMails(checkoutData.purchases, customer);
 
     return checkoutData;
 };
+
+function sendCustomerCheckoutMails(purchases, customer) {
+    purchases.forEach(purchase => {
+        if (purchase.success) {
+            mailSender.sendCustomerCheckoutMail(customer.email, purchase.contractNumber);
+        }
+    })
+}
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;
