@@ -27,71 +27,6 @@ describe('add phone test shop client config', () => {
                     "password": "test-phone-password",
                     "productOffersConfigurations": [
                         {
-                            "name": "Komplettschutz",
-                            "productType": "KOMPLETTSCHUTZ_2019",
-                            "applicationCode": "GU WG DE KS 0419",
-                            "basicRiskType": "KOMPLETTSCHUTZ",
-                            "defaultPaymentInterval": "monthly",
-                            "deviceClasses": [
-                                {
-                                    "objectCode": "9025",
-                                    "objectCodeExternal": "Smartphone",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180001
-                                        }
-                                    ]
-                                },
-                                {
-                                    "objectCode": "73",
-                                    "objectCodeExternal": "Mobilfunk",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180001
-                                        }
-                                    ]
-                                }
-
-                            ],
-                            "documents": {
-                                "legalDocuments": [
-                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
-                                ],
-                                "comparisonDocuments": []
-                            },
-                            "advantages": [
-                                "Für private und berufliche Nutzung",
-                                "Unsachgemäße Handhabung",
-                                "Weltweiter Schutz",
-                                "Volle Kostenübernahme bei Reparaturen",
-                                "Bei Totalschaden zählt der Zeitwert",
-                                "Für private und berufliche Nutzung",
-                                "Weltweiter Schutz",
-                                "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                                "Unsachgemäße Handhabung"
-                            ],
-                            "risks": []
-                        },
-                        {
                             "name": "Komplettschutz mit Premium-Option",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
@@ -139,26 +74,91 @@ describe('add phone test shop client config', () => {
                             "documents": {
                                 "legalDocuments": [
                                     documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
                                 ],
                                 "comparisonDocuments": []
                             },
                             "advantages": [
-                                "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
-                                "Diebstahlschutz",
+                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
+                                "Diebstahl? Wir erstatten den Zeitwert!",
                                 "Keine Selbstbeteiligung im Schadensfall",
-                                "einfacher Diebstahl",
-                                "Für private und berufliche Nutzung",
-                                "Unsachgemäße Handhabung",
-                                "Weltweiter Schutz",
-                                "Volle Kostenübernahme bei Reparaturen",
+                                "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Bei Totalschaden zählt der Zeitwert",
                                 "Für private und berufliche Nutzung",
                                 "Weltweiter Schutz",
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                                "Unsachgemäße Handhabung"
+                                "Unsachgemäße Handhabung",
+                                "Wasserschaden"
                             ],
                             "risks": ["DIEBSTAHLSCHUTZ"]
+                        },
+                        {
+                            "name": "Komplettschutz",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "9025",
+                                    "objectCodeExternal": "Smartphone",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 30001
+                                        },
+                                        {
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
+                                        },
+                                        {
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
+                                        }
+                                    ]
+                                },
+                                {
+                                    "objectCode": "73",
+                                    "objectCodeExternal": "Mobilfunk",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 30001
+                                        },
+                                        {
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
+                                        },
+                                        {
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
+                                        }
+                                    ]
+                                }
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ],
+                                "comparisonDocuments": []
+                            },
+                            "advantages": [
+                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
+                                "Bei Totalschaden zählt der Zeitwert",
+                                "Für private und berufliche Nutzung",
+                                "Weltweiter Schutz",
+                                "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                                "Unsachgemäße Handhabung",
+                                "Wasserschaden"
+                            ],
+                            "risks": []
                         }
                     ]
                 },
@@ -259,71 +259,6 @@ describe('add Handyflash DEV/Local test client config', () => {
                     "password": "test-handyflash-password",
                     "productOffersConfigurations": [
                         {
-                            "name": "Komplettschutz",
-                            "productType": "KOMPLETTSCHUTZ_2019",
-                            "applicationCode": "GU WG DE KS 0419",
-                            "basicRiskType": "KOMPLETTSCHUTZ",
-                            "defaultPaymentInterval": "monthly",
-                            "deviceClasses": [
-                                {
-                                    "objectCode": "9025",
-                                    "objectCodeExternal": "Smartphone",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180001
-                                        }
-                                    ]
-                                },
-                                {
-                                    "objectCode": "73",
-                                    "objectCodeExternal": "Mobilfunk",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180001
-                                        }
-                                    ]
-                                }
-
-                            ],
-                            "documents": {
-                                "legalDocuments": [
-                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
-                                ],
-                                "comparisonDocuments": []
-                            },
-                            "advantages": [
-                                "Für private und berufliche Nutzung",
-                                "Unsachgemäße Handhabung",
-                                "Weltweiter Schutz",
-                                "Volle Kostenübernahme bei Reparaturen",
-                                "Bei Totalschaden zählt der Zeitwert",
-                                "Für private und berufliche Nutzung",
-                                "Weltweiter Schutz",
-                                "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                                "Unsachgemäße Handhabung"
-                            ],
-                            "risks": []
-                        },
-                        {
                             "name": "Komplettschutz mit Premium-Option",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
@@ -371,26 +306,91 @@ describe('add Handyflash DEV/Local test client config', () => {
                             "documents": {
                                 "legalDocuments": [
                                     documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
                                 ],
                                 "comparisonDocuments": []
                             },
                             "advantages": [
-                                "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
-                                "Diebstahlschutz",
+                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
+                                "Diebstahl? Wir erstatten den Zeitwert!",
                                 "Keine Selbstbeteiligung im Schadensfall",
-                                "einfacher Diebstahl",
-                                "Für private und berufliche Nutzung",
-                                "Unsachgemäße Handhabung",
-                                "Weltweiter Schutz",
-                                "Volle Kostenübernahme bei Reparaturen",
+                                "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Bei Totalschaden zählt der Zeitwert",
                                 "Für private und berufliche Nutzung",
                                 "Weltweiter Schutz",
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                                "Unsachgemäße Handhabung"
+                                "Unsachgemäße Handhabung",
+                                "Wasserschaden"
                             ],
                             "risks": ["DIEBSTAHLSCHUTZ"]
+                        },
+                        {
+                            "name": "Komplettschutz",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "9025",
+                                    "objectCodeExternal": "Smartphone",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 30001
+                                        },
+                                        {
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
+                                        },
+                                        {
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
+                                        }
+                                    ]
+                                },
+                                {
+                                    "objectCode": "73",
+                                    "objectCodeExternal": "Mobilfunk",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 30001
+                                        },
+                                        {
+                                            "minClose": 30001,
+                                            "maxOpen": 80001
+                                        },
+                                        {
+                                            "minClose": 80001,
+                                            "maxOpen": 180001
+                                        }
+                                    ]
+                                }
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ],
+                                "comparisonDocuments": []
+                            },
+                            "advantages": [
+                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
+                                "Bei Totalschaden zählt der Zeitwert",
+                                "Für private und berufliche Nutzung",
+                                "Weltweiter Schutz",
+                                "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                                "Unsachgemäße Handhabung",
+                                "Wasserschaden"
+                            ],
+                            "risks": []
                         }
                     ]
                 }

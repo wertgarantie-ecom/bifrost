@@ -401,6 +401,16 @@ test('should update all product offers for client', async () => {
                     documentTitle: "IPID.pdf",
                     documentType: "IPID",
                     documentId: "1234"
+                },
+                {
+                    documentId: "1234",
+                    documentTitle: "GDPR.pdf",
+                    documentType: "GDPR",
+                },
+                {
+                    documentId: "1234",
+                    documentTitle: "Widerrufsbelehrung für Komplettschutz.pdf",
+                    documentType: "ROW",
                 }
             ],
             advantages: [],
@@ -424,6 +434,16 @@ test('should update all product offers for client', async () => {
                     documentTitle: "IPID.pdf",
                     documentType: "IPID",
                     documentId: "1234"
+                },
+                {
+                    documentId: "1234",
+                    documentTitle: "GDPR.pdf",
+                    documentType: "GDPR",
+                },
+                {
+                    documentId: "1234",
+                    documentTitle: "Widerrufsbelehrung für Komplettschutz.pdf",
+                    documentType: "ROW",
                 }
             ],
             advantages: [],

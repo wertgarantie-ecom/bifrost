@@ -1375,7 +1375,63 @@
 					"name": "component texts",
 					"item": [
 						{
-							"name": "update component texts for client for component",
+							"name": "update confirmation component texts for client",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{user}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"component\": \"confirmation\",\n    \"locale\": \"de\",\n    \"componentTexts\": {\n        \"productTexts\": {\n            \"paymentIntervals\": {\n                \"monthly\": \"monatl.\",\n                \"quarterly\": \"vierteljährl.\",\n                \"halfYearly\": \"habljährl.\",\n                \"yearly\": \"jährl.\"\n            },\n            \"taxInformation\": \"(inkl. %s VerSt**)\"\n        },\n        \"documents\": {\n            \"PIS\": \"Produktinformationsblatt\",\n            \"IPID\": \"Informationsblatt für Versicherungsprodukte\",\n            \"GTCI\": \"Allgemeine Versicherungsbedingungen\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/clients/:clientId/component-texts",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"clients",
+										":clientId",
+										"component-texts"
+									],
+									"variable": [
+										{
+											"key": "clientId",
+											"value": "1d24f1c0-81be-46bb-a1e5-31b8e3412462"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update selection pop up texts for client",
 							"request": {
 								"auth": {
 									"type": "basic",

@@ -24,8 +24,8 @@ function mockClientService(clientData) {
 }
 
 const testShoppingCart = {
-    clientId: "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
-    signature: "signature",
+    publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
+    sessionId: "38ff8413-dcfd-57f8-c013-08b5s762067a",
     orders: [
         {
             id: "18ff0413-bcfd-48f8-b003-04b57762067a",
@@ -62,9 +62,12 @@ const testShoppingCart = {
 const expectedResponse = {
     shoppingCart: testShoppingCart,
     termsAndConditionsConfirmed: true,
-    headerTitle: 'Herzlichen Glückwunsch, Du hast den besten Schutz für Deinen Einkauf ausgewählt.',
-    pleaseConfirmText: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
-    confirmText: 'Bitte bestätige noch kurz:',
+    texts: {
+        title: 'Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!',
+        subtitle: 'Bitte bestätige noch kurz:',
+        confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
+        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+    },
     orders: [
         {
             paymentInterval: "monatl.",
@@ -91,11 +94,6 @@ const expectedResponse = {
             orderId: "28ff0413-bcfd-48f8-b003-04b57762067a"
         },
     ],
-    generalConfirmationText: 'Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a href="http://localhost:3000/documents/justnotthere">(AVB)</a> und die Bestimmungen zum Datenschutz. \n' +
-        '                                    Das gesetzliche Widerrufsrecht, die Produktinformationsblätter und die Vermittler-Erstinformation habe ich \n' +
-        '                                    zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit \n' +
-        '                                    einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung \n' +
-        '                                    meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.',
 };
 
 
@@ -112,7 +110,7 @@ test("should return proper confirmation component data for one product", async (
         mockClientService(clientData),
         clientComponentTextService
     );
-    expect(confirmationData).toEqual(expectedResponse);
+    expect(confirmationData.instance).toEqual(expectedResponse);
 });
 
 test("should return undefined if no shopping cart is given", async () => {

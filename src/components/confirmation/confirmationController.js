@@ -6,7 +6,7 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     try {
         const result = await confirmationService.prepareConfirmationData(shoppingCart);
         if (result) {
-            return res.status(200).send(result);
+            return res.status(200).send(result.instance);
         } else {
             return sendEmptyShoppingCart(res);
         }

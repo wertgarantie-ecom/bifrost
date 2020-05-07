@@ -31,7 +31,9 @@ describe("should persist, retrieve and alter component texts for client", () => 
         documents: {
             PIS: "Produktinformationsblatt",
             IPID: "Informationsblatt für Versicherungsprodukte",
-            GTCI: "Allgemeine Versicherungsbedingungen"
+            GTCI: "Allgemeine Versicherungsbedingungen",
+            GDPR: "Datenschutz",
+            ROW: "Widerrufsrecht"
         },
         productTexts: {
             paymentIntervals: {

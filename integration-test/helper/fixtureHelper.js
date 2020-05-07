@@ -25,7 +25,7 @@ exports.validCustomer = function validCustomer() {
 
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic'} = data;
+    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic', model = "E-Mountainbike Premium 3000"} = data;
     const sessionId = uuid();
     const shoppingCart = {
         sessionId: sessionId,
@@ -33,7 +33,7 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
         orders: [
             {
                 shopProduct: {
-                    model: "E-Mountainbike Premium 3000",
+                    model: model,
                     price: devicePrice,
                     deviceClass: deviceClass,
                 },
@@ -182,7 +182,9 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         documents: {
                             legalDocuments: [
                                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
+                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                documentTypes.RIGHT_OF_WITHDRAWAL
                             ],
                             comparisonDocuments: []
                         },
@@ -237,7 +239,9 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         documents: {
                             legalDocuments: [
                                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
-                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
+                                documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                documentTypes.RIGHT_OF_WITHDRAWAL
                             ],
                             comparisonDocuments: []
                         },
@@ -253,7 +257,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         secrets: [
             "secret:" + uuid()
         ],
-        activePartnerNumber: 12345,
+        activePartnerNumber: 12345
     }
 };
 

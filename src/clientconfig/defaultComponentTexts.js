@@ -1,7 +1,9 @@
 const documents = {
     "PIS": "Produktinformationsblatt",
     "IPID": "Informationsblatt für Versicherungsprodukte",
-    "GTCI": "Allgemeine Versicherungsbedingungen"
+    "GTCI": "Allgemeine Versicherungsbedingungen",
+    "ROW": "Widerrufsrecht",
+    "GDPR": "Datenschutz"
 };
 
 const paymentIntervals = {
@@ -37,6 +39,10 @@ exports.defaultComponentTexts = {
     },
     "confirmation": {
         "de": {
+            "title": "Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!",
+            "subtitle": "Bitte bestätige noch kurz:",
+            "confirmationTextTermsAndConditions": "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"%s\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"%s\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"%s\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"%s\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+            "confirmationPrompt": "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
             "productTexts": {
                 "paymentIntervals": paymentIntervals,
                 "taxInformation": "(inkl. %s VerSt**)"
