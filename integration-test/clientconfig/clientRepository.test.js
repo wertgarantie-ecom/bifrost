@@ -7,6 +7,7 @@ describe("should find persisted client properties by given secret", () => {
     const clientData = {
         id: uuid(),
         name: "bikeShop",
+        email: "mymail@mail.mu",
         backends: {
             heimdall: {
                 clientId: uuid(),

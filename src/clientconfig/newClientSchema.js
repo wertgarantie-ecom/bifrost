@@ -1,60 +1,63 @@
 const productOffersConfigSchema = require('./productOffersConfigSchema').productOffersConfigSchema;
 
 module.exports.newClientSchema = {
-    "type": "object",
-    "additionalProperties": false,
-    "required": [
+    type: "object",
+    additionalProperties: false,
+    required: [
         "id",
         "name",
         "secrets",
         "publicClientIds"
     ],
-    "properties": {
-        "id": {
+    properties: {
+        id: {
             "type": "uuid"
         },
-        "name": {
+        name: {
             "type": "string",
         },
-        "backends": {
-            "required": [
+        email: {
+            "type": "string"
+        },
+        backends: {
+            required: [
                 "webservices"
             ],
-            "type": "object",
-            "properties": {
-                "webservices": {
-                    "type": "object",
-                    "properties": {
-                        "username": {
+            type: "object",
+            properties: {
+                webservices: {
+                    type: "object",
+                    properties: {
+                        username: {
                             "type": "string"
                         },
-                        "password": {
+                        password: {
                             "type": "string"
                         },
-                        "productOffersConfigurations": productOffersConfigSchema
+                        productOffersConfigurations: productOffersConfigSchema
                     },
-                    "required": [
+                    required: [
                         "username",
                         "password",
                         "productOffersConfigurations"
                     ]
                 },
-                "heimdall": {
-                    "type": "object",
-                    "properties": {
-                        "clientId": {
-                            "type": "string"
+                heimdall: {
+                    type: "object",
+                    properties: {
+                        clientId: {
+                            type: "string"
                         },
-                        "deviceClassMappings": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "shopDeviceClass": {
-                                        "type": "string"
+                        deviceClassMappings: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    shopDeviceClass: {
+                                        type: "string"
                                     },
-                                    "heimdallDeviceClass": {
-                                        "type": "string"
+                                    heimdallDeviceClass: {
+                                        type: "string"
                                     }
                                 }
                             }
@@ -63,19 +66,19 @@ module.exports.newClientSchema = {
                 }
             }
         },
-        "activePartnerNumber": {
-            "type": "integer"
+        activePartnerNumber: {
+            type: "integer"
         },
-        "secrets": {
-            "type": "array",
-            "items": {
-                "type": "string"
+        secrets: {
+            type: "array",
+            items: {
+                type: "string"
             }
         },
-        "publicClientIds": {
-            "type": "array",
-            "items": {
-                "type": "string"
+        publicClientIds: {
+            type: "array",
+            items: {
+                type: "string"
             }
         }
     }

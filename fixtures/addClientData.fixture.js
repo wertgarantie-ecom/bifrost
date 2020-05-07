@@ -12,6 +12,7 @@ describe('add phone test shop client config', () => {
         const validData = {
             "id": phoneClientId,
             "name": "Test Shop Handy",
+            "email": "wertgarantie.bifrost@gmail.com",
             "backends": {
                 "heimdall": {
                     "clientId": "test-phone-heimdall-clientId",
