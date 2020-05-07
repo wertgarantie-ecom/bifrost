@@ -251,7 +251,14 @@ async function sendWebservicesRequest(formDataMap, uri, httpClient, expectedStat
             throw new WebserviceError(`Could not connect to Webservices: ${JSON.stringify(request)}, error: ${e}`);
         }
     }
-    throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${JSON.stringify(formDataMap)}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
+    const requestFormData = [];
+    for (let entry of formDataMap.entries()) {
+        requestFormData.push({
+            key: entry[0],
+            value: entry[1]
+        });
+    }
+    throw new WebserviceError(`Webservices did not answer with status code ${expectedStatusCode} for request: ${JSON.stringify(requestFormData)}. Webservices responded with: ${JSON.stringify(response.data, null, 2)}`);
 }
 
 class WebserviceError extends Error {

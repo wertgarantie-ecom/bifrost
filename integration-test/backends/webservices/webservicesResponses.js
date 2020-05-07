@@ -247,7 +247,7 @@ exports.insurancePremiumResponse = {
     "RESULT": {
         "PREMIUM_SINGLE_PAYMENT": "0",
         "FEHLERMELDUNG": {},
-        "PREMIUM_RECURRING_INTERVALL": "23,4",
+        "PREMIUM_RECURRING_INTERVAL": "23,4",
         "PREMIUM_RECURRING": "23,4"
     },
     "LANGUAGE": "DE",

@@ -106,7 +106,7 @@ async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, de
             return {
                 minClose: range.minClose,
                 maxOpen: range.maxOpen,
-                insurancePremium: parseStringToMinorUnit(result.RESULT.PREMIUM_RECURRING_INTERVALL)
+                insurancePremium: parseStringToMinorUnit(result.RESULT.PREMIUM_RECURRING_INTERVAL)
             };
         }));
         intervalData.priceRangePremiums.push(...priceRangePremiums);
