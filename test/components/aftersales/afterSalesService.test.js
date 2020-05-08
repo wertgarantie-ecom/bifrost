@@ -1,11 +1,15 @@
 const afterSalesService = require('../../../src/components/aftersales/afterSalesService');
+const defaultAfterSalesTextsForDE = require('../../../src/clientconfig/defaultComponentTexts').defaultComponentTexts.aftersales.de;
 const uuid = require('uuid');
+const clientComponentTextService = {
+    getComponentTextsForClientAndLocal: () => defaultAfterSalesTextsForDE
+};
 
 test('should return proper after sales data for checkout data', async () => {
     const sessionId = "0b511572-3aa3-4706-8146-d109693cfe37";
     const productImageService = {
         getRandomImageLinksForDeviceClass: () => ['linkToProductImage']
-    }
+    };
     const checkoutRepository = {
         findBySessionId: () => {
             return {
@@ -30,20 +34,21 @@ test('should return proper after sales data for checkout data', async () => {
             }
         }
     };
-    const result = await afterSalesService.prepareAfterSalesData(sessionId, checkoutRepository, productImageService);
-    expect(result.headerTitle).toEqual('Ihre Geräte wurden erfolgreich versichert!');
-    expect(result.productBoxTitle).toEqual('Folgende Geräte wurden versichert:');
-    expect(result.nextStepsTitle).toEqual('Die nächsten Schritte:');
-    expect(result.nextSteps).toEqual(['Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen', 'Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App.']);
-    expect(result.orderItems.length).toEqual(1);
-    expect(result.orderItems[0]).toEqual({
+    const result = await afterSalesService.prepareAfterSalesData(sessionId, 'de', checkoutRepository, productImageService, clientComponentTextService);
+    expect(result.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
+    expect(result.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+    expect(result.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
+    expect(result.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
+    expect(result.successfulOrders.length).toEqual(1);
+    expect(result.successfulOrders[0]).toEqual({
         "insuranceProductTitle": "Premium",
         "productTitle": "Flash Handy 3000 Pro",
+        "contractNumber": 28850277,
         "imageLink": "linkToProductImage"
     });
 });
 
-test('should not return data for failed purchases', async () => {
+test('should return failed orders', async () => {
     const sessionId = uuid;
     const checkoutRepository = {
         findBySessionId: () => {
@@ -60,7 +65,7 @@ test('should not return data for failed purchases', async () => {
         }
     };
 
-    const result = await afterSalesService.prepareAfterSalesData(sessionId, checkoutRepository, undefined);
+    const result = await afterSalesService.prepareAfterSalesData(sessionId, "de", checkoutRepository, undefined, clientComponentTextService);
     expect(result).toEqual(undefined);
-})
+});
 

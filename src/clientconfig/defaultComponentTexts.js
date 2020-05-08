@@ -54,7 +54,14 @@ exports.defaultComponentTexts = {
         "de": {}
     },
     "aftersales": {
-        "de": {}
+        "de": {
+            "success": {
+                "title": "Dein Einkauf wurde erfolgreich versichert!",
+                "subtitle": "Folgende Geräte wurden versichert:",
+                "nextStepsTitle": "Die nächsten Schritte:",
+                "nextSteps": ["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]
+            }
+        }
     }
 };
 

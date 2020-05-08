@@ -104,7 +104,9 @@ exports.getValidPurchase = function getValidPurchase() {
         contractNumber: "23479998",
         transactionNumber: "7524545",
         backend: "heimdall",
-        backendResponseInfo: "a447s7s6666f"
+        backendResponseInfo: {
+            activationCode: "a447s7s6666f"
+        }
     }
 }
 
