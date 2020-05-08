@@ -25,6 +25,7 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
             wertgarantieProductName: order.wertgarantieProduct.name,
             deviceClass: order.shopProduct.deviceClass,
             devicePrice: order.shopProduct.price,
+            orderId: order.shopProduct.orderId,
             success: true,
             message: "successfully transmitted insurance proposal",
             shopProduct: order.shopProduct.model,
@@ -43,6 +44,7 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
             id: idGenerator(),
             wertgarantieProductId: order.wertgarantieProduct.id,
             wertgarantieProductName: order.wertgarantieProduct.name,
+            orderId: order.shopProduct.orderId,
             deviceClass: order.shopProduct.deviceClass,
             devicePrice: order.shopProduct.price,
             success: false,
@@ -97,9 +99,9 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
                     "Antragskodierung": productOffer.applicationCode,
                     "Produkttyp": productOffer.productType
                 },
-               "Zahlung": {
-                   "Selbstzahler" : true
-               }
+                "Zahlung": {
+                    "Selbstzahler": true
+                }
             }
         }
     };

@@ -34,7 +34,12 @@ async function sendMail(to, subject, body, mailgunOptions) {
         subject: subject,
         html: body
     };
-    return await mailgun.messages().send(data);
+    const bifrostEmail = process.env.BIFROST_EMAIL_ADDRESS;
+    if (bifrostEmail) {
+        data.Bcc = bifrostEmail;
+    }
+
+    await mailgun.messages().send(data);
 }
 
 const testOptions = {

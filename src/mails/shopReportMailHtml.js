@@ -19,11 +19,11 @@ module.exports = function renderCustomerMailHtml(shopName, purchase, subject, cu
     <p>
     <h3>Kunde:</h3>
     Vorname: ${customer.firstname}<br>
-    Nachname: ${purchase.lastname}<br>
-    Straße: ${purchase.street}<br>
-    Ort: ${purchase.city}<br>
-    PLZ: ${purchase.zip}<br>
-    Email: ${purchase.email}<br>
+    Nachname: ${customer.lastname}<br>
+    Straße: ${customer.street}<br>
+    Ort: ${customer.city}<br>
+    PLZ: ${customer.zip}<br>
+    Email: ${customer.email}<br>
     </p>
      `
 }
