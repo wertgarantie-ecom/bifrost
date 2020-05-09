@@ -20,10 +20,11 @@ exports.insert = async function insert(clientData) {
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: "INSERT INTO client (id, name, backends, activePartnerNumber) VALUES ($1 , $2, $3, $4);",
+            text: "INSERT INTO client (id, name, email, backends, activePartnerNumber) VALUES ($1 , $2, $3, $4, $5);",
             values: [
                 clientData.id,
                 clientData.name,
+                clientData.email,
                 JSON.stringify(clientData.backends),
                 clientData.activePartnerNumber,
             ]
@@ -70,7 +71,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: `SELECT c.id, c.name, c.backends, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientsecret
@@ -89,7 +90,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-public-id',
-        text: `SELECT c.id, c.name, c.backends, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientpublicid 
@@ -108,7 +109,7 @@ async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
-        text: `SELECT c.id, c.name, c.backends, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
                 WHERE c.id = $1
@@ -159,6 +160,7 @@ function toClientData(row) {
     return {
         id: row.id,
         name: row.name,
+        email: row.email || undefined,
         backends: row.backends || undefined,
         activePartnerNumber: row.activepartnernumber,
         secrets: row.secrets,

@@ -21,6 +21,9 @@ module.exports.checkoutSchema = {
                         },
                         model: {
                             type: "string"
+                        },
+                        orderId: {
+                            type: "string"
                         }
                     },
                     required: [

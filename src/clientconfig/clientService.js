@@ -52,6 +52,7 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
     const clientData = {
         id: createClientRequest.id || uuid(),
         name: createClientRequest.name,
+        email: createClientRequest.email,
         backends: createClientRequest.backends,
         activePartnerNumber: createClientRequest.activePartnerNumber,
         secrets: createClientRequest.secrets || ['secret:' + uuid()],

@@ -73,18 +73,11 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     };
 
     await repository.persist(checkoutData);
-    sendCustomerCheckoutMails(checkoutData.purchases, customer);
-
+    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, customer);
     return checkoutData;
 };
 
-function sendCustomerCheckoutMails(purchases, customer) {
-    purchases.forEach(purchase => {
-        if (purchase.success) {
-            mailSender.sendCustomerCheckoutMail(customer.email, purchase.contractNumber);
-        }
-    })
-}
+
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;
