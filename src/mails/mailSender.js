@@ -31,13 +31,10 @@ async function sendMail(to, subject, body, mailgunOptions) {
     const data = {
         from: 'ecommerce.wertgarantie.com <me@samples.mailgun.org>',
         to: to,
+        bcc: process.env.BIFROST_EMAIL_ADDRESS,
         subject: subject,
         html: body
     };
-    const bifrostEmail = process.env.BIFROST_EMAIL_ADDRESS;
-    if (bifrostEmail) {
-        data.Bcc = bifrostEmail;
-    }
 
     await mailgun.messages().send(data);
 }
