@@ -21,7 +21,7 @@ async function sendReportMailToShop(shopName, shopMailAddress, purchase, custome
     if (!shopMailAddress) {
         return;
     }
-    const subject = `Wertgarantie Versicherungsantrag ${purchase.contractNumber} erstellt ${purchase.orderId ? "für Order" + purchase.orderId : "für Produkt " + purchase.shopProduct}`;
+    const subject = `Wertgarantie Versicherungsantrag ${purchase.contractNumber} erstellt ${purchase.orderId ? "für Order " + purchase.orderId : "für Produkt " + purchase.shopProduct}`;
     const body = renderShopReportMailHtml(shopName, purchase, subject, customer);
     return await sendMail(shopMailAddress, subject, body, mailgunOptions);
 }
