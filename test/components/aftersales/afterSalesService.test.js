@@ -37,6 +37,7 @@ test('should return proper after sales data for checkout data', async () => {
     const result = await afterSalesService.prepareAfterSalesData(sessionId, 'de', checkoutRepository, productImageService, clientComponentTextService);
     expect(result.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
     expect(result.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+    expect(result.texts.success.contractNumber).toEqual('Auftragsnummer:');
     expect(result.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
     expect(result.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
     expect(result.successfulOrders.length).toEqual(1);

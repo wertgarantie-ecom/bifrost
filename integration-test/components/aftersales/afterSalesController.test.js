@@ -78,6 +78,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
         const resultBody = result.body;
         expect(resultBody.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
         expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+        expect(resultBody.texts.success.contractNumber).toEqual('Auftragsnummer:');
         expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
         expect(resultBody.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
         expect(resultBody.successfulOrders.length).toEqual(1);
@@ -164,6 +165,7 @@ describe("Check Checkout via after sales component ", () => {
         const resultBody = result.body;
         expect(resultBody.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
         expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+        expect(resultBody.texts.success.contractNumber).toEqual('Auftragsnummer:');
         expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
         expect(resultBody.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
         expect(resultBody.successfulOrders.length).toEqual(1);
