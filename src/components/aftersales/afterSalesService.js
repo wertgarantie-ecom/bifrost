@@ -4,40 +4,40 @@ const ClientError = require('../../errors/ClientError');
 const shoppingCartService = require('../../shoppingcart/shoppingCartService');
 const clientService = require('../../clientconfig/clientService');
 const _productImageService = require('../../images/productImageService');
+const component = require('../components').components.aftersales;
+const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 
-function getAfterSalesDataForCheckoutData(checkoutData, productImageService = _productImageService) {
-    const orderItems = [];
+async function getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) {
+    const successfulOrders = [];
     checkoutData.purchases.filter(purchase => purchase.success).map(checkoutItem => {
         const imageLink = productImageService.getRandomImageLinksForDeviceClass(checkoutItem.deviceClass, 1)[0];
-        orderItems.push({
+        successfulOrders.push({
             insuranceProductTitle: checkoutItem.wertgarantieProductName,
             productTitle: checkoutItem.shopProduct,
+            contractNumber: checkoutItem.contractNumber,
             imageLink: imageLink
         });
     });
-    if (orderItems.length === 0) {
+    if (successfulOrders.length === 0) {
         return undefined;
     }
-
+    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(checkoutData.clientId, component.name, locale);
     return {
-        headerTitle: "Ihre Geräte wurden erfolgreich versichert!",
-        productBoxTitle: "Folgende Geräte wurden versichert:",
-        nextStepsTitle: "Die nächsten Schritte:",
-        nextSteps: ["Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen", "Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App."],
-        orderItems: orderItems
+        texts: componentTexts,
+        successfulOrders: successfulOrders,
     };
 }
 
-exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService) {
+exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, locale = 'de', checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const checkoutData = await checkoutRepository.findBySessionId(sessionId);
     if (!checkoutData) {
         return undefined;
     }
 
-    return getAfterSalesDataForCheckoutData(checkoutData, productImageService);
+    return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
 };
 
-exports.checkout = async function checkout(shoppingCart, webshopData) {
+exports.checkout = async function checkout(shoppingCart, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const clientData = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
     const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientData, shoppingCart.sessionId);
     if (!sessionIdValid) {
@@ -45,5 +45,5 @@ exports.checkout = async function checkout(shoppingCart, webshopData) {
     }
 
     const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, shoppingCart, clientData);
-    return getAfterSalesDataForCheckoutData(checkoutData);
+    return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
 };

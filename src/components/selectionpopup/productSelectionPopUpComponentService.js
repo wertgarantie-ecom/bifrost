@@ -5,7 +5,7 @@ const documentTypes = require("../../documents/documentTypes").documentTypes;
 const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
-const componentName = "selectionpopup";
+const component = require('./../components').components.selectionpopup;
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 
@@ -24,7 +24,7 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
-    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
+    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     productOffers.forEach((offer, idx) => {
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
         products.push(product);

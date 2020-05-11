@@ -41,7 +41,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
         nockhelper.nockHeimdallLogin(clientData);
         nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
             payload: {
-                contract_number: "1234",
+                contract_number: 1234,
                 transaction_number: "28850277",
                 activation_code: "4db56dacfbhce",
                 message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
@@ -76,14 +76,16 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
     test("should get proper after sales component data", async () => {
         const result = await request(app).get('/wertgarantie/components/after-sales/' + sessionId).set('X-wertgarantie-session-id', sessionId);
         const resultBody = result.body;
-        expect(resultBody.headerTitle).toEqual('Ihre Geräte wurden erfolgreich versichert!');
-        expect(resultBody.productBoxTitle).toEqual('Folgende Geräte wurden versichert:');
-        expect(resultBody.nextStepsTitle).toEqual('Die nächsten Schritte:');
-        expect(resultBody.nextSteps).toEqual(['Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen', 'Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App.']);
-        expect(resultBody.orderItems.length).toEqual(1);
-        expect(resultBody.orderItems[0]).toEqual({
+        expect(resultBody.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
+        expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+        expect(resultBody.texts.success.contractNumber).toEqual('Auftragsnummer:');
+        expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
+        expect(resultBody.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
+        expect(resultBody.successfulOrders.length).toEqual(1);
+        expect(resultBody.successfulOrders[0]).toEqual({
             "insuranceProductTitle": "Basic",
             "productTitle": "SuperBike 3000",
+            "contractNumber": 1234,
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
         });
 
@@ -147,7 +149,7 @@ describe("Check Checkout via after sales component ", () => {
         nockhelper.nockHeimdallLogin(clientData);
         nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
             payload: {
-                contract_number: "1234",
+                contract_number: 1234,
                 transaction_number: "28850277",
                 activation_code: "4db56dacfbhce",
                 message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
@@ -161,14 +163,16 @@ describe("Check Checkout via after sales component ", () => {
                 signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart)
             });
         const resultBody = result.body;
-        expect(resultBody.headerTitle).toEqual('Ihre Geräte wurden erfolgreich versichert!');
-        expect(resultBody.productBoxTitle).toEqual('Folgende Geräte wurden versichert:');
-        expect(resultBody.nextStepsTitle).toEqual('Die nächsten Schritte:');
-        expect(resultBody.nextSteps).toEqual(['Sie erhalten eine E-Mail mit Informationen zum weiteren Vorgehen', 'Bitte aktivieren Sie nach Erhalt ihres Produktes die Versicherung mit unserer Fraud-Protection App.']);
-        expect(resultBody.orderItems.length).toEqual(1);
-        expect(resultBody.orderItems[0]).toEqual({
+        expect(resultBody.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
+        expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+        expect(resultBody.texts.success.contractNumber).toEqual('Auftragsnummer:');
+        expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
+        expect(resultBody.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
+        expect(resultBody.successfulOrders.length).toEqual(1);
+        expect(resultBody.successfulOrders[0]).toEqual({
             "insuranceProductTitle": "Basic",
             "productTitle": "SuperBike 3000",
+            "contractNumber": 1234,
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
         });
 

@@ -151,9 +151,9 @@ describe('add phone test shop client config', () => {
                             },
                             "advantages": [
                                 "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
-                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Bei Totalschaden zählt der Zeitwert",
                                 "Für private und berufliche Nutzung",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Weltweiter Schutz",
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung",

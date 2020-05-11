@@ -3,7 +3,7 @@ const _productOfferService = require('../../productoffers/productOffersService')
 const documentTypes = require('../../documents/documentTypes').documentTypes;
 const _productImageService = require('../../images/productImageService');
 const defaultClientService = require('../../clientconfig/clientService');
-const componentName = "confirmation";
+const component = require('../components').components.confirmation;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const confirmationResponseSchema = require('./confirmationResponseSchema').confirmationResponseSchema;
 const validator = require('../../framework/validation/validator');
@@ -20,7 +20,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
         return undefined;
     }
     const client = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
-    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, componentName, locale);
+    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const result = {
         texts: {
             title: componentTexts.title,
