@@ -23,6 +23,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const result = {
         texts: {
+            boxTitle: componentTexts.boxTitle,
             title: componentTexts.title,
             subtitle: componentTexts.subtitle,
         },

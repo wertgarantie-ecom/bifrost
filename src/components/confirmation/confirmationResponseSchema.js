@@ -3,7 +3,6 @@ const confirmationTextsSchema = require('./confirmationTextsSchema').confirmatio
 
 exports.confirmationResponseSchema = {
     type: "object",
-    additionalProperties: false,
     required: [
         "shoppingCart",
         "texts",

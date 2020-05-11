@@ -1,6 +1,5 @@
 exports.confirmationTextsSchema = {
     type: "object",
-    additionalProperties: false,
     required: [
         "title",
         "subtitle",
@@ -8,6 +7,9 @@ exports.confirmationTextsSchema = {
         "confirmationPrompt"
     ],
     properties: {
+        boxTitle: {
+            type: "string"
+        },
         title: {
             type: "string"
         },
