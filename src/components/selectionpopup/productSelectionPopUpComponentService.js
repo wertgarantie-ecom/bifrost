@@ -8,6 +8,7 @@ const _clientComponentTextService = require('../../clientconfig/clientComponentT
 const component = require('./../components').components.selectionpopup;
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
+const _ = require('lodash');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
@@ -52,7 +53,6 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         name: productOffer.name,
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
-        excludedAdvantages: advantageCategories.excludedAdvantages || [],
         GTCIText: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).name, // GTCI
         GTCIUri: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri, // GTCI --> naming hier auch ändern infoSheet und detailsDoc is scheiße
         IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,).name, // IPID

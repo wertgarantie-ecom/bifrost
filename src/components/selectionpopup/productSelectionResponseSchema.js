@@ -1,5 +1,17 @@
 const selectionPopUpTextsSchema = require("./selectionPopUpTextsSchema").selectionPopUpTextsSchema;
 
+const advantageSchema = {
+    "type": "object",
+    "properties": {
+        "text": {
+            "type": "string"
+        },
+        "included": {
+            "type": "boolean"
+        }
+    }
+};
+
 module.exports.productSelectionResponseSchema = {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
@@ -36,21 +48,15 @@ module.exports.productSelectionResponseSchema = {
                     },
                     "top3": {
                         "type": "array",
-                        "items": {
-                            "type": "string",
-                        }
+                        "items": advantageSchema
                     },
                     "advantages": {
                         "type": "array",
-                        "items": {
-                            "type": "string",
-                        }
+                        "items": advantageSchema
                     },
                     "excludedAdvantages": {
                         "type": "array",
-                        "items": {
-                            "type": "string",
-                        }
+                        "items": advantageSchema
                     },
                     "IPIDText": {
                         "type": "string",

@@ -51,7 +51,7 @@ test("should return correct diff array", () => {
     const productOffer = {
         advantages: ["advantage1", "advantage2", "advantage3"]
     };
-    const allAdvantages = [
+    const allProductOffers = [
         {
             advantages: ["advantage1", "advantage2", "advantage3"],
         },
@@ -61,8 +61,34 @@ test("should return correct diff array", () => {
     ];
 
 
-    const advantagesDiff = service.fromProductOffer(productOffer).getAdvantageCategories(allAdvantages).excludedAdvantages;
+    const advantagesDiff = service.fromProductOffer(productOffer).getAdvantageCategories(allProductOffers);
 
-    expect(advantagesDiff).toContain("special_advantage", "service", "advantage4");
-    expect(advantagesDiff).not.toContain("advantage1", "advantage2", "advantage3");
+    expect(advantagesDiff.top3).toEqual([
+        {
+            text: "advantage1",
+            included: true
+        },
+        {
+            text: "advantage4",
+            included: false
+        },
+        {
+            text: "service",
+            included: false
+        }
+    ]);
+    expect(advantagesDiff.advantages).toEqual([
+        {
+            text: "special_advantage",
+            included: false
+        },
+        {
+            text: "advantage2",
+            included: true
+        },
+        {
+            text: "advantage3",
+            included: true
+        }
+    ]);
 });

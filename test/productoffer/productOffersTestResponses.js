@@ -10,10 +10,7 @@ exports.productOffers = {
                 "Weltweiter Schutz",
                 "Volle Kostenübernahme bei Reparaturen",
                 "Bei Totalschaden zählt der Zeitwert",
-                "Für private und berufliche Nutzung",
-                "Weltweiter Schutz",
                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                "Unsachgemäße Handhabung"
             ],
             "defaultPaymentInterval": "monthly",
             "prices": {
@@ -68,16 +65,12 @@ exports.productOffers = {
                 "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
                 "Diebstahlschutz",
                 "Keine Selbstbeteiligung im Schadensfall",
-                "einfacher Diebstahl",
                 "Für private und berufliche Nutzung",
                 "Unsachgemäße Handhabung",
                 "Weltweiter Schutz",
                 "Volle Kostenübernahme bei Reparaturen",
                 "Bei Totalschaden zählt der Zeitwert",
-                "Für private und berufliche Nutzung",
-                "Weltweiter Schutz",
                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                "Unsachgemäße Handhabung"
             ],
             "defaultPaymentInterval": "monthly",
             "prices": {

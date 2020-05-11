@@ -30,14 +30,31 @@ test('should return proper product data', async () => {
                 "IPIDText": "Informationsblatt für Versicherungsprodukte",
                 "IPIDUri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
                 "advantages": [
-                    "Volle Kostenübernahme bei Reparaturen",
-                    "Bei Totalschaden zählt der Zeitwert",
-                    "Für private und berufliche Nutzung",
-                    "Weltweiter Schutz",
-                    "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                    "Unsachgemäße Handhabung"
+                    {
+                        "text": "Volle Kostenübernahme bei Reparaturen",
+                        "included": true
+                    },
+                    {
+                        "text": "Bei Totalschaden zählt der Zeitwert",
+                        "included": true
+                    },
+                    {
+                        "text": "Für private und berufliche Nutzung",
+                        "included": true
+                    },
+                    {
+                        "text": "Weltweiter Schutz",
+                        "included": true
+                    },
+                    {
+                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                        "included": true
+                    },
+                    {
+                        "text": "Unsachgemäße Handhabung",
+                        "included": true
+                    }
                 ],
-                "excludedAdvantages": [],
                 "id": "1",
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
                 "name": "Basis",
@@ -45,9 +62,18 @@ test('should return proper product data', async () => {
                 "priceFormatted": "5,00 €",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
-                    "Für private und berufliche Nutzung",
-                    "Unsachgemäße Handhabung",
-                    "Weltweiter Schutz"
+                    {
+                        "text": "Für private und berufliche Nutzung",
+                        "included": true
+                    },
+                    {
+                        "text": "Unsachgemäße Handhabung",
+                        "included": true
+                    },
+                    {
+                        "text": "Weltweiter Schutz",
+                        "included": true
+                    }
                 ]
             },
             {
@@ -56,14 +82,31 @@ test('should return proper product data', async () => {
                 "IPIDText": "Informationsblatt für Versicherungsprodukte",
                 "IPIDUri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
                 "advantages": [
-                    "Volle Kostenübernahme bei Reparaturen",
-                    "Bei Totalschaden zählt der Zeitwert",
-                    "Für private und berufliche Nutzung",
-                    "Weltweiter Schutz",
-                    "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                    "Unsachgemäße Handhabung"
+                    {
+                        "text": "Volle Kostenübernahme bei Reparaturen",
+                        "included": true
+                    },
+                    {
+                        "text": "Bei Totalschaden zählt der Zeitwert",
+                        "included": true
+                    },
+                    {
+                        "text": "Für private und berufliche Nutzung",
+                        "included": true
+                    },
+                    {
+                        "text": "Weltweiter Schutz",
+                        "included": true
+                    },
+                    {
+                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
+                        "included": true
+                    },
+                    {
+                        "text": "Unsachgemäße Handhabung",
+                        "included": true
+                    }
                 ],
-                "excludedAdvantages": [],
                 "id": "2",
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
                 "name": "Premium",
@@ -71,9 +114,18 @@ test('should return proper product data', async () => {
                 "priceFormatted": "5,00 €",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
-                    "Für private und berufliche Nutzung",
-                    "Unsachgemäße Handhabung",
-                    "Weltweiter Schutz"
+                    {
+                        "text": "Für private und berufliche Nutzung",
+                        "included": true
+                    },
+                    {
+                        "text": "Unsachgemäße Handhabung",
+                        "included": true
+                    },
+                    {
+                        "text": "Weltweiter Schutz",
+                        "included": true
+                    }
                 ]
             }
         ],
