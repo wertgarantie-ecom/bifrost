@@ -64,7 +64,6 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
         const matchingOffer = productOffers[productIndex];
         const productOfferFormatter = productOfferFormattingService.fromProductOffer(matchingOffer, componentTexts);
         matchingOffer.payment = productOfferFormatter.getPaymentInterval();
-        const advantageCategories = productOfferFormatter.getAdvantageCategories(productOffers);
         const IPID = productOfferFormatter.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION);
         return {
             product: {
@@ -72,7 +71,7 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
                 price: productOfferFormatter.getPriceFormatted(),
                 includedTax: productOfferFormatter.getIncludedTaxFormatted(),
                 productTitle: matchingOffer.name,
-                top3: advantageCategories.top3,
+                top3: matchingOffer.advantages.splice(0, 3),
                 IPIDUri: IPID.uri,
                 IPIDText: IPID.name,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.shopProduct.deviceClass, 1)[0],

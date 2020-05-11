@@ -82,17 +82,17 @@ describe('add phone test shop client config', () => {
                                 "comparisonDocuments": []
                             },
                             "advantages": [
-                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
                                 "Diebstahl? Wir erstatten den Zeitwert!",
                                 "Keine Selbstbeteiligung im Schadensfall",
                                 "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
-                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
+                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
                                 "Bei Totalschaden zählt der Zeitwert",
                                 "Für private und berufliche Nutzung",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Weltweiter Schutz",
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung",
-                                "Wasserschaden"
+                                "Wasserschaden",
                             ],
                             "risks": ["DIEBSTAHLSCHUTZ"]
                         },
@@ -314,13 +314,13 @@ describe('add Handyflash DEV/Local test client config', () => {
                                 "comparisonDocuments": []
                             },
                             "advantages": [
-                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
                                 "Diebstahl? Wir erstatten den Zeitwert!",
                                 "Keine Selbstbeteiligung im Schadensfall",
                                 "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
-                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
+                                "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
                                 "Bei Totalschaden zählt der Zeitwert",
                                 "Für private und berufliche Nutzung",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Weltweiter Schutz",
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung",
@@ -383,9 +383,9 @@ describe('add Handyflash DEV/Local test client config', () => {
                             },
                             "advantages": [
                                 "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
-                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Bei Totalschaden zählt der Zeitwert",
                                 "Für private und berufliche Nutzung",
+                                "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
                                 "Weltweiter Schutz",
                                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
                                 "Unsachgemäße Handhabung",
