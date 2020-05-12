@@ -69,6 +69,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
         sessionId: shoppingCart.sessionId,
         traceId: "563e6720-5f07-42ad-99c3-a5104797f083",
         clientId: clientConfig.id,
+        test: customer.firstname === 'Otto' && customer.lastname === 'Normalverbraucher',
         purchases: [...purchaseResults]
     };
 

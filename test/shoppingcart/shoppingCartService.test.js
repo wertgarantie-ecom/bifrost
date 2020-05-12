@@ -154,6 +154,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         "sessionId": "619f7fda-d77e-4be1-b73c-db145402bcab",
         "traceId": "563e6720-5f07-42ad-99c3-a5104797f083",
         "clientId": clientConfig.id,
+        "test": false,
         "purchases": [
             {
                 "id": "2fcb053d-873c-4046-87e4-bbd75566901d",

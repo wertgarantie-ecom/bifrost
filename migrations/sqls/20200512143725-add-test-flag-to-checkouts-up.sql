@@ -1,0 +1,1 @@
+alter table checkout add column test boolean not null default false;

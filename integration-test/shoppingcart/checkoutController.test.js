@@ -17,6 +17,7 @@ describe("should retrieve all checkouts via controller", () => {
             sessionId: sessionId1,
             clientId: clientId,
             traceId: traceId,
+            test: false,
             purchases: purchasesSession1
         };
         await checkoutRepository.persist(checkoutData1);
@@ -25,6 +26,7 @@ describe("should retrieve all checkouts via controller", () => {
             sessionId: sessionId2,
             clientId: clientId,
             traceId: traceId,
+            test: false,
             purchases: purchasesSession2
         };
         await checkoutRepository.persist(checkoutData2);
@@ -38,12 +40,14 @@ describe("should retrieve all checkouts via controller", () => {
                clientId: clientId,
                sessionId: sessionId2,
                traceId: traceId,
+               test: false,
                purchases: purchasesSession2
            },
            {
                clientId: clientId,
                sessionId: sessionId1,
                traceId: traceId,
+               test: false,
                purchases: purchasesSession1
            }
        ];

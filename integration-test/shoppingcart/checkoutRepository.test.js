@@ -15,7 +15,8 @@ describe("test persist and find by session in checkout repository", () => {
             sessionId: sessionId1,
             clientId: clientId,
             traceId: traceId,
-            purchases: purchasesSession1
+            purchases: purchasesSession1,
+            test: false
         };
         await checkoutRepository.persist(checkoutData);
         done();
@@ -27,6 +28,7 @@ describe("test persist and find by session in checkout repository", () => {
             clientId: clientId,
             sessionId: sessionId1,
             traceId: traceId,
+            test: false,
             purchases: purchasesSession1
         };
         expect(result).toEqual(expectedResult);
@@ -38,6 +40,7 @@ describe("test persist and find by session in checkout repository", () => {
             sessionId: sessionId2,
             clientId: clientId,
             traceId: traceId,
+            test: false,
             purchases: purchasesSession2
         };
         await checkoutRepository.persist(checkoutData);
@@ -52,12 +55,14 @@ describe("test persist and find by session in checkout repository", () => {
                 clientId: clientId,
                 sessionId: sessionId2,
                 traceId: traceId,
+                test: false,
                 purchases: purchasesSession2
             },
             {
                 clientId: clientId,
                 sessionId: sessionId1,
                 traceId: traceId,
+                test: false,
                 purchases: purchasesSession1
             }
         ];

@@ -7,12 +7,13 @@ exports.persist = async function persist(checkoutData) {
         await client.query('BEGIN');
         const query = {
             name: 'insert-checkout-data',
-            text: "INSERT INTO checkout (clientid, sessionid, timestamp, traceid, purchases) VALUES ($1 , $2 , now(), $3, $4);",
+            text: "INSERT INTO checkout (clientid, sessionid, timestamp, traceid, purchases, test) VALUES ($1 , $2 , now(), $3, $4, $5);",
             values: [
                 checkoutData.clientId,
                 checkoutData.sessionId,
                 checkoutData.traceId,
-                JSON.stringify(checkoutData.purchases)
+                JSON.stringify(checkoutData.purchases),
+                checkoutData.test
             ]
         };
         await client.query(query);
@@ -32,6 +33,7 @@ function toCheckoutData(rows) {
                 clientId: row.clientid,
                 sessionId: row.sessionid,
                 traceId: row.traceid,
+                test: row.test,
                 purchases: row.purchases
             }
         });
