@@ -144,6 +144,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
 
     const result = await shoppingCartService.checkoutShoppingCart(purchasedProducts,
         customer,
+        undefined,
         wertgarantieShoppingCart,
         clientConfig,
         mockClient,

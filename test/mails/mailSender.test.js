@@ -30,7 +30,6 @@ test('should send shop report mails without failures', async () => {
 
     const purchase = {
         id: uuid(),
-        orderId: uuid(),
         wertgarantieProductId: uuid(),
         wertgarantieProductName: "Komplettschutz Basis",
         deviceClass: "Smartphone",
@@ -43,7 +42,7 @@ test('should send shop report mails without failures', async () => {
         backend: "webservices"
     }
 
-    await mailSender.sendReportMailToShop('handyflash', 'arnelandwehr@gmail.com', purchase, validCustomer(), testOptions);
+    await mailSender.sendReportMailToShop('handyflash', 'arnelandwehr@gmail.com', purchase, undefined, validCustomer(), testOptions);
 
     expect(!!emailBody).toEqual(true);
 })
