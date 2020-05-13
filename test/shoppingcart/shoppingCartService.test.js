@@ -1,4 +1,4 @@
-const addProductToShoppingCartWithOrderId = require('../../src/shoppingcart/shoppingCartService').addProductToShoppingCartWithOrderId;
+const addProductToShoppingCartWithOrderId = require('../../src/shoppingcart/shoppingCartService').addProductToShoppingCart;
 const shoppingCartService = require('../../src/shoppingcart/shoppingCartService');
 const signatureService = require('../../src/shoppingcart/signatureService');
 const ClientError = require('../../src/errors/ClientError');

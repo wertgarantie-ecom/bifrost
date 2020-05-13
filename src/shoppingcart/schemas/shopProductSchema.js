@@ -9,6 +9,9 @@ exports.shopProductSchema = {
         },
         deviceClass: {
             type: "string"
+        },
+        orderItemId: {
+            type: "string"
         }
     },
     required: [

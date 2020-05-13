@@ -56,7 +56,7 @@ describe("should submit insurance proposal and persist purchase data", () => {
         nockHelper.nockGetNewContractNumber(contractNumber);
         nockHelper.nockSubmitInsuranceProposal();
 
-        const result = await shoppingCartService.checkoutShoppingCart(purchasedShopProducts, customer, wertgarantieShoppingCart, clientConfig);
+        const result = await shoppingCartService.checkoutShoppingCart(purchasedShopProducts, customer, undefined, wertgarantieShoppingCart, clientConfig);
         const purchase = result.purchases[0];
         expect(purchase.backend).toEqual("webservices");
         expect(purchase.wertgarantieProductName).toEqual("Komplettschutz");

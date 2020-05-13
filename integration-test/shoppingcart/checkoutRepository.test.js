@@ -8,8 +8,8 @@ describe("test persist and find by session in checkout repository", () => {
     const clientId = "public:" + uuid();
     const traceId = uuid();
     const purchasesSession1 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
-    const purchasesSession2 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
 
+    const purchasesSession2 = [fixtureHelper.getValidPurchase(), fixtureHelper.getValidPurchase()];
     test('Repository should persist checkout data', async (done) => {
         const checkoutData = {
             sessionId: sessionId1,

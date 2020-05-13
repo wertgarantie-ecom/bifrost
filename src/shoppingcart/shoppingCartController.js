@@ -47,7 +47,7 @@ exports.checkoutCurrentShoppingCart = async function checkoutCurrentShoppingCart
                 const errorMessage = "No client found for given client id: " + req.body.secretClientId;
                 sendErrorResponse(res, new ClientError(errorMessage));
             }
-            const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, req.shoppingCart, client);
+            const result = await service.checkoutShoppingCart(req.body.purchasedProducts, req.body.customer, req.body.orderId, req.shoppingCart, client);
             return res.status(200).send(result);
         } catch (error) {
             if (error instanceof SyntaxError) { //JSON.parse fails

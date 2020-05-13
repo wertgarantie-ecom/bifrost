@@ -1,0 +1,1 @@
+alter table checkout add column shoporderid text;

@@ -7,20 +7,15 @@ const ClientError = require('../errors/ClientError');
 const mailSender = require('../mails/mailSender');
 
 
-exports.addProductToShoppingCartWithOrderId = function addProductToShoppingCartWithOrderId(shoppingCart, requestBody, publicClientId, orderId) {
+exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId, orderId = uuid()) {
     const updatedShoppingCart = shoppingCart || newShoppingCart(publicClientId);
     updatedShoppingCart.orders.push({
         id: orderId,
-        shopProduct: requestBody.shopProduct,
-        wertgarantieProduct: requestBody.wertgarantieProduct
+        shopProduct: productToAdd.shopProduct,
+        wertgarantieProduct: productToAdd.wertgarantieProduct
     });
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
     return updatedShoppingCart;
-};
-
-exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId) {
-    const orderId = uuid();
-    return this.addProductToShoppingCartWithOrderId(shoppingCart, productToAdd, publicClientId, orderId);
 };
 
 exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute) {
@@ -35,7 +30,7 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shoppingCart, clientConfig, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
     const confirmations = shoppingCart.confirmations;
     if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
         throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
@@ -67,6 +62,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
 
     const checkoutData = {
         sessionId: shoppingCart.sessionId,
+        shopOrderId: shopOrderId,
         traceId: "563e6720-5f07-42ad-99c3-a5104797f083",
         clientId: clientConfig.id,
         test: customer.firstname === 'Otto' && customer.lastname === 'Normalverbraucher',
@@ -74,10 +70,9 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     };
 
     await repository.persist(checkoutData);
-    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, customer);
+    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
     return checkoutData;
 };
-
 
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
@@ -99,12 +94,12 @@ function newShoppingCart(clientId) {
     };
 }
 
-exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(orderId, shoppingCart) {
+exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(id, shoppingCart) {
     if (!shoppingCart) {
         return undefined;
     }
     for (var i = 0; i < shoppingCart.orders.length; i++) {
-        if (shoppingCart.orders[i].id === orderId) {
+        if (shoppingCart.orders[i].id === id) {
             shoppingCart.orders.splice(i, 1);
             i--;
         }

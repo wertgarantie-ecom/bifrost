@@ -2,10 +2,10 @@ const Mailgun = require('mailgun-js');
 const renderCustomerMailHtml = require('./customerMailHtml');
 const renderShopReportMailHtml = require('./shopReportMailHtml');
 
-module.exports.sendCheckoutMails = function (shopName, shopEmail, purchases, customer) {
+module.exports.sendCheckoutMails = function (shopName, shopEmail, purchases, shopOrderId, customer) {
     purchases.forEach(purchase => {
         if (purchase.success) {
-            sendReportMailToShop(shopName, shopEmail, purchase, customer);
+            sendReportMailToShop(shopName, shopEmail, purchase, shopOrderId, customer);
             sendCheckoutMailToCustomer(customer.email, purchase.contractNumber);
         }
     })
@@ -17,12 +17,12 @@ async function sendCheckoutMailToCustomer(customerMailAddress, contractNumber, m
     return await sendMail(customerMailAddress, subject, body, mailgunOptions);
 }
 
-async function sendReportMailToShop(shopName, shopMailAddress, purchase, customer, mailgunOptions = _mailgunOptions) {
+async function sendReportMailToShop(shopName, shopMailAddress, purchase, shopOrderId, customer, mailgunOptions = _mailgunOptions) {
     if (!shopMailAddress) {
         return;
     }
-    const subject = `Wertgarantie Versicherungsantrag ${purchase.contractNumber} erstellt ${purchase.orderId ? "für Order " + purchase.orderId : "für Produkt " + purchase.shopProduct}`;
-    const body = renderShopReportMailHtml(shopName, purchase, subject, customer);
+    const subject = `Wertgarantie Versicherungsantrag ${purchase.contractNumber} erstellt ${shopOrderId ? "für Order " + shopOrderId : "für Produkt " + purchase.shopProduct}`;
+    const body = renderShopReportMailHtml(shopName, purchase, shopOrderId, subject, customer);
     return await sendMail(shopMailAddress, subject, body, mailgunOptions);
 }
 

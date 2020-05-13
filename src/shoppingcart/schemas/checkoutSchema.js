@@ -4,6 +4,9 @@ module.exports.checkoutSchema = {
     $schema: "http://json-schema.org/draft-04/schema#",
     type: "object",
     properties: {
+        orderId: {
+            type: "string"
+        },
         purchasedProducts: {
             type: "array",
             items: [
@@ -22,7 +25,7 @@ module.exports.checkoutSchema = {
                         model: {
                             type: "string"
                         },
-                        orderId: {
+                        orderItemId: {
                             type: "string"
                         }
                     },

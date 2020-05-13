@@ -8,12 +8,14 @@ const nockhelper = require('../helper/nockHelper');
 test('should return shopping cart with selected product included', async () => {
     const client = await testhelper.createAndPersistDefaultClient();
     const wertgarantieProductId = uuid();
+    const orderItemId = uuid();
     const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
         .send({
             shopProduct: {
                 model: "Phone X",
                 price: 4500,
-                deviceClass: "Smartphone"
+                deviceClass: "Smartphone",
+                orderItemId: orderItemId
             },
             wertgarantieProduct: {
                 id: wertgarantieProductId,
@@ -27,6 +29,7 @@ test('should return shopping cart with selected product included', async () => {
     expect(shoppingCart.orders.length).toBe(1);
     expect(shoppingCart.confirmations.termsAndConditionsConfirmed).toBe(false);
     expect(shoppingCart.orders[0].shopProduct.deviceClass).toEqual("Smartphone");
+    expect(shoppingCart.orders[0].shopProduct.orderItemId).toEqual(orderItemId);
 });
 
 test('should fail when invalid request params are submitted', async () => {

@@ -44,6 +44,6 @@ exports.checkout = async function checkout(shoppingCart, webshopData, locale = '
         throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");
     }
 
-    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, shoppingCart, clientData);
+    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientData);
     return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
 };

@@ -1,9 +1,9 @@
-module.exports = function renderCustomerMailHtml(shopName, purchase, subject, customer) {
+module.exports = function renderCustomerMailHtml(shopName, purchase, shopOrderId, subject, customer) {
     return `<p>${subject}</p>
 
     <p>
     <h3>${shopName}  Produkt:</h3>
-    OrderId: ${purchase.orderId}<br>
+    OrderId: ${shopOrderId}<br>
     Modell: ${purchase.shopProduct}<br>
     DeviceClass: ${purchase.deviceClass}<br>
     Preis: ${purchase.devicePrice}<br>
