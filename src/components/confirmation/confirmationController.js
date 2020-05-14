@@ -2,9 +2,10 @@ const confirmationService = require('./confirmationComponentService');
 const shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res, next) {
-    const shoppingCart = req.shoppingCart;
+    const wertgarantieShoppingCart = req.shoppingCart;
+    const shopShoppingCart =  req.shopShoppingCart;
     try {
-        const result = await confirmationService.prepareConfirmationData(shoppingCart);
+        const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, shopShoppingCart);
         if (result) {
             return res.status(200).send(result.instance);
         } else {

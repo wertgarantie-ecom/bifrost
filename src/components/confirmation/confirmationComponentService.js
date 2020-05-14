@@ -10,16 +10,18 @@ const validator = require('../../framework/validation/validator');
 const _ = require('lodash');
 const util = require('util');
 
-exports.prepareConfirmationData = async function prepareConfirmationData(shoppingCart,
+exports.prepareConfirmationData = async function prepareConfirmationData(wertgarantieShoppingCart,
+                                                                         shopShoppingCart,
                                                                          locale = 'de',
                                                                          productOfferService = _productOfferService,
                                                                          productImageService = _productImageService,
                                                                          clientService = defaultClientService,
                                                                          clientComponentTextService = _clientComponentTextService) {
-    if (!shoppingCart) {
+    if (!wertgarantieShoppingCart) {
         return undefined;
     }
-    const client = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
+
+    const client = await clientService.findClientForPublicClientId(wertgarantieShoppingCart.publicClientId);
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const result = {
         texts: {
@@ -27,9 +29,9 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
             title: componentTexts.title,
             subtitle: componentTexts.subtitle,
         },
-        termsAndConditionsConfirmed: shoppingCart.confirmations.termsAndConditionsConfirmed,
+        termsAndConditionsConfirmed: wertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
         orders: [],
-        shoppingCart: shoppingCart
+        shoppingCart: wertgarantieShoppingCart
     };
 
     let avbHref;
@@ -37,8 +39,8 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     let GDPRHref;
     let IPIDHref;
 
-    for (var i = 0; i < shoppingCart.orders.length; i++) {
-        const order = shoppingCart.orders[i];
+    for (var i = 0; i < wertgarantieShoppingCart.orders.length; i++) {
+        const order = wertgarantieShoppingCart.orders[i];
         const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
@@ -56,6 +58,26 @@ exports.prepareConfirmationData = async function prepareConfirmationData(shoppin
     }
     return validator.validate(result, confirmationResponseSchema);
 };
+
+function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart) {
+    if (!shopShoppingCart) {
+        return wertgarantieShoppingCart;
+    }
+
+    const groupedByHasOrderItemdId = _.groupBy(wertgarantieShoppingCart.orders, order => order.shopProduct.orderItemId !== undefined);
+    const ordersWithOrderItemId = groupedByHasOrderItemdId.true;
+    // for each, check if it is also available in shopShoppingCart
+    // if yes = update price and model if needed
+    // if no = delete order
+
+    // if wertgarantieShoppingCart is now empty = return it
+    // else proceed as usual
+    const updatedShoppingCart = {...wertgarantieShoppingCart}
+    updatedShoppingCart.orders = groupedByHasOrderItemdId.false;
+    return updatedShoppingCart;
+}
+
+exports.updateWertgarantieShoppingCart = updateWertgarantieShoppingCart;
 
 async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts) {
     const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price)).productOffers;

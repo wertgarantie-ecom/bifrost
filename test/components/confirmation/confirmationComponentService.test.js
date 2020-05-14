@@ -105,6 +105,7 @@ test("should return proper confirmation component data for one product", async (
     const confirmationData = await service.prepareConfirmationData(
         testShoppingCart,
         undefined,
+        undefined,
         productOffersMock,
         productImageServiceMock,
         mockClientService(clientData),
@@ -117,3 +118,171 @@ test("should return undefined if no shopping cart is given", async () => {
     const result = await service.prepareConfirmationData(undefined);
     expect(result).toEqual(undefined);
 });
+
+
+test("should not update wertgarantieShoppingCart if no orderItemIds are available in wertgarantieShoppingCart", () => {
+        const shopShoppingCart = [
+            {
+                price: 10000,
+                manufacturer: "Apple Inc",
+                deviceClass: "Smartphone",
+                model: "IPhone X",
+                orderItemId: "orderItemId"
+            }
+        ];
+
+        const wertgarantieShoppingCart = {
+            orders: [
+                {
+                    id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+                    shopProduct: {
+                        price: 10000,
+                        deviceClass: "Smartphone",
+                        model: "IPhone X",
+                    },
+                    wertgarantieProduct: {
+                        id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                        name: "Komplettschutz",
+                        paymentInterval: "monthly"
+                    }
+                },
+            ],
+        }
+
+        const updatedWertgarantieShoppingCart = service.updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        expect(updatedWertgarantieShoppingCart.orders).toEqual(wertgarantieShoppingCart.orders);
+    }
+)
+
+test("should keept wertgarantieShoppingCart of not shopShoppingCart is provieded", () => {
+        const shopShoppingCart = undefined;
+
+        const wertgarantieShoppingCart = {
+            orders: [
+                {
+                    id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+                    shopProduct: {
+                        price: 10000,
+                        deviceClass: "Smartphone",
+                        orderItemId: "orderItemId",
+                        model: "IPhone X",
+                    },
+                    wertgarantieProduct: {
+                        id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                        name: "Komplettschutz",
+                        paymentInterval: "monthly"
+                    }
+                },
+            ],
+        }
+
+        const updatedWertgarantieShoppingCart = service.updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        expect(updatedWertgarantieShoppingCart.orders).toEqual(wertgarantieShoppingCart.orders);
+    }
+)
+
+test("should keep wertgarantieShoppingCart order if it matches with shopShoppingCart", () => {
+        const shopShoppingCart = [
+            {
+                price: 10000,
+                manufacturer: "Apple Inc",
+                deviceClass: "Smartphone",
+                orderItemId: "orderItemId",
+                model: "IPhone X"
+            }
+        ];
+
+        const wertgarantieShoppingCart = {
+            orders: [
+                {
+                    id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+                    shopProduct: {
+                        price: 10000,
+                        deviceClass: "Smartphone",
+                        orderItemId: "orderItemId",
+                        model: "IPhone X",
+                    },
+                    wertgarantieProduct: {
+                        id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                        name: "Komplettschutz",
+                        paymentInterval: "monthly"
+                    }
+                },
+            ],
+        }
+
+        const updatedWertgarantieShoppingCart = service.updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        expect(updatedWertgarantieShoppingCart.orders).toEqual(wertgarantieShoppingCart.orders);
+    }
+)
+
+test("should remove wertgarantieShoppingCart order with orderItemId if no match in shoppingCart was found", () => {
+        const shopShoppingCart = [
+            {
+                price: 10000,
+                manufacturer: "Apple Inc",
+                deviceClass: "Smartphone",
+                orderItemId: "anotherOrderItemId",
+                model: "IPhone X"
+            }
+        ];
+
+        const wertgarantieShoppingCart = {
+            orders: [
+                {
+                    id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+                    shopProduct: {
+                        price: 10000,
+                        deviceClass: "Smartphone",
+                        orderItemId: "orderItemId",
+                        model: "IPhone X",
+                    },
+                    wertgarantieProduct: {
+                        id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                        name: "Komplettschutz",
+                        paymentInterval: "monthly"
+                    }
+                },
+            ],
+        }
+
+        const updatedWertgarantieShoppingCart = service.updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        expect(updatedWertgarantieShoppingCart.orders).toEqual([]);
+    }
+)
+
+
+test("should update wertgarantieShoppingCart order if price of matching shopShoppingCart item does not match", () => {
+        const shopShoppingCart = [
+            {
+                price: 20000,
+                manufacturer: "Apple Inc",
+                deviceClass: "Smartphone",
+                orderItemId: "orderItemId",
+                model: "IPhone X"
+            }
+        ];
+
+        const wertgarantieShoppingCart = {
+            orders: [
+                {
+                    id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+                    shopProduct: {
+                        price: 10000,
+                        deviceClass: "Smartphone",
+                        orderItemId: "orderItemId",
+                        model: "IPhone X",
+                    },
+                    wertgarantieProduct: {
+                        id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                        name: "Komplettschutz",
+                        paymentInterval: "monthly"
+                    }
+                },
+            ],
+        }
+
+        const updatedWertgarantieShoppingCart = service.updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        expect(updatedWertgarantieShoppingCart.orders[0]).toEqual({});
+    }
+)
