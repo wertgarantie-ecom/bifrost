@@ -38,6 +38,7 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
     for (var i = 0; i < quantity; i++) {
         shoppingCart.orders.push({
             shopProduct: {
+                orderItemId: uuid(),
                 model: model,
                 price: devicePrice,
                 deviceClass: deviceClass,

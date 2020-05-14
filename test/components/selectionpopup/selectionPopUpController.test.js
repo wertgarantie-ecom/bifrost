@@ -12,7 +12,7 @@ test("Should return 502 if product offers are invalid", async () => {
     };
 
     const req = {
-        query: {
+        body: {
             deviceClass: 'xyz',
             devicePrice: 84000,
             clientId: 'clientId'

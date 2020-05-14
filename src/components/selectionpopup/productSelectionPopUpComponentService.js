@@ -14,11 +14,18 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
                                                                                  devicePrice,
                                                                                  clientId,
                                                                                  locale = "de",
+                                                                                 orderItemId,
+                                                                                 shoppingCart,
                                                                                  productOffersService = _productOffersService,
                                                                                  productImageService = _productImageService,
                                                                                  clientService = _clientService,
                                                                                  clientComponentTextService = _clientComponentTextService) {
     const client = await clientService.findClientForPublicClientId(clientId);
+
+    if (orderItemId && shoppingCart && shoppingCart.orders && _.find(shoppingCart.orders, order => order.shopProduct.orderItemId === orderItemId)) {
+        return undefined;
+    }
+
 
     const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
     const productOffers = productOffersData.productOffers;

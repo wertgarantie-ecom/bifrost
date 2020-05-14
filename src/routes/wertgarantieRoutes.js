@@ -13,14 +13,14 @@ const webservicesController = require("../backends/webservices/webservicesContro
 const documentsController = require("../documents/documentsController");
 const checkoutSchema = require("../shoppingcart/schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
-// const afterSalesComponentCheckoutSchema = require("../components/aftersales/afterSalesComponentCheckoutSchema").afterSalesComponentCheckoutSchema;
+const selectionPopUpGetProductsSchema = require("../components/selectionpopup/selectionPopUpGetProductsSchema").confirmationResponseSchema;
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 
 // components
 router.get("/rating", googleController.reviewRatings);
-router.get("/components/selection-popup", selectionPopUpController.getProducts);
+router.put("/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), selectionPopUpController.getProducts);
 
 router.put("/components/confirmation", confirmationController.getConfirmationComponentData);
 router.put("/components/confirmation/:confirmationAttribute", confirmationController.confirmAttribute);
