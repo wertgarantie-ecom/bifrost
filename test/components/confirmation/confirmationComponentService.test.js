@@ -143,7 +143,8 @@ test("should not update wertgarantieShoppingCart if no orderItemIds are availabl
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
                         name: "Komplettschutz",
-                        paymentInterval: "monthly"
+                        paymentInterval: "monthly",
+                        price: 500
                     }
                 },
             ],
@@ -170,6 +171,7 @@ test("should keept wertgarantieShoppingCart of not shopShoppingCart is provieded
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
                         name: "Komplettschutz",
+                        price: 500
                         paymentInterval: "monthly"
                     }
                 },
@@ -205,6 +207,7 @@ test("should keep wertgarantieShoppingCart order if it matches with shopShopping
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
                         name: "Komplettschutz",
+                        price: 500
                         paymentInterval: "monthly"
                     }
                 },
@@ -240,6 +243,7 @@ test("should remove wertgarantieShoppingCart order with orderItemId if no match 
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
                         name: "Komplettschutz",
+                        price: 500,
                         paymentInterval: "monthly"
                     }
                 },
@@ -276,6 +280,7 @@ test("should update wertgarantieShoppingCart order if price of matching shopShop
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
                         name: "Komplettschutz",
+                        price: 500,
                         paymentInterval: "monthly"
                     }
                 },
