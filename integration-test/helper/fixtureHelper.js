@@ -46,7 +46,8 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
             wertgarantieProduct: {
                 id: wertgarantieProductId,
                 name: wertgarantieProductName,
-                paymentInterval: "monthly"
+                paymentInterval: "monthly",
+                price: 500
             },
             id: uuid()
         });

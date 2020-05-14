@@ -44,6 +44,7 @@ test("should return proper product response", async () => {
             name: "Komplettschutz",
             paymentInterval: "monatl.",
             priceFormatted: "8,00 €",
+            price: 800,
             taxFormatted: "(inkl. 1,28 € VerSt**)",
             top3: [
                 {
@@ -96,6 +97,7 @@ test("should return proper product response", async () => {
                 name: "Komplettschutz mit Premium-Option",
                 paymentInterval: "monatl.",
                 priceFormatted: "9,95 €",
+                price: 995,
                 taxFormatted: "(inkl. 1,59 € VerSt**)",
                 top3: [
                     {

@@ -20,7 +20,8 @@ test('should return shopping cart with selected product included', async () => {
             wertgarantieProduct: {
                 id: wertgarantieProductId,
                 name: "Komplettschutz",
-                paymentInterval: "monthly"
+                paymentInterval: "monthly",
+                price: 500
             }
         });
     expect(result.status).toBe(200);
@@ -214,7 +215,8 @@ test("should add multiple orders to shopping cart", async () => {
             wertgarantieProduct: {
                 id: wertgarantieProductId,
                 name: "Komplettschutz",
-                paymentInterval: "monthly"
+                paymentInterval: "monthly",
+                price: 500
             },
             signedShoppingCart: signedShoppingCart
         });

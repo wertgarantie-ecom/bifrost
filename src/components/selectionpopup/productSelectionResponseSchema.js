@@ -36,6 +36,7 @@ module.exports.productSelectionResponseSchema = {
                     "GTCIText",
                     "GTCIUri",
                     "priceFormatted",
+                    "price",
                     "taxFormatted",
                     "imageLink"
                 ],
@@ -72,6 +73,9 @@ module.exports.productSelectionResponseSchema = {
                     },
                     "priceFormatted": {
                         "type": "string",
+                    },
+                    "price": {
+                        "type": "integer",
                     },
                     "taxFormatted": {
                         "type": "string",

@@ -60,6 +60,7 @@ test('should return proper product data', async () => {
                 "name": "Basis",
                 "paymentInterval": "monatl.",
                 "priceFormatted": "5,00 €",
+                "price": 500,
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     {
@@ -112,6 +113,7 @@ test('should return proper product data', async () => {
                 "name": "Premium",
                 "paymentInterval": "monatl.",
                 "priceFormatted": "5,00 €",
+                "price": 500,
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     {

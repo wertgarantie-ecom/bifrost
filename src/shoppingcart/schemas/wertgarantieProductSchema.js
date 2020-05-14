@@ -9,11 +9,15 @@ exports.wertgarantieProductSchema = {
         },
         paymentInterval: {
             type: "string"
+        },
+        price: {
+            type: "integer"
         }
     },
     required: [
         "id",
         "name",
+        "price",
         "paymentInterval"
     ]
 };

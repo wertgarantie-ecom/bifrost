@@ -65,6 +65,7 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,).name, // IPID
         IPIDUri: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri, // IPID
         priceFormatted: displayableProductOffer.getPriceFormatted(locale),
+        price: productOffer.prices[productOffer.defaultPaymentInterval].price,
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
         imageLink: imageLink
     }
