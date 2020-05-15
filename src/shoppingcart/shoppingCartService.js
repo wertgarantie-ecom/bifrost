@@ -86,7 +86,16 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
         }
     }
 
+    const syncResultAccumulator = {
+        changes: {
+            deleted: [],
+            updated: []
+        },
+        orders: []
+    }
+
     const syncOrderReducer = async (result, order) => {
+        result = await result;
         const matchingShopOrderItem = _.find(shopShoppingCart, shopPurchase => order.shopProduct.orderItemId === shopPurchase.orderItemId);
         if (!matchingShopOrderItem) {
             result.changes.deleted.push(order.id)
@@ -113,6 +122,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
                 })
             }
         }
+        return result;
     };
 
     if (!shopShoppingCart) {
@@ -125,19 +135,12 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
         return resultWitEmptyChanges(wertgarantieShoppingCart)
     }
 
-    const syncResult = {
-        changes: {
-            deleted: [],
-            updated: []
-        },
-        orders: []
-    }
-    await wertgarantieShoppingCart.orders.reduce(syncOrderReducer, syncResult);
+    await wertgarantieShoppingCart.orders.reduce(syncOrderReducer, syncResultAccumulator);
 
     const updatedShoppingCart = {...wertgarantieShoppingCart}
-    updatedShoppingCart.orders = syncResult.orders
+    updatedShoppingCart.orders = syncResultAccumulator.orders
     return {
-        changes: syncResult.changes,
+        changes: syncResultAccumulator.changes,
         shoppingCart: updatedShoppingCart
     };
 }

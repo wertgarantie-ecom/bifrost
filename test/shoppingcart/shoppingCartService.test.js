@@ -298,13 +298,20 @@ test("should keep wertgarantieShoppingCart if no shopShoppingCart is provided", 
     }
 )
 
-test("should keep wertgarantieShoppingCart order if it matches with shopShoppingCart", async () => {
+test("should keep wertgarantieShoppingCart orders if they match with shopShoppingCart orders", async () => {
         const shopShoppingCart = [
             {
                 price: 10000,
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
-                orderItemId: "orderItemId",
+                orderItemId: "orderItemId1",
+                model: "IPhone X"
+            },
+            {
+                price: 10000,
+                manufacturer: "Apple Inc",
+                deviceClass: "Smartphone",
+                orderItemId: "orderItemId2",
                 model: "IPhone X"
             }
         ];
@@ -316,7 +323,7 @@ test("should keep wertgarantieShoppingCart order if it matches with shopShopping
                     shopProduct: {
                         price: 10000,
                         deviceClass: "Smartphone",
-                        orderItemId: "orderItemId",
+                        orderItemId: "orderItemId1",
                         model: "IPhone X",
                     },
                     wertgarantieProduct: {
@@ -326,6 +333,21 @@ test("should keep wertgarantieShoppingCart order if it matches with shopShopping
                         paymentInterval: "monthly"
                     }
                 },
+                {
+                    id: "18ff0413-bcfd-48f8-b003-04b57762067a",
+                    shopProduct: {
+                        price: 10000,
+                        deviceClass: "Smartphone",
+                        orderItemId: "orderItemId2",
+                        model: "IPhone X",
+                    },
+                    wertgarantieProduct: {
+                        id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                        name: "Komplettschutz",
+                        price: 500,
+                        paymentInterval: "monthly"
+                    }
+                }
             ],
         }
 
