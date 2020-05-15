@@ -199,7 +199,16 @@ test("should return proper confirmation component data for updated shoppingCart"
             return {
                 shoppingCart: wertgarantieShoppingCart,
                 changes: {
-                    updated: [...testShoppingCart.orders.map(order => order.id)],
+                    updated: [
+                        {
+                            id: testShoppingCart.orders[0].id,
+                            wertgarantieProductPriceChanged: true
+                        },
+                        {
+                            id: testShoppingCart.orders[1].id,
+                            wertgarantieProductPriceChanged: true
+                        }
+                    ],
                     deleted: []
                 }
             }

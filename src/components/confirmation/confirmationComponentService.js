@@ -27,17 +27,20 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
 
     const updateResult = await shoppingCartService.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, client);
     const updatedWertgarantieShoppingCart = updateResult.shoppingCart;
-    const shoppingCartWasUpdated = updateResult.changes.updated.length > 0
 
+    const idsOfProductsWithPriceChange = updateResult.changes.updated
+        .filter(update => update.wertgarantieProductPriceChanged === true)
+        .map(update => update.id);
+    const priceOfAtLeastOneProductChanged = idsOfProductsWithPriceChange.length > 0;
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const result = {
         texts: {
             boxTitle: componentTexts.boxTitle,
             title: componentTexts.title,
             subtitle: componentTexts.subtitle,
-            flashMessage: shoppingCartWasUpdated ? componentTexts.priceChanged : undefined
+            flashMessage: priceOfAtLeastOneProductChanged ? componentTexts.priceChanged : undefined
         },
-        termsAndConditionsConfirmed: shoppingCartWasUpdated ? false : updatedWertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
+        termsAndConditionsConfirmed: priceOfAtLeastOneProductChanged ? false : updatedWertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
         orders: [],
         shoppingCart: updatedWertgarantieShoppingCart
     };
@@ -49,7 +52,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
 
     for (var i = 0; i < updatedWertgarantieShoppingCart.orders.length; i++) {
         const order = updatedWertgarantieShoppingCart.orders[i];
-        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts, updateResult.changes.updated);
+        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts, idsOfProductsWithPriceChange);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
