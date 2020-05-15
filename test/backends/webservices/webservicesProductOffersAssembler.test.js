@@ -270,7 +270,7 @@ test('should getDevicePremiums', async () => {
                     },
                     {
                         minClose: 80000,
-                        maxOpen: 180000
+                        maxOpen: 180001
                     }
                 ]
             },
@@ -288,7 +288,7 @@ test('should getDevicePremiums', async () => {
                     },
                     {
                         minClose: 80000,
-                        maxOpen: 180000
+                        maxOpen: 180001
                     }
                 ]
             }
@@ -325,7 +325,7 @@ test('should assemble product offers for client', async () => {
                     },
                     {
                         minClose: 80000,
-                        maxOpen: 180000
+                        maxOpen: 180001
                     }
                 ]
             }
@@ -474,7 +474,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -495,7 +495,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -516,7 +516,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -537,7 +537,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -565,7 +565,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -586,7 +586,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -607,7 +607,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]
@@ -628,7 +628,7 @@ const expectedIntervalPremiumsForKS = [
                     },
                     {
                         "minClose": 80000,
-                        "maxOpen": 180000,
+                        "maxOpen": 180001,
                         "insurancePremium": 2340
                     }
                 ]

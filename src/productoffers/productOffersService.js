@@ -8,8 +8,8 @@ async function getPriceForSelectedProductOffer(clientConfig, deviceClass, produc
     if (!product) {
         return undefined;
     } else {
-        const price = product.prices[paymentInterval];
-        return (price) ? price.price : undefined;
+        const paymentIntervalPrice = product.prices[paymentInterval];
+        return (paymentIntervalPrice) ? paymentIntervalPrice.netAmount : undefined;
     }
 }
 
@@ -38,24 +38,24 @@ function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
             defaultPaymentInterval: toDefaultPaymentInterval(heimdallOffer.payment),
             prices: {
                 monthly: {
-                    "price": parseInt(heimdallOffer.prices.monthly.price.replace(",", "")),
-                    "priceCurrency": "EUR",
-                    "priceTax": parseInt(heimdallOffer.prices.monthly.price_tax.replace(",", ""))
+                    "netAmount": parseInt(heimdallOffer.prices.monthly.price.replace(",", "")),
+                    "currency": "EUR",
+                    "taxAmount": parseInt(heimdallOffer.prices.monthly.price_tax.replace(",", ""))
                 },
                 quarterly: {
-                    "price": parseInt(heimdallOffer.prices.quarterly.price.replace(",", "")),
-                    "priceCurrency": "EUR",
-                    "priceTax": parseInt(heimdallOffer.prices.quarterly.price_tax.replace(",", ""))
+                    "netAmount": parseInt(heimdallOffer.prices.quarterly.price.replace(",", "")),
+                    "currency": "EUR",
+                    "taxAmount": parseInt(heimdallOffer.prices.quarterly.price_tax.replace(",", ""))
                 },
                 halfYearly: {
-                    "price": parseInt(heimdallOffer.prices.half_yearly.price.replace(",", "")),
-                    "priceCurrency": "EUR",
-                    "priceTax": parseInt(heimdallOffer.prices.half_yearly.price_tax.replace(",", ""))
+                    "netAmount": parseInt(heimdallOffer.prices.half_yearly.price.replace(",", "")),
+                    "currency": "EUR",
+                    "taxAmount": parseInt(heimdallOffer.prices.half_yearly.price_tax.replace(",", ""))
                 },
                 yearly: {
-                    "price": parseInt(heimdallOffer.prices.yearly.price.replace(",", "")),
-                    "priceCurrency": "EUR",
-                    "priceTax": parseInt(heimdallOffer.prices.yearly.price_tax.replace(",", ""))
+                    "netAmount": parseInt(heimdallOffer.prices.yearly.price.replace(",", "")),
+                    "currency": "EUR",
+                    "taxAmount": parseInt(heimdallOffer.prices.yearly.price_tax.replace(",", ""))
                 }
             },
             documents: heimdallOffer.documents.map(document => {
@@ -117,9 +117,9 @@ function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
             throw new ProductOffersError(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
         }
         intervalPrices[mapIntervalCode(interval.intervalCode)] = {
-            "price": priceRangePremium.insurancePremium,
-            "priceCurrency": "EUR",
-            "priceTax": Math.round(priceRangePremium.insurancePremium - priceRangePremium.insurancePremium / 1.19)
+            "netAmount": priceRangePremium.insurancePremium,
+            "currency": "EUR",
+            "taxAmount": Math.round(priceRangePremium.insurancePremium - priceRangePremium.insurancePremium / 1.19)
         };
     });
     return intervalPrices;

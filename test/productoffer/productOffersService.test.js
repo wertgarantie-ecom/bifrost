@@ -25,24 +25,24 @@ test("test webservices product offer conversion", async () => {
                 "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
-                        "price": 800,
-                        "priceCurrency": "EUR",
-                        "priceTax": 128
+                        "netAmount": 800,
+                        "currency": "EUR",
+                        "taxAmount": 128
                     },
                     "quarterly": {
-                        "price": 2400,
-                        "priceCurrency": "EUR",
-                        "priceTax": 383
+                        "netAmount": 2400,
+                        "currency": "EUR",
+                        "taxAmount": 383
                     },
                     "halfYearly": {
-                        "price": 4800,
-                        "priceCurrency": "EUR",
-                        "priceTax": 766
+                        "netAmount": 4800,
+                        "currency": "EUR",
+                        "taxAmount": 766
                     },
                     "yearly": {
-                        "price": 9600,
-                        "priceCurrency": "EUR",
-                        "priceTax": 1533
+                        "netAmount": 9600,
+                        "currency": "EUR",
+                        "taxAmount": 1533
                     }
                 },
                 "documents": [
@@ -64,24 +64,24 @@ test("test webservices product offer conversion", async () => {
                 "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
-                        "price": 995,
-                        "priceCurrency": "EUR",
-                        "priceTax": 159
+                        "netAmount": 995,
+                        "currency": "EUR",
+                        "taxAmount": 159
                     },
                     "quarterly": {
-                        "price": 2985,
-                        "priceCurrency": "EUR",
-                        "priceTax": 477
+                        "netAmount": 2985,
+                        "currency": "EUR",
+                        "taxAmount": 477
                     },
                     "halfYearly": {
-                        "price": 5970,
-                        "priceCurrency": "EUR",
-                        "priceTax": 953
+                        "netAmount": 5970,
+                        "currency": "EUR",
+                        "taxAmount": 953
                     },
                     "yearly": {
-                        "price": 11940,
-                        "priceCurrency": "EUR",
-                        "priceTax": 1906
+                        "netAmount": 11940,
+                        "currency": "EUR",
+                        "taxAmount": 1906
                     }
                 },
                 "documents": [
@@ -122,24 +122,24 @@ test("test heimdall product offer conversion", async () => {
                 "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
-                        "price": 500,
-                        "priceCurrency": "EUR",
-                        "priceTax": 80
+                        "netAmount": 500,
+                        "currency": "EUR",
+                        "taxAmount": 80
                     },
                     "quarterly": {
-                        "price": 1500,
-                        "priceCurrency": "EUR",
-                        "priceTax": 239
+                        "netAmount": 1500,
+                        "currency": "EUR",
+                        "taxAmount": 239
                     },
                     "halfYearly": {
-                        "price": 3000,
-                        "priceCurrency": "EUR",
-                        "priceTax": 479
+                        "netAmount": 3000,
+                        "currency": "EUR",
+                        "taxAmount": 479
                     },
                     "yearly": {
-                        "price": 6000,
-                        "priceCurrency": "EUR",
-                        "priceTax": 958
+                        "netAmount": 6000,
+                        "currency": "EUR",
+                        "taxAmount": 958
                     }
                 },
                 "documents": [
@@ -197,24 +197,24 @@ test("test heimdall product offer conversion", async () => {
                 "defaultPaymentInterval": "monthly",
                 "prices": {
                     "monthly": {
-                        "price": 500,
-                        "priceCurrency": "EUR",
-                        "priceTax": 80
+                        "netAmount": 500,
+                        "currency": "EUR",
+                        "taxAmount": 80
                     },
                     "quarterly": {
-                        "price": 1500,
-                        "priceCurrency": "EUR",
-                        "priceTax": 239
+                        "netAmount": 1500,
+                        "currency": "EUR",
+                        "taxAmount": 239
                     },
                     "halfYearly": {
-                        "price": 3000,
-                        "priceCurrency": "EUR",
-                        "priceTax": 479
+                        "netAmount": 3000,
+                        "currency": "EUR",
+                        "taxAmount": 479
                     },
                     "yearly": {
-                        "price": 6000,
-                        "priceCurrency": "EUR",
-                        "priceTax": 958
+                        "netAmount": 6000,
+                        "currency": "EUR",
+                        "taxAmount": 958
                     }
                 },
                 "documents": [
