@@ -9,6 +9,7 @@ const confirmationResponseSchema = require('./confirmationResponseSchema').confi
 const validator = require('../../framework/validation/validator');
 const _ = require('lodash');
 const util = require('util');
+const _shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.prepareConfirmationData = async function prepareConfirmationData(wertgarantieShoppingCart,
                                                                          shopShoppingCart,
@@ -16,22 +17,29 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
                                                                          productOfferService = _productOfferService,
                                                                          productImageService = _productImageService,
                                                                          clientService = defaultClientService,
-                                                                         clientComponentTextService = _clientComponentTextService) {
+                                                                         clientComponentTextService = _clientComponentTextService,
+                                                                         shoppingCartService = _shoppingCartService) {
     if (!wertgarantieShoppingCart) {
         return undefined;
     }
 
     const client = await clientService.findClientForPublicClientId(wertgarantieShoppingCart.publicClientId);
+
+    const updateResult = await shoppingCartService.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, client);
+    const updatedWertgarantieShoppingCart = updateResult.shoppingCart;
+    const shoppingCartWasUpdated = updateResult.changes.updated.length > 0
+
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
     const result = {
         texts: {
             boxTitle: componentTexts.boxTitle,
             title: componentTexts.title,
             subtitle: componentTexts.subtitle,
+            flashMessage: shoppingCartWasUpdated ? componentTexts.priceChanged : undefined
         },
-        termsAndConditionsConfirmed: wertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
+        termsAndConditionsConfirmed: shoppingCartWasUpdated ? false : updatedWertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
         orders: [],
-        shoppingCart: wertgarantieShoppingCart
+        shoppingCart: updatedWertgarantieShoppingCart
     };
 
     let avbHref;
@@ -39,9 +47,9 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
     let GDPRHref;
     let IPIDHref;
 
-    for (var i = 0; i < wertgarantieShoppingCart.orders.length; i++) {
-        const order = wertgarantieShoppingCart.orders[i];
-        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts);
+    for (var i = 0; i < updatedWertgarantieShoppingCart.orders.length; i++) {
+        const order = updatedWertgarantieShoppingCart.orders[i];
+        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts, updateResult.changes.updated);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
@@ -59,27 +67,8 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
     return validator.validate(result, confirmationResponseSchema);
 };
 
-function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart) {
-    if (!shopShoppingCart) {
-        return wertgarantieShoppingCart;
-    }
 
-    const groupedByHasOrderItemdId = _.groupBy(wertgarantieShoppingCart.orders, order => order.shopProduct.orderItemId !== undefined);
-    const ordersWithOrderItemId = groupedByHasOrderItemdId.true;
-    // for each, check if it is also available in shopShoppingCart
-    // if yes = update price and model if needed
-    // if no = delete order
-
-    // if wertgarantieShoppingCart is now empty = return it
-    // else proceed as usual
-    const updatedShoppingCart = {...wertgarantieShoppingCart}
-    updatedShoppingCart.orders = groupedByHasOrderItemdId.false;
-    return updatedShoppingCart;
-}
-
-exports.updateWertgarantieShoppingCart = updateWertgarantieShoppingCart;
-
-async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts) {
+async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts, listOfUpdates) {
     const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price)).productOffers;
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
@@ -98,7 +87,8 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
                 IPIDText: IPID.name,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.shopProduct.deviceClass, 1)[0],
                 shopProductShortName: order.shopProduct.model,
-                orderId: order.id
+                orderId: order.id,
+                updated: listOfUpdates.find(updatedId => updatedId === order.id) !== undefined
             },
             avbHref: productOfferFormatter.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri,
             rowHref: productOfferFormatter.getDocument(documentTypes.RIGHT_OF_WITHDRAWAL).uri,
@@ -108,3 +98,5 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
 
     return undefined
 }
+
+exports.getConfirmationProductData = getConfirmationProductData;

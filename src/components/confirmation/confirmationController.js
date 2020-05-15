@@ -3,7 +3,7 @@ const shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.getConfirmationComponentData = async function getConfirmationComponentData(req, res, next) {
     const wertgarantieShoppingCart = req.shoppingCart;
-    const shopShoppingCart =  req.shopShoppingCart;
+    const shopShoppingCart = req.body.shopShoppingCart ? JSON.parse(Buffer.from(req.body.shopShoppingCart, 'base64').toString()) : undefined
     try {
         const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, shopShoppingCart);
         if (result) {

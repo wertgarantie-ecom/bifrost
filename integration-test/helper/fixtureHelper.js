@@ -160,7 +160,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                     },
                                     {
                                         minClose: 80000,
-                                        maxOpen: 180000
+                                        maxOpen: 180001
                                     }
                                 ]
                             },
@@ -178,7 +178,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                     },
                                     {
                                         minClose: 80000,
-                                        maxOpen: 180000
+                                        maxOpen: 180001
                                     }
                                 ]
                             }
@@ -217,7 +217,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                     },
                                     {
                                         minClose: 80000,
-                                        maxOpen: 180000
+                                        maxOpen: 180001
                                     }
                                 ]
                             },
@@ -235,7 +235,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                     },
                                     {
                                         minClose: 80000,
-                                        maxOpen: 180000
+                                        maxOpen: 180001
                                     }
                                 ]
                             }

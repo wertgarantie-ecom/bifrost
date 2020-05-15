@@ -2,6 +2,17 @@ const _heimdallClient = require('../backends/heimdall/heimdallClient');
 const _webserviceProductOffersRepository = require('../backends/webservices/webserviceProductOffersRepository');
 const _ = require('lodash');
 
+async function getPriceForSelectedProductOffer(clientConfig, deviceClass, productId, shopProductPrice, paymentInterval) {
+    const productOffers = await getProductOffers(clientConfig, deviceClass, shopProductPrice);
+    const product = _.find(productOffers.productOffers, offer => offer.id === productId);
+    if (!product) {
+        return undefined;
+    } else {
+        const price = product.prices[paymentInterval];
+        return (price) ? price.price : undefined;
+    }
+}
+
 async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
@@ -149,3 +160,4 @@ exports.hasDeviceClassAndIsInLimit = hasDeviceClassAndIsInLimit;
 exports.mapIntervalDescription = mapIntervalCode;
 exports.getPricesForWebservicesProductOffer = getPricesForWebservicesProductOffer;
 exports.webserviceProductOffersToGeneralProductOffers = webserviceProductOffersToGeneralProductOffers;
+exports.getPriceForSelectedProductOffer = getPriceForSelectedProductOffer;
