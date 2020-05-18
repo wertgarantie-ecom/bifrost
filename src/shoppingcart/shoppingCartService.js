@@ -86,6 +86,12 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
         }
     }
 
+    function updateShoppingCart(oldShoppingCart, newOrders) {
+        const updatedShoppingCart = {...wertgarantieShoppingCart}
+        updatedShoppingCart.orders = newOrders;
+        return updatedShoppingCart;
+    }
+
     const syncResultAccumulator = {
         changes: {
             deleted: [],
@@ -136,12 +142,11 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     await wertgarantieShoppingCart.orders.reduce(syncOrderReducer, syncResultAccumulator);
+    const updatedWertgarantieShoppingCart = updateShoppingCart(wertgarantieShoppingCart, syncResultAccumulator.orders)
 
-    const updatedShoppingCart = {...wertgarantieShoppingCart}
-    updatedShoppingCart.orders = syncResultAccumulator.orders
     return {
         changes: syncResultAccumulator.changes,
-        shoppingCart: updatedShoppingCart
+        shoppingCart: updatedWertgarantieShoppingCart
     };
 }
 

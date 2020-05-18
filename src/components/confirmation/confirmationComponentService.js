@@ -38,9 +38,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
             boxTitle: componentTexts.boxTitle,
             title: componentTexts.title,
             subtitle: componentTexts.subtitle,
-            flashMessage: priceOfAtLeastOneProductChanged ? componentTexts.priceChanged : undefined
+            priceChangedWarning: componentTexts.priceChanged
         },
         termsAndConditionsConfirmed: priceOfAtLeastOneProductChanged ? false : updatedWertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
+        showPriceChangedWarning: priceOfAtLeastOneProductChanged,
         orders: [],
         shoppingCart: updatedWertgarantieShoppingCart
     };
