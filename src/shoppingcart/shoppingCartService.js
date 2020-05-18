@@ -5,6 +5,7 @@ const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutS
 const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 const ClientError = require('../errors/ClientError');
 const mailSender = require('../mails/mailSender');
+const _productOfferService = require('../productoffers/productOffersService');
 
 
 exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId, orderId = uuid()) {
@@ -74,6 +75,80 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     return checkoutData;
 };
 
+exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {
+    function resultWitEmptyChanges(wertgarantieShoppingCart) {
+        return {
+            changes: {
+                deleted: [],
+                updated: []
+            },
+            shoppingCart: wertgarantieShoppingCart
+        }
+    }
+
+    function updateShoppingCart(oldShoppingCart, newOrders) {
+        const updatedShoppingCart = {...wertgarantieShoppingCart}
+        updatedShoppingCart.orders = newOrders;
+        return updatedShoppingCart;
+    }
+
+    const syncResultAccumulator = {
+        changes: {
+            deleted: [],
+            updated: []
+        },
+        orders: []
+    }
+
+    const syncOrderReducer = async (result, order) => {
+        result = await result;
+        const matchingShopOrderItem = _.find(shopShoppingCart, shopPurchase => order.shopProduct.orderItemId === shopPurchase.orderItemId);
+        if (!matchingShopOrderItem) {
+            result.changes.deleted.push(order.id)
+        } else {
+            if (matchingShopOrderItem.model === order.shopProduct.model && matchingShopOrderItem.price === order.shopProduct.price) {
+                result.orders.push(order);
+            } else {
+                order.shopProduct.model = matchingShopOrderItem.model;
+                let priceUpdated = false;
+                if (order.shopProduct.price !== matchingShopOrderItem.price) {
+                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.shopProduct.deviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
+                    if (!newPrice) {
+                        result.changes.deleted.push(order.id)
+                        return;
+                    }
+                    order.shopProduct.price = matchingShopOrderItem.price;
+                    priceUpdated = order.wertgarantieProduct.price !== newPrice;
+                    order.wertgarantieProduct.price = newPrice;
+                }
+                result.orders.push(order);
+                result.changes.updated.push({
+                    id: order.id,
+                    wertgarantieProductPriceChanged: priceUpdated
+                })
+            }
+        }
+        return result;
+    };
+
+    if (!shopShoppingCart) {
+        return resultWitEmptyChanges(wertgarantieShoppingCart);
+    }
+    if (!wertgarantieShoppingCart || _.isEmpty(wertgarantieShoppingCart.orders)) {
+        return resultWitEmptyChanges(wertgarantieShoppingCart)
+    }
+    if (wertgarantieShoppingCart.orders[0].shopProduct.orderItemId === undefined) {
+        return resultWitEmptyChanges(wertgarantieShoppingCart)
+    }
+
+    await wertgarantieShoppingCart.orders.reduce(syncOrderReducer, syncResultAccumulator);
+    const updatedWertgarantieShoppingCart = updateShoppingCart(wertgarantieShoppingCart, syncResultAccumulator.orders)
+
+    return {
+        changes: syncResultAccumulator.changes,
+        shoppingCart: updatedWertgarantieShoppingCart
+    };
+}
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;

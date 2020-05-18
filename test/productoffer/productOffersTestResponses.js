@@ -15,24 +15,24 @@ exports.productOffers = {
             "defaultPaymentInterval": "monthly",
             "prices": {
                 "monthly": {
-                    "price": 800,
-                    "priceCurrency": "EUR",
-                    "priceTax": 128
+                    "netAmount": 800,
+                    "currency": "EUR",
+                    "taxAmount": 128
                 },
                 "quarterly": {
-                    "price": 2400,
-                    "priceCurrency": "EUR",
-                    "priceTax": 383
+                    "netAmount": 2400,
+                    "currency": "EUR",
+                    "taxAmount": 383
                 },
                 "halfYearly": {
-                    "price": 4800,
-                    "priceCurrency": "EUR",
-                    "priceTax": 766
+                    "netAmount": 4800,
+                    "currency": "EUR",
+                    "taxAmount": 766
                 },
                 "yearly": {
-                    "price": 9600,
-                    "priceCurrency": "EUR",
-                    "priceTax": 1533
+                    "netAmount": 9600,
+                    "currency": "EUR",
+                    "taxAmount": 1533
                 }
             },
             "documents": [
@@ -75,24 +75,24 @@ exports.productOffers = {
             "defaultPaymentInterval": "monthly",
             "prices": {
                 "monthly": {
-                    "price": 995,
-                    "priceCurrency": "EUR",
-                    "priceTax": 159
+                    "netAmount": 995,
+                    "currency": "EUR",
+                    "taxAmount": 159
                 },
                 "quarterly": {
-                    "price": 2985,
-                    "priceCurrency": "EUR",
-                    "priceTax": 477
+                    "netAmount": 2985,
+                    "currency": "EUR",
+                    "taxAmount": 477
                 },
                 "halfYearly": {
-                    "price": 5970,
-                    "priceCurrency": "EUR",
-                    "priceTax": 953
+                    "netAmount": 5970,
+                    "currency": "EUR",
+                    "taxAmount": 953
                 },
                 "yearly": {
-                    "price": 11940,
-                    "priceCurrency": "EUR",
-                    "priceTax": 1906
+                    "netAmount": 11940,
+                    "currency": "EUR",
+                    "taxAmount": 1906
                 }
             },
             "documents": [
@@ -135,24 +135,24 @@ exports.productOffersWithoutDocuments = {
             "defaultPaymentInterval": "monthly",
             "prices": {
                 "monthly": {
-                    "price": 800,
-                    "priceCurrency": "EUR",
-                    "priceTax": 128
+                    "netAmount": 800,
+                    "currency": "EUR",
+                    "taxAmount": 128
                 },
                 "quarterly": {
-                    "price": 2400,
-                    "priceCurrency": "EUR",
-                    "priceTax": 383
+                    "netAmount": 2400,
+                    "currency": "EUR",
+                    "taxAmount": 383
                 },
                 "halfYearly": {
-                    "price": 4800,
-                    "priceCurrency": "EUR",
-                    "priceTax": 766
+                    "netAmount": 4800,
+                    "currency": "EUR",
+                    "taxAmount": 766
                 },
                 "yearly": {
-                    "price": 9600,
-                    "priceCurrency": "EUR",
-                    "priceTax": 1533
+                    "netAmount": 9600,
+                    "currency": "EUR",
+                    "taxAmount": 1533
                 }
             },
             "documents": []
@@ -168,24 +168,24 @@ exports.productOffersWithoutDocuments = {
             "defaultPaymentInterval": "monthly",
             "prices": {
                 "monthly": {
-                    "price": 995,
-                    "priceCurrency": "EUR",
-                    "priceTax": 159
+                    "netAmount": 995,
+                    "currency": "EUR",
+                    "taxAmount": 159
                 },
                 "quarterly": {
-                    "price": 2985,
-                    "priceCurrency": "EUR",
-                    "priceTax": 477
+                    "netAmount": 2985,
+                    "currency": "EUR",
+                    "taxAmount": 477
                 },
                 "halfYearly": {
-                    "price": 5970,
-                    "priceCurrency": "EUR",
-                    "priceTax": 953
+                    "netAmount": 5970,
+                    "currency": "EUR",
+                    "taxAmount": 953
                 },
                 "yearly": {
-                    "price": 11940,
-                    "priceCurrency": "EUR",
-                    "priceTax": 1906
+                    "netAmount": 11940,
+                    "currency": "EUR",
+                    "taxAmount": 1906
                 }
             },
             "documents": []

@@ -56,7 +56,6 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
             const top3 = getTop3(advantages, excludedAdvantages);
 
 
-
             return {
                 advantages: excludedAdvantages.map(adv => {
                     return {
@@ -75,13 +74,13 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
 
         getIncludedTaxFormatted(locale = "de") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const formattedTax = Globalize(locale).currencyFormatter(intervalPrice.priceCurrency, {style: "accounting"})(intervalPrice.priceTax / 100);
+            const formattedTax = Globalize(locale).currencyFormatter(intervalPrice.currency, {style: "accounting"})(intervalPrice.taxAmount / 100);
             return format(componentTexts.productTexts.taxInformation, formattedTax);
         },
 
         getPriceFormatted(locale = "de") {
-            const intervalData = productOffer.prices[productOffer.defaultPaymentInterval];
-            return Globalize(locale).currencyFormatter(intervalData.priceCurrency, {style: "accounting"})(intervalData.price / 100);
+            const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
+            return Globalize(locale).currencyFormatter(intervalPrice.currency, {style: "accounting"})(intervalPrice.netAmount / 100);
         },
 
         getDocument(documentType) {

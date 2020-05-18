@@ -20,6 +20,19 @@ exports.confirmationResponseSchema = {
             items: {
                 type: "object",
                 additionalProperties: false,
+                required: [
+                    "paymentInterval",
+                    "price",
+                    "includedTax",
+                    "productTitle",
+                    "top3",
+                    "IPIDUri",
+                    "IPIDText",
+                    "productBackgroundImageLink",
+                    "shopProductShortName",
+                    "orderId",
+                    "updated"
+                ],
                 properties: {
                     paymentInterval: {
                         type: "string"
@@ -53,7 +66,10 @@ exports.confirmationResponseSchema = {
                     },
                     orderId: {
                         type: "string"
-}
+                    },
+                    updated: {
+                        boolean: "string"
+                    }
                 }
             }
         }

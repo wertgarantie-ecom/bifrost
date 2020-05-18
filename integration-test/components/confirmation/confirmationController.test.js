@@ -3,6 +3,7 @@ const app = require('../../../src/app');
 const testhelper = require('../../helper/fixtureHelper');
 const webservicesProductOffersAssembler = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
 const mockWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClient();
+const productOffersService = require('../../../src/productoffers/productOffersService');
 
 beforeAll(() => {
     process.env = Object.assign(process.env, {BACKEND: "webservices"});
@@ -71,7 +72,9 @@ test("should return valid confirmation data", async () => {
     expect(response.body.termsAndConditionsConfirmed).toEqual(false);
     expect(response.body.orders.length).toEqual(1);
     expect(response.body.texts).toEqual({
+        boxTitle: "Versicherung",
         title: "Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!",
+        priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
         subtitle: "Bitte bestätige noch kurz:",
         confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"undefined/wertgarantie/documents/e2289cb6c7e945f4e79bab6b250cb0be34a9960e\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"undefined/wertgarantie/documents/6a9715485af877495e38b24b093d603436c433eb\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
         confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren."
@@ -100,10 +103,57 @@ test("should remove order from shopping cart", async () => {
     expect(response.body.signedShoppingCart.shoppingCart.orders[0]).toEqual(signedShoppingCart.shoppingCart.orders[1]);
     expect(response.body.termsAndConditionsConfirmed).toEqual(false);
     expect(response.body.orders.length).toEqual(1);
-    expect(response.body.texts).toEqual({
-        title: "Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!",
-        subtitle: "Bitte bestätige noch kurz:",
-        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"undefined/wertgarantie/documents/e2289cb6c7e945f4e79bab6b250cb0be34a9960e\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"undefined/wertgarantie/documents/6a9715485af877495e38b24b093d603436c433eb\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
-        confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren."
-    });
 });
+
+
+test('should return proper data if wertgarantieShoppingCart must be synced with shop provided cart', async () => {
+    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
+    const deviceClass = "Smartphone";
+    const selectedWertgarantieProduct = productOffers[0].id;
+    const signedShoppingCart = testhelper.createSignedShoppingCart({
+        publicClientId: clientData.publicClientIds[0],
+        devicePrice: 80000,
+        deviceClass: deviceClass,
+        model: "Test Handy",
+        wertgarantieProductId: selectedWertgarantieProduct,
+        wertgarantieProductName: productOffers[0].name
+    });
+
+    const wertgarantieOrder = signedShoppingCart.shoppingCart.orders[0];
+    const orderItemId = wertgarantieOrder.shopProduct.orderItemId;
+
+    const shopShoppingCart = [
+        {
+            price: 180000,
+            model: "IPhone 3000GB",
+            orderItemId: orderItemId
+        }
+    ]
+    const encodedShopShoppingCart = Buffer.from(JSON.stringify(shopShoppingCart)).toString("base64");
+
+    const expectedPrice = await productOffersService.getPriceForSelectedProductOffer(clientData, deviceClass, selectedWertgarantieProduct, shopShoppingCart[0].price, wertgarantieOrder.wertgarantieProduct.paymentInterval);
+
+    const response = await request.agent(app).put('/wertgarantie/components/confirmation')
+        .send({
+            signedShoppingCart: signedShoppingCart,
+            shopShoppingCart: encodedShopShoppingCart
+        });
+
+    expect(response.status).toBe(200);
+    expect(response.body.signedShoppingCart.shoppingCart.orders[0]).toEqual({
+        "id": wertgarantieOrder.id,
+        "shopProduct": {
+            "deviceClass": "Smartphone",
+            "model": shopShoppingCart[0].model,
+            "orderItemId": orderItemId,
+            "price": shopShoppingCart[0].price
+        },
+        "wertgarantieProduct": {
+            "id": selectedWertgarantieProduct,
+            "name": "Komplettschutz",
+            "paymentInterval": "monthly",
+            "price": expectedPrice
+        }
+    });
+})
