@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 app.options('*', cors(corsOptions));
-app.use(sslRedirect(['prod', 'dev', 'staging']));
+app.use(sslRedirect(['production', 'dev', 'staging']));
 
 app.use(require('./shoppingcart/shoppingCartResponseFilter'));
 app.use('/healthcheck', require('express-healthcheck')());
