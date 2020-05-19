@@ -56,7 +56,8 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         backends: createClientRequest.backends,
         activePartnerNumber: createClientRequest.activePartnerNumber,
         secrets: createClientRequest.secrets || ['secret:' + uuid()],
-        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()]
+        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
+        credentials: createClientRequest.credentials
     };
     validate(clientData, newClientSchema);
     const persistedClientData = await repository.insert(clientData);

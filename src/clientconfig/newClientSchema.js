@@ -80,6 +80,22 @@ module.exports.newClientSchema = {
             items: {
                 type: "string"
             }
+        },
+        credentials: {
+            type: "object",
+            properties: {
+                basicAuth: {
+                    type: "object",
+                    properties: {
+                        username: {
+                            type: "string"
+                        },
+                        password: {
+                            type: "string"
+                        }
+                    }
+                }
+            }
         }
     }
 };

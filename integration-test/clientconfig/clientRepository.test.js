@@ -33,7 +33,13 @@ describe("should find persisted client properties by given secret", () => {
         ],
         publicClientIds: [
             "public:" + uuid()
-        ]
+        ],
+        credentials: {
+            basicAuth: {
+                username: "test",
+                password: "test"
+            }
+        }
     };
 
 
@@ -78,7 +84,13 @@ describe("should find persisted client properties by given public client id", ()
         ],
         publicClientIds: [
             "public:" + uuid()
-        ]
+        ],
+        credentials: {
+            basicAuth: {
+                username: "test",
+                password: "test"
+            }
+        }
     };
 
     test("should persist valid client data", async () => {
@@ -117,7 +129,13 @@ describe("should delete client data for client id", () => {
         },
         activePartnerNumber: 1234,
         secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
-        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort()
+        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
+        credentials: {
+            basicAuth: {
+                username: "test",
+                password: "test"
+            }
+        }
     };
 
     test("should persist valid client data", async () => {
@@ -224,6 +242,12 @@ describe("should handle client config for product offers", () => {
         activePartnerNumber: 1234,
         secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
         publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
+        credentials: {
+            basicAuth: {
+                username: "test",
+                password: "test"
+            }
+        }
     };
     test("persist and retrieve product offers config for client", async () => {
         const persistResult = await clientRepository.insert(clientData);

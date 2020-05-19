@@ -15,6 +15,7 @@ const documentationController = require("../documentation/documentationControlle
 const checkoutSchema = require("../shoppingcart/schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
 const selectionPopUpGetProductsSchema = require("../components/selectionpopup/selectionPopUpGetProductsSchema").confirmationResponseSchema;
+const clientService = require('../clientconfig/clientService');
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
@@ -50,6 +51,21 @@ const basicAuthUsers = {
 };
 basicAuthUsers.users[user] = password;
 
+// client documentation
+const clientBasicAuths = {
+    users: {}
+};
+clientService.findAllClients().then(clients => {
+    clients.map(client => {
+        if(client.credentials && client.credentials.basicAuth) {
+            clientBasicAuths.users[client.credentials.basicAuth.username] = client.credentials.basicAuth.password
+        }
+    });
+}).then(() => router.get("/clients/:clientId/documentation", basicAuth({
+    users: clientBasicAuths.users,
+    challenge: true
+}), documentationController.getClientDocumentation));
+
 // client settings
 router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
 router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients);
@@ -60,8 +76,6 @@ router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.
 router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), clientComponentTextController.saveComponentTextForClient);
 router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
-// client documentation
-router.get("/clients/:clientId/documentation", documentationController.getClientDocumentation);
 
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);

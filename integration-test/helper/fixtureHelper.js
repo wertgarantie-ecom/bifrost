@@ -90,7 +90,13 @@ exports.createDefaultClient = function createDefaultClient() {
         secrets: [
             "secret:" + uuid()
         ],
-        activePartnerNumber: 12345
+        activePartnerNumber: 12345,
+        credentials: {
+            basicAuth: {
+                username: "testclient",
+                password: "testclient"
+            }
+        }
     };
 };
 
@@ -262,7 +268,13 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         secrets: [
             "secret:" + uuid()
         ],
-        activePartnerNumber: 12345
+        activePartnerNumber: 12345,
+        credentials: {
+            basicAuth: {
+                username: "testclient",
+                password: "testclient"
+            }
+        }
     }
 };
 

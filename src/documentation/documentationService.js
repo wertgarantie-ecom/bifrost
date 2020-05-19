@@ -103,8 +103,61 @@ Eine beispielhafte Integration kann hier gefunden werden: [confirmation-componen
 Weitere Details zur Confirmation-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-confirmation--confirmation-component-phone-shop) zu finden.
 
 ### 3. After Sales Component
+Die After-Sales Komponente benötigt zur Initialisierung ein Base64 enkodiertes JSON Object mit den Produkten, die bei ${client.name} gekauft wurden, sowie die Kundendaten und die mit einem secret verschlüsselte SessionID aus dem Cookie \`wertgaranite-session-id\`.
+Das zugehörige Schema des JSON Objects ist [hier](https://github.com/wertgarantie-ecom/bifrost/blob/master/src/components/aftersales/afterSalesComponentCheckoutSchema.js) zu finden.
 
+Hier ein Beispiel-Code in JavaScript:
+\`\`\`js
+const CryptoJS = require('crypto-js');
 
+// retrieve cookie from request
+const sessionId = req.cookies['wertgarantie-session-id'];
+
+// encrypt retrieved sessionID with secret client ID provided by Wertgarantie team
+const encryptedSessionId = CryptoJS.HmacSHA256(sessionId, "yourSecretClientIDFromWertgarantie").toString();
+
+// Buffer stringified Object and convert to base64
+const wertgarantieCheckoutDataBuffer = Buffer.from(JSON.stringify({
+        purchasedProducts: [
+            {
+                price: 86000, // in minor units (cent)
+                manufacturer: "XXXPhones Inc.",
+                deviceClass: "Smartphone",
+                model: "Example Phone",
+                orderId: "orderNo1"
+            }       
+        ],
+        customer: {
+            salutation: 'Herr',
+            firstname: 'Otto',
+            lastname: 'Normalverbraucher',
+            street: 'Beispielstraße 9',
+            zip: '52345',
+            city: 'Köln',
+            country: 'Deutschland',
+            email: 'otto@normalverbraucher.com'
+        },
+        encryptedSessionId: encryptedSessionId
+    }));
+const dataShopPurchaseData = wertgarantieCheckoutDataBuffer.toString('base64');
+\`\`\`
+
+Das Resultat (hier \`dataShopPurchaseData\`) wird mit dem HTML-Attribut \`data-shop-purchase-data\` der Komponente übergeben, die daraufhin die Versicherungsanträge übermittelt und das Ergebnis anzeigt.
+
+\`\`\`html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/handyflash/wertgarantie-after-sales.css ">
+
+<wertgarantie-after-sales
+                    id="wertgarantie-after-sales"
+                    data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg...">
+</wertgarantie-after-sales>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-after-sales@1/dist/after-sales.min.js" crossorigin="anonymous"></script>
+\`\`\`
+
+Eine beispielhafte Integration kann hier gefunden werden: [after-sales-integration-sample](https://github.com/wertgarantie-ecom/integrations/blob/master/handyflash/bestellbestaetigungs_seite_staging.html)
+
+Weitere Details zur Implementierung befinden sich [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-after-sales--after-sales-general).
 
 ## Links
 - [Dokumentation](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/about-about--overview)
