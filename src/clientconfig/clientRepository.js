@@ -26,7 +26,7 @@ exports.insert = async function insert(clientData) {
                 clientData.name,
                 clientData.email,
                 JSON.stringify(clientData.backends),
-                clientData.activePartnerNumber,
+                clientData.activePartnerNumber
             ]
         };
         await client.query(query);
