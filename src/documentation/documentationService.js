@@ -1,17 +1,31 @@
 const MarkdownIt = require('markdown-it');
-const md = new MarkdownIt();
+const hljs = require('highlight.js');
+const md = new MarkdownIt(
+    {
+        highlight: function (str, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return hljs.highlight(lang, str).value;
+                } catch (__) {
+                }
+            }
+
+            return ''; // use external default escaping
+        }
+    }
+);
 const _ = require('lodash');
 
 
 exports.getInstallationInstructions = function getInstallationInstructions(client) {
     const configuredDeviceClassesArray = [];
     client.backends.webservices.productOffersConfigurations.map(offerConfig => {
-       configuredDeviceClassesArray.push(...offerConfig.deviceClasses.map(deviceClass => deviceClass.objectCodeExternal));
+        configuredDeviceClassesArray.push(...offerConfig.deviceClasses.map(deviceClass => deviceClass.objectCodeExternal));
     });
     const configuredDeviceClasses = _.uniqBy(configuredDeviceClassesArray, deviceClass => deviceClass);
 
     // language=md
-    const installationInstructionsMarkdown =  md.render(`# Installationsanleitung für ${client.name} für Umgebung ${process.env.NODE_ENV}
+    const installationInstructionsMarkdown = md.render(`# Installationsanleitung für ${client.name} für Umgebung ${process.env.NODE_ENV}
 
 ## Konfiguration
 * public Client Ids: \`${client.publicClientIds}\`
@@ -59,6 +73,8 @@ Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents),
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+    <link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/styles/default.min.css">
     
     <title>Installation Instructions for ${client.name}</title>
 </head>

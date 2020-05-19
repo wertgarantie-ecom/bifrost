@@ -42,6 +42,7 @@
     "form-data": "^3.0.0",
     "globalize": "^1.5.0",
     "heroku-ssl-redirect": "0.0.4",
+    "highlight.js": "^10.0.3",
     "http-errors": "~1.6.3",
     "is-base64": "^1.0.0",
     "is-uuid": "^1.0.2",
