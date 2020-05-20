@@ -148,6 +148,7 @@ Das Resultat (hier \`dataShopPurchaseData\`) wird mit dem HTML-Attribut \`data-s
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/handyflash/wertgarantie-after-sales.css ">
 
 <wertgarantie-after-sales
+                    ${bifrostUriDateAttribute} 
                     id="wertgarantie-after-sales"
                     data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg...">
 </wertgarantie-after-sales>
