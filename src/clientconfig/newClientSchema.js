@@ -81,21 +81,11 @@ module.exports.newClientSchema = {
                 type: "string"
             }
         },
-        credentials: {
-            type: "object",
-            properties: {
-                basicAuth: {
-                    type: "object",
-                    properties: {
-                        username: {
-                            type: "string"
-                        },
-                        password: {
-                            type: "string"
-                        }
-                    }
-                }
-            }
+        basicAuthUser: {
+            type: "string",
+        },
+        basicAuthPassword: {
+            type: "string"
         }
     }
 };

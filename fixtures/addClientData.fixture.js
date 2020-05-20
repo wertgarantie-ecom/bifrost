@@ -171,12 +171,8 @@ describe('add phone test shop client config', () => {
             "publicClientIds": [
                 "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"
             ],
-            "credentials": {
-                "basicAuth": {
-                    "username": "testshophandy",
-                    "password": "testshophandy"
-                }
-            }
+            "basicAuthUser": "testshophandy",
+            "basicAuthPassword": "testshophandy"
         };
 
         const response = await request(app)
@@ -225,12 +221,8 @@ describe('add bike test shop client config', () => {
             "publicClientIds": [
                 "public:5a576bd2-1953-4d20-80de-4de00d65fdc7"
             ],
-            "credentials": {
-                "basicAuth": {
-                    "username": "testshopbike",
-                    "password": "testshopbike"
-                }
-            }
+            "basicAuthUser": "testshopbike",
+            "basicAuthPassword": "testshopbike"
         };
 
         const response = await request(app)
@@ -415,12 +407,8 @@ describe('add Handyflash DEV/Local test client config', () => {
             "publicClientIds": [
                 "public:b9f303d0-74e1-11ea-b9e9-034d1bd36e8d"
             ],
-            "credentials": {
-                "basicAuth": {
-                    "username": "handyflash-dev",
-                    "password": "handyflash-dev"
-                }
-            }
+            "basicAuthUser": "handyflash-dev",
+            "basicAuthPassword": "handyflash-dev"
         };
 
         const response = await request(app)

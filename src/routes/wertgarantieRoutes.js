@@ -20,6 +20,15 @@ const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shopp
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 
+async function asyncAuthorizer(username, password, cb) {
+    // find client by username
+    const client = await clientService.findClientByUsername(username);
+    if (username === client.basicAuthUser && password === client.basicAuthPassword)
+        return cb(null, true);
+    else
+        return cb(null, false);
+}
+
 // components
 router.get("/rating", googleController.reviewRatings);
 router.put("/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), selectionPopUpController.getProducts);
@@ -51,21 +60,6 @@ const basicAuthUsers = {
 };
 basicAuthUsers.users[user] = password;
 
-// client documentation
-const clientBasicAuths = {
-    users: {}
-};
-clientService.findAllClients().then(clients => {
-    clients.map(client => {
-        if(client.credentials && client.credentials.basicAuth) {
-            clientBasicAuths.users[client.credentials.basicAuth.username] = client.credentials.basicAuth.password
-        }
-    });
-}).then(() => router.get("/clients/:clientId/documentation", basicAuth({
-    users: clientBasicAuths.users,
-    challenge: true
-}), documentationController.getClientDocumentation));
-
 // client settings
 router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
 router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients);
@@ -76,6 +70,12 @@ router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.
 router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), clientComponentTextController.saveComponentTextForClient);
 router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
+// client installation guide
+router.get("/clients/:clientId/documentation", basicAuth({
+    authorizer: asyncAuthorizer,
+    authorizeAsync: true,
+    challenge: true
+}), documentationController.getClientDocumentation);
 
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);

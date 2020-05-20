@@ -55,12 +55,8 @@ test('should create client with valid offers config', async () => {
         secrets: [
             "secret:" + uuid()
         ],
-        credentials: {
-            basicAuth: {
-                username: "test",
-                password: "test"
-            }
-        }
+        basicAuthUser: "test",
+        basicAuthPassword: "test"
     };
 
     const repository = {
@@ -90,12 +86,8 @@ test('should reject client with invalid offers config', async () => {
         secrets: [
             "secret:" + uuid()
         ],
-        credentials: {
-            basicAuth: {
-                username: "test",
-                password: "test"
-            }
-        }
+        basicAuthUser: "test",
+        basicAuthPassword: "test"
     };
 
     try {
