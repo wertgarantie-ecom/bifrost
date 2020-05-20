@@ -72,5 +72,4 @@ router.get("/productOffers/:clientId", basicAuth(basicAuthUsers), webservicesCon
 // documents
 router.get("/documents/:documentId", documentsController.getDocumentById);
 
-
 module.exports = router;
