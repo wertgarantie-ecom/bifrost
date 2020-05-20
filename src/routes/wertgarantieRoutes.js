@@ -11,12 +11,15 @@ const afterSalesController = require("../components/aftersales/afterSalesControl
 const landingPageController = require("../components/landingpage/landingPageController");
 const webservicesController = require("../backends/webservices/webservicesController");
 const documentsController = require("../documents/documentsController");
+const documentationController = require("../documentation/documentationController");
 const checkoutSchema = require("../shoppingcart/schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
 const selectionPopUpGetProductsSchema = require("../components/selectionpopup/selectionPopUpGetProductsSchema").confirmationResponseSchema;
+const clientService = require('../clientconfig/clientService');
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
+const basicAuthByClientId = require('./basicAuthByClientIdFilter');
 
 // components
 router.get("/rating", googleController.reviewRatings);
@@ -59,6 +62,9 @@ router.delete("/clients/:clientId", basicAuth(basicAuthUsers), clientController.
 router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), clientComponentTextController.saveComponentTextForClient);
 router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
+// client installation guide
+router.get("/clients/:clientId/documentation", basicAuthByClientId, documentationController.getClientDocumentation);
+
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);
 router.post("/productOffers/:clientId", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssemblyForClient);
@@ -66,5 +72,6 @@ router.get("/productOffers/:clientId", basicAuth(basicAuthUsers), webservicesCon
 
 // documents
 router.get("/documents/:documentId", documentsController.getDocumentById);
+
 
 module.exports = router;

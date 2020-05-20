@@ -80,6 +80,12 @@ module.exports.newClientSchema = {
             items: {
                 type: "string"
             }
+        },
+        basicAuthUser: {
+            type: "string",
+        },
+        basicAuthPassword: {
+            type: "string"
         }
     }
 };

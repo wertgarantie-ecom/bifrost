@@ -33,7 +33,9 @@ describe("should find persisted client properties by given secret", () => {
         ],
         publicClientIds: [
             "public:" + uuid()
-        ]
+        ],
+        basicAuthUser: "test",
+        basicAuthPassword: "test"
     };
 
 
@@ -78,7 +80,9 @@ describe("should find persisted client properties by given public client id", ()
         ],
         publicClientIds: [
             "public:" + uuid()
-        ]
+        ],
+        basicAuthUser: "test",
+        basicAuthPassword: "test"
     };
 
     test("should persist valid client data", async () => {
@@ -117,7 +121,9 @@ describe("should delete client data for client id", () => {
         },
         activePartnerNumber: 1234,
         secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
-        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort()
+        publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
+        basicAuthUser: "test1",
+        basicAuthPassword: "test1"
     };
 
     test("should persist valid client data", async () => {
@@ -224,9 +230,16 @@ describe("should handle client config for product offers", () => {
         activePartnerNumber: 1234,
         secrets: ["secret:" + uuid(), "secret:" + uuid()].sort(),
         publicClientIds: ["public:" + uuid(), "public:" + uuid()].sort(),
+        basicAuthUser: "test2",
+        basicAuthPassword: "test2"
     };
     test("persist and retrieve product offers config for client", async () => {
         const persistResult = await clientRepository.insert(clientData);
         expect(persistResult).toEqual(clientData);
+    });
+
+    test("should find client by username", async () => {
+        const clientByUsername = await clientRepository.findByUsername("test2");
+        expect(clientByUsername).toEqual(clientData);
     });
 });

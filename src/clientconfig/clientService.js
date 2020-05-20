@@ -10,6 +10,14 @@ async function findClientById(id) {
 
 exports.findClientById = findClientById;
 
+exports.findClientByUsername = async function findClientByUsername(username, repository = _repository) {
+    const client = repository.findByUsername(username);
+    if (!client) {
+        throw new InvalidClientIdError(`Could not find Client for username: ${username}`);
+    }
+    return client;
+};
+
 exports.updateWebservicesBackendConfig = async function updateWebservicesBackendConfig(clientId, newWebservicesConfig) {
     validate(newWebservicesConfig, newClientSchema.properties.backends.properties.webservices);
     const client = await findClientById(clientId);
@@ -56,7 +64,9 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         backends: createClientRequest.backends,
         activePartnerNumber: createClientRequest.activePartnerNumber,
         secrets: createClientRequest.secrets || ['secret:' + uuid()],
-        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()]
+        publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
+        basicAuthUser: createClientRequest.basicAuthUser,
+        basicAuthPassword: createClientRequest.basicAuthPassword
     };
     validate(clientData, newClientSchema);
     const persistedClientData = await repository.insert(clientData);
