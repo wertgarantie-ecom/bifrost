@@ -19,15 +19,7 @@ const clientService = require('../clientconfig/clientService');
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
-
-async function asyncAuthorizer(username, password, cb) {
-    // find client by username
-    const client = await clientService.findClientByUsername(username);
-    if (username === client.basicAuthUser && password === client.basicAuthPassword)
-        return cb(null, true);
-    else
-        return cb(null, false);
-}
+const basicAuthByClientId = require('./basicAuthByClientIdFilter');
 
 // components
 router.get("/rating", googleController.reviewRatings);
@@ -71,11 +63,7 @@ router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), cli
 router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
 // client installation guide
-router.get("/clients/:clientId/documentation", basicAuth({
-    authorizer: asyncAuthorizer,
-    authorizeAsync: true,
-    challenge: true
-}), documentationController.getClientDocumentation);
+router.get("/clients/:clientId/documentation", basicAuthByClientId, documentationController.getClientDocumentation);
 
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);
