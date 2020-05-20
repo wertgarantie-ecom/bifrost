@@ -67,7 +67,7 @@ Eine beispielhafte Integration kann hier gefunden werden: [pop-up-integration-sa
 Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
 
 ### 2. Confirmation Component
-Die Confirmation Komponente benötigt zur Initialisierung den aktuellen Handyflash Shopping Cart (zumindest alle Artikel deren deviceClass versicherbar ist).
+Die Confirmation Component benötigt zur Initialisierung den aktuellen Handyflash Shopping Cart (zumindest alle Artikel deren deviceClass versicherbar ist).
 Die Artikel müssen in einem Base64 enkodierten JSON Array übergeben werden (das zugehörige Schema ist [hier](https://github.com/wertgarantie-ecom/bifrost/blob/master/src/shoppingcart/schemas/shopProductSchema.js) zu finden). 
 
 Hier ein Beispiel Code in Javascript:
@@ -84,6 +84,11 @@ confirmationCompData.push(...shoppingCartData.products.map(product => {
 }));
 const confirmationShopOrderBase64 = Buffer.from(JSON.stringify(confirmationCompData)).toString('base64'); 
 \`\`\`
+
+Die Confirmation Component ist designed, um im Warenkorb eingebunden zu werden. Im Warenkorb wird es ein HTMLElement geben, das den Einkauf der Shop-Produkte abschließt. 
+Ein Selector dieses HTMLElements wird mit dem Attribut \`data-validation-trigger-selector\` der Komponente übergeben. Dahinter kann sich z. B. eine Form verbergen oder ein Button. Darauf setzt die Komponente automatisch einen Event-Listener auf den Event-Typ, der mit 
+dem Attribut \`data-validation-trigger-event\` (form -> "submit", button -> "click", ...) übergeben wird. Beim entsprechenden Event führt die Komponente eine Prüfung durch, ob die Einverständniserklärung bestätigt wurde, bevor die eigentliche Aktion des Shops ausgeführt wird. 
+Wurde nicht bestätigt, wird diese Aktion unterbrochen und die Komponente zeigt eine entsprechende Meldung an. Wurde bestätigt, wird der reguläre Vorgang im Shop ausgelöst.
 
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/handyflash/wertgarantie-confirmation.css">
@@ -143,6 +148,7 @@ const dataShopPurchaseData = wertgarantieCheckoutDataBuffer.toString('base64');
 \`\`\`
 
 Das Resultat (hier \`dataShopPurchaseData\`) wird mit dem HTML-Attribut \`data-shop-purchase-data\` der Komponente übergeben, die daraufhin die Versicherungsanträge übermittelt und das Ergebnis anzeigt.
+Weiterhin ist die public client ID erforderlich:
 
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/handyflash/wertgarantie-after-sales.css ">
@@ -150,7 +156,8 @@ Das Resultat (hier \`dataShopPurchaseData\`) wird mit dem HTML-Attribut \`data-s
 <wertgarantie-after-sales
                     ${bifrostUriDateAttribute} 
                     id="wertgarantie-after-sales"
-                    data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg...">
+                    data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg..."
+                    data-client-id="${client.publicClientIds[0]}>
 </wertgarantie-after-sales>
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-after-sales@1/dist/after-sales.min.js" crossorigin="anonymous"></script>
