@@ -16,6 +16,7 @@ async function basicAuthByClientId(req, res, next) {
         challenge: true
     };
     options.users[clientConfig.basicAuthUser] = clientConfig.basicAuthPassword;
+    options.users[process.env.BASIC_AUTH_USER] = process.env.BASIC_AUTH_PASSWORD;
     return basicAuth(options)(req, res, next);
 }
 
