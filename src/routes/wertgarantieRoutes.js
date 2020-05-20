@@ -15,7 +15,6 @@ const documentationController = require("../documentation/documentationControlle
 const checkoutSchema = require("../shoppingcart/schemas/checkoutSchema").checkoutSchema;
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
 const selectionPopUpGetProductsSchema = require("../components/selectionpopup/selectionPopUpGetProductsSchema").confirmationResponseSchema;
-const clientService = require('../clientconfig/clientService');
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
