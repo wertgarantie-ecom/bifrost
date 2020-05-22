@@ -8,6 +8,21 @@ const component = require('./../components').components.selectionpopup;
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 const _ = require('lodash');
+const metrics = require('../../framework/metrics')();
+
+exports.getProductOffers = async function getProductOffers(deviceClass,
+                                                           devicePrice,
+                                                           clientId,
+                                                           locale = "de",
+                                                           orderItemId,
+                                                           shoppingCart) {
+
+    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientId, locale, orderItemId, shoppingCart);
+    const resultKey = (result) ? 'success' : 'skipped';
+
+    metrics.increment(`requests.selection-pop-up.success.${resultKey}`, 1, [client.id]);
+
+}
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
@@ -32,6 +47,9 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
         products.push(product);
     });
+    if (products.length !== 2) {
+        return undefined;
+    }
 
     this.products = products;
 
@@ -41,7 +59,9 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     };
     data.texts.footerHtml = util.format(popUpTexts.footerHtml, popUpTexts.partnerShop);
 
-    return validate(data, schema);
+    const result = validate(data, schema);
+
+    return result.instance;
 };
 
 function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {

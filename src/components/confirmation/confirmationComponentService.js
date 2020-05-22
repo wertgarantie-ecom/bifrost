@@ -9,6 +9,7 @@ const validator = require('../../framework/validation/validator');
 const _ = require('lodash');
 const util = require('util');
 const _shoppingCartService = require('../../shoppingcart/shoppingCartService');
+const metrics = require('../../framework/metrics')();
 
 exports.prepareConfirmationData = async function prepareConfirmationData(wertgarantieShoppingCart,
                                                                          clientConfig,
@@ -65,7 +66,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
     if (result.orders.length <= 0) {
         return undefined;
     }
-    return validator.validate(result, confirmationResponseSchema);
+
+    const validationResult = validator.validate(result, confirmationResponseSchema);
+    metrics.increment('requests.confirmation.success', 1, [client.id]);
+    return validationResult;
 };
 
 

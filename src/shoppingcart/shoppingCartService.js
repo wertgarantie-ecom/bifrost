@@ -6,6 +6,7 @@ const webservicesInsuranceProposalService = require('../backends/webservices/web
 const ClientError = require('../errors/ClientError');
 const mailSender = require('../mails/mailSender');
 const _productOfferService = require('../productoffers/productOffersService');
+const metrics = require('../framework/metrics');
 
 
 exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId, orderId = uuid()) {
@@ -74,6 +75,16 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
     return checkoutData;
 };
+
+function sendCheckoutMetrics(clientId, checkoutData) {
+    const tags = [clientId];
+    if (checkoutData.test) {
+        tags.push('test');
+
+    }
+    metrics().increment('proposals.count', checkoutData.purchases.length, tags);
+    metrics().increment('proposals.premium.monthly', checkoutData.purchases.wertgarantieProduct.pr);
+}
 
 exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {
     function resultWitEmptyChanges(wertgarantieShoppingCart) {
