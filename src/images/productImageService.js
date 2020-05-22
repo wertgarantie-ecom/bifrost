@@ -1,12 +1,14 @@
 const productImageMapping = {
     // Smartphone
     "1dfd4549-9bdc-4285-9047-e5088272dade": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/fabian-albert-iiPOd73iCUQ-unsplash.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/matt-wojtas--baMCm2CLKM-unsplash.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/mnm-all-eMyJQVS1a3I-unsplash.jpg"
     ],
     "Smartphone": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/fabian-albert-iiPOd73iCUQ-unsplash.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/matt-wojtas--baMCm2CLKM-unsplash.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/mnm-all-eMyJQVS1a3I-unsplash.jpg"
     ],
     // Handy
     "2dc16d28-c7af-4e19-9494-1659e1c27201": [
