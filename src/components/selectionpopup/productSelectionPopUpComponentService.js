@@ -2,7 +2,6 @@ const _productImageService = require('../../images/productImageService');
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
 const documentTypes = require("../../documents/documentTypes").documentTypes;
-const _clientService = require('../../clientconfig/clientService');
 const schema = require('./productSelectionResponseSchema').productSelectionResponseSchema;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const component = require('./../components').components.selectionpopup;
@@ -12,27 +11,23 @@ const _ = require('lodash');
 
 exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
                                                                                  devicePrice,
-                                                                                 clientId,
+                                                                                 clientConfig,
                                                                                  locale = "de",
                                                                                  orderItemId,
                                                                                  shoppingCart,
                                                                                  productOffersService = _productOffersService,
                                                                                  productImageService = _productImageService,
-                                                                                 clientService = _clientService,
                                                                                  clientComponentTextService = _clientComponentTextService) {
-    const client = await clientService.findClientForPublicClientId(clientId);
-
     if (orderItemId && shoppingCart && shoppingCart.orders && _.find(shoppingCart.orders, order => order.shopProduct.orderItemId === orderItemId)) {
         return undefined;
     }
 
-
-    const productOffersData = await productOffersService.getProductOffers(client, deviceClass, devicePrice);
+    const productOffersData = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
     const productOffers = productOffersData.productOffers;
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
-    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
+    const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     productOffers.forEach((offer, idx) => {
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
         products.push(product);

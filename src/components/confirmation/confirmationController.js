@@ -5,7 +5,7 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     const wertgarantieShoppingCart = req.shoppingCart;
     const shopShoppingCart = req.body.shopShoppingCart ? JSON.parse(Buffer.from(req.body.shopShoppingCart, 'base64').toString()) : undefined;
     try {
-        const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, shopShoppingCart);
+        const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, shopShoppingCart, req.locale.language, req.clientConfig);
         if (result) {
             return res.status(200).send(result.instance);
         } else {

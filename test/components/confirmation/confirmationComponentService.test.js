@@ -167,9 +167,9 @@ test("should return proper confirmation component data for one product", async (
         testShoppingCart,
         undefined,
         undefined,
+        clientData,
         productOffersMock,
         productImageServiceMock,
-        mockClientService(clientData),
         clientComponentTextService,
         shoppingCartServiceMock);
     expect(confirmationData.instance).toEqual(expectedResponse);
@@ -222,9 +222,9 @@ test("should return proper confirmation component data for updated shoppingCart"
         testShoppingCart,
         undefined,
         undefined,
+        clientData,
         productOffersMock,
         productImageServiceMock,
-        mockClientService(clientData),
         clientComponentTextService,
         shoppingCartServiceMock
     );

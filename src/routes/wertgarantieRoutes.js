@@ -19,12 +19,13 @@ const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shopp
 const validate = require('express-jsonschema').validate;
 const basicAuth = require('express-basic-auth');
 const basicAuthByClientId = require('./basicAuthByClientIdFilter');
+const setClientConfigByPublicClientId = require('../clientconfig/publicClientIdFilter');
 
 // components
 router.get("/rating", googleController.reviewRatings);
-router.put("/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), selectionPopUpController.getProducts);
+router.put("/clients/public/:publicClientId/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), setClientConfigByPublicClientId, selectionPopUpController.getProducts);
 
-router.put("/components/confirmation", confirmationController.getConfirmationComponentData);
+router.put("/clients/public/:publicClientId/components/confirmation", setClientConfigByPublicClientId, confirmationController.getConfirmationComponentData);
 router.put("/components/confirmation/:confirmationAttribute", confirmationController.confirmAttribute);
 router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
 router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);

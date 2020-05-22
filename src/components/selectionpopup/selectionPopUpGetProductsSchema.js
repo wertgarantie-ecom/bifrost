@@ -4,8 +4,7 @@ exports.confirmationResponseSchema = {
     type: "object",
     required: [
         "deviceClass",
-        "devicePrice",
-        "clientId",
+        "devicePrice"
     ],
     properties: {
         signedShoppingCart: signedShoppingCartSchema,
@@ -14,9 +13,6 @@ exports.confirmationResponseSchema = {
         },
         devicePrice: {
             type: "integer"
-        },
-        clientId: {
-            type: "string"
         },
         orderItemId: {
             type: "string"

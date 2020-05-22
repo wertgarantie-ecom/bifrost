@@ -64,7 +64,7 @@ test("should return valid confirmation data", async () => {
         wertgarantieProductName: productOffers[0].name
     });
 
-    const response = await request.agent(app).put('/wertgarantie/components/confirmation')
+    const response = await request.agent(app).put(`/wertgarantie/clients/public/${clientData.publicClientIds[0]}/components/confirmation`)
         .send({signedShoppingCart: signedShoppingCart});
     expect(response.status).toBe(200);
     expect(response.body.signedShoppingCart).toEqual(signedShoppingCart);
