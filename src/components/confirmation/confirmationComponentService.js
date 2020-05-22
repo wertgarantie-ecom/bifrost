@@ -11,9 +11,9 @@ const util = require('util');
 const _shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.prepareConfirmationData = async function prepareConfirmationData(wertgarantieShoppingCart,
+                                                                         clientConfig,
                                                                          shopShoppingCart,
                                                                          locale = 'de',
-                                                                         clientConfig,
                                                                          productOfferService = _productOfferService,
                                                                          productImageService = _productImageService,
                                                                          clientComponentTextService = _clientComponentTextService,
@@ -29,7 +29,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
         .filter(update => update.wertgarantieProductPriceChanged === true)
         .map(update => update.id);
     const priceOfAtLeastOneProductChanged = idsOfProductsWithPriceChange.length > 0;
-    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig, component.name, locale);
+    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     const result = {
         texts: {
             boxTitle: componentTexts.boxTitle,

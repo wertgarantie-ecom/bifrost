@@ -163,15 +163,7 @@ test("should return proper confirmation component data for one product", async (
     };
 
 
-    const confirmationData = await service.prepareConfirmationData(
-        testShoppingCart,
-        undefined,
-        undefined,
-        clientData,
-        productOffersMock,
-        productImageServiceMock,
-        clientComponentTextService,
-        shoppingCartServiceMock);
+    const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, productImageServiceMock, clientComponentTextService, shoppingCartServiceMock);
     expect(confirmationData.instance).toEqual(expectedResponse);
 });
 
@@ -218,16 +210,7 @@ test("should return proper confirmation component data for updated shoppingCart"
         }
     }
 
-    const confirmationData = await service.prepareConfirmationData(
-        testShoppingCart,
-        undefined,
-        undefined,
-        clientData,
-        productOffersMock,
-        productImageServiceMock,
-        clientComponentTextService,
-        shoppingCartServiceMock
-    );
+    const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, productImageServiceMock, clientComponentTextService, shoppingCartServiceMock);
     expect(confirmationData.instance).toEqual(updatedShoppingCartExpectedResponse);
 });
 

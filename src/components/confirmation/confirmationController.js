@@ -5,7 +5,7 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     const wertgarantieShoppingCart = req.shoppingCart;
     const shopShoppingCart = req.body.shopShoppingCart ? JSON.parse(Buffer.from(req.body.shopShoppingCart, 'base64').toString()) : undefined;
     try {
-        const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, shopShoppingCart, req.locale.language, req.clientConfig);
+        const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, req.clientConfig, shopShoppingCart, req.locale.language);
         if (result) {
             return res.status(200).send(result.instance);
         } else {
@@ -21,7 +21,7 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
         const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart);
 
         if (updatedShoppingCart) {
-            const result = await confirmationService.prepareConfirmationData(updatedShoppingCart);
+            const result = await confirmationService.prepareConfirmationData(updatedShoppingCart, req.clientConfig);
             if (result) {
                 return res.status(200).send(result.instance);
             } else {

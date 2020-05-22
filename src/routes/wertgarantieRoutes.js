@@ -26,9 +26,9 @@ router.get("/rating", googleController.reviewRatings);
 router.put("/clients/public/:publicClientId/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), setClientConfigByPublicClientId, selectionPopUpController.getProducts);
 
 router.put("/clients/public/:publicClientId/components/confirmation", setClientConfigByPublicClientId, confirmationController.getConfirmationComponentData);
-router.put("/components/confirmation/:confirmationAttribute", confirmationController.confirmAttribute);
-router.delete("/components/confirmation/product", confirmationController.removeProductFromShoppingCart);
-router.delete("/components/confirmation/:confirmationAttribute", confirmationController.unconfirmAttribute);
+router.put("/clients/public/:publicClientId/components/confirmation/:confirmationAttribute", setClientConfigByPublicClientId, confirmationController.confirmAttribute);
+router.delete("/clients/public/:publicClientId/components/confirmation/product", setClientConfigByPublicClientId, confirmationController.removeProductFromShoppingCart);
+router.delete("/clients/public/:publicClientId/components/confirmation/:confirmationAttribute", setClientConfigByPublicClientId, confirmationController.unconfirmAttribute);
 
 router.get("/components/after-sales/:sessionId", afterSalesController.getAfterSalesData);
 router.post("/components/after-sales/checkout", filterAndValidateBase64EncodedWebshopData, afterSalesController.componentCheckout);
