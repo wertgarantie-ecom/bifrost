@@ -76,10 +76,10 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
     test("should get proper after sales component data", async () => {
         const result = await request(app).get('/wertgarantie/components/after-sales/' + sessionId).set('X-wertgarantie-session-id', sessionId);
         const resultBody = result.body;
-        expect(resultBody.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
-        expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+        expect(resultBody.texts.success.title).toEqual('Länger Freude am Einkauf');
+        expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte werden übermittelt');
         expect(resultBody.texts.success.contractNumber).toEqual('Auftragsnummer:');
-        expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
+        expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte');
         expect(resultBody.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
         expect(resultBody.successfulOrders.length).toEqual(1);
         expect(resultBody.successfulOrders[0]).toEqual({
@@ -163,10 +163,10 @@ describe("Check Checkout via after sales component ", () => {
                 signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart)
             });
         const resultBody = result.body;
-        expect(resultBody.texts.success.title).toEqual('Dein Einkauf wurde erfolgreich versichert!');
-        expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte wurden versichert:');
+        expect(resultBody.texts.success.title).toEqual('Länger Freude am Einkauf');
+        expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte werden übermittelt');
         expect(resultBody.texts.success.contractNumber).toEqual('Auftragsnummer:');
-        expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte:');
+        expect(resultBody.texts.success.nextStepsTitle).toEqual('Die nächsten Schritte');
         expect(resultBody.texts.success.nextSteps).toEqual(["E-Mail-Postfach überprüfen", "Mit wenigen Schritten absichern", "Sofortige Hilfe erhalten, wenn es zählt"]);
         expect(resultBody.successfulOrders.length).toEqual(1);
         expect(resultBody.successfulOrders[0]).toEqual({

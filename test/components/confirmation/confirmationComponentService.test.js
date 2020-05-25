@@ -78,11 +78,11 @@ const expectedResponse = {
     showPriceChangedWarning: false,
     texts: {
         boxTitle: "Versicherung",
-        title: 'Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!',
+        title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
         confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
-        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
     },
     orders: [
         {
@@ -120,11 +120,11 @@ const updatedShoppingCartExpectedResponse = {
     showPriceChangedWarning: true,
     texts: {
         boxTitle: "Versicherung",
-        title: 'Glückwunsch! Du hast den besten Schutz für deinen Einkauf ausgewählt!',
+        title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
         confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
-        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung meiner Daten an Wertgarantie stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
     },
     orders: [
         {

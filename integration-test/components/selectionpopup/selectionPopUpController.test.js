@@ -141,7 +141,7 @@ test('should return proper product data', async () => {
             "showDetailsText": "Details anzeigen",
             "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
             "furtherInformation": "Weitere Informationen:",
-            "title": "Vergessen Sie nicht Ihren Rundumschutz",
+            "title": "Vergessen Sie nicht Ihren Wertgarantie Rundumschutz",
             "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
             "documents": {
                 "GTCI": "Allgemeine Versicherungsbedingungen",
