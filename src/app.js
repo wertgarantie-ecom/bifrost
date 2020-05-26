@@ -16,6 +16,8 @@ const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
 const detectBase64EncodedRequestBody = require('./shoppingcart/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
 const checkSessionIdCheckout = require('./shoppingcart/shoppingCartRequestFilter').checkSessionIdCheckout;
 const validateShoppingCartRequest = require('./shoppingcart/shoppingCartRequestFilter').validateShoppingCart;
+const basicAuth = require('express-basic-auth');
+const adminRoutes = require('./routes/adminUIRoutes');
 
 const app = express();
 
@@ -46,6 +48,17 @@ app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', checkSessionIdCheckout);
 app.use('/wertgarantie/', validateShoppingCartRequest);
 app.use('/wertgarantie/', wertgarantieRoutes);
+
+const user = process.env.BASIC_AUTH_USER;
+const password = process.env.BASIC_AUTH_PASSWORD;
+const basicAuthUsers = {};
+basicAuthUsers[user] = password;
+
+app.use('/admin/', basicAuth({
+    users: basicAuthUsers,
+    challenge: true
+}));
+app.use('/admin/', adminRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
