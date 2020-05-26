@@ -11,8 +11,9 @@ beforeAll(() => {
 });
 
 test('should reject confirm request for missing shopping cart', async () => {
+    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
     const result = await request(app)
-        .put("/wertgarantie/components/confirmation/confirm")
+        .put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/confirm`)
         .send({signedShoppingCart: {}})
         .set('Accept', 'application/json');
 
@@ -20,10 +21,11 @@ test('should reject confirm request for missing shopping cart', async () => {
 });
 
 test('should handle shopping cart confirmation', async function () {
+    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
     const agent = request.agent(app);
     const signedShoppingCart = testhelper.createSignedShoppingCart();
 
-    const result = await agent.put('/wertgarantie/components/confirmation/termsAndConditionsConfirmed')
+    const result = await agent.put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/termsAndConditionsConfirmed`)
         .send({signedShoppingCart: signedShoppingCart})
         .set('Accept', 'application/json');
 
@@ -32,18 +34,20 @@ test('should handle shopping cart confirmation', async function () {
 });
 
 describe('should handle shopping cart confirmation rejection', function () {
+    let clientData;
     const agent = request.agent(app);
     const signedShoppingCart = testhelper.createSignedShoppingCart();
 
     it('confirm shopping cart', async function () {
-        const result = await agent.put('/wertgarantie/components/confirmation/termsAndConditionsConfirmed')
+        clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+        const result = await agent.put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/termsAndConditionsConfirmed`)
             .send({signedShoppingCart: signedShoppingCart})
             .set('Accept', 'application/json');
         expect(result.status).toBe(200);
     });
 
     it('unconfirm shopping cart', async function () {
-        const result = await agent.delete('/wertgarantie/components/confirmation/termsAndConditionsConfirmed')
+        const result = await agent.delete(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/termsAndConditionsConfirmed`)
             .send({signedShoppingCart: signedShoppingCart})
             .set('Accept', 'application/json');
 
@@ -64,7 +68,7 @@ test("should return valid confirmation data", async () => {
         wertgarantieProductName: productOffers[0].name
     });
 
-    const response = await request.agent(app).put('/wertgarantie/components/confirmation')
+    const response = await request.agent(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation`)
         .send({signedShoppingCart: signedShoppingCart});
     expect(response.status).toBe(200);
     expect(response.body.signedShoppingCart).toEqual(signedShoppingCart);
@@ -93,7 +97,7 @@ test("should remove order from shopping cart", async () => {
         quantity: 2
     });
 
-    const response = await request.agent(app).delete('/wertgarantie/components/confirmation/product')
+    const response = await request.agent(app).delete(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/product`)
         .send({
             orderId: signedShoppingCart.shoppingCart.orders[0].id,
             signedShoppingCart: signedShoppingCart
@@ -134,7 +138,7 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
 
     const expectedPrice = await productOffersService.getPriceForSelectedProductOffer(clientData, deviceClass, selectedWertgarantieProduct, shopShoppingCart[0].price, wertgarantieOrder.wertgarantieProduct.paymentInterval);
 
-    const response = await request.agent(app).put('/wertgarantie/components/confirmation')
+    const response = await request.agent(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation`)
         .send({
             signedShoppingCart: signedShoppingCart,
             shopShoppingCart: encodedShopShoppingCart

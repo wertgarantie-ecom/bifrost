@@ -12,12 +12,13 @@ const localeFilter = require('./framework/localeRequestFilter');
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
 
-const wertgarantieRoutes = require('./routes/wertgarantieRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const ecommerceRoutes = require('./routes/ecommerceRoutes');
 const detectBase64EncodedRequestBody = require('./shoppingcart/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
 const checkSessionIdCheckout = require('./shoppingcart/shoppingCartRequestFilter').checkSessionIdCheckout;
 const validateShoppingCartRequest = require('./shoppingcart/shoppingCartRequestFilter').validateShoppingCart;
 const basicAuth = require('express-basic-auth');
-const adminRoutes = require('./routes/adminUIRoutes');
+const adminUIRoutes = require('./routes/adminUIRoutes');
 
 const app = express();
 
@@ -47,7 +48,8 @@ app.use('/heroku', require('./heroku/herokuController'));
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', checkSessionIdCheckout);
 app.use('/wertgarantie/', validateShoppingCartRequest);
-app.use('/wertgarantie/', wertgarantieRoutes);
+app.use('/wertgarantie/', adminRoutes);
+app.use('/wertgarantie/ecommerce/', ecommerceRoutes);
 
 const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;
@@ -58,7 +60,7 @@ app.use('/admin/', basicAuth({
     users: basicAuthUsers,
     challenge: true
 }));
-app.use('/admin/', adminRoutes);
+app.use('/admin/', adminUIRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -2,7 +2,6 @@ const productOfferFormattingService = require('../../productoffers/productOfferF
 const _productOfferService = require('../../productoffers/productOffersService');
 const documentTypes = require('../../documents/documentTypes').documentTypes;
 const _productImageService = require('../../images/productImageService');
-const defaultClientService = require('../../clientconfig/clientService');
 const component = require('../components').components.confirmation;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const confirmationResponseSchema = require('./confirmationResponseSchema').confirmationResponseSchema;
@@ -12,27 +11,25 @@ const util = require('util');
 const _shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.prepareConfirmationData = async function prepareConfirmationData(wertgarantieShoppingCart,
+                                                                         clientConfig,
                                                                          shopShoppingCart,
                                                                          locale = 'de',
                                                                          productOfferService = _productOfferService,
                                                                          productImageService = _productImageService,
-                                                                         clientService = defaultClientService,
                                                                          clientComponentTextService = _clientComponentTextService,
                                                                          shoppingCartService = _shoppingCartService) {
     if (!wertgarantieShoppingCart) {
         return undefined;
     }
 
-    const client = await clientService.findClientForPublicClientId(wertgarantieShoppingCart.publicClientId);
-
-    const updateResult = await shoppingCartService.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, client);
+    const updateResult = await shoppingCartService.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig);
     const updatedWertgarantieShoppingCart = updateResult.shoppingCart;
 
     const idsOfProductsWithPriceChange = updateResult.changes.updated
         .filter(update => update.wertgarantieProductPriceChanged === true)
         .map(update => update.id);
     const priceOfAtLeastOneProductChanged = idsOfProductsWithPriceChange.length > 0;
-    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(client.id, component.name, locale);
+    const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     const result = {
         texts: {
             boxTitle: componentTexts.boxTitle,
@@ -53,7 +50,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
 
     for (var i = 0; i < updatedWertgarantieShoppingCart.orders.length; i++) {
         const order = updatedWertgarantieShoppingCart.orders[i];
-        const confirmationProductData = await getConfirmationProductData(order, client, locale, productOfferService, productImageService, componentTexts, idsOfProductsWithPriceChange);
+        const confirmationProductData = await getConfirmationProductData(order, clientConfig, locale, productOfferService, productImageService, componentTexts, idsOfProductsWithPriceChange);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;

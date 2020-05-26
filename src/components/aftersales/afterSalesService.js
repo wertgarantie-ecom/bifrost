@@ -37,13 +37,12 @@ exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, 
     return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
 };
 
-exports.checkout = async function checkout(shoppingCart, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
-    const clientData = await clientService.findClientForPublicClientId(shoppingCart.publicClientId);
-    const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientData, shoppingCart.sessionId);
+exports.checkout = async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+    const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientConfig, shoppingCart.sessionId);
     if (!sessionIdValid) {
         throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");
     }
 
-    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientData);
+    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig);
     return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
 };

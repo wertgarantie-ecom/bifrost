@@ -15,7 +15,7 @@ exports.getAfterSalesData = async function getAfterSalesData(req, res, next) {
 
 exports.componentCheckout = async function componentCheckout(req, res, next) {
     try {
-        const result = await afterSalesService.checkout(req.shoppingCart, req.body.webshopData);
+        const result = await afterSalesService.checkout(req.shoppingCart, req.clientConfig, req.body.webshopData);
         res.set('X-wertgarantie-shopping-cart-delete', true);
         if (!result) {
             return res.sendStatus(204);

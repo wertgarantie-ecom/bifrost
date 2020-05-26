@@ -37,6 +37,9 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
 };
 
 exports.findClientForPublicClientId = async function findClientForPublicClientId(publicClientId) {
+    if (!publicClientId) {
+        throw new InvalidClientIdError(`Could not find Client for specified public client ID: ${publicClientId}`);
+    }
     const client = await _repository.findClientForPublicClientId(publicClientId);
     if (!client) {
         throw new InvalidClientIdError(`Could not find Client for specified public client ID: ${publicClientId}`);
