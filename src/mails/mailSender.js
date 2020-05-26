@@ -29,7 +29,7 @@ async function sendReportMailToShop(shopName, shopMailAddress, purchase, shopOrd
 async function sendMail(to, subject, body, mailgunOptions) {
     const mailgun = Mailgun(mailgunOptions);
     const data = {
-        from: 'ecommerce.wertgarantie.com <me@samples.mailgun.org>',
+        from: 'e-insurance.wertgarantie.com <no-reply@e-insurance.wertgarantie.com>',
         to: to,
         bcc: process.env.BIFROST_EMAIL_ADDRESS,
         subject: subject,
