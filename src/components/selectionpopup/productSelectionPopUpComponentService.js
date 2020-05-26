@@ -12,27 +12,27 @@ const metrics = require('../../framework/metrics')();
 
 exports.getProductOffers = async function getProductOffers(deviceClass,
                                                            devicePrice,
-                                                           clientId,
+                                                           clientConfig,
                                                            locale = "de",
                                                            orderItemId,
                                                            shoppingCart) {
 
-    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientId, locale, orderItemId, shoppingCart);
+    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, orderItemId, shoppingCart);
     const resultKey = (result) ? 'success' : 'skipped';
 
-    metrics.increment(`requests.selection-pop-up.success.${resultKey}`, 1, [client.id]);
-
+    metrics.increment(`requests.selection-pop-up.${resultKey}`, 1, [clientConfig.id]);
+    return result;
 }
 
-exports.prepareProductSelectionData = async function prepareProductSelectionData(deviceClass,
-                                                                                 devicePrice,
-                                                                                 clientConfig,
-                                                                                 locale = "de",
-                                                                                 orderItemId,
-                                                                                 shoppingCart,
-                                                                                 productOffersService = _productOffersService,
-                                                                                 productImageService = _productImageService,
-                                                                                 clientComponentTextService = _clientComponentTextService) {
+async function prepareProductSelectionData(deviceClass,
+                                           devicePrice,
+                                           clientConfig,
+                                           locale = "de",
+                                           orderItemId,
+                                           shoppingCart,
+                                           productOffersService = _productOffersService,
+                                           productImageService = _productImageService,
+                                           clientComponentTextService = _clientComponentTextService) {
     if (orderItemId && shoppingCart && shoppingCart.orders && _.find(shoppingCart.orders, order => order.shopProduct.orderItemId === orderItemId)) {
         return undefined;
     }
@@ -62,7 +62,10 @@ exports.prepareProductSelectionData = async function prepareProductSelectionData
     const result = validate(data, schema);
 
     return result.instance;
-};
+}
+
+exports.prepareProductSelectionData = prepareProductSelectionData;
+
 
 function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {
     const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);

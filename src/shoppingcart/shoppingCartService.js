@@ -73,6 +73,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
 
     await repository.persist(checkoutData);
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
+    sendCheckoutMetrics(clientConfig.id, checkoutData);
     return checkoutData;
 };
 
@@ -83,7 +84,6 @@ function sendCheckoutMetrics(clientId, checkoutData) {
 
     }
     metrics().increment('proposals.count', checkoutData.purchases.length, tags);
-    metrics().increment('proposals.premium.monthly', checkoutData.purchases.wertgarantieProduct.pr);
 }
 
 exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {

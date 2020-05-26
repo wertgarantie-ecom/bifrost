@@ -68,7 +68,7 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
     }
 
     const validationResult = validator.validate(result, confirmationResponseSchema);
-    metrics.increment('requests.confirmation.success', 1, [client.id]);
+    metrics.increment('requests.confirmation.success', 1, [clientConfig.id]);
     return validationResult;
 };
 

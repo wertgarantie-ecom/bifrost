@@ -8,7 +8,7 @@ function metrics() {
             return dogstasD;
         } else {
             dogstasD = new StatsD({
-                mock: true,
+                mock: process.env.METRICS_MOCK,
                 globalTags: {env: process.env.NODE_ENV},
             });
             return dogstasD;

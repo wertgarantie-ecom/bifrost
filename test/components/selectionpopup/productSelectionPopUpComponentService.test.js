@@ -14,11 +14,6 @@ const clientData =
         publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
     };
 
-function mockClientService(clientData) {
-    return {
-        findClientForPublicClientId: jest.fn(() => clientData)
-    }
-}
 
 test("should return proper product response", async () => {
     const mockProductOfferService = {
@@ -146,8 +141,7 @@ test("should return proper product response", async () => {
             }],
 
     };
-    expect(result.valid).toEqual(true);
-    expect(result.instance).toEqual(expectedResult);
+    expect(result).toEqual(expectedResult);
 });
 
 test('should return undefined if orderItemId is already included in shoppingCart', async () => {
