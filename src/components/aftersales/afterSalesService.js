@@ -23,7 +23,7 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
         return undefined;
     }
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(checkoutData.clientId, component.name, locale);
-    metrics.increment('requests.after-sales.success', 1, [checkoutData.clientId]);
+    metrics.increment('requests.after-sales.success', 1, [checkoutData.name]);
     return {
         texts: componentTexts,
         successfulOrders: successfulOrders,

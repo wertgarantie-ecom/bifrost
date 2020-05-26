@@ -73,12 +73,12 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
 
     await repository.persist(checkoutData);
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
-    sendCheckoutMetrics(clientConfig.id, checkoutData);
+    sendCheckoutMetrics(clientConfig, checkoutData);
     return checkoutData;
 };
 
-function sendCheckoutMetrics(clientId, checkoutData) {
-    const tags = [clientId];
+function sendCheckoutMetrics(clientConfig, checkoutData) {
+    const tags = [clientConfig.name];
     if (checkoutData.test) {
         tags.push('test');
 

@@ -20,7 +20,7 @@ exports.getProductOffers = async function getProductOffers(deviceClass,
     const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, orderItemId, shoppingCart);
     const resultKey = (result) ? 'success' : 'skipped';
 
-    metrics.increment(`requests.selection-pop-up.${resultKey}`, 1, [clientConfig.id]);
+    metrics.increment(`requests.selection-pop-up.${resultKey}`, 1, [clientConfig.name]);
     return result;
 }
 
