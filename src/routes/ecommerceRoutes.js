@@ -21,6 +21,8 @@ router.get("/rating", googleController.reviewRatings);
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
 
 router.put("/clients/:publicClientId/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), setClientConfigByPublicClientId, selectionPopUpController.getProducts);
+router.post("/clients/:publicClientId/components/selection-popup/cancel", setClientConfigByPublicClientId, selectionPopUpController.popUpCanceled);
+
 router.put("/clients/:publicClientId/components/confirmation", setClientConfigByPublicClientId, confirmationController.getConfirmationComponentData);
 router.put("/clients/:publicClientId/components/confirmation/:confirmationAttribute", setClientConfigByPublicClientId, confirmationController.confirmAttribute);
 router.delete("/clients/:publicClientId/components/confirmation/product", setClientConfigByPublicClientId, confirmationController.removeProductFromShoppingCart);
