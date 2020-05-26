@@ -18,7 +18,7 @@ const detectBase64EncodedRequestBody = require('./shoppingcart/shoppingCartReque
 const checkSessionIdCheckout = require('./shoppingcart/shoppingCartRequestFilter').checkSessionIdCheckout;
 const validateShoppingCartRequest = require('./shoppingcart/shoppingCartRequestFilter').validateShoppingCart;
 const basicAuth = require('express-basic-auth');
-const adminRoutes = require('./routes/adminUIRoutes');
+const adminUIRoutes = require('./routes/adminUIRoutes');
 
 const app = express();
 
@@ -60,7 +60,7 @@ app.use('/admin/', basicAuth({
     users: basicAuthUsers,
     challenge: true
 }));
-app.use('/admin/', adminRoutes);
+app.use('/admin/', adminUIRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
