@@ -9,7 +9,7 @@ test('should return shopping cart with selected product included', async () => {
     const client = await testhelper.createAndPersistDefaultClient();
     const wertgarantieProductId = uuid();
     const orderItemId = uuid();
-    const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
+    const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
             shopProduct: {
                 model: "Phone X",
@@ -34,7 +34,8 @@ test('should return shopping cart with selected product included', async () => {
 });
 
 test('should fail when invalid request params are submitted', async () => {
-    return request(app).post('/wertgarantie/shoppingCart/43446A56-3546-416D-B942-1262CA0526FB')
+    const client = await testhelper.createAndPersistDefaultClient();
+    return request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
             "productId": 12,
             "devicePrice": 45.0,
@@ -88,7 +89,7 @@ describe("Checkout Shopping Cart", () => {
             }
         });
 
-        const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        const result = await request(app).post("/wertgarantie/ecommerce/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
                     price: 139999,
@@ -156,7 +157,7 @@ describe("Checkout Shopping Cart", () => {
 });
 
 test("should handle empty wertgarantieShoppingCart with info message", (done) => {
-    return request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+    return request(app).post("/wertgarantie/ecommerce/shoppingCarts/current/checkout")
         .send({
             purchasedProducts: [],
             customer: {
@@ -180,7 +181,7 @@ test("should handle empty wertgarantieShoppingCart with info message", (done) =>
 });
 
 test("should handle invalid JSON in wertgarantieShoppingCart with status 400", async () => {
-    const result = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+    const result = await request(app).post("/wertgarantie/ecommerce/shoppingCarts/current/checkout")
         .send({
             purchasedProducts: [],
             customer: {
@@ -205,7 +206,7 @@ test("should add multiple orders to shopping cart", async () => {
     const client = await testhelper.createAndPersistDefaultClient();
     const signedShoppingCart = testhelper.createSignedShoppingCart();
     const wertgarantieProductId = uuid();
-    const result = await request(app).post('/wertgarantie/shoppingCart/' + client.publicClientIds[0])
+    const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
             shopProduct: {
                 model: "Phone X",

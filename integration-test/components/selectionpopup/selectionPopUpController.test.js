@@ -15,7 +15,7 @@ test('should return proper product data', async () => {
     nockhelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
 
     const expectedStatusCode = 200;
-    const result = await request(app).put(`/wertgarantie/clients/public/${clientData.publicClientIds[0]}/components/selection-popup`).send({
+    const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-popup`).send({
         deviceClass: "Test",
         devicePrice: 120000
     });
@@ -175,7 +175,7 @@ test('should return 204 if given orderItemId is already included in existing sho
     nockhelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
 
     const expectedStatusCode = 204;
-    const result = await request(app).put(`/wertgarantie/clients/public/${clientData.publicClientIds[0]}/components/selection-popup`).send({
+    const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-popup`).send({
         signedShoppingCart: signedShoppingCart,
         deviceClass: "Test",
         devicePrice: 120000,

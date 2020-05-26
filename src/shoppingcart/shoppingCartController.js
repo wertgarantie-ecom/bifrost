@@ -1,5 +1,4 @@
 const service = require('./shoppingCartService');
-const clientRepository = require('../clientconfig/clientRepository');
 const clientService = require('../clientconfig/clientService');
 const ClientError = require('../errors/ClientError');
 
@@ -7,14 +6,7 @@ const ClientError = require('../errors/ClientError');
  * Add given product to existing or new shopping cart.
  */
 exports.addProductToShoppingCart = async function addProductToShoppingCart(req, res) {
-    const publicClientId = req.params.clientId;
-    const client = await clientRepository.findClientForPublicClientId(publicClientId);
-    if (!client) {
-        return res.status(400).send({
-            message: "Unknown Client Id"
-        });
-    }
-    const shoppingCart = service.addProductToShoppingCart(req.shoppingCart, req.body, publicClientId);
+    const shoppingCart = service.addProductToShoppingCart(req.shoppingCart, req.body, req.clientConfig.id);
 
     res.status(200).send({
         shoppingCart: shoppingCart,

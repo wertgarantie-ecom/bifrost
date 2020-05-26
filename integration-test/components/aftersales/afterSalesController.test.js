@@ -48,7 +48,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
             }
         });
 
-        const response = await request(app).post("/wertgarantie/shoppingCarts/current/checkout")
+        const response = await request(app).post("/wertgarantie/ecommerce/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
                     price: 139999,
@@ -74,7 +74,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
     });
 
     test("should get proper after sales component data", async () => {
-        const result = await request(app).get('/wertgarantie/components/after-sales/' + sessionId).set('X-wertgarantie-session-id', sessionId);
+        const result = await request(app).get(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/after-sales/${sessionId}`).set('X-wertgarantie-session-id', sessionId);
         const resultBody = result.body;
         expect(resultBody.texts.success.title).toEqual('Länger Freude am Einkauf');
         expect(resultBody.texts.success.subtitle).toEqual('Folgende Geräte werden übermittelt');
@@ -157,7 +157,7 @@ describe("Check Checkout via after sales component ", () => {
         });
         const base64WebshopData = Buffer.from(JSON.stringify(webshopData)).toString('base64');
 
-        const result = await request(app).post("/wertgarantie/components/after-sales/checkout")
+        const result = await request(app).post(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/after-sales/checkout`)
             .send({
                 webshopData: base64WebshopData,
                 signedShoppingCart: signatureService.signShoppingCart(wertgarantieShoppingCart)
