@@ -6,6 +6,7 @@ const webservicesInsuranceProposalService = require('../backends/webservices/web
 const ClientError = require('../errors/ClientError');
 const mailSender = require('../mails/mailSender');
 const _productOfferService = require('../productoffers/productOffersService');
+const metrics = require('../framework/metrics');
 
 
 exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId, orderId = uuid()) {
@@ -72,8 +73,18 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
 
     await repository.persist(checkoutData);
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
+    sendCheckoutMetrics(clientConfig.id, checkoutData);
     return checkoutData;
 };
+
+function sendCheckoutMetrics(clientId, checkoutData) {
+    const tags = [clientId];
+    if (checkoutData.test) {
+        tags.push('test');
+
+    }
+    metrics().increment('proposals.count', checkoutData.purchases.length, tags);
+}
 
 exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {
     function resultWitEmptyChanges(wertgarantieShoppingCart) {

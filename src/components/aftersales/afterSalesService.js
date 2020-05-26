@@ -6,6 +6,7 @@ const clientService = require('../../clientconfig/clientService');
 const _productImageService = require('../../images/productImageService');
 const component = require('../components').components.aftersales;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
+const metrics = require('../../framework/metrics')();
 
 async function getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) {
     const successfulOrders = [];
@@ -22,6 +23,7 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
         return undefined;
     }
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(checkoutData.clientId, component.name, locale);
+    metrics.increment('requests.after-sales.success', 1, [checkoutData.clientId]);
     return {
         texts: componentTexts,
         successfulOrders: successfulOrders,

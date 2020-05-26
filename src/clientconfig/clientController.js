@@ -1,6 +1,9 @@
 const clientService = require('./clientService');
+var StatsD = require('hot-shots');
+var dogstatsd = new StatsD({mock: true});
 
 exports.addNewClient = async function addNewClient(req, res, next) {
+
     const requestBody = req.body;
     try {
         const result = await clientService.addNewClient(requestBody);
