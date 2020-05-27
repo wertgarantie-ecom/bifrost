@@ -84,12 +84,6 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
 };
 
 function sendCheckoutMetrics(clientConfig, checkoutData) {
-    const tags = ["client:" + clientConfig.name];
-    if (checkoutData.test) {
-        tags.push('test:true');
-
-    }
-    metrics().increment('proposals.count', checkoutData.purchases.length, tags);
 }
 
 exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {

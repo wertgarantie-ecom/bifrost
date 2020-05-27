@@ -7,6 +7,7 @@ const _productImageService = require('../../images/productImageService');
 const component = require('../components').components.aftersales;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const metrics = require('../../framework/metrics')();
+const aftersales = require('../components').components.aftersales.name;
 
 async function getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) {
     const successfulOrders = [];
@@ -23,20 +24,20 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
         return undefined;
     }
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(checkoutData.clientId, component.name, locale);
-    metrics.increment('requests.after-sales.success', 1, ["client:" + checkoutData.name]);
     return {
         texts: componentTexts,
         successfulOrders: successfulOrders,
     };
 }
 
-exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, locale = 'de', checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, clientConfig, locale = 'de', checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const checkoutData = await checkoutRepository.findBySessionId(sessionId);
     if (!checkoutData) {
         return undefined;
     }
 
-    return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+    const result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+    metrics().incrementComponentRequest(aftersales, "display", "canceled", clientConfig.name);
 };
 
 exports.checkout = async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {

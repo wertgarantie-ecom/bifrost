@@ -1,5 +1,6 @@
 const _service = require('./productSelectionPopUpComponentService.js');
 const metrics = require('../../framework/metrics');
+const selectionpopup = require('../components').components.selectionpopup.name;
 
 exports.getProducts = async function getProducts(req, res, next, service = _service) {
     const deviceClass = req.body.deviceClass;
@@ -18,6 +19,6 @@ exports.getProducts = async function getProducts(req, res, next, service = _serv
 
 exports.popUpCanceled = async function popUpCanceled(req, res) {
     const clientConfig = req.clientConfig;
-    metrics().increment(`requests.selection-pop-up.cancel`, 1, ["client:" + clientConfig.name]);
+    metrics().incrementComponentRequest(selectionpopup, "cancel", "canceled", clientConfig.name);
     return res.sendStatus(204);
 };
