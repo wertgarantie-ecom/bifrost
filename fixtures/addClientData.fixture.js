@@ -48,7 +48,7 @@ describe('add phone test shop client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 },
@@ -66,7 +66,7 @@ describe('add phone test shop client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 }
@@ -117,7 +117,7 @@ describe('add phone test shop client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 },
@@ -135,7 +135,7 @@ describe('add phone test shop client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 }
@@ -211,7 +211,253 @@ describe('add bike test shop client config', () => {
                 "webservices": {
                     "username": "test-bike-user",
                     "password": "test-bike-password",
-                    "productOffersConfigurations": []
+                    "productOffersConfigurations": [
+                        {
+                            "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+                            "productType": "KOMPLETTSCHUTZ_RAD_M_2018",
+                            "applicationCode": "GU WG DE RAD KS 0818",
+                            "basicRiskType": "KOMPLETTSCHUTZ_RAD",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "27",
+                                    "objectCodeExternal": "Bike",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 50001
+                                        },
+                                        {
+                                            "minClose": 50001,
+                                            "maxOpen": 75001
+                                        },
+                                        {
+                                            "minClose": 75001,
+                                            "maxOpen": 100001
+                                        },
+                                        {
+                                            "minClose": 100001,
+                                            "maxOpen": 150001
+                                        },
+                                        {
+                                            "minClose": 150001,
+                                            "maxOpen": 200001
+                                        },
+                                        {
+                                            "minClose": 200001,
+                                            "maxOpen": 400000
+                                        }
+                                    ]
+                                }
+
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ],
+                                "comparisonDocuments": []
+                            },
+                            "advantages": [
+                                "Verschleiß / Abnutzung / Alterung der Reifen und Schläuche (ab dem 7. Monat)",
+                                "Materialfehler",
+                                "Konstruktionsfehler",
+                                "Produktionsfehler",
+                                "Reparaturkosten",
+                                "Unsachgemäße Handhabung",
+                                "Vandalismus",
+                                "Fall- und Sturzschäden",
+                                "Unfallschäden",
+                                "Diebstahl des Fahrrads",
+                                "Teilediebstahl"
+                            ],
+                            "risks": []
+                        },
+                        {
+                            "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                            "productType": "KOMPLETTSCHUTZ_RAD_J_2018",
+                            "applicationCode": "GU WG DE RAD KS 0818",
+                            "basicRiskType": "KOMPLETTSCHUTZ_RAD",
+                            "defaultPaymentInterval": "yearly",
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "27",
+                                    "objectCodeExternal": "Bike",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 50001
+                                        },
+                                        {
+                                            "minClose": 50001,
+                                            "maxOpen": 75001
+                                        },
+                                        {
+                                            "minClose": 75001,
+                                            "maxOpen": 100001
+                                        },
+                                        {
+                                            "minClose": 100001,
+                                            "maxOpen": 150001
+                                        },
+                                        {
+                                            "minClose": 150001,
+                                            "maxOpen": 200001
+                                        },
+                                        {
+                                            "minClose": 200001,
+                                            "maxOpen": 400000
+                                        }
+                                    ]
+                                }
+
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ],
+                                "comparisonDocuments": []
+                            },
+                            "advantages": [
+                                "Materialfehler",
+                                "Konstruktionsfehler",
+                                "Produktionsfehler",
+                                "Reparaturkosten",
+                                "Unsachgemäße Handhabung",
+                                "Vandalismus",
+                                "Fall- und Sturzschäden",
+                                "Unfallschäden",
+                                "Diebstahl des Fahrrads",
+                                "Teilediebstahl"
+                            ],
+                            "risks": []
+                        },
+                        {
+                            "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+                            "productType": "KOMPLETTSCHUTZ_EBIKE_M_2018",
+                            "applicationCode": "GU WG DE RAD EBS 0818",
+                            "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
+                            "defaultPaymentInterval": "monthly",
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "270009",
+                                    "objectCodeExternal": "E-Bike",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 150001
+                                        },
+                                        {
+                                            "minClose": 150001,
+                                            "maxOpen": 300001
+                                        },
+                                        {
+                                            "minClose": 300001,
+                                            "maxOpen": 400001
+                                        },
+                                        {
+                                            "minClose": 400001,
+                                            "maxOpen": 600000
+                                        }
+                                    ]
+                                }
+
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ],
+                                "comparisonDocuments": []
+                            },
+                            "advantages": [
+                                "Verschleiß / Abnutzung / Alterung der Reifen und Schläuche (ab dem 7. Monat)",
+                                "Materialfehler",
+                                "Konstruktionsfehler",
+                                "Produktionsfehler",
+                                "Reparaturkosten",
+                                "Unsachgemäße Handhabung",
+                                "Vandalismus",
+                                "Verschleiß am eBike / Pedelec (ab dem 07. Monat)",
+                                "Verschleiß am Akku (ab dem 13. Monat)",
+                                "Wasser-/Feuchtigkeitsschäden",
+                                "Elektronikschäden",
+                                "Fall- und Sturzschäden",
+                                "Pick-up-Service",
+                                "Akku-Defekte",
+                                "Unfallschäden",
+                                "Diebstahl des E-Bikes/Pedelecs",
+                                "Teilediebstahl"
+                            ],
+                            "risks": []
+                        },                        {
+                            "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+                            "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
+                            "applicationCode": "GU WG DE RAD EBS 0818",
+                            "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
+                            "defaultPaymentInterval": "yearly",
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "270009",
+                                    "objectCodeExternal": "E-Bike",
+                                    "priceRanges": [
+                                        {
+                                            "minClose": 0,
+                                            "maxOpen": 150001
+                                        },
+                                        {
+                                            "minClose": 150001,
+                                            "maxOpen": 300001
+                                        },
+                                        {
+                                            "minClose": 300001,
+                                            "maxOpen": 400001
+                                        },
+                                        {
+                                            "minClose": 400001,
+                                            "maxOpen": 600000
+                                        }
+                                    ]
+                                }
+
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ],
+                                "comparisonDocuments": []
+                            },
+                            "advantages": [
+                                "Materialfehler",
+                                "Konstruktionsfehler",
+                                "Produktionsfehler",
+                                "Reparaturkosten",
+                                "Unsachgemäße Handhabung",
+                                "Vandalismus",
+                                "Verschleiß am eBike / Pedelec (ab dem 07. Monat)",
+                                "Verschleiß am Akku (ab dem 13. Monat)",
+                                "Wasser-/Feuchtigkeitsschäden",
+                                "Elektronikschäden",
+                                "Fall- und Sturzschäden",
+                                "Pick-up-Service",
+                                "Akku-Defekte",
+                                "Unfallschäden",
+                                "Diebstahl des E-Bikes/Pedelecs",
+                                "Teilediebstahl"
+                            ],
+                            "risks": []
+                        }
+                    ]
                 }
             },
             "activePartnerNumber": 22222,
@@ -284,7 +530,7 @@ describe('add Handyflash DEV/Local test client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 },
@@ -302,7 +548,7 @@ describe('add Handyflash DEV/Local test client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 }
@@ -353,7 +599,7 @@ describe('add Handyflash DEV/Local test client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 },
@@ -371,7 +617,7 @@ describe('add Handyflash DEV/Local test client config', () => {
                                         },
                                         {
                                             "minClose": 80001,
-                                            "maxOpen": 180001
+                                            "maxOpen": 180000
                                         }
                                     ]
                                 }

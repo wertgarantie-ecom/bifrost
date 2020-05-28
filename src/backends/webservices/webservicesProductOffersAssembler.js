@@ -114,13 +114,16 @@ async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, de
     }));
 }
 
+function findMaxPriceFromPriceRanges(deviceClassConfig) {
+    return _.max(deviceClassConfig.priceRanges.map(range => range.maxOpen));
+}
 
 async function getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient = _webservicesClient) {
     return await Promise.all(productOfferConfig.deviceClasses.map(async deviceClassConfig => {
         const deviceClass = {
             objectCode: deviceClassConfig.objectCode,
             objectCodeExternal: deviceClassConfig.objectCodeExternal,
-            maxPriceLimitation: findMaxPriceForDeviceClass(webservicesProduct, deviceClassConfig),
+            maxPriceLimitation: findMaxPriceForDeviceClass(webservicesProduct, deviceClassConfig) || findMaxPriceFromPriceRanges(deviceClassConfig),
             intervals: []
         };
 

@@ -94,6 +94,8 @@ app.use(function (err, req, res, next) {
         err.status = 400;
     } else if (err.name === 'ProductOffersError') {
         err.status = 400;
+    } else if (err.name === 'UnknownInsuranceProposalError') {
+        err.status = 400;
     }
     if (err.validations) {
         console.error(JSON.stringify(err, null, 2));

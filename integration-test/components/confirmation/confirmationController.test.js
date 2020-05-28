@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../../src/app');
 const testhelper = require('../../helper/fixtureHelper');
 const webservicesProductOffersAssembler = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
-const mockWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClient();
+const mockWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig();
 const productOffersService = require('../../../src/productoffers/productOffersService');
 
 beforeAll(() => {

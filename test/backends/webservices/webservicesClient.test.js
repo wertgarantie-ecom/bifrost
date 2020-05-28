@@ -80,7 +80,7 @@ test("should catch error when login did not succeed", async () => {
 test("should retrieve agent data for multiple products", async () => {
     const mockHttpClient = jest.fn(() => {
         return {
-            data: responses.agentDataMultipleProducts
+            data: responses.agentDataMultipleMultimediaProducts
         }
     });
 

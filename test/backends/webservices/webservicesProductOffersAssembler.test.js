@@ -5,7 +5,7 @@ const documentTypes = require('../../../src/documents/documentTypes').documentTy
 const uuid = require('uuid');
 
 const session = 'DG21586374946XD38P9X37K64BD3NI1L78XD9GR93B33E3N34CO456R26KL2DE5';
-const mockWebservicesClient = require('../../helpers/webserviceMockClient').createMockWebserviceClient(session);
+const mockWebservicesClient = require('../../helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig(session);
 
 const allRelevantWebservicesProducts = [{
     "RISKS": {
@@ -346,7 +346,7 @@ test('should assemble product offers for client', async () => {
     const documentRepository = {
         persist: () => documentId
     };
-    const result = await webservicesService.assembleProductOffer(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleProducts.RESULT.PRODUCT_LIST.PRODUCT, uuid, mockWebservicesClient, documentRepository);
+    const result = await webservicesService.assembleProductOffer(session, productOfferConfig, "public:publicId", webservicesResponses.agentDataMultipleMultimediaProducts.RESULT.PRODUCT_LIST.PRODUCT, uuid, mockWebservicesClient, documentRepository);
     expect(result).toEqual({
         name: "Komplettschutz",
         id: "productOfferUuid",
