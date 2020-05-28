@@ -3,6 +3,7 @@ const dateformat = require('dateformat');
 const uuid = require('uuid');
 const _webservicesClient = require('./webservicesClient');
 const _productOffersRepository = require('./webserviceProductOffersRepository');
+const getInsuranceProposalSpecifics = require('./webservicesInsuranceProposalSpecificsService').getInsuranceProposalSpecifics;
 const _ = require('lodash');
 
 exports.submitInsuranceProposal = async function submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
@@ -62,50 +63,39 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
 
     const formattedDate = dateformat(date, 'dd.mm.yyyy');
     const objectCode = findObjectCode(shopProduct.deviceClass, productOffer);
-    const proposalJson = {
-        "Antraege": {
-            "Herkunft": "WG_E-COMMERCE_COMPONENTS",
-            "Exportdatum": formattedDate,
-            "Antrag": {
-                "Vertragsnummer": contractNumber,
-                "Satznummer": satznummer,
-                "Antragsdatum": formattedDate,
-                "Vermittlernummer": activePartnerNumber,
-                "Kundendaten": {
-                    "Anrede": customer.salutation,
-                    "Vorname": customer.firstname,
-                    "Nachname": customer.lastname,
-                    "Anschrift": {
-                        "Strasse": customer.street,
-                        "PLZ": customer.zip,
-                        "Ort": customer.city
-                    }
-                },
-                "Kommunikation": {
-                    "Position": 1,
-                    "Hersteller": shopProduct.manufacturer,
-                    "Geraetekennzeichen": objectCode,
-                    "Kaufdatum": formattedDate,
-                    "Kaufpreis": ((shopProduct.price / 100) + "").replace(".", ","),
-                    "Risiken": {
-                        "Risiko": productOffer.risks.map(risk => {
-                            return {
-                                "Risikotyp": risk
-                            }
-                        })
-                    }
-                },
-                "Produktdetails": {
-                    "Antragskodierung": productOffer.applicationCode,
-                    "Produkttyp": productOffer.productType
-                },
-                "Zahlung": {
-                    "Selbstzahler": true
-                }
+    const proposal = {
+        "Vertragsnummer": contractNumber,
+        "Satznummer": satznummer,
+        "Antragsdatum": formattedDate,
+        "Vermittlernummer": activePartnerNumber,
+        "Kundendaten": {
+            "Anrede": customer.salutation,
+            "Vorname": customer.firstname,
+            "Nachname": customer.lastname,
+            "Anschrift": {
+                "Strasse": customer.street,
+                "PLZ": customer.zip,
+                "Ort": customer.city
             }
         }
     };
-    return create(proposalJson).end();
+    getInsuranceProposalSpecifics(proposal, objectCode, shopProduct, formattedDate, productOffer);
+    proposal["Produktdetails"] = {
+        "Antragskodierung": productOffer.applicationCode,
+        "Produkttyp": productOffer.productType
+    };
+    proposal["Zahlung"] = {
+        "Selbstzahler": true
+    };
+
+    const proposalJsonComplete = {
+        "Antraege": {
+            "Herkunft": "WG_E-COMMERCE_COMPONENTS",
+            "Exportdatum": formattedDate,
+            "Antrag": proposal
+        }
+    };
+    return create(proposalJsonComplete).end();
 }
 
 exports.getInsuranceProposalXML = getInsuranceProposalXML;

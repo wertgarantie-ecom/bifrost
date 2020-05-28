@@ -1,4 +1,4 @@
-exports.agentDataMultipleProducts = {
+exports.agentDataMultipleMultimediaProducts = {
     "RESULT": {
         "PRODUCT_LIST": {
             "PRODUCT": [
@@ -130,6 +130,226 @@ exports.agentDataMultipleProducts = {
     "AMOUNT": "30",
     "STATUS": "OK",
     "REQUEST_ID": "98838980",
+    "ORDERBY": "PRODUCT_NAME",
+    "SORT": "ASC",
+    "STATUSCODE": "0",
+    "PAGE": "1"
+};
+
+exports.agentDataMultipleBikeProducts = {
+    "RESULT": {
+        "PRODUCT_LIST": {
+            "PRODUCT": [
+                {
+                    "BASIC_RISK": "AKKUSCHUTZ_EBIKE",
+                    "RISKS": {
+                        "RISK": {
+                            "RISK_NAME": "Sofortschutz",
+                            "RISK_TYPE": "SOFORTSCHUTZ"
+                        }
+                    },
+                    "APPLICATION_CODE": "GU WG DE RAD EBS 0818",
+                    "SIGNATURES": "0",
+                    "PURCHASE_PRICE_LIMITATIONS": {
+                        "MAX_PRICE": {
+                            "AMOUNT": "10000",
+                            "OBJECT_CODE": {}
+                        }
+                    },
+                    "PRODUCT_TYPE": "AKKUSCHUTZ_EBIKE_2018",
+                    "TERM": "langfristig",
+                    "PRODUCT_NAME": "Akkuschutz E-Bike 2018",
+                    "COLLECTIONTYPES": {
+                        "Einzug": "true",
+                        "Selbstzahler": "true"
+                    },
+                    "MAX_DEVICES_EACH_CONTRACT": "1",
+                    "PAYMENTINTERVALS": {
+                        "INTERVAL": [
+                            {
+                                "VALUE": "1",
+                                "DESCRIPTION": "monatlich"
+                            },
+                            {
+                                "VALUE": "3",
+                                "DESCRIPTION": "vierteljährlich"
+                            },
+                            {
+                                "VALUE": "6",
+                                "DESCRIPTION": "halbjährlich"
+                            },
+                            {
+                                "VALUE": "12",
+                                "DESCRIPTION": "jährlich"
+                            }
+                        ]
+                    },
+                    "SIGANATURES": "0"
+                },
+                {
+                    "BASIC_RISK": "KOMPLETTSCHUTZ_EBIKE",
+                    "RISKS": {
+                        "RISK": {
+                            "RISK_NAME": "Sofortschutz",
+                            "RISK_TYPE": "SOFORTSCHUTZ"
+                        }
+                    },
+                    "APPLICATION_CODE": "GU WG DE RAD EBS 0818",
+                    "SIGNATURES": "0",
+                    "PURCHASE_PRICE_LIMITATIONS": {
+                        "MAX_PRICE": {
+                            "AMOUNT": "10000",
+                            "OBJECT_CODE": {}
+                        }
+                    },
+                    "PRODUCT_TYPE": "KOMPLETTSCHUTZ_EBIKE_J_2018",
+                    "TERM": "langfristig",
+                    "PRODUCT_NAME": "Komplettschutz EBike 2018 VarB",
+                    "COLLECTIONTYPES": {
+                        "Einzug": "true",
+                        "Selbstzahler": "true"
+                    },
+                    "MAX_DEVICES_EACH_CONTRACT": "1",
+                    "PAYMENTINTERVALS": {
+                        "INTERVAL": {
+                            "VALUE": "12",
+                            "DESCRIPTION": "jährlich"
+                        }
+                    },
+                    "SIGANATURES": "0"
+                },
+                {
+                    "BASIC_RISK": "KOMPLETTSCHUTZ_EBIKE",
+                    "RISKS": {
+                        "RISK": {
+                            "RISK_NAME": "Sofortschutz",
+                            "RISK_TYPE": "SOFORTSCHUTZ"
+                        }
+                    },
+                    "APPLICATION_CODE": "GU WG DE RAD EBS 0818",
+                    "SIGNATURES": "0",
+                    "PURCHASE_PRICE_LIMITATIONS": {
+                        "MAX_PRICE": {
+                            "AMOUNT": "10000",
+                            "OBJECT_CODE": {}
+                        }
+                    },
+                    "PRODUCT_TYPE": "KOMPLETTSCHUTZ_EBIKE_M_2018",
+                    "TERM": "langfristig",
+                    "PRODUCT_NAME": "Komplettschutz EBike 2018 VarA",
+                    "COLLECTIONTYPES": {
+                        "Einzug": "true",
+                        "Selbstzahler": "true"
+                    },
+                    "MAX_DEVICES_EACH_CONTRACT": "1",
+                    "PAYMENTINTERVALS": {
+                        "INTERVAL": [
+                            {
+                                "VALUE": "1",
+                                "DESCRIPTION": "monatlich"
+                            },
+                            {
+                                "VALUE": "3",
+                                "DESCRIPTION": "vierteljährlich"
+                            },
+                            {
+                                "VALUE": "6",
+                                "DESCRIPTION": "halbjährlich"
+                            },
+                            {
+                                "VALUE": "12",
+                                "DESCRIPTION": "jährlich"
+                            }
+                        ]
+                    },
+                    "SIGANATURES": "0"
+                },
+                {
+                    "BASIC_RISK": "KOMPLETTSCHUTZ_RAD",
+                    "RISKS": {
+                        "RISK": {
+                            "RISK_NAME": "Sofortschutz",
+                            "RISK_TYPE": "SOFORTSCHUTZ"
+                        }
+                    },
+                    "APPLICATION_CODE": "GU WG DE RAD KS 0818",
+                    "SIGNATURES": "0",
+                    "PURCHASE_PRICE_LIMITATIONS": {
+                        "MAX_PRICE": {
+                            "AMOUNT": "4000",
+                            "OBJECT_CODE": {}
+                        }
+                    },
+                    "PRODUCT_TYPE": "KOMPLETTSCHUTZ_RAD_J_2018",
+                    "TERM": "langfristig",
+                    "PRODUCT_NAME": "Komplettschutz Rad 2018 VarB",
+                    "COLLECTIONTYPES": {
+                        "Einzug": "true",
+                        "Selbstzahler": "true"
+                    },
+                    "MAX_DEVICES_EACH_CONTRACT": "1",
+                    "PAYMENTINTERVALS": {
+                        "INTERVAL": {
+                            "VALUE": "12",
+                            "DESCRIPTION": "jährlich"
+                        }
+                    },
+                    "SIGANATURES": "0"
+                },
+                {
+                    "BASIC_RISK": "KOMPLETTSCHUTZ_RAD",
+                    "RISKS": {
+                        "RISK": {
+                            "RISK_NAME": "Sofortschutz",
+                            "RISK_TYPE": "SOFORTSCHUTZ"
+                        }
+                    },
+                    "APPLICATION_CODE": "GU WG DE RAD KS 0818",
+                    "SIGNATURES": "0",
+                    "PURCHASE_PRICE_LIMITATIONS": {
+                        "MAX_PRICE": {
+                            "AMOUNT": "4000",
+                            "OBJECT_CODE": {}
+                        }
+                    },
+                    "PRODUCT_TYPE": "KOMPLETTSCHUTZ_RAD_M_2018",
+                    "TERM": "langfristig",
+                    "PRODUCT_NAME": "Komplettschutz Rad 2018 VarA",
+                    "COLLECTIONTYPES": {
+                        "Einzug": "true",
+                        "Selbstzahler": "true"
+                    },
+                    "MAX_DEVICES_EACH_CONTRACT": "1",
+                    "PAYMENTINTERVALS": {
+                        "INTERVAL": [
+                            {
+                                "VALUE": "1",
+                                "DESCRIPTION": "monatlich"
+                            },
+                            {
+                                "VALUE": "3",
+                                "DESCRIPTION": "vierteljährlich"
+                            },
+                            {
+                                "VALUE": "6",
+                                "DESCRIPTION": "halbjährlich"
+                            },
+                            {
+                                "VALUE": "12",
+                                "DESCRIPTION": "jährlich"
+                            }
+                        ]
+                    },
+                    "SIGANATURES": "0"
+                }
+            ]
+        }
+    },
+    "LANGUAGE": "DE",
+    "MAXAMOUNT": "5",
+    "AMOUNT": "30",
+    "STATUS": "OK",
+    "REQUEST_ID": "99020995",
     "ORDERBY": "PRODUCT_NAME",
     "SORT": "ASC",
     "STATUSCODE": "0",

@@ -1,6 +1,6 @@
 const shoppingCartService = require('../../src/shoppingcart/shoppingCartService');
 const webservicesProductOffersAssembler = require('../../src/backends/webservices/webservicesProductOffersAssembler');
-const mockWebservicesClient = require('../../test/helpers/webserviceMockClient').createMockWebserviceClient();
+const mockWebservicesClient = require('../../test/helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig();
 const fixtureHelper = require('../helper/fixtureHelper');
 const nockHelper = require('../helper/nockHelper');
 const checkoutRepository = require('../../src/shoppingcart/checkoutRepository');
