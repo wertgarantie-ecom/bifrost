@@ -2,12 +2,22 @@ const defaultCheckoutRepository = require('../../shoppingcart/checkoutRepository
 const signatureService = require('../../shoppingcart/signatureService');
 const ClientError = require('../../errors/ClientError');
 const shoppingCartService = require('../../shoppingcart/shoppingCartService');
-const clientService = require('../../clientconfig/clientService');
 const _productImageService = require('../../images/productImageService');
 const component = require('../components').components.aftersales;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const metrics = require('../../framework/metrics')();
-const aftersales = require('../components').components.aftersales.name;
+
+exports.showAfterSalesComponent = async function showAfterSalesComponent(sessionId, clientName, locale = 'de', checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+    const checkoutData = await checkoutRepository.findBySessionId(sessionId);
+    let result = undefined;
+    if (!checkoutData) {
+        result = undefined;
+    } else {
+        result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+    }
+    metrics.incrementShowComponentRequest(component.name, result, clientName);
+    return result
+};
 
 async function getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) {
     const successfulOrders = [];
@@ -30,16 +40,6 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
     };
 }
 
-exports.prepareAfterSalesData = async function prepareAfterSalesData(sessionId, clientConfig, locale = 'de', checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
-    const checkoutData = await checkoutRepository.findBySessionId(sessionId);
-    if (!checkoutData) {
-        return undefined;
-    }
-
-    const result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
-    metrics().incrementComponentRequest(aftersales, "display", "canceled", clientConfig.name);
-};
-
 exports.checkout = async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientConfig, shoppingCart.sessionId);
     if (!sessionIdValid) {
@@ -47,5 +47,8 @@ exports.checkout = async function checkout(shoppingCart, clientConfig, webshopDa
     }
 
     const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig);
-    return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+    const result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+    const metricsResult = result ? 'display_proposals' : 'no_proposals';
+    metrics.incrementComponentRequest(component.name, "checkout", metricsResult, clientConfig.name);
+    return result;
 };

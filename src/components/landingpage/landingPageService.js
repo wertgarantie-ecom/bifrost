@@ -1,7 +1,9 @@
-exports.prepareLandingPageData = async function prepareLandingPageData() {
-    // const tariffCalculatorHtml = await tariffCalculatorService.getTariffCalculatorHtml();
+const metrics = require('../../framework/metrics')();
+const component = require('../components').components.landingpage;
 
-    return {
+
+exports.showLandingPage = async function showLandingPage(clientConfig) {
+    const result = {
         headImageLink: 'https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/Banner_clean.png',
         textSections: {
             whyInsurance: whyInsurance,
@@ -11,6 +13,8 @@ exports.prepareLandingPageData = async function prepareLandingPageData() {
             bottom: bottom
         }
     }
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    return result;
 };
 
 const whyInsurance = {
@@ -52,12 +56,5 @@ const bottom = {
 Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua ut labore et dolore magna aliquyam erat, sed diam voluptua ut labore et dolore magna aliquyam erat, sed diam voluptua.`,
     imageLink: 'https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_selfie.jpg'
-};
-
-const landingPageImageLinks = {
-    waterdmg: ['https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_wasserschaden.jpg', 'https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/waterdamage2.png'],
-    brokenDisplay: ['https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg', 'https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch2.jpg', 'https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/brokenDisplay3.png'],
-    general: ['https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_selfie.jpg'],
-    banner: ['https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/Banner_clean.png']
 };
 

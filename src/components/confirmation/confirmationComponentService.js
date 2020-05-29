@@ -11,14 +11,23 @@ const util = require('util');
 const _shoppingCartService = require('../../shoppingcart/shoppingCartService');
 const metrics = require('../../framework/metrics')();
 
-exports.prepareConfirmationData = async function prepareConfirmationData(wertgarantieShoppingCart,
-                                                                         clientConfig,
-                                                                         shopShoppingCart,
-                                                                         locale = 'de',
-                                                                         productOfferService = _productOfferService,
-                                                                         productImageService = _productImageService,
-                                                                         clientComponentTextService = _clientComponentTextService,
-                                                                         shoppingCartService = _shoppingCartService) {
+exports.showConfirmationComponent = async function showConfirmationComponent(wertgarantieShoppingCart,
+                                                                             clientConfig,
+                                                                             shopShoppingCart,
+                                                                             locale = 'de') {
+    const result = await prepareConfirmationData(wertgarantieShoppingCart, clientConfig, shopShoppingCart, locale);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    return result;
+};
+
+async function prepareConfirmationData(wertgarantieShoppingCart,
+                                       clientConfig,
+                                       shopShoppingCart,
+                                       locale = 'de',
+                                       productOfferService = _productOfferService,
+                                       productImageService = _productImageService,
+                                       clientComponentTextService = _clientComponentTextService,
+                                       shoppingCartService = _shoppingCartService) {
     if (!wertgarantieShoppingCart) {
         return undefined;
     }
@@ -77,11 +86,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
         return undefined;
     }
 
-    const validationResult = validator.validate(result, confirmationResponseSchema);
-    metrics.increment('requests.confirmation.success', 1, ["client:" + clientConfig.name]);
-    return validationResult;
-};
+    return validator.validate(result, confirmationResponseSchema).instance;
+}
 
+exports.prepareConfirmationData = prepareConfirmationData;
 
 async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts, listOfUpdates) {
     const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price)).productOffers;
