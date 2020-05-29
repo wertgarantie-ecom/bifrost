@@ -54,12 +54,12 @@ const productImageMapping = {
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/utah-mountain-biking-bike-biking-71104.jpeg"
     ],
     "Bike": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/eBike-HP.jpeg",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/utah-mountain-biking-bike-biking-71104.jpeg"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Bike/fahrrad_1.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Bike/fahrrad_2.jpg"
     ],
     "E-Bike": [
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/eBike-HP.jpeg",
-        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/utah-mountain-biking-bike-biking-71104.jpeg"
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/E-Bike/ebike_1.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/E-Bike/ebike_2.jpg"
     ],
     // Test
     "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d": [
