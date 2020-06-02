@@ -5,7 +5,6 @@ const uuid = require('uuid');
 module.exports.createMockWebserviceClientWithPhoneConfig = (session = uuid()) => {
     return {
         getLegalDocuments: () => webservicesResponses.multipleLegalDocuments,
-        getComparisonDocuments: () => webservicesResponses.multipleComparisonDocumentsResponse,
         login: () => session,
         getAgentData: () => {
             const agentData = _.cloneDeep(webservicesResponses.agentDataMultipleMultimediaProducts);
@@ -23,7 +22,6 @@ module.exports.createMockWebserviceClientWithPhoneConfig = (session = uuid()) =>
 module.exports.createMockWebserviceClientWithBikeConfig = (session = uuid()) => {
     return {
         getLegalDocuments: () => webservicesResponses.multipleLegalDocuments,
-        getComparisonDocuments: () => webservicesResponses.multipleComparisonDocumentsResponse,
         login: () => session,
         getAgentData: () => {
             const agentData = _.cloneDeep(webservicesResponses.agentDataMultipleBikeProducts);

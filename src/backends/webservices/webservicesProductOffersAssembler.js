@@ -76,7 +76,6 @@ async function findProductFor(productOfferConfig, allWebservicesProductsForClien
 async function getDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRepository = _documentRespository) {
     const documents = [];
     documents.push(...await getLegalDocuments(session, productOfferConfig, webservicesClient, documentRepository));
-    documents.push(...await getComparisonDocuments(session, productOfferConfig, webservicesClient, documentRepository));
     return documents;
 }
 
@@ -154,23 +153,6 @@ async function getLegalDocuments(session, productOfferConfig, webservicesClient 
 }
 
 
-async function getComparisonDocuments(session, productOfferConfig, webservicesClient = _webservicesClient, documentRespository = _documentRespository) {
-    const allComparisonDocuments = await webservicesClient.getComparisonDocuments(session, productOfferConfig.applicationCode, productOfferConfig.productType); // liefert aktuell alle Dokumente in einem wieder...
-    return await Promise.all(productOfferConfig.documents.comparisonDocuments.map(async comparisonDocumentConfig => {
-        const document = _.find(allComparisonDocuments.RESULT.DOCUMENTS.DOCUMENT, (document) => document.FILENAME.match(comparisonDocumentConfig.pattern));
-        if (!document) {
-            return undefined;
-        }
-        document.type = comparisonDocumentConfig.type;
-        const documentID = await documentRespository.persist(document);
-        return {
-            documentTitle: document.FILENAME,
-            documentType: comparisonDocumentConfig.type,
-            documentId: documentID
-        };
-    }));
-}
-
 exports.updateProductOffersForAllClients = updateProductOffersForAllClients;
 exports.selectRelevantWebservicesProducts = selectRelevantWebservicesProducts;
 exports.assembleAllProductOffersForClient = assembleAllProductOffersForClient;
@@ -181,5 +163,4 @@ exports.findMaxPriceForDeviceClass = findMaxPriceForDeviceClass;
 exports.getIntervalPremiumsForPriceRanges = getIntervalPremiumsForPriceRanges;
 exports.getDevicePremiums = getDevicePremiums;
 exports.getLegalDocuments = getLegalDocuments;
-exports.getComparisonDocuments = getComparisonDocuments;
 exports.updateAllProductOffersForClient = updateAllProductOffersForClient;

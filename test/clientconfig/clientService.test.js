@@ -40,8 +40,7 @@ test('should create client with valid offers config', async () => {
                             legalDocuments: [
                                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: [],
                         risks: []

@@ -91,44 +91,6 @@ test('should find product for client product offer config', async () => {
     expect(result).toEqual(allRelevantWebservicesProducts[0]);
 });
 
-test('should getComparisonDocuments', async () => {
-    const productOfferConfig = {
-        documents: {
-            comparisonDocuments: [
-                {
-                    type: documentTypes.COMPARISON,
-                    pattern: 'EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF'
-                }
-            ]
-        }
-    };
-
-    const documentRepository = {
-        persist: () => "comparisonDocumentID"
-    };
-
-    const result = await webservicesService.getComparisonDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
-    expect(result.length).toBe(1);
-    expect(result[0].documentTitle).toEqual("EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF");
-    expect(result[0].documentType).toEqual(documentTypes.COMPARISON);
-    expect(result[0].documentId).toEqual("comparisonDocumentID");
-});
-
-test('should not have comparison documents if not configured', async () => {
-    const productOfferConfig = {
-        documents: {
-            comparisonDocuments: []
-        }
-    };
-
-    const documentRepository = {
-        persist: () => "comparisonDocumentID"
-    };
-
-    const result = await webservicesService.getComparisonDocuments(session, productOfferConfig, mockWebservicesClient, documentRepository);
-    expect(result.length).toBe(0);
-});
-
 test('should getLegalDocuments', async () => {
     const productOfferConfig = {
         documents: {
@@ -161,8 +123,7 @@ test('should getDocuments', async () => {
             legalDocuments: [
                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
-            ],
-            comparisonDocuments: []
+            ]
         }
     };
     const documentRepository = {
@@ -334,8 +295,7 @@ test('should assemble product offers for client', async () => {
             legalDocuments: [
                 documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION
-            ],
-            comparisonDocuments: []
+            ]
         },
         advantages: [],
         risks: []
@@ -705,8 +665,7 @@ test('should not fail if no products are matching for the given offers configura
                                     type: documentTypes.LEGAL_NOTICE,
                                     pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                                 }
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: [],
                         risks: []
@@ -793,8 +752,7 @@ test.skip('call webservices dev', async () => {
                                     type: documentTypes.LEGAL_NOTICE,
                                     pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                                 }
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: ["Das schon toll hier", "alles wird gut", "Corona Party!!!"],
                         risks: []
@@ -849,8 +807,7 @@ test.skip('call webservices dev', async () => {
                                     type: documentTypes.LEGAL_NOTICE,
                                     pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                                 }
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: ["total geiler diebstahlschutz", "was gegen Wasser", "mit Soße"],
                         risks: ["DIEBSTAHLSCHUTZ"]

@@ -71,17 +71,10 @@ module.exports.productOffersConfigSchema = {
             "documents": {
                 "type": "object",
                 "required": [
-                    "legalDocuments",
-                    "comparisonDocuments"
+                    "legalDocuments"
                 ],
                 "properties": {
                     "legalDocuments": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "comparisonDocuments": {
                         "type": "array",
                         "items": {
                             "type": "string"

@@ -481,55 +481,6 @@ exports.insurancePremiumResponse = {
     "PAGE": "1"
 };
 
-exports.singleComparisonDocumentsResponse = {
-    "RESULT": {
-        "DOCUMENTS": {
-            "DOCUMENT": {
-                "FILENAME": "EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
-                "CONTENT":
-                    "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
-            }
-        }
-    },
-    "LANGUAGE": "DE",
-    "MAXAMOUNT": "1",
-    "AMOUNT": {},
-    "STATUS": "OK",
-    "REQUEST_ID": "98843607",
-    "ORDERBY": {},
-    "SORT": {},
-    "STATUSCODE": "0",
-    "PAGE": {}
-};
-
-exports.multipleComparisonDocumentsResponse = {
-    "RESULT": {
-        "DOCUMENTS": {
-            "DOCUMENT": [
-                {
-                    "FILENAME": "EX NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
-                    "CONTENT":
-                        "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
-                },
-                {
-                    "FILENAME": "YY NEO DGG WG DE P3 0917_RECHTSDOKUMENTE.PDF",
-                    "CONTENT":
-                        "JVBERi0xLjUNJcjIyMjIyMgNMSAwIG9iago8PC9DcmVhdGlvbkRhdGUoRDoyMDE3MDkyODE1MjMyOCswMScwMCcpL0NyZWF0b3IoQXNwb3NlIEx0ZC4pL01vZERhdGUoRDoyMDE5MDkyNTEyMjkwOCswMicwMCcpL1Byb2R1..."
-                }
-            ]
-        }
-    },
-    "LANGUAGE": "DE",
-    "MAXAMOUNT": "1",
-    "AMOUNT": {},
-    "STATUS": "OK",
-    "REQUEST_ID": "98843607",
-    "ORDERBY": {},
-    "SORT": {},
-    "STATUSCODE": "0",
-    "PAGE": {}
-};
-
 exports.multipleLegalDocuments = {
     "RESULT": {
         "DOCUMENT": [

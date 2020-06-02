@@ -78,8 +78,7 @@ describe('add phone test shop client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Diebstahl? Wir erstatten den Zeitwert!",
@@ -146,8 +145,7 @@ describe('add phone test shop client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
@@ -257,8 +255,7 @@ describe('add bike test shop client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Verschleiß / Abnutzung / Alterung der Reifen und Schläuche (ab dem 7. Monat)",
@@ -320,8 +317,7 @@ describe('add bike test shop client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Materialfehler",
@@ -374,8 +370,7 @@ describe('add bike test shop client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Verschleiß / Abnutzung / Alterung der Reifen und Schläuche (ab dem 7. Monat)",
@@ -434,8 +429,7 @@ describe('add bike test shop client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Materialfehler",
@@ -560,8 +554,7 @@ describe('add Handyflash DEV/Local test client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Diebstahl? Wir erstatten den Zeitwert!",
@@ -628,8 +621,7 @@ describe('add Handyflash DEV/Local test client config', () => {
                                     documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                     documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                     documentTypes.RIGHT_OF_WITHDRAWAL
-                                ],
-                                "comparisonDocuments": []
+                                ]
                             },
                             "advantages": [
                                 "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",

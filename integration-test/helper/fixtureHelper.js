@@ -197,8 +197,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                 documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                 documentTypes.RIGHT_OF_WITHDRAWAL
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: [],
                         risks: []
@@ -254,8 +253,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                 documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                 documentTypes.RIGHT_OF_WITHDRAWAL
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: [],
                         risks: ["DIEBSTAHLSCHUTZ"]
@@ -342,8 +340,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                 documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                 documentTypes.RIGHT_OF_WITHDRAWAL
-                            ],
-                            "comparisonDocuments": []
+                            ]
                         },
                         "advantages": [
                             "Verschleiß / Abnutzung / Alterung der Reifen und Schläuche (ab dem 7. Monat)",
@@ -405,8 +402,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                 documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                 documentTypes.RIGHT_OF_WITHDRAWAL
-                            ],
-                            "comparisonDocuments": []
+                            ]
                         },
                         "advantages": [
                             "Materialfehler",
@@ -459,8 +455,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                 documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                 documentTypes.RIGHT_OF_WITHDRAWAL
-                            ],
-                            "comparisonDocuments": []
+                            ]
                         },
                         "advantages": [
                             "Verschleiß / Abnutzung / Alterung der Reifen und Schläuche (ab dem 7. Monat)",
@@ -519,8 +514,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
                                 documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
                                 documentTypes.RIGHT_OF_WITHDRAWAL
-                            ],
-                            "comparisonDocuments": []
+                            ]
                         },
                         "advantages": [
                             "Materialfehler",

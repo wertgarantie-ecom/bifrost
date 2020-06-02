@@ -159,24 +159,6 @@ exports.getInsurancePremium = async function getInsurancePremium(session, applic
     return await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
-exports.getComparisonDocuments = async function getComparisonDocuments(session, applicationCode, productType, httpClient = axiosWithSimpleLogging) {
-    if (!(session && productType && applicationCode)) {
-        throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);
-    }
-    const formDataMap = new Map();
-    formDataMap.set('FUNCTION', 'GET_PRODUCT_DATA');
-    formDataMap.set('SHAPING', 'COMPARISON_DOCUMENTS');
-    formDataMap.set('API', 'JSON');
-    formDataMap.set('SESSION', session);
-    formDataMap.set('APPLICATION_CODE', applicationCode);
-    formDataMap.set('PRODUCT_TYPE', productType);
-    const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
-    if (!Array.isArray(result.RESULT.DOCUMENTS.DOCUMENT)) {
-        result.RESULT.DOCUMENTS.DOCUMENT = [result.RESULT.DOCUMENTS.DOCUMENT];
-    }
-    return result;
-};
-
 exports.getLegalDocuments = async function getLegalDocuments(session, applicationCode, productType, httpClient = axiosWithSimpleLogging) {
     if (!(session && productType && applicationCode)) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, applicationCode: ${applicationCode}`);

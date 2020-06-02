@@ -218,8 +218,7 @@ describe("should handle client config for product offers", () => {
                                     type: documentTypes.LEGAL_NOTICE,
                                     pattern: 'GU WG DE KS 0419_RECHTSDOKUMENTE.PDF'
                                 }
-                            ],
-                            comparisonDocuments: []
+                            ]
                         },
                         advantages: [],
                         risks: []

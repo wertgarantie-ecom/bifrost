@@ -4,7 +4,6 @@ const dateformat = require('dateformat');
 const agentDataMultipleProductsTestResponse = require('../backends/webservices/webservicesResponses').agentDataMultipleMultimediaProducts;
 const advertisingTextResponse = require('../backends/webservices/webservicesResponses').advertisingText;
 const insurancePremiumResponse = require('../backends/webservices/webservicesResponses').insurancePremiumResponse;
-const comparisonDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleComparisonDocumentsResponse;
 const legalDocumentsResponse = require('../backends/webservices/webservicesResponses').multipleLegalDocuments;
 const getNewContractNumber = require('../backends/webservices/webservicesResponses').getNewContractNumber;
 const successfulInsuranceProposal = require('../backends/webservices/webservicesResponses').successfulInsuranceProposal;
@@ -60,12 +59,6 @@ exports.nockGetInsurancePremium = function nockGetInsurancePremium() {
     nock(process.env.WEBSERVICES_URI)
         .post("/callservice.pl")
         .reply(200, insurancePremiumResponse);
-};
-
-exports.nockGetComparisonDocuments = function nockGetComparisonDocuments() {
-    nock(process.env.WEBSERVICES_URI)
-        .post("/callservice.pl")
-        .reply(200, comparisonDocumentsResponse);
 };
 
 exports.nockGetLegalDocuments = function nockGetLegalDocuments() {

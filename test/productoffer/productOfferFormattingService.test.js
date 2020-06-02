@@ -41,7 +41,7 @@ test("should not fail on missing document", () => {
         ]
     };
 
-    const document = service.fromProductOffer(productOffer).getDocument(documentTypes.COMPARISON);
+    const document = service.fromProductOffer(productOffer).getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE);
 
     expect(document).toEqual(undefined);
 });
