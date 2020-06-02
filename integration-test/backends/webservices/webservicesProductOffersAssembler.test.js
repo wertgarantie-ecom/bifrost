@@ -27,6 +27,7 @@ describe('should persist product offers for Bike shop', () => {
         expect(productOffers[1].name).toEqual("Fahrrad-Komplettschutz mit jährlicher Zahlweise");
         expect(productOffers[2].name).toEqual("E-Bike-Komplettschutz mit monatlicher Zahlweise");
         expect(productOffers[3].name).toEqual("E-Bike-Komplettschutz mit jährlicher Zahlweise");
+        expect(productOffers[0].lock).toEqual(client.backends.webservices.productOffersConfigurations[0].lock);
     });
 
 });

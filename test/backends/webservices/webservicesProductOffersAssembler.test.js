@@ -690,6 +690,7 @@ test('should not fail if no products are matching for the given offers configura
     expect(result).toEqual([]);
 });
 
+
 test.skip('call webservices dev', async () => {
     const clientConfig = {
         "id": uuid(),

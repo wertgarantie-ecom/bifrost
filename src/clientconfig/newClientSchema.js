@@ -1,4 +1,4 @@
-const productOffersConfigSchema = require('./productOffersConfigSchema').productOffersConfigSchema;
+const productOffersConfigSchema = require('../backends/webservices/productOffersConfigSchema').productOffersConfigSchema;
 
 module.exports.newClientSchema = {
     type: "object",

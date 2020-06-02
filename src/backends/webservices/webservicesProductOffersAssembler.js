@@ -63,7 +63,8 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
         defaultPaymentInterval: productOfferConfig.defaultPaymentInterval,
         documents: await getDocuments(session, productOfferConfig, webservicesClient, documentRepository),
         advantages: productOfferConfig.advantages,
-        devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient)
+        devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient),
+        lock: productOfferConfig.lock
     };
 }
 
