@@ -46,6 +46,7 @@ function smartphoneSpecificProposal(objectCode, shopProduct, formattedDate, prod
         "Position": 1,
         "Hersteller": shopProduct.manufacturer,
         "Geraetekennzeichen": objectCode,
+        "Modellbezeichnung": shopProduct.model,
         "Kaufdatum": formattedDate,
         "Kaufpreis": ((shopProduct.price / 100) + "").replace(".", ","),
         "Risiken": {
