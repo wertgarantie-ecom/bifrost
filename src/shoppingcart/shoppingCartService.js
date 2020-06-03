@@ -11,7 +11,7 @@ const metrics = require('../framework/metrics');
 
 exports.addProductToShoppingCart = async function addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, orderId = uuid(), productOfferService = _productOfferService) {
     const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.publicClientIds[0]);
-    const completeProductToAdd = productOfferService.getProductOfferById(productToAdd.wertgarantieProduct.id);
+    const completeProductToAdd = await productOfferService.getProductOfferById(productToAdd.wertgarantieProduct.id);
     updatedShoppingCart.orders.push({
         id: orderId,
         shopProduct: productToAdd.shopProduct,
@@ -104,9 +104,29 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     function updateShoppingCart(oldShoppingCart, newOrders) {
-        const updatedShoppingCart = {...wertgarantieShoppingCart}
+        const updatedShoppingCart = {...wertgarantieShoppingCart};
         updatedShoppingCart.orders = newOrders;
         return updatedShoppingCart;
+    }
+
+    async function updateLockPrice(updatedShoppingCart, changes) {
+        if (!(_.isEmpty(changes.updated) && _.isEmpty(changes.deleted))) {
+            const lockPrices = await Promise.all(updatedShoppingCart.orders.map(async order => {
+                const productOffer = await productOfferService.getProductOfferById(order.wertgarantieProduct.id);
+                return productOfferService.getMinimumLockPriceForProduct(productOffer, order.shopProduct.price);
+            }));
+
+            const newRequiredLockPrice = _.max(lockPrices);
+            if (!newRequiredLockPrice) {
+                delete updatedShoppingCart.confirmations.requiredLockPrice;
+                delete updatedShoppingCart.confirmations.lockConfirmed;
+            } else {
+                if (newRequiredLockPrice !== updatedShoppingCart.confirmations.requiredLockPrice) {
+                    updatedShoppingCart.confirmations.requiredLockPrice = newRequiredLockPrice;
+                    updatedShoppingCart.confirmations.lockConfirmed = false;
+                }
+            }
+        }
     }
 
     const syncResultAccumulator = {
@@ -131,7 +151,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
                 if (order.shopProduct.price !== matchingShopOrderItem.price) {
                     const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.shopProduct.deviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
                     if (!newPrice) {
-                        result.changes.deleted.push(order.id)
+                        result.changes.deleted.push(order.id);
                         return;
                     }
                     order.shopProduct.price = matchingShopOrderItem.price;
@@ -159,13 +179,14 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     await wertgarantieShoppingCart.orders.reduce(syncOrderReducer, syncResultAccumulator);
-    const updatedWertgarantieShoppingCart = updateShoppingCart(wertgarantieShoppingCart, syncResultAccumulator.orders)
+    const updatedWertgarantieShoppingCart = updateShoppingCart(wertgarantieShoppingCart, syncResultAccumulator.orders);
+    await updateLockPrice(updatedWertgarantieShoppingCart, syncResultAccumulator.changes);
 
     return {
         changes: syncResultAccumulator.changes,
         shoppingCart: updatedWertgarantieShoppingCart
     };
-}
+};
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;

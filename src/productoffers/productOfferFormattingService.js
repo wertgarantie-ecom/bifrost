@@ -99,3 +99,7 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
         }
     }
 };
+
+exports.formatPrice = function formatPrice(price, locale = "de", currency = "EUR") {
+    return Globalize(locale).currencyFormatter(currency, {style: "accounting"})(price / 100);
+}

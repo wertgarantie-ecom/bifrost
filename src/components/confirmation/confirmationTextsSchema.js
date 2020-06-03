@@ -3,7 +3,6 @@ exports.confirmationTextsSchema = {
     required: [
         "title",
         "subtitle",
-        "confirmationTextTermsAndConditions",
         "confirmationPrompt"
     ],
     properties: {
@@ -14,9 +13,6 @@ exports.confirmationTextsSchema = {
             type: "string"
         },
         subtitle: {
-            type: "string"
-        },
-        confirmationTextTermsAndConditions: {
             type: "string"
         },
         confirmationPrompt: {
