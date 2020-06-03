@@ -32,6 +32,9 @@ exports.signedSchoppingCartSchema = {
                         termsAndConditionsConfirmed: {
                             type: "boolean",
                             required: true
+                        },
+                        lockConfirmed: {
+                            type: "boolean"
                         }
                     }
                 },

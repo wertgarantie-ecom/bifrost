@@ -9,14 +9,20 @@ const _productOfferService = require('../productoffers/productOffersService');
 const metrics = require('../framework/metrics');
 
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId, orderId = uuid()) {
-    const updatedShoppingCart = shoppingCart || newShoppingCart(publicClientId);
+exports.addProductToShoppingCart = async function addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, orderId = uuid(), productOfferService = _productOfferService) {
+    const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.publicClientIds[0]);
+    const completeProductToAdd = productOfferService.getProductOfferById(productToAdd.wertgarantieProduct.id);
     updatedShoppingCart.orders.push({
         id: orderId,
         shopProduct: productToAdd.shopProduct,
         wertgarantieProduct: productToAdd.wertgarantieProduct
     });
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
+    if (completeProductToAdd.lock) {
+        updatedShoppingCart.confirmations.lockConfirmed = false;
+        const newItemsLockPrice = productOfferService.getMinimumLockPriceForProduct(completeProductToAdd, productToAdd.shopProduct.price);
+        updatedShoppingCart.confirmations.requiredLockPrice = _.max([updatedShoppingCart.confirmations.requiredLockPrice, newItemsLockPrice]);
+    }
     return updatedShoppingCart;
 };
 
@@ -109,7 +115,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
             updated: []
         },
         orders: []
-    }
+    };
 
     const syncOrderReducer = async (result, order) => {
         result = await result;
@@ -180,7 +186,28 @@ function newShoppingCart(clientId) {
     };
 }
 
-exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(id, shoppingCart) {
+async function updateLockPrices(result, productOffersService = _productOfferService) {
+    const lockPrices = await Promise.all(result.orders.map(async order => {
+        const productOffer = await productOffersService.getProductOfferById(order.wertgarantieProduct.id);
+        if (productOffer.lock) {
+            return productOffersService.getMinimumLockPriceForProduct(productOffer, order.shopProduct.price);
+        }
+        return undefined;
+    }));
+    const newLockPrice = _.max(lockPrices);
+    if (!newLockPrice) {
+        delete result.confirmations.lockConfirmed;
+        delete result.confirmations.requiredLockPrice;
+    } else {
+        const currentLockPrice = result.confirmations.requiredLockPrice;
+        if (currentLockPrice !== newLockPrice) {
+            result.confirmations.requiredLockPrice = newLockPrice;
+            result.confirmations.lockConfirmed = false;
+        }
+    }
+}
+
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(id, shoppingCart, productOffersService = _productOfferService) {
     if (!shoppingCart) {
         return undefined;
     }
@@ -190,7 +217,11 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(i
             i--;
         }
     }
-    return shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+    const result = shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+    if (result && result.confirmations.requiredLockPrice) {
+        await updateLockPrices(result, productOffersService);
+    }
+    return result;
 };
 
 class InvalidPublicClientIdError extends Error {

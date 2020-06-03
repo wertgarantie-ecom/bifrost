@@ -62,6 +62,9 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
     }
 
     result.texts.confirmationTextTermsAndConditions = util.format(componentTexts.confirmationTextTermsAndConditions, avbHref, GDPRHref, rowHref, IPIDHref);
+    if (updatedWertgarantieShoppingCart.confirmations.lockConfirmed !== undefined) {
+        // result.texts.lockConfirmationText = util.format(componentTexts.confirmationTextLock, confirmationProductData)
+    }
     result.texts.confirmationPrompt = componentTexts.confirmationPrompt;
     if (result.orders.length <= 0) {
         return undefined;

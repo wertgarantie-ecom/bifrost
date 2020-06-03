@@ -1,14 +1,18 @@
 const repository = require('../../src/backends/webservices/webserviceProductOffersRepository');
 const fixtureHelper = require('../helper/fixtureHelper');
+const uuid = require('uuid');
 
 
 describe("test handle product offers for client", () => {
+    const productOfferUuid = uuid();
+    let client;
+    let productOffers;
     test("persist productOffersForClient", async () => {
-        const client = await fixtureHelper.createAndPersistDefaultClient();
-        const productOffers = [
+        client = await fixtureHelper.createAndPersistDefaultClient();
+        productOffers = [
             {
                 name: "Komplettschutz",
-                id: "productOfferUuid",
+                id: productOfferUuid,
                 clientId: client.id,
                 documents: [
                     {
@@ -33,9 +37,18 @@ describe("test handle product offers for client", () => {
                 devices: expectedIntervalPremiumsForKS
             }
         ];
-
         const result = await repository.persist(productOffers);
         expect(result).toEqual(productOffers);
+    });
+
+    test("should find product offers by client id", async () => {
+        const result = await repository.findByClientId(client.id);
+        expect(result).toEqual(productOffers);
+    });
+
+    test("should find product offer by id", async () => {
+        const result = await repository.findById(productOfferUuid);
+        expect(result).toEqual(productOffers[0]);
     });
 });
 

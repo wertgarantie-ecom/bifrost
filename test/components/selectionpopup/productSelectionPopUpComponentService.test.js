@@ -17,7 +17,7 @@ const clientData =
 
 test("should return proper product response", async () => {
     const mockProductOfferService = {
-        getProductOffers: () => productOffersTestResponses.productOffers
+        getProductOffers: () => productOffersTestResponses.productOffersPhone
     };
     const mockComponentTextsService = {
         getComponentTextsForClientAndLocal: () => selectionPopUpDefaultTexts

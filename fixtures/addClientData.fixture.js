@@ -216,6 +216,20 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD KS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                             "defaultPaymentInterval": "monthly",
+                            "lock": {
+                                "priceRanges": [
+                                    {
+                                        "maxOpen": 100001,
+                                        "minClose": 0,
+                                        "requiredLockPrice": 1900
+                                    },
+                                    {
+                                        "maxOpen": 400001,
+                                        "minClose": 100001,
+                                        "requiredLockPrice": 4900
+                                    }
+                                ]
+                            },
                             "deviceClasses": [
                                 {
                                     "objectCode": "27",
@@ -278,6 +292,20 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD KS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                             "defaultPaymentInterval": "yearly",
+                            "lock": {
+                                "priceRanges": [
+                                    {
+                                        "maxOpen": 100001,
+                                        "minClose": 0,
+                                        "requiredLockPrice": 1900
+                                    },
+                                    {
+                                        "maxOpen": 400001,
+                                        "minClose": 100001,
+                                        "requiredLockPrice": 4900
+                                    }
+                                ]
+                            },
                             "deviceClasses": [
                                 {
                                     "objectCode": "27",
@@ -339,6 +367,15 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD EBS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                             "defaultPaymentInterval": "monthly",
+                            "lock": {
+                                "priceRanges": [
+                                    {
+                                        "maxOpen": 600001,
+                                        "minClose": 0,
+                                        "requiredLockPrice": 4900
+                                    }
+                                ]
+                            },
                             "deviceClasses": [
                                 {
                                     "objectCode": "270009",
@@ -398,6 +435,15 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD EBS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                             "defaultPaymentInterval": "yearly",
+                            "lock": {
+                                "priceRanges": [
+                                    {
+                                        "maxOpen": 600001,
+                                        "minClose": 0,
+                                        "requiredLockPrice": 4900
+                                    }
+                                ]
+                            },
                             "deviceClasses": [
                                 {
                                     "objectCode": "270009",
