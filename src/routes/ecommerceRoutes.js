@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const selectionPopUpController = require("../components/selectionpopup/selectionPopUpController");
+const selectionEmbeddedController = require("../components/selectionembedded/selectionEmbeddedController");
 const confirmationController = require("../components/confirmation/confirmationController");
 const afterSalesController = require("../components/aftersales/afterSalesController");
 const landingPageController = require("../components/landingpage/landingPageController");
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
-const selectionPopUpGetProductsSchema = require("../components/selectionpopup/selectionPopUpGetProductsSchema").confirmationResponseSchema;
+const selectionGetProductsSchema = require("../components/selectiongeneral/selectionGetProductsSchema").selectionPopUpGetProductsSchema;
 const shoppingCartController = require("../shoppingcart/shoppingCartController");
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
@@ -20,8 +21,10 @@ router.get("/rating", googleController.reviewRatings);
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);
 
-router.put("/clients/:publicClientId/components/selection-popup", validate({body: selectionPopUpGetProductsSchema}), setClientConfigByPublicClientId, selectionPopUpController.getProducts);
+router.put("/clients/:publicClientId/components/selection-popup", validate({body: selectionGetProductsSchema}), setClientConfigByPublicClientId, selectionPopUpController.getProducts);
 router.post("/clients/:publicClientId/components/selection-popup/cancel", setClientConfigByPublicClientId, selectionPopUpController.popUpCanceled);
+
+router.put("/clients/:publicClientId/components/selection-embedded", validate({body: selectionGetProductsSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.getProducts);
 
 router.put("/clients/:publicClientId/components/confirmation", setClientConfigByPublicClientId, confirmationController.getConfirmationComponentData);
 router.put("/clients/:publicClientId/components/confirmation/:confirmationAttribute", setClientConfigByPublicClientId, confirmationController.confirmAttribute);

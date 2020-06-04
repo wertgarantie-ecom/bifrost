@@ -3,6 +3,7 @@ const landingPageTextsSchema = require('./landingpage/landingPageTextsSchema');
 const selectionPopUpTextsSchema = require('./selectionpopup/selectionPopUpTextsSchema');
 const confirmationTextsSchema = require('./confirmation/confirmationTextsSchema');
 const afterSalesTextsSchema = require('./aftersales/afterSalesTextsSchema');
+const selectionEmbeddedTextsSchema = require('./selectionembedded/selectionEmbeddedTextsSchema');
 
 exports.components = {
     rating: {
@@ -16,6 +17,10 @@ exports.components = {
     selectionpopup: {
         name: "selectionpopup",
         textsSchema: selectionPopUpTextsSchema
+    },
+    selectionembedded: {
+        name: "selectionembedded",
+        textsSchema: selectionEmbeddedTextsSchema
     },
     confirmation: {
         name: "confirmation",

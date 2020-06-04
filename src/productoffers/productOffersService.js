@@ -141,6 +141,7 @@ function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
     return {
         id: webservicesProductOffer.id,
         name: webservicesProductOffer.name,
+        shortName: webservicesProductOffer.shortName,
         advantages: [...webservicesProductOffer.advantages],
         defaultPaymentInterval: webservicesProductOffer.defaultPaymentInterval,
         prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
