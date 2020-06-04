@@ -4,10 +4,10 @@ const CryptoJS = require('crypto-js');
 function hashProductOffers(productOffers) {
     const relevantOfferParts = productOffers.map(offer => {
         return {
-
             documents: offer.documents,
             advantages: offer.advantages,
-            devices: offer.devices
+            devices: offer.devices,
+            lock: offer.lock
         };
     });
 
