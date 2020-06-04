@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+require('express-async-errors');
 const path = require('path');
 const logger = require('morgan');
 const cors = require('cors');
