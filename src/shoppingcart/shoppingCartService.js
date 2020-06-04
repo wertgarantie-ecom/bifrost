@@ -110,14 +110,17 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     async function updateLockPrice(updatedShoppingCart, changes) {
-        if (!(_.isEmpty(changes.updated) && _.isEmpty(changes.deleted))) {
+        if (!(_.isEmpty(changes.updated) && _.isEmpty(changes.deleted) )) {
             const lockPrices = await Promise.all(updatedShoppingCart.orders.map(async order => {
                 const productOffer = await productOfferService.getProductOfferById(order.wertgarantieProduct.id);
+                if (!productOffer.lock) {
+                    return undefined;
+                }
                 return productOfferService.getMinimumLockPriceForProduct(productOffer, order.shopProduct.price);
             }));
 
             const newRequiredLockPrice = _.max(lockPrices);
-            if (!newRequiredLockPrice) {
+            if (!newRequiredLockPrice && !updatedShoppingCart.confirmations.requiredLockPrice && updatedShoppingCart.confirmations.lockConfirmed !== undefined) {
                 delete updatedShoppingCart.confirmations.requiredLockPrice;
                 delete updatedShoppingCart.confirmations.lockConfirmed;
             } else {

@@ -399,9 +399,12 @@ test("should remove wertgarantieShoppingCart order with orderItemId if no match 
                     }
                 },
             ],
+            confirmations: {
+                termsAndConditionsConfirmed: false
+            }
         };
 
-        const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOfferServicePhone);
         expect(result.shoppingCart.orders).toEqual([]);
         expect(result.changes.deleted).toEqual([idToDelete])
     }
@@ -440,10 +443,14 @@ test("should update wertgarantieShoppingCart order if price of matching shopShop
                     }
                 },
             ],
+            confirmations: {
+                termsAndConditionsConfirmed: false
+            }
         };
 
         const mockProductOffersService = {
-            getPriceForSelectedProductOffer: () => wertgarantieProductPrice
+            getPriceForSelectedProductOffer: () => wertgarantieProductPrice,
+            getProductOfferById: () => productOffersTestResponses.productOffersPhone.productOffers[0]
         };
         const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOffersService);
         expect(result.shoppingCart.orders[0].shopProduct.price).toEqual(updatedPrice);
@@ -485,10 +492,14 @@ test("should update price of wertgarantie product if price of matching shopShopp
                     }
                 },
             ],
+            confirmations: {
+                termsAndConditionsConfirmed: false
+            }
         };
         const newWertgarantieProductPrice = 1000000;
         const mockProductOffersService = {
-            getPriceForSelectedProductOffer: () => newWertgarantieProductPrice
+            getPriceForSelectedProductOffer: () => newWertgarantieProductPrice,
+            getProductOfferById: () => productOffersTestResponses.productOffersPhone.productOffers[0]
         };
         const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOffersService);
         expect(result.shoppingCart.orders[0].wertgarantieProduct.price).toEqual(newWertgarantieProductPrice);
@@ -530,15 +541,22 @@ test("should delete order item if no premium could be found for new shop item pr
                     }
                 },
             ],
+            confirmations: {
+                termsAndConditionsConfirmed: false
+            }
         };
         const newWertgarantieProductPrice = undefined;
         const mockProductOffersService = {
-            getPriceForSelectedProductOffer: () => newWertgarantieProductPrice
+            getPriceForSelectedProductOffer: () => newWertgarantieProductPrice,
+            getProductOfferById: () => productOffersTestResponses.productOffersPhone.productOffers[0]
         };
         const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOffersService);
         expect(result).toEqual({
             shoppingCart: {
-                orders: []
+                orders: [],
+                confirmations: {
+                    termsAndConditionsConfirmed: false
+                }
             },
             changes: {
                 updated: [],
@@ -616,9 +634,12 @@ test("should update model if matching shopProduct model differs", async () => {
                     }
                 },
             ],
+            confirmations: {
+                termsAndConditionsConfirmed: false
+            }
         };
 
-        const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart);
+        const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOfferServicePhone);
         expect(result.shoppingCart.orders[0].shopProduct.model).toEqual(updatedModel);
         expect(result.changes.updated).toEqual([{
             id: idToUpdate,

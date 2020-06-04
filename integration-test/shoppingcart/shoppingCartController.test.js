@@ -4,10 +4,13 @@ const testhelper = require('../helper/fixtureHelper');
 const signatureService = require('../../src/shoppingcart/signatureService');
 const uuid = require('uuid');
 const nockhelper = require('../helper/nockHelper');
+const webservicesProductOffersAssembler = require('../../src/backends/webservices/webservicesProductOffersAssembler');
+const webserviceMockClientWithPhoneConfig = require('../../test/helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig();
+const webserviceMockClientWithBikeConfig = require('../../test/helpers/webserviceMockClient').createMockWebserviceClientWithBikeConfig();
 
 test('should return shopping cart with selected product included', async () => {
-    const client = await testhelper.createAndPersistDefaultClient();
-    const wertgarantieProductId = uuid();
+    const client = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(client, undefined, webserviceMockClientWithPhoneConfig);
     const orderItemId = uuid();
     const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
@@ -18,7 +21,7 @@ test('should return shopping cart with selected product included', async () => {
                 orderItemId: orderItemId
             },
             wertgarantieProduct: {
-                id: wertgarantieProductId,
+                id: productOffers[0].id,
                 name: "Komplettschutz",
                 paymentInterval: "monthly",
                 price: 500
@@ -203,9 +206,9 @@ test("should handle invalid JSON in wertgarantieShoppingCart with status 400", a
 });
 
 test("should add multiple orders to shopping cart", async () => {
-    const client = await testhelper.createAndPersistDefaultClient();
+    const client = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(client, undefined, webserviceMockClientWithPhoneConfig);
     const signedShoppingCart = testhelper.createSignedShoppingCart();
-    const wertgarantieProductId = uuid();
     const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
             shopProduct: {
@@ -214,7 +217,7 @@ test("should add multiple orders to shopping cart", async () => {
                 deviceClass: "Smartphone"
             },
             wertgarantieProduct: {
-                id: wertgarantieProductId,
+                id: productOffers[0].id,
                 name: "Komplettschutz",
                 paymentInterval: "monthly",
                 price: 500
