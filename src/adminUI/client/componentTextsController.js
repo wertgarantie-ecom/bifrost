@@ -37,15 +37,16 @@ function getInputRow(inputName, componentTexts, excludedAttributes = []) {
 
 function getComponentTextsEditor(component, componentTexts, clientId, selectedLanguage, excludedAttributes = []) {
     // language=HTML
-    if (componentTexts) {
-        return `<form action="${'/admin/' + clientId + '/component-texts'}" method="post">
+    const currentTexts = componentTexts ? `<form action="${'/admin/' + clientId + '/component-texts'}" method="post">
             <input type="hidden" name="component" value="${component}">
             <input type="hidden" name="language" value="${selectedLanguage}">
             ${editorTableHeader}
             ${Object.keys(componentTexts).map(attribute => getInputRow(attribute, componentTexts, excludedAttributes)).join('')}
             <button type="submit" class="submit-button">Texte für ${component} component speichern</button>
         </form>
-        <hr/>
+        <hr/>` : ``;
+
+    return currentTexts + `
         <form action="${'/admin/' + clientId + '/component-texts/new-attribute'}" method="post">
             <input type="hidden" name="component" value="${component}">
             <input type="hidden" name="language" value="${selectedLanguage}">
@@ -63,8 +64,6 @@ function getComponentTextsEditor(component, componentTexts, clientId, selectedLa
         </form>
         </hr>
     `
-    }
-    return `<p>Keine Texte bisher hingerlegt für Komponente: ${component}</p>`;
 }
 
 function renderComponentTextEditor(componentTexts, component, selectedLanguage, client) {
