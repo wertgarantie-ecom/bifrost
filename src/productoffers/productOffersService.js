@@ -3,14 +3,18 @@ const _webserviceProductOffersRepository = require('../backends/webservices/webs
 const _ = require('lodash');
 
 async function getPriceForSelectedProductOffer(clientConfig, deviceClass, productId, shopProductPrice, paymentInterval) {
-    const productOffers = await getProductOffers(clientConfig, deviceClass, shopProductPrice);
-    const product = _.find(productOffers.productOffers, offer => offer.id === productId);
-    if (!product) {
+    const productOffer = await getProductOfferById(productId);
+    if (!productOffer) {
         return undefined;
     } else {
-        const paymentIntervalPrice = product.prices[paymentInterval];
+        const preparedProductOffer = webserviceProductOffersToGeneralProductOffers([productOffer], deviceClass, shopProductPrice);
+        const paymentIntervalPrice = preparedProductOffer[0].prices[paymentInterval];
         return (paymentIntervalPrice) ? paymentIntervalPrice.netAmount : undefined;
     }
+}
+
+async function getProductOfferById (productOfferId, webserviceProductOffersRepository = _webserviceProductOffersRepository) {
+    return webserviceProductOffersRepository.findById(productOfferId);
 }
 
 async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
@@ -125,23 +129,35 @@ function getPricesForWebservicesProductOffer(webservicesProductOffer, price) {
     return intervalPrices;
 }
 
+function getMinimumLockPriceForProduct(webservicesProductOffer, price) {
+    const lockPriceRange = _.find(webservicesProductOffer.lock.priceRanges, priceRange => price >= priceRange.minClose && price < priceRange.maxOpen);
+    if (!lockPriceRange) {
+        return undefined;
+    }
+    return lockPriceRange.requiredLockPrice;
+}
+
+function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
+    return {
+        id: webservicesProductOffer.id,
+        name: webservicesProductOffer.name,
+        advantages: [...webservicesProductOffer.advantages],
+        defaultPaymentInterval: webservicesProductOffer.defaultPaymentInterval,
+        prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
+        documents: webservicesProductOffer.documents.map(document => {
+            return {
+                type: document.documentType,
+                name: document.documentTitle,
+                uri: `${process.env.BASE_URI}/wertgarantie/documents/${document.documentId}`
+            };
+        })
+    }
+}
+
 function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, deviceClass, price) {
     const filteredProductOffers = filterProductOffers(webservicesProductOffers, deviceClass, price);
     return filteredProductOffers.map(webservicesProductOffer => {
-        return {
-            id: webservicesProductOffer.id,
-            name: webservicesProductOffer.name,
-            advantages: [...webservicesProductOffer.advantages],
-            defaultPaymentInterval: webservicesProductOffer.defaultPaymentInterval,
-            prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
-            documents: webservicesProductOffer.documents.map(document => {
-                return {
-                    type: document.documentType,
-                    name: document.documentTitle,
-                    uri: `${process.env.BASE_URI}/wertgarantie/documents/${document.documentId}`
-                };
-            })
-        }
+        return getProductOfferWithCorrectPrice(webservicesProductOffer, price);
     });
 }
 
@@ -154,6 +170,8 @@ class ProductOffersError extends Error {
 }
 
 exports.getProductOffers = getProductOffers;
+exports.getProductOfferById = getProductOfferById;
+exports.getMinimumLockPriceForProduct = getMinimumLockPriceForProduct;
 exports.heimdallProductOffersToGeneralProductOffers = heimdallProductOffersToGeneralProductOffers;
 exports.filterProductOffers = filterProductOffers;
 exports.hasDeviceClassAndIsInLimit = hasDeviceClassAndIsInLimit;

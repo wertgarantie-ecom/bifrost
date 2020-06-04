@@ -301,6 +301,20 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                         "defaultPaymentInterval": "monthly",
+                        "lock": {
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 100001,
+                                    "requiredLockPrice": 1900
+                                },
+                                {
+                                    "minClose": 100001,
+                                    "maxOpen": 400001,
+                                    "requiredLockPrice": 4900
+                                }
+                            ]
+                        },
                         "deviceClasses": [
                             {
                                 "objectCode": "27",
@@ -477,7 +491,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                             "Teilediebstahl"
                         ],
                         "risks": []
-                    },                        {
+                    }, {
                         "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
                         "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                         "applicationCode": "GU WG DE RAD EBS 0818",

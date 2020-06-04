@@ -73,14 +73,14 @@ test("should return valid confirmation data", async () => {
     expect(response.status).toBe(200);
     expect(response.body.signedShoppingCart).toEqual(signedShoppingCart);
     expect(response.body.shoppingCart).toEqual(undefined);
-    expect(response.body.termsAndConditionsConfirmed).toEqual(false);
+    expect(response.body.confirmations.termsAndConditionsConfirmed).toEqual(false);
+    expect(response.body.confirmations.confirmationTextTermsAndConditions).toEqual("Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"undefined/wertgarantie/documents/e2289cb6c7e945f4e79bab6b250cb0be34a9960e\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"undefined/wertgarantie/documents/6a9715485af877495e38b24b093d603436c433eb\">Widerrufsrecht</a> und das Produktinformationsblatt <a target=\"_blank\" href=\"undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa\">(IPID)</a> habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.");
     expect(response.body.orders.length).toEqual(1);
     expect(response.body.texts).toEqual({
         boxTitle: "Versicherung",
         title: "Glückwunsch! Dieser Einkauf wird bestens abgesichert",
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
         subtitle: "Bitte bestätige noch kurz:",
-        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"undefined/wertgarantie/documents/e2289cb6c7e945f4e79bab6b250cb0be34a9960e\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"undefined/wertgarantie/documents/6a9715485af877495e38b24b093d603436c433eb\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
         confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren."
     });
 });
@@ -105,7 +105,7 @@ test("should remove order from shopping cart", async () => {
     expect(response.status).toBe(200);
     expect(response.body.signedShoppingCart.shoppingCart.orders.length).toEqual(1);
     expect(response.body.signedShoppingCart.shoppingCart.orders[0]).toEqual(signedShoppingCart.shoppingCart.orders[1]);
-    expect(response.body.termsAndConditionsConfirmed).toEqual(false);
+    expect(response.body.confirmations.termsAndConditionsConfirmed).toEqual(false);
     expect(response.body.orders.length).toEqual(1);
 });
 
@@ -133,7 +133,7 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
             model: "IPhone 3000GB",
             orderItemId: orderItemId
         }
-    ]
+    ];
     const encodedShopShoppingCart = Buffer.from(JSON.stringify(shopShoppingCart)).toString("base64");
 
     const expectedPrice = await productOffersService.getPriceForSelectedProductOffer(clientData, deviceClass, selectedWertgarantieProduct, shopShoppingCart[0].price, wertgarantieOrder.wertgarantieProduct.paymentInterval);

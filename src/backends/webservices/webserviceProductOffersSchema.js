@@ -1,3 +1,4 @@
+const lockSchema = require('./lockSchema').lockSchema;
 module.exports.productOfferSchema = {
     "type": "object",
     "additionalProperties": false,
@@ -56,6 +57,7 @@ module.exports.productOfferSchema = {
                 "type": "string"
             }
         },
+        "lock": lockSchema,
         "devices": {
             "type": "array",
             "items": {

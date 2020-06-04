@@ -259,6 +259,29 @@ test("test heimdall product offer conversion", async () => {
     });
 });
 
+test("should get correct required lock price for bike", () => {
+    const productOffer = {
+        "lock": {
+            "priceRanges": [
+                {
+                    "maxOpen": 100001,
+                    "minClose": 0,
+                    "requiredLockPrice": 1900
+                },
+                {
+                    "maxOpen": 400001,
+                    "minClose": 100001,
+                    "requiredLockPrice": 4900
+                }
+            ]
+        }
+    };
+    const requiredLockPrice19 = productOffersService.getMinimumLockPriceForProduct(productOffer, 100000);
+    expect(requiredLockPrice19).toEqual(1900);
+    const requiredLockPrice49 = productOffersService.getMinimumLockPriceForProduct(productOffer, 100001);
+    expect(requiredLockPrice49).toEqual(4900);
+});
+
 const productOffersResult = [
     {
         "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",

@@ -1,5 +1,5 @@
 const service = require('../../../src/components/confirmation/confirmationComponentService');
-const productOffersTestResponse = require('../../productoffer/productOffersTestResponses').productOffers;
+const productOffersTestResponse = require('../../productoffer/productOffersTestResponses').productOffersPhone;
 const defaultConfirmationTextsDE = require('../../../src/clientconfig/defaultComponentTexts').defaultComponentTexts.confirmation.de;
 const _ = require('lodash');
 
@@ -21,7 +21,7 @@ const shoppingCartServiceMock = {
             }
         }
     }
-}
+};
 
 const clientData =
     {
@@ -74,15 +74,18 @@ const testShoppingCart = {
 
 const expectedResponse = {
     shoppingCart: testShoppingCart,
-    termsAndConditionsConfirmed: true,
+    confirmations: {
+        termsAndConditionsConfirmed: true,
+        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a> und das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+        furtherConfirmations: []
+    },
     showPriceChangedWarning: false,
     texts: {
         boxTitle: "Versicherung",
         title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
-        confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
-        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+        confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren."
     },
     orders: [
         {
@@ -116,7 +119,11 @@ const expectedResponse = {
 
 const updatedShoppingCartExpectedResponse = {
     shoppingCart: testShoppingCart,
-    termsAndConditionsConfirmed: false,
+    confirmations: {
+        termsAndConditionsConfirmed: false,
+        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a> und das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
+        furtherConfirmations: []
+    },
     showPriceChangedWarning: true,
     texts: {
         boxTitle: "Versicherung",
@@ -124,7 +131,6 @@ const updatedShoppingCartExpectedResponse = {
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
         confirmationPrompt: "Bitte bestätige die oben stehenden Bedingungen um fortzufahren.",
-        confirmationTextTermsAndConditions: "Ich akzeptiere die Allgemeinen Versicherungsbedingungen <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(AVB)</a> und die Bestimmungen zum <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Datenschutz</a>. Das gesetzliche <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">Widerrufsrecht</a>, das Produktinformationsblatt <a target=\"_blank\" href=\"http://localhost:3000/documents/justnotthere\">(IPID)</a> und die Vermittler-Erstinformation habe ich zur Kenntnis genommen und alle Dokumente heruntergeladen. Mit der Bestätigung der Checkbox erkläre ich mich damit einverstanden, dass mir alle vorstehenden Unterlagen an meine E-Mail-Adresse übermittelt werden. Der Übertragung der erforderlichen Daten zur Übermittlung meines Versicherungsantrages an die WERTGARANTIE AG per E-Mail stimme ich zu. Der Betrag wird separat per Rechnung bezahlt.",
     },
     orders: [
         {
@@ -208,7 +214,7 @@ test("should return proper confirmation component data for updated shoppingCart"
                 }
             }
         }
-    }
+    };
 
     const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, productImageServiceMock, clientComponentTextService, shoppingCartServiceMock);
     expect(confirmationData.instance).toEqual(updatedShoppingCartExpectedResponse);

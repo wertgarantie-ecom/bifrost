@@ -6,14 +6,43 @@ exports.confirmationResponseSchema = {
     required: [
         "shoppingCart",
         "texts",
-        "termsAndConditionsConfirmed",
+        "confirmations",
         "orders"
     ],
     properties: {
         shoppingCart: shoppingCartSchema,
         texts: confirmationTextsSchema,
-        termsAndConditionsConfirmed: {
-            type: "boolean"
+        confirmations: {
+            type: "object",
+            required: [
+                "termsAndConditionsConfirmed",
+                "confirmationTextTermsAndConditions"
+            ],
+            properties: {
+                termsAndConditionsConfirmed: {
+                    type: "boolean"
+                },
+                confirmationTextTermsAndConditions: {
+                    type: "string"
+                },
+                furtherConfirmations: {
+                    type: "array",
+                    items: {
+                        type: "object",
+                        properties: {
+                            name: {
+                                type: "string"
+                            },
+                            confirmed: {
+                                type: "boolean"
+                            },
+                            cofirmationText: {
+                                type: "string"
+                            }
+                        }
+                    }
+                }
+            }
         },
         orders: {
             type: "array",

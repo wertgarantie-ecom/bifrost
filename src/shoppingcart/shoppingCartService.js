@@ -9,14 +9,20 @@ const _productOfferService = require('../productoffers/productOffersService');
 const metrics = require('../framework/metrics');
 
 
-exports.addProductToShoppingCart = function addProductToShoppingCart(shoppingCart, productToAdd, publicClientId, orderId = uuid()) {
-    const updatedShoppingCart = shoppingCart || newShoppingCart(publicClientId);
+exports.addProductToShoppingCart = async function addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, orderId = uuid(), productOfferService = _productOfferService) {
+    const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.publicClientIds[0]);
+    const completeProductToAdd = await productOfferService.getProductOfferById(productToAdd.wertgarantieProduct.id);
     updatedShoppingCart.orders.push({
         id: orderId,
         shopProduct: productToAdd.shopProduct,
         wertgarantieProduct: productToAdd.wertgarantieProduct
     });
     updatedShoppingCart.confirmations.termsAndConditionsConfirmed = false;
+    if (completeProductToAdd.lock) {
+        updatedShoppingCart.confirmations.lockConfirmed = false;
+        const newItemsLockPrice = productOfferService.getMinimumLockPriceForProduct(completeProductToAdd, productToAdd.shopProduct.price);
+        updatedShoppingCart.confirmations.requiredLockPrice = _.max([updatedShoppingCart.confirmations.requiredLockPrice, newItemsLockPrice]);
+    }
     return updatedShoppingCart;
 };
 
@@ -98,9 +104,32 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     function updateShoppingCart(oldShoppingCart, newOrders) {
-        const updatedShoppingCart = {...wertgarantieShoppingCart}
+        const updatedShoppingCart = {...wertgarantieShoppingCart};
         updatedShoppingCart.orders = newOrders;
         return updatedShoppingCart;
+    }
+
+    async function updateLockPrice(updatedShoppingCart, changes) {
+        if (!(_.isEmpty(changes.updated) && _.isEmpty(changes.deleted) )) {
+            const lockPrices = await Promise.all(updatedShoppingCart.orders.map(async order => {
+                const productOffer = await productOfferService.getProductOfferById(order.wertgarantieProduct.id);
+                if (!productOffer.lock) {
+                    return undefined;
+                }
+                return productOfferService.getMinimumLockPriceForProduct(productOffer, order.shopProduct.price);
+            }));
+
+            const newRequiredLockPrice = _.max(lockPrices);
+            if (!newRequiredLockPrice && !updatedShoppingCart.confirmations.requiredLockPrice && updatedShoppingCart.confirmations.lockConfirmed !== undefined) {
+                delete updatedShoppingCart.confirmations.requiredLockPrice;
+                delete updatedShoppingCart.confirmations.lockConfirmed;
+            } else {
+                if (newRequiredLockPrice !== updatedShoppingCart.confirmations.requiredLockPrice) {
+                    updatedShoppingCart.confirmations.requiredLockPrice = newRequiredLockPrice;
+                    updatedShoppingCart.confirmations.lockConfirmed = false;
+                }
+            }
+        }
     }
 
     const syncResultAccumulator = {
@@ -109,7 +138,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
             updated: []
         },
         orders: []
-    }
+    };
 
     const syncOrderReducer = async (result, order) => {
         result = await result;
@@ -125,7 +154,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
                 if (order.shopProduct.price !== matchingShopOrderItem.price) {
                     const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.shopProduct.deviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
                     if (!newPrice) {
-                        result.changes.deleted.push(order.id)
+                        result.changes.deleted.push(order.id);
                         return;
                     }
                     order.shopProduct.price = matchingShopOrderItem.price;
@@ -153,13 +182,14 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     await wertgarantieShoppingCart.orders.reduce(syncOrderReducer, syncResultAccumulator);
-    const updatedWertgarantieShoppingCart = updateShoppingCart(wertgarantieShoppingCart, syncResultAccumulator.orders)
+    const updatedWertgarantieShoppingCart = updateShoppingCart(wertgarantieShoppingCart, syncResultAccumulator.orders);
+    await updateLockPrice(updatedWertgarantieShoppingCart, syncResultAccumulator.changes);
 
     return {
         changes: syncResultAccumulator.changes,
         shoppingCart: updatedWertgarantieShoppingCart
     };
-}
+};
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;
@@ -180,7 +210,28 @@ function newShoppingCart(clientId) {
     };
 }
 
-exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(id, shoppingCart) {
+async function updateLockPrices(result, productOffersService = _productOfferService) {
+    const lockPrices = await Promise.all(result.orders.map(async order => {
+        const productOffer = await productOffersService.getProductOfferById(order.wertgarantieProduct.id);
+        if (productOffer.lock) {
+            return productOffersService.getMinimumLockPriceForProduct(productOffer, order.shopProduct.price);
+        }
+        return undefined;
+    }));
+    const newLockPrice = _.max(lockPrices);
+    if (!newLockPrice) {
+        delete result.confirmations.lockConfirmed;
+        delete result.confirmations.requiredLockPrice;
+    } else {
+        const currentLockPrice = result.confirmations.requiredLockPrice;
+        if (currentLockPrice !== newLockPrice) {
+            result.confirmations.requiredLockPrice = newLockPrice;
+            result.confirmations.lockConfirmed = false;
+        }
+    }
+}
+
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(id, shoppingCart, productOffersService = _productOfferService) {
     if (!shoppingCart) {
         return undefined;
     }
@@ -190,7 +241,11 @@ exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(i
             i--;
         }
     }
-    return shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+    const result = shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+    if (result && result.confirmations.requiredLockPrice) {
+        await updateLockPrices(result, productOffersService);
+    }
+    return result;
 };
 
 class InvalidPublicClientIdError extends Error {

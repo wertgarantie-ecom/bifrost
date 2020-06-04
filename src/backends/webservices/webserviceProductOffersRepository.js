@@ -74,3 +74,17 @@ exports.findByClientId = async function findByClientId(clientId) {
         return undefined;
     }
 };
+
+exports.findById = async function findById(productOfferId) {
+    const pool = Pool.getInstance();
+    const result = await pool.query({
+        name: 'find-product-offer-by-id',
+        text: `SELECT * FROM (SELECT jsonb_array_elements(p.productoffers) as offer FROM productoffers p) po WHERE  po.offer ->> 'id' = $1`,
+        values: [productOfferId]
+    });
+    if (result.rowCount > 0) {
+        return result.rows[0].offer;
+    } else {
+        return undefined;
+    }
+}

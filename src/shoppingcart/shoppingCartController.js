@@ -6,7 +6,7 @@ const ClientError = require('../errors/ClientError');
  * Add given product to existing or new shopping cart.
  */
 exports.addProductToShoppingCart = async function addProductToShoppingCart(req, res) {
-    const shoppingCart = service.addProductToShoppingCart(req.shoppingCart, req.body, req.clientConfig.id);
+    const shoppingCart = await service.addProductToShoppingCart(req.shoppingCart, req.body, req.clientConfig);
 
     res.status(200).send({
         shoppingCart: shoppingCart,

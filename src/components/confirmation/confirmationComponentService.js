@@ -38,7 +38,10 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
             subtitle: componentTexts.subtitle,
             priceChangedWarning: componentTexts.priceChanged
         },
-        termsAndConditionsConfirmed: priceOfAtLeastOneProductChanged ? false : updatedWertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
+        confirmations: {
+            termsAndConditionsConfirmed: priceOfAtLeastOneProductChanged ? false : updatedWertgarantieShoppingCart.confirmations.termsAndConditionsConfirmed,
+            furtherConfirmations: []
+        },
         showPriceChangedWarning: priceOfAtLeastOneProductChanged,
         orders: [],
         shoppingCart: updatedWertgarantieShoppingCart
@@ -61,7 +64,14 @@ exports.prepareConfirmationData = async function prepareConfirmationData(wertgar
         }
     }
 
-    result.texts.confirmationTextTermsAndConditions = util.format(componentTexts.confirmationTextTermsAndConditions, avbHref, GDPRHref, rowHref, IPIDHref);
+    result.confirmations.confirmationTextTermsAndConditions = util.format(componentTexts.confirmationTextTermsAndConditions, avbHref, GDPRHref, rowHref, IPIDHref);
+    if (updatedWertgarantieShoppingCart.confirmations.lockConfirmed !== undefined) {
+        result.confirmations.furtherConfirmations.push({
+            name: "lockConfirmed",
+            confirmed: updatedWertgarantieShoppingCart.confirmations.lockConfirmed,
+            confirmationText: util.format(componentTexts.confirmationTextLock, productOfferFormattingService.formatPrice(updatedWertgarantieShoppingCart.confirmations.requiredLockPrice))
+        });
+    }
     result.texts.confirmationPrompt = componentTexts.confirmationPrompt;
     if (result.orders.length <= 0) {
         return undefined;

@@ -1,3 +1,5 @@
+const lockSchema = require('./lockSchema').lockSchema;
+
 module.exports.productOffersConfigSchema = {
     "type": "array",
     "items": {
@@ -93,7 +95,8 @@ module.exports.productOffersConfigSchema = {
                 "items": {
                     "type": "string"
                 }
-            }
+            },
+            "lock": lockSchema
         }
     }
 };
