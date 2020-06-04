@@ -41,6 +41,7 @@ function getComponentTextsEditor(component, componentTexts, clientId, selectedLa
         <input type="hidden" name="component" value="${component}">
         <input type="hidden" name="language" value="${selectedLanguage}">
         ${editorTableHeader}
+        ${console.log(JSON.stringify(componentTexts, null, 2))}
         ${Object.keys(componentTexts).map(attribute => getInputRow(attribute, componentTexts, excludedAttributes)).join('')}
         <button type="submit" class="submit-button">Texte für ${component} component speichern</button>
     </form>
