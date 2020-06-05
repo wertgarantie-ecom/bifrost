@@ -299,6 +299,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                 productOffersConfigurations: [
                     {
                         "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+                        "shortName": "Variante A",
                         "productType": "KOMPLETTSCHUTZ_RAD_M_2018",
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
@@ -375,6 +376,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                     },
                     {
                         "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                        "shortName": "Variante B",
                         "productType": "KOMPLETTSCHUTZ_RAD_J_2018",
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
@@ -436,6 +438,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                     },
                     {
                         "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+                        "shortName": "Variante A",
                         "productType": "KOMPLETTSCHUTZ_EBIKE_M_2018",
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
@@ -495,6 +498,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "risks": []
                     }, {
                         "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+                        "shortName": "Variante B",
                         "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
