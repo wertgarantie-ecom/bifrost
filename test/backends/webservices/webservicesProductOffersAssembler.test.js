@@ -345,6 +345,7 @@ test('should update all product offers for client', async () => {
     expect(result).toEqual([
         {
             name: "Komplettschutz",
+            shortName: "Basisschutz",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
             clientId: clientConfig.id,
             applicationCode: "GU WG DE KS 0419",
@@ -378,6 +379,7 @@ test('should update all product offers for client', async () => {
         },
         {
             name: "Komplettschutz mit Premium-Option",
+            shortName: "Premiumschutz",
             id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
             clientId: clientConfig.id,
             applicationCode: "GU WG DE KS 0419",

@@ -148,6 +148,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                 productOffersConfigurations: [
                     {
                         name: "Komplettschutz",
+                        shortName: "Basisschutz",
                         productType: "KOMPLETTSCHUTZ_2019",
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
@@ -204,6 +205,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                     },
                     {
                         name: "Komplettschutz mit Premium-Option",
+                        shortName: "Premiumschutz",
                         productType: "KOMPLETTSCHUTZ_2019",
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
