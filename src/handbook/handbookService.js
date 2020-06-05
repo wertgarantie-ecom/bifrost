@@ -17,7 +17,10 @@ const md = new MarkdownIt(
 const _ = require('lodash');
 
 
-exports.getInstallationInstructions = function getInstallationInstructions(client) {
+exports.generateHandbookForClient = function generateHandbookForClient(client) {
+    if (!client.handbook) {
+        return undefined;
+    }
     const configuredDeviceClassesArray = [];
     client.backends.webservices.productOffersConfigurations.map(offerConfig => {
         configuredDeviceClassesArray.push(...offerConfig.deviceClasses.map(deviceClass => deviceClass.objectCodeExternal));
@@ -39,34 +42,30 @@ ${configuredDeviceClasses.map(deviceClass => `* ${deviceClass}`).join("\n")}
 
 Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents), konfigurierter DeviceClass und einer der public Client IDs:
 \`\`\`html
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/handyflash/wertgarantie-selection-pop-up.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-pop-up.css">
 
     <wertgarantie-selection-pop-up id="wertgarantie-selection"
                                 ${bifrostUriDateAttribute} 
                                data-shop-product-name="iPhone SE"
                                data-device-price=86000
-                               data-device-class="Smartphone"
-                               data-order-item-id="1234-12309aj1-321"
+                               data-device-class=${configuredDeviceClasses[0]}
+                               ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? 'data-order-item-id="1234-12309aj1-321"' : ''}
                                data-client-id="${client.publicClientIds[0]}">
     </wertgarantie-selection-pop-up>
     
     <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-selection-popup@2/dist/selection-popup.min.js" crossorigin="anonymous"></script>
-    
-    <script>
-        window.onload = function () {
-        var selection = document.getElementById('wertgarantie-selection');
-        if (selection) {
-            selection.displayComponent();
-        }
-    }
-    </script>
 \`\`\`
 
-Eine beispielhafte Integration kann hier gefunden werden: [pop-up-integration-sample](https://github.com/wertgarantie-ecom/integrations/blob/master/handyflash/warenkorb-staging.html)
+${client.handbook.components.selectionpopup.sample
+        ? `Eine beispielhafte Integration kann hier gefunden werden: [pop-up-integration-sample](${client.handbook.components.selectionpopup.sample})`
+        : ''}
+
 
 Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
 
 ### 2. Confirmation Component
+${client.handbook.features.includes('SHOPPING_CART_SYNC')
+        ? `
 Die Confirmation Component benötigt zur Initialisierung den aktuellen Handyflash Shopping Cart (zumindest alle Artikel deren deviceClass versicherbar ist).
 Die Artikel müssen in einem Base64 enkodierten JSON Array übergeben werden (das zugehörige Schema ist [hier](https://github.com/wertgarantie-ecom/bifrost/blob/master/src/shoppingcart/schemas/shopProductSchema.js) zu finden). 
 
@@ -84,6 +83,8 @@ confirmationCompData.push(...shoppingCartData.products.map(product => {
 }));
 const confirmationShopOrderBase64 = Buffer.from(JSON.stringify(confirmationCompData)).toString('base64'); 
 \`\`\`
+        `
+        : ''}
 
 Die Confirmation Component ist designed, um im Warenkorb eingebunden zu werden. Im Warenkorb wird es ein HTMLElement geben, das den Einkauf der Shop-Produkte abschließt. 
 Ein Selector dieses HTMLElements wird mit dem Attribut \`data-validation-trigger-selector\` der Komponente übergeben. Dahinter kann sich z. B. eine Form verbergen oder ein Button. Darauf setzt die Komponente automatisch einen Event-Listener auf den Event-Typ, der mit 
@@ -91,19 +92,22 @@ dem Attribut \`data-validation-trigger-event\` (form -> "submit", button -> "cli
 Wurde nicht bestätigt, wird diese Aktion unterbrochen und die Komponente zeigt eine entsprechende Meldung an. Wurde bestätigt, wird der reguläre Vorgang im Shop ausgelöst.
 
 \`\`\`html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/handyflash/wertgarantie-confirmation.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-confirmation.css">
 <wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation"
       ${bifrostUriDateAttribute} 
        data-validation-trigger-selector="#orderbutton"
        data-validation-trigger-event="click"
-       data-shop-order-base64="JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL08...">
+       ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? 'data-shop-order-base64="JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL08..."' : ''}
        data-client-id="${client.publicClientIds[0]}">
 </wertgarantie-confirmation>
                         
 <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-confirmation@2/dist/confirmation.min.js" crossorigin="anonymous"></script>
 \`\`\`
 
-Eine beispielhafte Integration kann hier gefunden werden: [confirmation-component-integration-sample](https://github.com/wertgarantie-ecom/integrations/blob/master/handyflash/warenkorb-staging.html)
+${client.handbook.components.confirmation.sample
+        ? `Eine beispielhafte Integration kann hier gefunden werden: [confirmation-component-integration-sample](${client.handbook.components.confirmation.sample})`
+        : ''}
+
 
 Weitere Details zur Confirmation-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-confirmation--confirmation-component-phone-shop) zu finden.
 
@@ -151,7 +155,7 @@ Das Resultat (hier \`dataShopPurchaseData\`) wird mit dem HTML-Attribut \`data-s
 Weiterhin ist die public client ID erforderlich:
 
 \`\`\`html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/handyflash/wertgarantie-after-sales.css ">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-after-sales.css ">
 
 <wertgarantie-after-sales
                     ${bifrostUriDateAttribute} 
@@ -163,7 +167,9 @@ Weiterhin ist die public client ID erforderlich:
 <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-after-sales@1/dist/after-sales.min.js" crossorigin="anonymous"></script>
 \`\`\`
 
-Eine beispielhafte Integration kann hier gefunden werden: [after-sales-integration-sample](https://github.com/wertgarantie-ecom/integrations/blob/master/handyflash/bestellbestaetigungs_seite_staging.html)
+${client.handbook.components.aftersales.sample
+        ? `Eine beispielhafte Integration kann hier gefunden werden: [after-sales-integration-sample](${client.handbook.components.aftersales.sample})`
+        : ''}
 
 Weitere Details zur Implementierung befinden sich [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-after-sales--after-sales-general).
 
@@ -197,4 +203,6 @@ Weitere Details zur Implementierung befinden sich [hier](https://wertgarantie-ec
 </body>
 </html>`;
 }
+
+
 ;

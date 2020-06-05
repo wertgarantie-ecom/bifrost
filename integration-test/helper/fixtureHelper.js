@@ -2,6 +2,7 @@ const signatureService = require('../../src/shoppingcart/signatureService');
 const clientService = require('../../src/clientconfig/clientService');
 const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
+const features = require('../../src/handbook/features');
 
 exports.createAndPersistDefaultClient = async function createAndPersistDefaultClient() {
     const addNewClientRequest = this.createDefaultClient();
@@ -269,7 +270,22 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         ],
         activePartnerNumber: 12345,
         basicAuthUser: "testclient",
-        basicAuthPassword: "testclient"
+        basicAuthPassword: "testclient",
+        handbook: {
+            features: features,
+            components: {
+                selectionpopup: {
+                    samples: "www.example.com"
+                },
+                confirmation: {
+                    samples: "www.example.com"
+                },
+                aftersales: {
+                    samples: "www.example.com"
+                }
+
+            }
+        }
     }
 };
 

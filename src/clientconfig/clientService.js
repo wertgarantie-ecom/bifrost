@@ -69,7 +69,8 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         secrets: createClientRequest.secrets || ['secret:' + uuid()],
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
         basicAuthUser: createClientRequest.basicAuthUser,
-        basicAuthPassword: createClientRequest.basicAuthPassword
+        basicAuthPassword: createClientRequest.basicAuthPassword,
+        handbook: createClientRequest.handbook
     };
     validate(clientData, newClientSchema);
     const persistedClientData = await repository.insert(clientData);

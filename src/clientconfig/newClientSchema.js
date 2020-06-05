@@ -1,4 +1,5 @@
 const productOffersConfigSchema = require('../backends/webservices/productOffersConfigSchema').productOffersConfigSchema;
+const features = require('../handbook/features');
 
 module.exports.newClientSchema = {
     type: "object",
@@ -86,6 +87,48 @@ module.exports.newClientSchema = {
         },
         basicAuthPassword: {
             type: "string"
+        },
+        handbook: {
+            type: "object",
+            properties: {
+                features: {
+                    type: "array",
+                    items: {
+                        type: "string",
+                        enum: features
+                    }
+                },
+                components: {
+                    type: "object",
+                    properties: {
+                        selectionpopup: {
+                            type: "object",
+                            properties: {
+                                sample: {
+                                    type: "string"
+                                }
+                            }
+                        },
+                        confirmation: {
+                            type: "object",
+                            properties: {
+                                sample: {
+                                    type: "string"
+                                }
+                            }
+                        },
+                        aftersales: {
+                            type: "object",
+                            properties: {
+                                sample: {
+                                    type: "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
+
     }
 };

@@ -35,7 +35,23 @@ describe("should find persisted client properties by given secret", () => {
             "public:" + uuid()
         ],
         basicAuthUser: "test",
-        basicAuthPassword: "test"
+        basicAuthPassword: "test",
+        handbook: {
+            features: [
+                "SHOPPING_CART_SYNC"
+            ],
+            components: {
+                popupselection: {
+                    "samples": []
+                },
+                confirmation: {
+                    "samples": []
+                },
+                aftersales: {
+                    "samples": []
+                }
+            }
+        }
     };
 
 

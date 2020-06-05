@@ -5,7 +5,7 @@ const clientController = require("../clientconfig/clientController");
 const clientComponentTextController = require("../clientconfig/clientComponentTextController");
 const webservicesController = require("../backends/webservices/webservicesController");
 const documentsController = require("../documents/documentsController");
-const documentationController = require("../documentation/documentationController");
+const handbookController = require("../handbook/handbookController");
 const basicAuth = require('express-basic-auth');
 const basicAuthByClientId = require('./basicAuthByClientIdFilter');
 // purchases
@@ -31,7 +31,8 @@ router.post("/clients/:clientId/component-texts", basicAuth(basicAuthUsers), cli
 router.get("/clients/:clientId/component-texts", clientComponentTextController.getAllComponentTextsForClient);
 
 // client installation guide
-router.get("/clients/:clientId/documentation", basicAuthByClientId, documentationController.getClientDocumentation);
+router.get("/clients/:clientId/documentation", basicAuthByClientId, (req, res) => res.redirect(`../${req.params.clientId}/handbook`));
+router.get("/clients/:clientId/handbook", basicAuthByClientId, handbookController.getClientHandbook);
 
 // webservices product offers
 router.post("/productOffers", basicAuth(basicAuthUsers), webservicesController.triggerProductOffersAssembly);

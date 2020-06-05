@@ -1,6 +1,7 @@
 const documentTypes = require('../src/documents/documentTypes').documentTypes;
 const request = require('supertest');
 const app = require('../src/app');
+const features = require('../src/handbook/features');
 
 const phoneClientId = "433295ef-ec5d-45d2-8701-d530e44fcf88";
 const bocClientId = "ad0a99e6-a165-4eda-91fc-564fb3f935b4";
@@ -429,7 +430,7 @@ describe('add bike test shop client config', () => {
                                 "Teilediebstahl"
                             ],
                             "risks": []
-                        },                        {
+                        }, {
                             "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
                             "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                             "applicationCode": "GU WG DE RAD EBS 0818",
@@ -508,7 +509,22 @@ describe('add bike test shop client config', () => {
                 "public:5a576bd2-1953-4d20-80de-4de00d65fdc7"
             ],
             "basicAuthUser": "testshopbike",
-            "basicAuthPassword": "testshopbike"
+            "basicAuthPassword": "testshopbike",
+            "handbook": {
+                "features": features,
+                "components": {
+                    selectionpopup: {
+                        sample: "www.example.com"
+                    },
+                    confirmation: {
+                        sample: "www.example.com"
+                    },
+                    aftersales: {
+                        sample: "www.example.com"
+                    }
+
+                }
+            }
         };
 
         const response = await request(app)
