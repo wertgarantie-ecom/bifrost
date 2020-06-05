@@ -114,7 +114,7 @@ exports.getValidPurchase = function getValidPurchase() {
     }
 }
 
-exports.createAndPersistDefaultClientWithWebservicesConfiguration = async function createAndPersistDefaultClientWithWebservicesConfiguratio() {
+exports.createAndPersistPhoneClientWithWebservicesConfiguration = async function createAndPersistPhoneClientWithWebservicesConfiguration() {
     const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();
     return await clientService.addNewClient(addNewClientRequest);
 };
@@ -174,7 +174,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,
@@ -231,7 +231,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,

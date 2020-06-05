@@ -1,14 +1,17 @@
-const selectionPopUpTextsSchema = require("./selectionPopUpTextsSchema").selectionPopUpTextsSchema;
 const advantageSchema = require('../selectiongeneral/advantageSchema').advantageSchema;
+const selectionEmbeddedTextsSchema = require('./selectionEmbeddedTextsSchema').selectionEmbeddedTextsSchema;
 
-module.exports.productSelectionResponseSchema = {
+
+exports.selectionEmbeddedResponseSchema = {
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
     "type": "object",
     "required": [
         "texts",
         "products"
     ],
     "properties": {
-        "texts": selectionPopUpTextsSchema,
+        "texts": selectionEmbeddedTextsSchema,
         "products": {
             "type": "array",
             "items": {
@@ -16,6 +19,7 @@ module.exports.productSelectionResponseSchema = {
                 "required": [
                     "id",
                     "name",
+                    "shortName",
                     "top3",
                     "advantages",
                     "IPIDText",

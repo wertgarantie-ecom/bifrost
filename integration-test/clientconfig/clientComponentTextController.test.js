@@ -47,7 +47,7 @@ describe("should persist, retrieve and alter component texts for client", () => 
     };
 
     test("should insert german text for selection popup", async () => {
-        client = await fixtureHelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+        client = await fixtureHelper.createAndPersistPhoneClientWithWebservicesConfiguration();
         const result = await request(app).post(`/wertgarantie/clients/${client.id}/component-texts`)
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .send({

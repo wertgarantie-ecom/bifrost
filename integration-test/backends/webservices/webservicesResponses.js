@@ -77,7 +77,7 @@ exports.agentDataMultipleMultimediaProducts = {
                     "PURCHASE_PRICE_LIMITATIONS": {
                         "MAX_PRICE": [
                             {
-                                "OBJECT_DESCRIPTION": "Mobilfunk",
+                                "OBJECT_DESCRIPTION": "Test",
                                 "AMOUNT": "1800",
                                 "OBJECT_CODE": "73"
                             },
@@ -371,7 +371,7 @@ exports.agentDataSingleProduct = {
                 "PURCHASE_PRICE_LIMITATIONS": {
                     "MAX_PRICE": [
                         {
-                            "OBJECT_DESCRIPTION": "Mobilfunk",
+                            "OBJECT_DESCRIPTION": "Test",
                             "AMOUNT": "1800",
                             "OBJECT_CODE": "73"
                         },

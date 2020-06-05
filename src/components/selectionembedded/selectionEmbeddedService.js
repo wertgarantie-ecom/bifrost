@@ -3,7 +3,7 @@ const _productOffersService = require("../../productoffers/productOffersService"
 const productService = require("../../productoffers/productOfferFormattingService");
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const documentTypes = require("../../documents/documentTypes").documentTypes;
-const schema = require('../selectionpopup/productSelectionResponseSchema').productSelectionResponseSchema;
+const schema = require('../selectionembedded/selectionEmbeddedResponseSchema').selectionEmbeddedResponseSchema;
 const component = require('./../components').components.selectionembedded;
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
@@ -40,9 +40,9 @@ async function prepareProductSelectionData(deviceClass,
     };
     data.texts.footerHtml = util.format(selectionEmbeddedTexts.footerHtml, selectionEmbeddedTexts.partnerShop);
 
-    // const result = validate(data, schema);
+    const result = validate(data, schema);
 
-    return data;
+    return result.instance;
 }
 
 exports.prepareProductSelectionData = prepareProductSelectionData;

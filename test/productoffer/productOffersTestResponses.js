@@ -4,6 +4,7 @@ exports.productOffersPhone = {
         {
             "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
             "name": "Komplettschutz",
+            "shortName": "Basisschutz",
             "advantages": [
                 "Für private und berufliche Nutzung",
                 "Unsachgemäße Handhabung",
@@ -61,6 +62,7 @@ exports.productOffersPhone = {
         {
             "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
             "name": "Komplettschutz mit Premium-Option",
+            "shortName": "Premiumschutz",
             "advantages": [
                 "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
                 "Diebstahlschutz",
@@ -141,6 +143,7 @@ exports.productOffersBike = {
                 ]
             },
             "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+            "shortName": "Variante A",
             "risks": [
                 "KOMPLETTSCHUTZ_RAD"
             ],
@@ -354,6 +357,7 @@ exports.productOffersBike = {
                 ]
             },
             "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+            "shortName": "Variante B",
             "risks": [
                 "KOMPLETTSCHUTZ_RAD"
             ],
@@ -453,6 +457,7 @@ exports.productOffersBike = {
                 ]
             },
             "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+            "shortName": "Variante A",
             "risks": [
                 "KOMPLETTSCHUTZ_EBIKE"
             ],
@@ -627,6 +632,7 @@ exports.productOffersBike = {
                 ]
             },
             "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+            "shortName": "Variante B",
             "risks": [
                 "KOMPLETTSCHUTZ_EBIKE"
             ],

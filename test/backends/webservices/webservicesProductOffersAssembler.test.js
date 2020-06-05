@@ -19,7 +19,7 @@ const allRelevantWebservicesProducts = [{
     "PURCHASE_PRICE_LIMITATIONS": {
         "MAX_PRICE": [
             {
-                "OBJECT_DESCRIPTION": "Mobilfunk",
+                "OBJECT_DESCRIPTION": "Test",
                 "AMOUNT": "1800",
                 "OBJECT_CODE": "73"
             },
@@ -237,7 +237,7 @@ test('should getDevicePremiums', async () => {
             },
             {
                 objectCode: "73",
-                objectCodeExternal: "Mobilfunk",
+                objectCodeExternal: "Test",
                 priceRanges: [
                     {
                         minClose: 0,
@@ -508,7 +508,7 @@ const expectedIntervalPremiumsForKS = [
     },
     {
         "objectCode": "73",
-        "objectCodeExternal": "Mobilfunk",
+        "objectCodeExternal": "Test",
         "maxPriceLimitation": 180000,
         "intervals": [
             {
@@ -643,7 +643,7 @@ test('should not fail if no products are matching for the given offers configura
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,
@@ -731,7 +731,7 @@ test.skip('call webservices dev', async () => {
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,
@@ -786,7 +786,7 @@ test.skip('call webservices dev', async () => {
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,

@@ -9,7 +9,7 @@ const webserviceMockClientWithPhoneConfig = require('../../test/helpers/webservi
 const webserviceMockClientWithBikeConfig = require('../../test/helpers/webserviceMockClient').createMockWebserviceClientWithBikeConfig();
 
 test('should return shopping cart with selected product included', async () => {
-    const client = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const client = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(client, undefined, webserviceMockClientWithPhoneConfig);
     const orderItemId = uuid();
     const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
@@ -206,7 +206,7 @@ test("should handle invalid JSON in wertgarantieShoppingCart with status 400", a
 });
 
 test("should add multiple orders to shopping cart", async () => {
-    const client = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const client = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(client, undefined, webserviceMockClientWithPhoneConfig);
     const signedShoppingCart = testhelper.createSignedShoppingCart();
     const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
