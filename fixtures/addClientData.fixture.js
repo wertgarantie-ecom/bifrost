@@ -3,7 +3,7 @@ const request = require('supertest');
 const app = require('../src/app');
 
 const phoneClientId = "433295ef-ec5d-45d2-8701-d530e44fcf88";
-const bikeClientId = "ad0a99e6-a165-4eda-91fc-564fb3f935b4";
+const bocClientId = "ad0a99e6-a165-4eda-91fc-564fb3f935b4";
 const handFlashClientId = "9302410c-fbbe-44e3-a628-0d42d3944078";
 
 describe('add phone test shop client config', () => {
@@ -194,7 +194,7 @@ describe('add bike test shop client config', () => {
     test('should add bike test shop client configuration', async (done) => {
 
         const validData = {
-            "id": bikeClientId,
+            "id": bocClientId,
             "name": "Test Shop Bike",
             "backends": {
                 "heimdall": {
@@ -530,11 +530,11 @@ describe('add bike test shop client config', () => {
     })
 });
 
-describe('add Handyflash DEV/Local test client config', () => {
-    test('should add Handyflash DEV test client configuration', async (done) => {
+describe('add Handyflash Local test client config', () => {
+    test('should add Handyflash Local test client configuration', async (done) => {
         const validData = {
             "id": handFlashClientId,
-            "name": "Handyflash DEV",
+            "name": "Handyflash Local",
             "backends": {
                 "heimdall": {
                     "clientId": "test-handyflash-heimdall-clientId",
