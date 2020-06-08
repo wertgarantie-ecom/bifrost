@@ -77,7 +77,7 @@ confirmationCompData.push(...shoppingCartData.products.map(product => {
     return {
         price: product.selectedVariant.devicePrice,
         deviceClass: product.deviceClass,
-        model: product.productName,
+        name: product.productName,
         orderItemId: product.orderItemId
     }
 }));
@@ -132,7 +132,7 @@ const wertgarantieCheckoutDataBuffer = Buffer.from(JSON.stringify({
                 price: 86000, // in minor units (cent)
                 manufacturer: "XXXPhones Inc.",
                 deviceClass: "Smartphone",
-                model: "Example Phone",
+                name: "Example Phone",
                 orderId: "orderNo1"
             }       
         ],

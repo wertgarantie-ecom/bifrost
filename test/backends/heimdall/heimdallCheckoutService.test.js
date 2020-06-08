@@ -4,7 +4,7 @@ const validCustomer = require('../../../integration-test/helper/fixtureHelper').
 test("shopping cart checkout should checkout wertgarantie product if referenced shop product was also purchased", async () => {
     const wertgarantieProduct = {
         shopProduct: {
-            model: "IPhone X",
+            name: "IPhone X",
             deviceClass: "Smartphone",
             price: 100000
         },
@@ -19,7 +19,7 @@ test("shopping cart checkout should checkout wertgarantie product if referenced 
         price: "100000",
         manufacturer: "Apple Inc",
         deviceClass: "Smartphone",
-        model: "IPhone X",
+        name: "IPhone X",
         deviceOS: "iOS"
     };
     const customer = validCustomer();
@@ -112,7 +112,7 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
 
     const shoppingCartOrder = {
         shopProduct: {
-            model: "IPhone X",
+            name: "IPhone X",
             deviceClass: "Smartphone",
             price: 100000
         },
@@ -127,7 +127,7 @@ test("failing heimdall checkout call should be handled gracefully", async () => 
         price: 100000,
         manufacturer: "Apple Inc",
         deviceClass: "Smartphone",
-        model: "IPhone X",
+        name: "IPhone X",
         productId: "1"
     };
 

@@ -21,7 +21,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                     {
                         id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46",
                         shopProduct: {
-                            model: "SuperBike 3000",
+                            name: "SuperBike 3000",
                             deviceClass: "Test",
                             price: 139999
                         },
@@ -54,7 +54,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                     price: 139999,
                     manufacturer: "Super Bike Inc.",
                     deviceClass: "Test",
-                    model: "SuperBike 3000"
+                    name: "SuperBike 3000"
                 }],
                 customer: {
                     company: "INNOQ",
@@ -109,7 +109,7 @@ describe("Check Checkout via after sales component ", () => {
                     {
                         id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46",
                         shopProduct: {
-                            model: "SuperBike 3000",
+                            name: "SuperBike 3000",
                             deviceClass: "Test",
                             price: 139999
                         },
@@ -130,7 +130,7 @@ describe("Check Checkout via after sales component ", () => {
                 price: 139999,
                 manufacturer: "Super Bike Inc.",
                 deviceClass: "Test",
-                model: "SuperBike 3000"
+                name: "SuperBike 3000"
             }],
             customer: {
                 company: "INNOQ",

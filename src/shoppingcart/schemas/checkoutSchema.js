@@ -22,7 +22,7 @@ module.exports.checkoutSchema = {
                         deviceClass: {
                             type: "string"
                         },
-                        model: {
+                        name: {
                             type: "string"
                         },
                         orderItemId: {
@@ -33,7 +33,7 @@ module.exports.checkoutSchema = {
                         "price",
                         "manufacturer",
                         "deviceClass",
-                        "model"
+                        "name"
                     ]
                 }
             ]

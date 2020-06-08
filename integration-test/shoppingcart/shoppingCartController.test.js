@@ -15,7 +15,7 @@ test('should return shopping cart with selected product included', async () => {
     const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
             shopProduct: {
-                model: "Phone X",
+                name: "Phone X",
                 price: 4500,
                 deviceClass: "Smartphone",
                 orderItemId: orderItemId
@@ -72,7 +72,7 @@ describe("Checkout Shopping Cart", () => {
                     shopProduct: {
                         deviceClass: "Bike",
                         price: 139999,
-                        model: "SuperBike 3000",
+                        name: "SuperBike 3000",
                     },
                     id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46"
                 }
@@ -98,7 +98,7 @@ describe("Checkout Shopping Cart", () => {
                     price: 139999,
                     manufacturer: "Super Bike Inc.",
                     deviceClass: "Bike",
-                    model: "SuperBike 3000"
+                    name: "SuperBike 3000"
                 }],
                 customer: {
                     company: "INNOQ",
@@ -212,7 +212,7 @@ test("should add multiple orders to shopping cart", async () => {
     const result = await request(app).post(`/wertgarantie/ecommerce/clients/${client.publicClientIds[0]}/shoppingCart`)
         .send({
             shopProduct: {
-                model: "Phone X",
+                name: "Phone X",
                 price: 4500,
                 deviceClass: "Smartphone"
             },

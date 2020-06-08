@@ -63,7 +63,7 @@ test("should return valid confirmation data", async () => {
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
         deviceClass: "Smartphone",
-        model: "Test Handy",
+        name: "Test Handy",
         wertgarantieProductId: productOffers[0].id,
         wertgarantieProductName: productOffers[0].name
     });
@@ -91,7 +91,7 @@ test("should remove order from shopping cart", async () => {
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
         deviceClass: "Smartphone",
-        model: "Test Handy",
+        name: "Test Handy",
         wertgarantieProductId: productOffers[0].id,
         wertgarantieProductName: productOffers[0].name,
         quantity: 2
@@ -119,7 +119,7 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
         publicClientId: clientData.publicClientIds[0],
         devicePrice: 80000,
         deviceClass: deviceClass,
-        model: "Test Handy",
+        name: "Test Handy",
         wertgarantieProductId: selectedWertgarantieProduct,
         wertgarantieProductName: productOffers[0].name
     });
@@ -130,7 +130,7 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
     const shopShoppingCart = [
         {
             price: 180000,
-            model: "IPhone 3000GB",
+            name: "IPhone 3000GB",
             orderItemId: orderItemId
         }
     ];
@@ -149,7 +149,7 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
         "id": wertgarantieOrder.id,
         "shopProduct": {
             "deviceClass": "Smartphone",
-            "model": shopShoppingCart[0].model,
+            "name": shopShoppingCart[0].name,
             "orderItemId": orderItemId,
             "price": shopShoppingCart[0].price
         },

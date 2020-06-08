@@ -1,7 +1,7 @@
 exports.shopProductSchema = {
     type: "object",
     properties: {
-        model: {
+        name: {
             type: "string"
         },
         price: {
@@ -15,7 +15,7 @@ exports.shopProductSchema = {
         }
     },
     required: [
-        "model",
+        "name",
         "price",
         "deviceClass"
     ]

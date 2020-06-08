@@ -43,7 +43,7 @@ test("should return valid insurance proposal XML", () => {
         price: 139999,
         manufacturer: "Super Phones Inc.",
         deviceClass: "Smartphone",
-        model: "Smartphone 11x"
+        name: "Smartphone 11x"
     };
     const customer = {
         company: "INNOQ",
@@ -66,7 +66,7 @@ test("should submit insurance proposal", async () => {
         shopProduct: {
             deviceClass: "Smartphone",
             price: 139999,
-            model: "Smartphone 11x"
+            name: "Smartphone 11x"
         },
         wertgarantieProduct: {
             id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
@@ -78,7 +78,7 @@ test("should submit insurance proposal", async () => {
         price: 139999,
         manufacturer: "Super Phones Inc.",
         deviceClass: "Smartphone",
-        model: "Smartphone 11x"
+        name: "Smartphone 11x"
     };
     const customer = {
         company: "INNOQ",
@@ -153,7 +153,7 @@ test.skip('execute vs webservices dev', async () => {
         price: 139999,
         manufacturer: "Super Phones Inc.",
         deviceClass: "Smartphone",
-        model: "Smartphone 11x"
+        name: "Smartphone 11x"
     };
     const customer = {
         company: "INNOQ",

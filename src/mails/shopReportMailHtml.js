@@ -4,7 +4,7 @@ module.exports = function renderCustomerMailHtml(shopName, purchase, shopOrderId
     <p>
     <h3>${shopName}  Produkt:</h3>
     OrderId: ${shopOrderId}<br>
-    Modell: ${purchase.shopProduct}<br>
+    Name: ${purchase.shopProduct}<br>
     DeviceClass: ${purchase.deviceClass}<br>
     Preis: ${purchase.devicePrice}<br>
     </p>

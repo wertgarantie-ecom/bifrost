@@ -101,7 +101,7 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
                 IPIDUri: IPID.uri,
                 IPIDText: IPID.name,
                 productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.shopProduct.deviceClass, 1)[0],
-                shopProductShortName: order.shopProduct.model,
+                shopProductShortName: order.shopProduct.name,
                 orderId: order.id,
                 updated: listOfUpdates.find(updatedId => updatedId === order.id) !== undefined
             },

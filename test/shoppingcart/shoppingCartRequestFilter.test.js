@@ -78,7 +78,7 @@ test('should call next if no shopping cart is given', async () => {
 test('should convert base64 encoded string to webshopData', async () => {
     const mockRequest = {
         body: {
-            "webshopData": "eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg2MDAwLCJtYW51ZmFjdHVyZXIiOiJYWFhQaG9uZXMgSW5jLiIsImRldmljZUNsYXNzIjoiU21hcnRwaG9uZSIsIm1vZGVsIjoiRmxhc2ggSGFuZHkgMzAwMCBQcm8iLCJkZXZpY2VPUyI6ImFuZHJvaWQifV0sImN1c3RvbWVyIjp7ImNvbXBhbnkiOiJJTk5PUSIsInNhbHV0YXRpb24iOiJIZXJyIiwiZmlyc3RuYW1lIjoiTWF4IiwibGFzdG5hbWUiOiJNdXN0ZXJtYW5uIiwic3RyZWV0IjoiVW50ZXIgZGVuIExpbmRlbiA5IiwiemlwIjoiNTIzNDUiLCJjaXR5IjoiS8O2bG4iLCJjb3VudHJ5IjoiRGV1dHNjaGxhbmQiLCJlbWFpbCI6Im1heC5tdXN0ZXJtYW5uMTIzNEB0ZXN0LmNvbSJ9LCJlbmNyeXB0ZWRTZXNzaW9uSWQiOiJlNjFiNGRiYTA3MWQ1MDM5ZjEwMGUxMzM4YTViODdmNjAzZDNmYzlhMTc5NjczYzA5YzJkOWEzZGVlNmQ5ZTkxIn0=",
+            "webshopData": "eyJjdXN0b21lciI6IHsiY2l0eSI6ICJLw7ZsbiIsICJjb21wYW55IjogIklOTk9RIiwgImNvdW50cnkiOiAiRGV1dHNjaGxhbmQiLCAiZW1haWwiOiAibWF4Lm11c3Rlcm1hbm4xMjM0QHRlc3QuY29tIiwgImZpcnN0bmFtZSI6ICJNYXgiLCAibGFzdG5hbWUiOiAiTXVzdGVybWFubiIsICJzYWx1dGF0aW9uIjogIkhlcnIiLCAic3RyZWV0IjogIlVudGVyIGRlbiBMaW5kZW4gOSIsICJ6aXAiOiAiNTIzNDUifSwgImVuY3J5cHRlZFNlc3Npb25JZCI6ICJlNjFiNGRiYTA3MWQ1MDM5ZjEwMGUxMzM4YTViODdmNjAzZDNmYzlhMTc5NjczYzA5YzJkOWEzZGVlNmQ5ZTkxIiwgInB1cmNoYXNlZFByb2R1Y3RzIjogW3siZGV2aWNlQ2xhc3MiOiAiU21hcnRwaG9uZSIsICJkZXZpY2VPUyI6ICJhbmRyb2lkIiwgIm1hbnVmYWN0dXJlciI6ICJYWFhQaG9uZXMgSW5jLiIsICJuYW1lIjogIkZsYXNoIEhhbmR5IDMwMDAgUHJvIiwgInByaWNlIjogODYwMDB9XX0=",
             "signedShoppingCart": {
                 "shoppingCart": {
                     "sessionId": "c6aec80a-a430-40bd-a988-f627b2f358d0",
@@ -88,7 +88,7 @@ test('should convert base64 encoded string to webshopData', async () => {
                         "shopProduct": {
                             "price": 86000,
                             "deviceClass": "Smartphone",
-                            "model": "Flash Handy 3000 Pro"
+                            "name": "Flash Handy 3000 Pro"
                         },
                         "wertgarantieProduct": {
                             "id": "d6ac561e-4d83-46a5-8857-f523ea569190",
@@ -112,7 +112,7 @@ test('should convert base64 encoded string to webshopData', async () => {
                 "price": 86000,
                 "manufacturer": "XXXPhones Inc.",
                 "deviceClass": "Smartphone",
-                "model": "Flash Handy 3000 Pro",
+                "name": "Flash Handy 3000 Pro",
                 "deviceOS": "android"
             }
         ],
@@ -145,7 +145,7 @@ test('should fail if checkout data is incomplete', async () => {
                         "shopProduct": {
                             "price": 86000,
                             "deviceClass": "Smartphone",
-                            "model": "Flash Handy 3000 Pro"
+                            "name": "Flash Handy 3000 Pro"
                         },
                         "wertgarantieProduct": {
                             "id": "d6ac561e-4d83-46a5-8857-f523ea569190",
