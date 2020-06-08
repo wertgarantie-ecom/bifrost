@@ -43,7 +43,7 @@ const testShoppingCart = {
         {
             id: "18ff0413-bcfd-48f8-b003-04b57762067a",
             shopProduct: {
-                model: "Super Bike",
+                name: "Super Bike",
                 price: 100000,
                 deviceClass: "Bike"
             },
@@ -56,7 +56,7 @@ const testShoppingCart = {
         {
             id: "28ff0413-bcfd-48f8-b003-04b57762067a",
             shopProduct: {
-                model: "Super Bike",
+                name: "Super Bike",
                 price: 100000,
                 deviceClass: "Bike"
             },

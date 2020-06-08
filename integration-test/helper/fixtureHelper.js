@@ -26,7 +26,7 @@ exports.validCustomer = function validCustomer() {
 
 
 exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) {
-    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic', model = "E-Mountainbike Premium 3000", quantity = 1} = data;
+    const {publicClientId = "public:" + uuid(), deviceClass = "Bike", devicePrice = 139999, wertgarantieProductId = "1", wertgarantieProductName = 'Basic', name = "E-Mountainbike Premium 3000", quantity = 1} = data;
     const sessionId = uuid();
     const shoppingCart = {
         sessionId: sessionId,
@@ -40,7 +40,7 @@ exports.createSignedShoppingCart = function createSignedShoppingCart(data = {}) 
         shoppingCart.orders.push({
             shopProduct: {
                 orderItemId: uuid(),
-                model: model,
+                name: name,
                 price: devicePrice,
                 deviceClass: deviceClass,
             },

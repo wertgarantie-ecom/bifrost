@@ -55,7 +55,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
                 devicePrice: order.shopProduct.price,
                 success: false,
                 message: "couldn't find matching product in shop cart for wertgarantie product",
-                shopProduct: order.shopProduct.model,
+                shopProduct: order.shopProduct.name,
                 availableShopProducts: purchasedShopProducts || []
             };
         }
@@ -146,10 +146,10 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
         if (!matchingShopOrderItem) {
             result.changes.deleted.push(order.id)
         } else {
-            if (matchingShopOrderItem.model === order.shopProduct.model && matchingShopOrderItem.price === order.shopProduct.price) {
+            if (matchingShopOrderItem.name === order.shopProduct.name && matchingShopOrderItem.price === order.shopProduct.price) {
                 result.orders.push(order);
             } else {
-                order.shopProduct.model = matchingShopOrderItem.model;
+                order.shopProduct.name = matchingShopOrderItem.name;
                 let priceUpdated = false;
                 if (order.shopProduct.price !== matchingShopOrderItem.price) {
                     const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.shopProduct.deviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
@@ -194,7 +194,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;
     return _.findIndex(shopSubmittedPurchases, shopSubmittedPurchase =>
-        shopSubmittedPurchase.model === wertgarantieSubmittedPurchase.model
+        shopSubmittedPurchase.name === wertgarantieSubmittedPurchase.name
         && shopSubmittedPurchase.price === wertgarantieSubmittedPurchase.price
         && shopSubmittedPurchase.deviceClass === wertgarantieSubmittedPurchase.deviceClass);
 }

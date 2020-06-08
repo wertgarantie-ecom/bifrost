@@ -23,7 +23,7 @@ describe("should submit insurance proposal and persist purchase data", () => {
                 },
                 shopProduct: {
                     price: "1000",
-                    model: "IPhone X",
+                    name: "IPhone X",
                     deviceClass: "Smartphone",
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
@@ -39,7 +39,7 @@ describe("should submit insurance proposal and persist purchase data", () => {
             price: "1000",
             manufacturer: "Apple Inc",
             deviceClass: "Smartphone",
-            model: "IPhone X",
+            name: "IPhone X",
         }
     ];
     const customer = fixtureHelper.validCustomer();

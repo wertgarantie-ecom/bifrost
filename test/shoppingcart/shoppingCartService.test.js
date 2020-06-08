@@ -24,7 +24,7 @@ function validProduct() {
     return {
         id: "9fd47b8a-f984-11e9-adcf-afabcc521083",
         shopProduct: {
-            model: "Phone X",
+            name: "Phone X",
             deviceClass: "Smartphone",
             price: 1200
         },
@@ -39,7 +39,7 @@ function validProduct() {
 const includedOrder = {
     id: "5f507954-fed1-45c9-aaa6-30f216d6f163",
     shopProduct: {
-        model: "Phone X",
+        name: "Phone X",
         deviceClass: "Smartphone",
         price: 1200
     },
@@ -133,7 +133,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 },
                 shopProduct: {
                     price: "1000",
-                    model: "IPhone X",
+                    name: "IPhone X",
                     deviceClass: "Smartphone",
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
@@ -149,7 +149,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
             price: "1200.93",
             manufacturer: "Apple Inc",
             deviceClass: "Smartphone",
-            model: "IPhone X",
+            name: "IPhone X",
         }
     ];
     const customer = validCustomer();
@@ -187,7 +187,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                         "price": "1200.93",
                         "manufacturer": "Apple Inc",
                         "deviceClass": "Smartphone",
-                        "model": "IPhone X"
+                        "name": "IPhone X"
                     }
                 ]
             }
@@ -215,7 +215,7 @@ test("checkout call executed without confirmation", async () => {
                 shopProduct: {
                     price: "1000",
                     deviceClass: "Bike",
-                    model: "Super Bike"
+                    name: "Super Bike"
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
@@ -229,7 +229,7 @@ test("checkout call executed without confirmation", async () => {
             price: "1000",
             manufacturer: "Apple Inc",
             deviceClass: "Smartphone",
-            model: "IPhone X",
+            name: "IPhone X",
             productId: "1"
         }
     ];
@@ -251,7 +251,7 @@ test("should not update wertgarantieShoppingCart if no orderItemIds are availabl
                 price: 10000,
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
-                model: "IPhone X",
+                name: "IPhone X",
                 orderItemId: "orderItemId"
             }
         ];
@@ -263,7 +263,7 @@ test("should not update wertgarantieShoppingCart if no orderItemIds are availabl
                     shopProduct: {
                         price: 10000,
                         deviceClass: "Smartphone",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -292,7 +292,7 @@ test("should keep wertgarantieShoppingCart if no shopShoppingCart is provided", 
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -317,14 +317,14 @@ test("should keep wertgarantieShoppingCart orders if they match with shopShoppin
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "orderItemId1",
-                model: "IPhone X"
+                name: "IPhone X"
             },
             {
                 price: 10000,
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "orderItemId2",
-                model: "IPhone X"
+                name: "IPhone X"
             }
         ];
 
@@ -336,7 +336,7 @@ test("should keep wertgarantieShoppingCart orders if they match with shopShoppin
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId1",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -351,7 +351,7 @@ test("should keep wertgarantieShoppingCart orders if they match with shopShoppin
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId2",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -376,7 +376,7 @@ test("should remove wertgarantieShoppingCart order with orderItemId if no match 
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "anotherOrderItemId",
-                model: "IPhone X"
+                name: "IPhone X"
             }
         ];
 
@@ -389,7 +389,7 @@ test("should remove wertgarantieShoppingCart order with orderItemId if no match 
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -419,7 +419,7 @@ test("should update wertgarantieShoppingCart order if price of matching shopShop
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "orderItemId",
-                model: "IPhone X"
+                name: "IPhone X"
             }
         ];
 
@@ -433,7 +433,7 @@ test("should update wertgarantieShoppingCart order if price of matching shopShop
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -469,7 +469,7 @@ test("should update price of wertgarantie product if price of matching shopShopp
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "orderItemId",
-                model: "IPhone X"
+                name: "IPhone X"
             }
         ];
 
@@ -482,7 +482,7 @@ test("should update price of wertgarantie product if price of matching shopShopp
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -518,7 +518,7 @@ test("should delete order item if no premium could be found for new shop item pr
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "orderItemId",
-                model: "IPhone X"
+                name: "IPhone X"
             }
         ];
 
@@ -531,7 +531,7 @@ test("should delete order item if no premium could be found for new shop item pr
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -573,7 +573,7 @@ test("should ignore changed device class on matching shopProduct", async () => {
                 manufacturer: "Apple Inc",
                 deviceClass: "Completely different",
                 orderItemId: "orderItemId",
-                model: "IPhone X"
+                name: "IPhone X"
             }
         ];
 
@@ -585,7 +585,7 @@ test("should ignore changed device class on matching shopProduct", async () => {
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -603,15 +603,15 @@ test("should ignore changed device class on matching shopProduct", async () => {
     }
 );
 
-test("should update model if matching shopProduct model differs", async () => {
-        const updatedModel = "IPhone X in Red";
+test("should update name if matching shopProduct name differs", async () => {
+        const updatedName = "IPhone X in Red";
         const shopShoppingCart = [
             {
                 price: 10000,
                 manufacturer: "Apple Inc",
                 deviceClass: "Smartphone",
                 orderItemId: "orderItemId",
-                model: updatedModel
+                name: updatedName
             }
         ];
 
@@ -624,7 +624,7 @@ test("should update model if matching shopProduct model differs", async () => {
                         price: 10000,
                         deviceClass: "Smartphone",
                         orderItemId: "orderItemId",
-                        model: "IPhone X",
+                        name: "IPhone X",
                     },
                     wertgarantieProduct: {
                         id: "9338a770-0d0d-4203-8d54-583a03bdebf3",
@@ -640,7 +640,7 @@ test("should update model if matching shopProduct model differs", async () => {
         };
 
         const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOfferServicePhone);
-        expect(result.shoppingCart.orders[0].shopProduct.model).toEqual(updatedModel);
+        expect(result.shoppingCart.orders[0].shopProduct.name).toEqual(updatedName);
         expect(result.changes.updated).toEqual([{
             id: idToUpdate,
             wertgarantieProductPriceChanged: false
@@ -655,7 +655,7 @@ test("should return given wertgarantieShopping Cart if it was empty", async () =
             manufacturer: "Apple Inc",
             deviceClass: "Smartphone",
             orderItemId: "orderItemId",
-            model: "IPhone X"
+            name: "IPhone X"
         }
     ];
 
@@ -674,7 +674,7 @@ test("should add bike product to shopping cart with lock requirement", async () 
         shopProduct: {
             price: 100000,
             deviceClass: 'Bike',
-            model: 'Test Bike',
+            name: 'Test Bike',
             orderItemId: 'some order item id'
         },
         wertgarantieProduct: {
@@ -694,7 +694,7 @@ test("should add bike product to shopping cart with lock requirement", async () 
                     price: 100000,
                     deviceClass: "Bike",
                     orderItemId: "orderItemId",
-                    model: "Test Bike",
+                    name: "Test Bike",
                 },
                 wertgarantieProduct: {
                     id: productId,
@@ -718,7 +718,7 @@ test("should add bike product to shopping cart with lock requirement", async () 
                     "price": 100000,
                     "deviceClass": "Bike",
                     "orderItemId": "orderItemId",
-                    "model": "Test Bike"
+                    "name": "Test Bike"
                 },
                 "wertgarantieProduct": {
                     "id": productId,
@@ -732,7 +732,7 @@ test("should add bike product to shopping cart with lock requirement", async () 
                 "shopProduct": {
                     "price": 100000,
                     "deviceClass": "Bike",
-                    "model": "Test Bike",
+                    "name": "Test Bike",
                     "orderItemId": "some order item id"
                 },
                 "wertgarantieProduct": {
@@ -759,7 +759,7 @@ test("should update lock price if more expensive lock is required", async () => 
                 "shopProduct": {
                     "price": 100000,
                     "deviceClass": "Bike",
-                    "model": "Test Bike",
+                    "name": "Test Bike",
                     "orderItemId": "some order item id"
                 },
                 "wertgarantieProduct": {
@@ -781,7 +781,7 @@ test("should update lock price if more expensive lock is required", async () => 
         shopProduct: {
             price: 100001, // should get lock price 4900
             deviceClass: 'Bike',
-            model: 'Test Bike',
+            name: 'Test Bike',
             orderItemId: 'some order item id'
         },
         wertgarantieProduct: {
@@ -811,7 +811,7 @@ test("should update lock price if product is deleted from shopping cart and chea
                     "price": 100000,
                     "deviceClass": "Bike",
                     "orderItemId": "orderItemId",
-                    "model": "Test Bike"
+                    "name": "Test Bike"
                 },
                 "wertgarantieProduct": {
                     "id": productId,
@@ -825,7 +825,7 @@ test("should update lock price if product is deleted from shopping cart and chea
                 "shopProduct": {
                     "price": 100001,
                     "deviceClass": "Bike",
-                    "model": "Test Bike",
+                    "name": "Test Bike",
                     "orderItemId": "some order item id"
                 },
                 "wertgarantieProduct": {
