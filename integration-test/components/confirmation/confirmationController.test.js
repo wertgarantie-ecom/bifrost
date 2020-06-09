@@ -7,11 +7,10 @@ const productOffersService = require('../../../src/productoffers/productOffersSe
 
 beforeAll(() => {
     process.env = Object.assign(process.env, {BACKEND: "webservices"});
-
 });
 
 test('should reject confirm request for missing shopping cart', async () => {
-    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const result = await request(app)
         .put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/confirm`)
         .send({signedShoppingCart: {}})
@@ -21,7 +20,7 @@ test('should reject confirm request for missing shopping cart', async () => {
 });
 
 test('should handle shopping cart confirmation', async function () {
-    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const agent = request.agent(app);
     const signedShoppingCart = testhelper.createSignedShoppingCart();
 
@@ -39,7 +38,7 @@ describe('should handle shopping cart confirmation rejection', function () {
     const signedShoppingCart = testhelper.createSignedShoppingCart();
 
     it('confirm shopping cart', async function () {
-        clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+        clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
         const result = await agent.put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation/termsAndConditionsConfirmed`)
             .send({signedShoppingCart: signedShoppingCart})
             .set('Accept', 'application/json');
@@ -58,7 +57,7 @@ describe('should handle shopping cart confirmation rejection', function () {
 
 
 test("should return valid confirmation data", async () => {
-    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
@@ -86,7 +85,7 @@ test("should return valid confirmation data", async () => {
 });
 
 test("should remove order from shopping cart", async () => {
-    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
@@ -111,7 +110,7 @@ test("should remove order from shopping cart", async () => {
 
 
 test('should return proper data if wertgarantieShoppingCart must be synced with shop provided cart', async () => {
-    const clientData = await testhelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+    const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
     const deviceClass = "Smartphone";
     const selectedWertgarantieProduct = productOffers[0].id;

@@ -30,6 +30,7 @@ describe('add phone test shop client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Komplettschutz mit Premium-Option",
+                            "shorName": "Premiumschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
@@ -98,6 +99,7 @@ describe('add phone test shop client config', () => {
                         },
                         {
                             "name": "Komplettschutz",
+                            "shorName": "Basisschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
@@ -213,6 +215,7 @@ describe('add bike test shop client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+                            "shortName": "Variante A",
                             "productType": "KOMPLETTSCHUTZ_RAD_M_2018",
                             "applicationCode": "GU WG DE RAD KS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_RAD",
@@ -289,6 +292,7 @@ describe('add bike test shop client config', () => {
                         },
                         {
                             "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                            "shortName": "Variante B",
                             "productType": "KOMPLETTSCHUTZ_RAD_J_2018",
                             "applicationCode": "GU WG DE RAD KS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_RAD",
@@ -364,6 +368,7 @@ describe('add bike test shop client config', () => {
                         },
                         {
                             "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+                            "shortName": "Variante A",
                             "productType": "KOMPLETTSCHUTZ_EBIKE_M_2018",
                             "applicationCode": "GU WG DE RAD EBS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
@@ -432,6 +437,7 @@ describe('add bike test shop client config', () => {
                             "risks": []
                         }, {
                             "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+                            "shortName": "Variante B",
                             "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                             "applicationCode": "GU WG DE RAD EBS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
@@ -567,6 +573,7 @@ describe('add Handyflash Local test client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Komplettschutz mit Premium-Option",
+                            "shorName": "Premiumschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
@@ -635,6 +642,7 @@ describe('add Handyflash Local test client config', () => {
                         },
                         {
                             "name": "Komplettschutz",
+                            "shorName": "Basisschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",

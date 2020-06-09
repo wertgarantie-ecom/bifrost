@@ -115,7 +115,7 @@ exports.getValidPurchase = function getValidPurchase() {
     }
 }
 
-exports.createAndPersistDefaultClientWithWebservicesConfiguration = async function createAndPersistDefaultClientWithWebservicesConfiguratio() {
+exports.createAndPersistPhoneClientWithWebservicesConfiguration = async function createAndPersistPhoneClientWithWebservicesConfiguration() {
     const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();
     return await clientService.addNewClient(addNewClientRequest);
 };
@@ -149,6 +149,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                 productOffersConfigurations: [
                     {
                         name: "Komplettschutz",
+                        shortName: "Basisschutz",
                         productType: "KOMPLETTSCHUTZ_2019",
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
@@ -174,7 +175,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,
@@ -205,6 +206,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                     },
                     {
                         name: "Komplettschutz mit Premium-Option",
+                        shortName: "Premiumschutz",
                         productType: "KOMPLETTSCHUTZ_2019",
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
@@ -230,7 +232,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
+                                objectCodeExternal: "Test",
                                 priceRanges: [
                                     {
                                         minClose: 0,
@@ -313,6 +315,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                 productOffersConfigurations: [
                     {
                         "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+                        "shortName": "Variante A",
                         "productType": "KOMPLETTSCHUTZ_RAD_M_2018",
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
@@ -389,6 +392,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                     },
                     {
                         "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                        "shortName": "Variante B",
                         "productType": "KOMPLETTSCHUTZ_RAD_J_2018",
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
@@ -450,6 +454,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                     },
                     {
                         "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+                        "shortName": "Variante A",
                         "productType": "KOMPLETTSCHUTZ_EBIKE_M_2018",
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
@@ -509,6 +514,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "risks": []
                     }, {
                         "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+                        "shortName": "Variante B",
                         "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",

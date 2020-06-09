@@ -55,6 +55,7 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
     }
     return {
         name: productOfferConfig.name,
+        shortName: productOfferConfig.shortName,
         id: uuid(),
         applicationCode: productOfferConfig.applicationCode,
         risks: [productOfferConfig.basicRiskType, ...productOfferConfig.risks],

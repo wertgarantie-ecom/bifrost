@@ -11,7 +11,7 @@ describe("should persist and retrieve component texts", () => {
     let client;
 
     test("should persist texts for selection popup", async () => {
-        client = await fixtureHelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+        client = await fixtureHelper.createAndPersistPhoneClientWithWebservicesConfiguration();
         const persistResult = await clientComponentTextRepository.persist(selectionPopUpTexts, client.id, locale, "selectionpopup");
         expect(persistResult).toEqual(selectionPopUpTexts);
     });

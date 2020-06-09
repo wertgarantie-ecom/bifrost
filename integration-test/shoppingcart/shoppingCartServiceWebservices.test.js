@@ -47,7 +47,7 @@ describe("should submit insurance proposal and persist purchase data", () => {
     const contractNumber = "12345678";
 
     test("submit insurance proposal and persist data", async () => {
-        clientConfig = await fixtureHelper.createAndPersistDefaultClientWithWebservicesConfiguration();
+        clientConfig = await fixtureHelper.createAndPersistPhoneClientWithWebservicesConfiguration();
         const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientConfig, undefined, mockWebservicesClient);
         wertgarantieShoppingCart.orders[0].wertgarantieProduct.id = productOffers[0].id;
         wertgarantieShoppingCart.orders[0].wertgarantieProduct.name = productOffers[0].name;

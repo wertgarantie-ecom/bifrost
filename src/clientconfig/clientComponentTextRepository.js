@@ -40,6 +40,7 @@ function toComponentTextRessource(rows) {
         componentTextRessource[row.locale] = {
             ratingTexts: row.rating,
             selectionPopUpTexts: row.selectionpopup,
+            selectionEmbedded: row.selectionembedded,
             confirmationTexts: row.confirmation,
             aftersalesTexts: row.aftersales,
             landingPageTexts: row.landingpage

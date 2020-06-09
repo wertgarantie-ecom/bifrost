@@ -6,7 +6,7 @@ const webserviceMockClientWithBikeConfig = require('../../../test/helpers/webser
 describe('should persist product offers for phone shop', () => {
 
     test('should update product offers', async () => {
-        const client = await fixtures.createAndPersistDefaultClientWithWebservicesConfiguration();
+        const client = await fixtures.createAndPersistPhoneClientWithWebservicesConfiguration();
         const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(client, undefined, webserviceMockClientWithPhoneConfig);
 
         expect(productOffers.length).toEqual(2);

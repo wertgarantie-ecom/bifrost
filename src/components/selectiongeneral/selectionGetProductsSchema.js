@@ -1,6 +1,6 @@
 const signedShoppingCartSchema = require("../../shoppingcart/schemas/signedShoppingCartSchema").signedSchoppingCartSchema;
 
-exports.confirmationResponseSchema = {
+exports.selectionPopUpGetProductsSchema = {
     type: "object",
     required: [
         "deviceClass",
@@ -16,6 +16,6 @@ exports.confirmationResponseSchema = {
         },
         orderItemId: {
             type: "string"
-        },
+        }
     }
 };

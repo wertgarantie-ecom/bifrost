@@ -6,6 +6,9 @@ module.exports.productOfferSchema = {
         "name": {
             "type": "string"
         },
+        "shortName": {
+            "type": "string"
+        },
         "id": {
             "type": "string",
             "pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}"
@@ -121,6 +124,7 @@ module.exports.productOfferSchema = {
         "devices",
         "advantages",
         "name",
+        "shortName",
         "id",
         "clientId",
         "documents",
