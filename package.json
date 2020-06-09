@@ -41,6 +41,7 @@
     "express-locale": "^2.0.0",
     "express-mung": "^0.5.1",
     "form-data": "^3.0.0",
+    "generate-password": "^1.5.1",
     "globalize": "^1.5.0",
     "heroku-ssl-redirect": "0.0.4",
     "highlight.js": "^10.0.3",

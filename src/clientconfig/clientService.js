@@ -3,6 +3,7 @@ const uuid = require('uuid');
 const validate = require('../framework/validation/validator').validate;
 const newClientSchema = require('./newClientSchema').newClientSchema;
 const _clientComponentTextService = require('./clientComponentTextService');
+const generatePassword = require('generate-password');
 
 async function findClientById(id) {
     return await _repository.findClientById(id);
@@ -68,8 +69,8 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
         activePartnerNumber: createClientRequest.activePartnerNumber,
         secrets: createClientRequest.secrets || ['secret:' + uuid()],
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
-        basicAuthUser: createClientRequest.basicAuthUser,
-        basicAuthPassword: createClientRequest.basicAuthPassword,
+        basicAuthUser: createClientRequest.basicAuthUser || createClientRequest.name,
+        basicAuthPassword: createClientRequest.basicAuthPassword || generatePassword.generate(),
         handbook: createClientRequest.handbook
     };
     validate(clientData, newClientSchema);

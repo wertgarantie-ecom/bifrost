@@ -69,6 +69,23 @@ test('should create client with valid offers config', async () => {
     expect(newClient.productOffersConfigurations).toEqual(data.productOffersConfigurations);
 });
 
+test('should create basic auth credentials if none were given', async () => {
+    const data = {
+        name: "testclient"
+    }
+
+    const repository = {
+        insert: (client) => client
+    };
+
+    const clientComponentTextService = {
+        addDefaultTextsForAllComponents: () => "voll kuhl"
+    };
+    const client = await clientService.addNewClient(data, repository, clientComponentTextService);
+    expect(client.basicAuthPassword).not.toEqual(undefined);
+    expect(client.basicAuthUser).not.toEqual(undefined);
+});
+
 test('should reject client with invalid offers config', async () => {
     const data = {
         name: "testclient",
