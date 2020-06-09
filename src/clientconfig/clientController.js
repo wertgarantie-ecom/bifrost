@@ -6,7 +6,7 @@ exports.addNewClient = async function addNewClient(req, res, next) {
 
     const requestBody = req.body;
     try {
-        const result = await clientService.addNewClientFromDefaults(requestBody);
+        const result = await clientService.addNewClient(requestBody);
         res.status(200).send(result);
     } catch (error) {
         next(error);
