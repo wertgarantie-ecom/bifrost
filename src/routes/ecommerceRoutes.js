@@ -8,6 +8,7 @@ const afterSalesController = require("../components/aftersales/afterSalesControl
 const landingPageController = require("../components/landingpage/landingPageController");
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
 const selectionGetProductsSchema = require("../components/selectiongeneral/selectionGetProductsSchema").selectionPopUpGetProductsSchema;
+const productSelectionClickedSchema = require("../components/selectionembedded/productSelectionClickedSchema").productSelectionClickedSchema;
 const shoppingCartController = require("../shoppingcart/shoppingCartController");
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
@@ -25,6 +26,8 @@ router.put("/clients/:publicClientId/components/selection-popup", validate({body
 router.post("/clients/:publicClientId/components/selection-popup/cancel", setClientConfigByPublicClientId, selectionPopUpController.popUpCanceled);
 
 router.put("/clients/:publicClientId/components/selection-embedded", validate({body: selectionGetProductsSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.getProducts);
+router.post("/clients/:publicClientId/components/selection-embedded/select", validate({body: productSelectionClickedSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.registerProductSelected);
+router.delete("/clients/:publicClientId/components/selection-embedded/select", validate({body: productSelectionClickedSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.registerProductUnselected);
 
 router.put("/clients/:publicClientId/components/confirmation", setClientConfigByPublicClientId, confirmationController.getConfirmationComponentData);
 router.put("/clients/:publicClientId/components/confirmation/:confirmationAttribute", setClientConfigByPublicClientId, confirmationController.confirmAttribute);

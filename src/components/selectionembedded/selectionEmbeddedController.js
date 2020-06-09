@@ -14,3 +14,17 @@ exports.getProducts = async function getProducts(req, res, next) {
         next(e);
     }
 };
+
+exports.registerProductSelected = async function registerProductSelected(req, res) {
+    // const selectedProduct = req.body;
+    // metrics here
+    res.sendStatus(204);
+};
+
+
+exports.registerProductUnselected = async function registerProductUnselected(req, res) {
+    // const unselectedProduct = req.body;
+    // metrics here
+    res.sendStatus(204);
+};
+
