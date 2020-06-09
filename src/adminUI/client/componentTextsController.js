@@ -75,6 +75,9 @@ function renderComponentTextEditor(componentTexts, component, selectedLanguage, 
         case "selectionPopUpTexts":
             componentName = "selectionpopup";
             return getComponentTextsEditor(componentName, componentTexts, client.id, selectedLanguage, ["documents", "productTexts"]);
+        case "selectionEmbedded":
+            componentName = "selectionembedded";
+            return getComponentTextsEditor(componentName, componentTexts, client.id, selectedLanguage, ["documents", "productTexts"]);
         case "confirmationTexts":
             componentName = "confirmation";
             return getComponentTextsEditor(componentName, componentTexts, client.id, selectedLanguage, ["documents", "productTexts"]);
@@ -150,6 +153,9 @@ exports.saveNewTextAttribute = async function saveNewTextAttribute(req, res) {
     } else {
         currentTexts = await componentTextsService.getComponentTextsForClientAndLocal(clientId, req.body.component, req.body.language);
     }
+    if (!currentTexts) {
+        currentTexts = {};
+    }
     currentTexts[req.body.newAttribute] = req.body.newAttributeValue.includes(";;") ? req.body.newAttributeValue.split(";;") : req.body.newAttributeValue
     if (req.body.component === "aftersales") {
         await componentTextsService.saveNewComponentTextsForClientId(clientId, req.body.language, req.body.component, {success: currentTexts});
@@ -157,5 +163,5 @@ exports.saveNewTextAttribute = async function saveNewTextAttribute(req, res) {
         await componentTextsService.saveNewComponentTextsForClientId(clientId, req.body.language, req.body.component, currentTexts);
     }
 
-    return res.redirect(req.originalUrl);
+    return res.redirect(req.originalUrl.replace('/new-attribute', ''));
 };

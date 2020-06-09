@@ -41,8 +41,12 @@ exports.defaultComponentTexts = {
             "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt %s neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
             "partnerShop": "Testshop",
             "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
+            "productPanelTitle": "Ihr Wertgarantie Rundumschutz",
+            "productPanelDetailsHeader": "Weitere Vorteile",
+            "productFurtherInformation": "Weitere Informationen",
             "productTexts": {
-                "paymentIntervals": paymentIntervals
+                "paymentIntervals": paymentIntervals,
+                "taxInformation": "(inkl. %s VerSt**)"
             },
             "documents": documents
         }

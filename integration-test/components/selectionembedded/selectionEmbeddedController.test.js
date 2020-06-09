@@ -38,7 +38,7 @@ test('should return proper product data', async () => {
             "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
             "priceFormatted": "23,40 €",
             "price": 2340,
-            "taxFormatted": "undefined 3,74 €",
+            "taxFormatted": "(inkl. 3,74 € VerSt**)",
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
         },
         {
@@ -59,7 +59,7 @@ test('should return proper product data', async () => {
             "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
             "priceFormatted": "23,40 €",
             "price": 2340,
-            "taxFormatted": "undefined 3,74 €",
+            "taxFormatted": "(inkl. 3,74 € VerSt**)",
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
         }
     ]);

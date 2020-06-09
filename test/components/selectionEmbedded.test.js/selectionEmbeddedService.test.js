@@ -76,7 +76,7 @@ test("should prepare correct product offers", async () => {
         "IPIDUri": "http://localhost:3000/documents/justnotthere",
         "priceFormatted": "8,00 €",
         "price": 800,
-        "taxFormatted": "undefined 1,28 €",
+        "taxFormatted": "(inkl. 1,28 € VerSt**)",
         "imageLink": "imageLink1"
     });
     expect(result.products[1]).toEqual({
@@ -131,7 +131,7 @@ test("should prepare correct product offers", async () => {
         "IPIDUri": "http://localhost:3000/documents/justnotthere",
         "priceFormatted": "9,95 €",
         "price": 995,
-        "taxFormatted": "undefined 1,59 €",
+        "taxFormatted": "(inkl. 1,59 € VerSt**)",
         "imageLink": "imageLink2"
     });
 });
