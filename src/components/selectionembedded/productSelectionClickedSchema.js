@@ -6,12 +6,10 @@ exports.productSelectionClickedSchema = {
         },
         productName: {
             type: "string"
-        },
-        productIndex: {
-            type: "integer"
-        },
-        productBaseIdentifier: {
-            type: "string"
         }
-    }
+    },
+    required: [
+        "productId",
+        "productName"
+    ]
 }
