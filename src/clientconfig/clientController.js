@@ -1,12 +1,19 @@
 const clientService = require('./clientService');
-var StatsD = require('hot-shots');
-var dogstatsd = new StatsD({mock: true});
 
 exports.addNewClient = async function addNewClient(req, res, next) {
-
     const requestBody = req.body;
     try {
         const result = await clientService.addNewClient(requestBody);
+        res.status(200).send(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.addNewClientFromDefaults = async function addNewClientFromDefaults(req, res, next) {
+    const requestBody = req.body;
+    try {
+        const result = await clientService.addNewClientFromDefaults(requestBody, req.params.type);
         res.status(200).send(result);
     } catch (error) {
         next(error);

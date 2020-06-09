@@ -4,6 +4,9 @@ const validate = require('../framework/validation/validator').validate;
 const newClientSchema = require('./newClientSchema').newClientSchema;
 const _clientComponentTextService = require('./clientComponentTextService');
 const generatePassword = require('generate-password');
+const defaultClientConfigs = require('./defaultClientConfigurations');
+const ClientError = require('../errors/ClientError');
+const _ = require('lodash');
 
 async function findClientById(id) {
     return await _repository.findClientById(id);
@@ -60,7 +63,16 @@ exports.findAllClients = async function findAllClients() {
     return await _repository.findAllClients();
 };
 
-exports.addNewClient = async function addNewClient(createClientRequest, repository = _repository, clientComponentTextService = _clientComponentTextService) {
+exports.addNewClientFromDefaults = async function addNewClientFromDefaults(newClientData, type) {
+    const defaultConfig = defaultClientConfigs[type];
+    if (!defaultConfig) {
+        throw new ClientError(`invalid default type: ${newClientData.type} `);
+    }
+    const clientConfig = _.merge(defaultConfig, newClientData);
+    return addNewClient(clientConfig);
+}
+
+async function addNewClient(createClientRequest, repository = _repository, clientComponentTextService = _clientComponentTextService) {
     const clientData = {
         id: createClientRequest.id || uuid(),
         name: createClientRequest.name,
@@ -77,8 +89,9 @@ exports.addNewClient = async function addNewClient(createClientRequest, reposito
     const persistedClientData = await repository.insert(clientData);
     await clientComponentTextService.addDefaultTextsForAllComponents(clientData.id, clientData.name);
     return persistedClientData;
-};
+}
 
+exports.addNewClient = addNewClient;
 
 class InvalidClientIdError extends Error {
     constructor(message) {

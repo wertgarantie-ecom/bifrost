@@ -22,6 +22,7 @@ basicAuthUsers.users[user] = password;
 
 // client settings
 router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
+router.post("/clients/:type", basicAuth(basicAuthUsers), clientController.addNewClientFromDefaults);
 router.get("/clients", basicAuth(basicAuthUsers), clientController.getAllClients);
 router.get("/clients/:clientId", basicAuth(basicAuthUsers), clientController.getClientById);
 router.put("/clients/:clientId/backends/webservices", basicAuth(basicAuthUsers), clientController.updateWebservicesBackendConfig);
