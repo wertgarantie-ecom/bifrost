@@ -117,13 +117,20 @@ exports.getValidPurchase = function getValidPurchase() {
 
 exports.createAndPersistPhoneClientWithWebservicesConfiguration = async function createAndPersistPhoneClientWithWebservicesConfiguration() {
     const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();
-    return await clientService.addNewClient(addNewClientRequest);
+    return await createAndPersistClient(addNewClientRequest);
 };
 
 exports.createAndPersistBikeClientWithWebservicesConfiguration = async function createAndPersistBikeClientWithWebservicesConfiguration() {
     const addNewClientRequest = this.createBikeClientWithWebservicesConfiguration();
-    return await clientService.addNewClient(addNewClientRequest);
+    return await createAndPersistClient(addNewClientRequest);
 };
+
+async function createAndPersistClient(clientConfig) {
+    const doNotAssembleProductOffers = {
+        updateAllProductOffersForClient: _ => _
+    }
+    return await clientService.addNewClient(clientConfig, undefined, undefined, doNotAssembleProductOffers);
+}
 
 exports.createDefaultClientWithWebservicesConfiguration = function createDefaultClientWithWebservicesConfiguration() {
     return {

@@ -2,6 +2,18 @@ const clientService = require('../../src/clientconfig/clientService');
 const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
 
+const mockClientRepository = {
+    insert: _ => _
+}
+
+const mockTextService = {
+    addDefaultTextsForAllComponents: () => "voll kuhl"
+};
+
+const mockProductOffersAssembler = {
+    updateAllProductOffersForClient: _ => _
+}
+
 test('should create client with valid offers config', async () => {
     const data = {
         name: "testclient",
@@ -57,14 +69,7 @@ test('should create client with valid offers config', async () => {
         basicAuthUser: "test",
         basicAuthPassword: "test"
     };
-
-    const repository = {
-        insert: (client) => client
-    };
-    const clientComponentTextService = {
-        addDefaultTextsForAllComponents: () => "voll kuhl"
-    };
-    const newClient = await clientService.addNewClient(data, repository, clientComponentTextService);
+    const newClient = await clientService.addNewClient(data, mockClientRepository, mockTextService, mockProductOffersAssembler);
 
     expect(newClient.productOffersConfigurations).toEqual(data.productOffersConfigurations);
 });
@@ -74,14 +79,7 @@ test('should create basic auth credentials if none were given', async () => {
         name: "testclient"
     }
 
-    const repository = {
-        insert: (client) => client
-    };
-
-    const clientComponentTextService = {
-        addDefaultTextsForAllComponents: () => "voll kuhl"
-    };
-    const client = await clientService.addNewClient(data, repository, clientComponentTextService);
+    const client = await clientService.addNewClient(data, mockClientRepository, mockTextService, mockProductOffersAssembler);
     expect(client.basicAuthPassword).not.toEqual(undefined);
     expect(client.basicAuthUser).not.toEqual(undefined);
 });

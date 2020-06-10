@@ -7,6 +7,7 @@ const generatePassword = require('generate-password');
 const defaultClientConfigs = require('./defaultClientConfigurations');
 const ClientError = require('../errors/ClientError');
 const _ = require('lodash');
+const _productOffersAssembler = require('../backends/webservices/webservicesProductOffersAssembler');
 
 async function findClientById(id) {
     return await _repository.findClientById(id);
@@ -72,7 +73,7 @@ exports.addNewClientFromDefaults = async function addNewClientFromDefaults(newCl
     return addNewClient(clientConfig);
 }
 
-async function addNewClient(createClientRequest, repository = _repository, clientComponentTextService = _clientComponentTextService) {
+async function addNewClient(createClientRequest, clientRepository = _repository, clientComponentTextService = _clientComponentTextService, productOffersAssembler = _productOffersAssembler) {
     const clientData = {
         id: createClientRequest.id || uuid(),
         name: createClientRequest.name,
@@ -86,9 +87,10 @@ async function addNewClient(createClientRequest, repository = _repository, clien
         handbook: createClientRequest.handbook
     };
     validate(clientData, newClientSchema);
-    const persistedClientData = await repository.insert(clientData);
-    await clientComponentTextService.addDefaultTextsForAllComponents(clientData.id, clientData.name);
-    return persistedClientData;
+    const createdClientConfig = await clientRepository.insert(clientData);
+    await clientComponentTextService.addDefaultTextsForAllComponents(createdClientConfig.id, createdClientConfig.name);
+    await productOffersAssembler.updateAllProductOffersForClient(createdClientConfig);
+    return createdClientConfig;
 }
 
 exports.addNewClient = addNewClient;
