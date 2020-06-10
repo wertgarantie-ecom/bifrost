@@ -85,7 +85,13 @@ test("should retrieve agent data for multiple products", async () => {
     });
 
     try {
-        const retrivedData = await webservicesClient.getAgentData("session", {activePartnerNumber: 123456}, mockHttpClient);
+        const retrivedData = await webservicesClient.getAgentData("session", {
+            backends: {
+                webservices: {
+                    username: 123456
+                }
+            }
+        }, mockHttpClient);
         expect(retrivedData.RESULT.PRODUCT_LIST.PRODUCT[1].APPLICATION_CODE).toEqual("GU WG DE KS 0419");
     } catch (error) {
         fail(error);
@@ -100,7 +106,13 @@ test("should retrieve agent data for single product", async () => {
     });
 
     try {
-        const retrivedData = await webservicesClient.getAgentData("session", {activePartnerNumber: 123456}, mockHttpClient);
+        const retrivedData = await webservicesClient.getAgentData("session", {
+            backends: {
+                webservices: {
+                    username: 123456
+                }
+            }
+        }, mockHttpClient);
         expect(retrivedData.RESULT.PRODUCT_LIST.PRODUCT[0].APPLICATION_CODE).toEqual("GU WG DE KS 0419");
     } catch (error) {
         fail(error);

@@ -76,7 +76,7 @@ exports.getAgentData = async function getAgentData(session, clientConfig, httpCl
     formDataMap.set('API', 'JSON');
     formDataMap.set('SESSION', session);
     formDataMap.set('EXTENDED_RESULT', "true");
-    formDataMap.set('AGENT_NR', clientConfig.activePartnerNumber);
+    formDataMap.set('AGENT_NR', clientConfig.backends.webservices.username);
     const result = await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
     if (!Array.isArray(result.RESULT.PRODUCT_LIST.PRODUCT)) {
         result.RESULT.PRODUCT_LIST.PRODUCT = [result.RESULT.PRODUCT_LIST.PRODUCT];
