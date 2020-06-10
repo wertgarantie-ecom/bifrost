@@ -26,7 +26,7 @@ exports.generateHandbookForClient = function generateHandbookForClient(client) {
         configuredDeviceClassesArray.push(...offerConfig.deviceClasses.map(deviceClass => deviceClass.objectCodeExternal));
     });
     const configuredDeviceClasses = _.uniqBy(configuredDeviceClassesArray, deviceClass => deviceClass);
-    const bifrostUriDateAttribute = `${process.env.NODE_ENV !== "production" ? `data-bifrost-uri="${process.env.BASE_URI}/wertgarantie"` : ``}`;
+    const bifrostUriDateAttribute = `${process.env.NODE_ENV !== "production" ? `\n\tdata-bifrost-uri="${process.env.BASE_URI}/wertgarantie"` : ``}`;
     // language=md
     const installationInstructionsMarkdown = md.render(`# Installationsanleitung für ${client.name} für Umgebung ${process.env.NODE_ENV}
 
@@ -44,13 +44,11 @@ Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents),
 \`\`\`html
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-pop-up.css">
 
-    <wertgarantie-selection-pop-up id="wertgarantie-selection"
-                                ${bifrostUriDateAttribute} 
-                               data-shop-product-name="iPhone SE"
-                               data-device-price=86000
-                               data-device-class=${configuredDeviceClasses[0]}
-                               ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? 'data-order-item-id="1234-12309aj1-321"' : ''}
-                               data-client-id="${client.publicClientIds[0]}">
+    <wertgarantie-selection-pop-up id="wertgarantie-selection" ${bifrostUriDateAttribute} 
+        data-shop-product-name="example Product"
+        data-device-price=86000
+        data-device-class=${configuredDeviceClasses[0]} ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\t\tdata-order-item-id="1234-12309aj1-321"' : ''}
+        data-client-id="${client.publicClientIds[0]}">
     </wertgarantie-selection-pop-up>
     
     <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-selection-popup@2/dist/selection-popup.min.js" crossorigin="anonymous"></script>
@@ -93,12 +91,10 @@ Wurde nicht bestätigt, wird diese Aktion unterbrochen und die Komponente zeigt 
 
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-confirmation.css">
-<wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation"
-      ${bifrostUriDateAttribute} 
-       data-validation-trigger-selector="#orderbutton"
-       data-validation-trigger-event="click"
-       ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? 'data-shop-order-base64="JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL08..."' : ''}
-       data-client-id="${client.publicClientIds[0]}">
+<wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation" ${bifrostUriDateAttribute} 
+        data-validation-trigger-selector="#orderbutton"
+        data-validation-trigger-event="click" ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\tdata-shop-order-base64="JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL08..."' : ''}
+        data-client-id="${client.publicClientIds[0]}">
 </wertgarantie-confirmation>
                         
 <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-confirmation@2/dist/confirmation.min.js" crossorigin="anonymous"></script>
@@ -157,11 +153,9 @@ Weiterhin ist die public client ID erforderlich:
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-after-sales.css ">
 
-<wertgarantie-after-sales
-                    ${bifrostUriDateAttribute} 
-                    id="wertgarantie-after-sales"
-                    data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg..."
-                    data-client-id="${client.publicClientIds[0]}>
+<wertgarantie-after-sales id="wertgarantie-after-sales" ${bifrostUriDateAttribute} 
+        data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg..."
+        data-client-id="${client.publicClientIds[0]}">
 </wertgarantie-after-sales>
 
 <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-after-sales@1/dist/after-sales.min.js" crossorigin="anonymous"></script>
