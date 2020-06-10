@@ -316,6 +316,7 @@ module.exports = {
                 "productOffersConfigurations": [
                     {
                         "name": "Komplettschutz mit Premium-Option",
+                        "shortName": "Premiumschutz",
                         "productType": "KOMPLETTSCHUTZ_2019",
                         "applicationCode": "GU WG DE KS 0419",
                         "basicRiskType": "KOMPLETTSCHUTZ",
@@ -368,10 +369,10 @@ module.exports = {
                             "comparisonDocuments": []
                         },
                         "advantages": [
-                            "Diebstahl? Wir erstatten den Zeitwert!",
-                            "Keine Selbstbeteiligung im Schadensfall",
-                            "Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten",
-                            "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
+                            "Diebstahlschutz",
+                            "Keine Selbstbeteiligung",
+                            "Cyberschutz",
+                            "Displaybruch",
                             "Bei Totalschaden zählt der Zeitwert",
                             "Für private und berufliche Nutzung",
                             "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
@@ -386,6 +387,7 @@ module.exports = {
                     },
                     {
                         "name": "Komplettschutz",
+                        "shortName": "Basisschutz",
                         "productType": "KOMPLETTSCHUTZ_2019",
                         "applicationCode": "GU WG DE KS 0419",
                         "basicRiskType": "KOMPLETTSCHUTZ",
@@ -438,7 +440,7 @@ module.exports = {
                             "comparisonDocuments": []
                         },
                         "advantages": [
-                            "Displaybruch? Wir kümmern uns um die Reparatur und Kosten!",
+                            "Displaybruch",
                             "Bei Totalschaden zählt der Zeitwert",
                             "Für private und berufliche Nutzung",
                             "Volle Kostenübernahme bei Reparaturen (inkl. Fall- und Sturzschäden, Display- und Bruchschäden, Bedienfehlern, Motor-Lagerschäden, Wasserschäden, Elektronikschäden, Verkalkung, Verschleiß, uvm.)",
