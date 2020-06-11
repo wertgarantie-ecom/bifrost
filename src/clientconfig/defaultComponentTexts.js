@@ -56,7 +56,6 @@ exports.defaultComponentTexts = {
     },
     "confirmation": {
         "de": {
-            "boxTitle": "Versicherung",
             "title": "Glückwunsch! Dieser Einkauf wird bestens abgesichert",
             "subtitle": "Bitte bestätige noch kurz:",
             "priceChanged": "Der Preis deiner Versicherung hat sich geändert!",

@@ -2,6 +2,7 @@
 const styling = `
     body {
         font-family: Arial, Helvetica, sans-serif;
+        width: 100%;
     }
 
     a {
@@ -24,7 +25,7 @@ const styling = `
     }
 
     .content {
-        padding: 0 10%;
+        padding: 0 20%;
     }
 
     .config-navbar {
@@ -75,38 +76,26 @@ const styling = `
     .component-details {
         margin: 1em 0;
     }
-
-    .component-editing-section {
-        display: flex;
-    }
-
-    .component-editing-section__item--attribute {
-        width: 20%;
-    }
-
-    .component-editing-section__item {
-        width: 40%;
-    }
-
-    .editing-textarea {
-        width: 95%;
-        height: 50px;
-    }
-
+    
     .submit-button {
-        padding: 1em;
+        padding: 0.5em;
         background-color: #41a4ff;
-        font-size: 1em;
+        font-size: 0.8em;
         font-weight: 700;
         color: #e9e9e9;
         border-radius: 10px;
     }
+
+    .submit-button--delete {
+        background-color: #ff0020;
+    }
 `;
 
 
-exports.htmlTemplate = function htmlTemplate(title, body) {
+exports.htmlTemplate = function htmlTemplate(title, additionalStyling = [], body) {
     // lanugage=HTML
-    return `<!doctype html>
+    return `
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -115,6 +104,11 @@ exports.htmlTemplate = function htmlTemplate(title, body) {
     <style>
         ${styling}
     </style>
+    ${additionalStyling.map(style => `
+        <style>
+            ${style}
+        </style>`
+    )}
     <title>${title}</title>
 </head>
 <body>

@@ -30,12 +30,6 @@ const clientData =
         publicClientIds: ["5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
     };
 
-function mockClientService(clientData) {
-    return {
-        findClientForPublicClientId: jest.fn(() => clientData)
-    }
-}
-
 const testShoppingCart = {
     publicClientId: "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f",
     sessionId: "38ff8413-dcfd-57f8-c013-08b5s762067a",
@@ -81,7 +75,6 @@ const expectedResponse = {
     },
     showPriceChangedWarning: false,
     texts: {
-        boxTitle: "Versicherung",
         title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
@@ -126,7 +119,6 @@ const updatedShoppingCartExpectedResponse = {
     },
     showPriceChangedWarning: true,
     texts: {
-        boxTitle: "Versicherung",
         title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
@@ -179,7 +171,7 @@ test('should return proper confirmation data for not updated ordered', async () 
     const orderData = await service.getConfirmationProductData(order, clientData, "de", productOffersMock, productImageServiceMock, defaultConfirmationTextsDE, listOfUpdatedIds);
 
     expect(orderData.product.updated).toEqual(false);
-})
+});
 
 
 test('should return proper confirmation data for updated ordered', async () => {
@@ -188,7 +180,7 @@ test('should return proper confirmation data for updated ordered', async () => {
     const orderData = await service.getConfirmationProductData(order, clientData, "de", productOffersMock, productImageServiceMock, defaultConfirmationTextsDE, listOfUpdatedIds);
 
     expect(orderData.product.updated).toEqual(true);
-})
+});
 
 test("should return proper confirmation component data for updated shoppingCart", async () => {
     const clientComponentTextService = {
