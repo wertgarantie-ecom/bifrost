@@ -20,7 +20,6 @@ exports.showComponentTexts = async function showComponentTexts(req, res) {
             </div>`).join('')}
         </div>
         ${componentTextEditorTemplate.get(selectedLanguageTexts, selectedLanguage, client)}
-        
     `;
 
     return res.status(200).send(htmlTemplate(client.name + " - Komponenten-Texte", [componentTextEditorStyling], body));

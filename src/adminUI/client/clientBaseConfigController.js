@@ -8,7 +8,7 @@ exports.showAllClients = async function showAllClients(req, res) {
     const body = `<h2>Alle Client Configs</h2>
         ${clients.map(clientConfig => `<a href="${'/admin/' + clientConfig.id}">${clientConfig.name}</a><hr/>`).join('')}`;
 
-    return res.status(200).send(htmlTemplate("Alle Clients", body));
+    return res.status(200).send(htmlTemplate("Alle Clients", [], body));
 };
 
 exports.showClient = async function showClient(req, res) {
@@ -18,5 +18,5 @@ exports.showClient = async function showClient(req, res) {
         ${clientConfigNavbar("base", client.id)}
     `;
 
-    return res.status(200).send(htmlTemplate(client.name, body))
+    return res.status(200).send(htmlTemplate(client.name, [], body))
 };

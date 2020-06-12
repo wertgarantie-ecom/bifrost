@@ -9,7 +9,7 @@ exports.showBackendConfig = async function showBackendConfig(req, res) {
         ${clientConfigNavbar("backend-config", client.id)}
     `;
 
-    return res.status(200).send(htmlTemplate(client.name, body))
+    return res.status(200).send(htmlTemplate(client.name, [], body))
 };
 
 exports.saveBackendConfig = async function saveBackendConfig(req, res) {
