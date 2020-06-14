@@ -30,7 +30,7 @@ exports.updateWebservicesBackendConfig = async function updateWebservicesBackend
         throw new InvalidClientIdError(`Could not find Client for specified ID: ${clientId}`);
     }
     client.backends.webservices = newWebservicesConfig;
-    return await _repository.update(client.id, client.backends);
+    return await _repository.updateBackendConfig(client.id, client.backends);
 };
 
 exports.findClientForSecret = async function findClientForSecret(secret) {
@@ -71,7 +71,11 @@ exports.addNewClientFromDefaults = async function addNewClientFromDefaults(newCl
     }
     const clientConfig = _.merge(defaultConfig, newClientData);
     return addNewClient(clientConfig);
-}
+};
+
+exports.updateClientData = async function updateClientDat(client, repository = _repository) {
+    return await repository.update(client);
+};
 
 async function addNewClient(createClientRequest, clientRepository = _repository, clientComponentTextService = _clientComponentTextService, productOffersAssembler = _productOffersAssembler) {
     const clientData = {

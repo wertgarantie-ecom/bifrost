@@ -89,6 +89,31 @@ const styling = `
     .submit-button--delete {
         background-color: #ff0020;
     }
+    
+    .new-client-input {
+        margin: 1em 0;
+        width: 600px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .input-field {
+        width: 70%;
+    }
+    
+    .input-field input {
+        width: 100%;
+    }
+    
+    .client-list {
+        width: 100%;
+        max-width: 600px;
+    }
+    
+    .horizontal {
+        display: flex;
+        justify-content: space-between;
+    }
 `;
 
 
@@ -130,9 +155,6 @@ exports.clientConfigurationNavbar = function clientConfigurationNavbar(highlight
         </div>
         <div class="configuration-section${highlightedSection === 'component-texts' ? ' configuration-section--selected' : ''}">
             <a href="${process.env.BASE_URI + '/admin/' + clientId + '/component-texts'}">Komponenten-Texte</a>
-        </div>
-        <div class="configuration-section${highlightedSection === 'backend-config' ? ' configuration-section--selected' : ''}">
-            <a href="${process.env.BASE_URI + '/admin/' + clientId + '/backend-config'}">Backend-Konfiguration</a>
         </div>
     </div>`
 }
