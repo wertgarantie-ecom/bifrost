@@ -109,4 +109,8 @@ test('should include client and admin credentials', async () => {
             clientUser: "clientPassword"
         }
     });
+});
+
+test("test", () => {
+    console.log(JSON.stringify("value", null, 2));
 })

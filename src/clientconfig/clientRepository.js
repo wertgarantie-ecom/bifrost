@@ -1,6 +1,6 @@
 const Pool = require("../framework/postgres").Pool;
 
-exports.update = async function updateBackendConfig(id, backendConfig) {
+exports.updateBackendConfig = async function updateBackendConfig(id, backendConfig) {
     const pool = Pool.getInstance();
     await pool.query({
         name: 'upudate-backends-config',
@@ -56,6 +56,63 @@ exports.insert = async function insert(clientData) {
             return client.query(insertPublicId);
         }));
 
+        await client.query('COMMIT');
+        return await this.findClientById(clientData.id);
+    } catch (error) {
+        await client.query('ROLLBACK');
+        if (error.code === '23505' && (error.constraint === 'clientsecret_pkey' || error.constraint === 'clientpublicid_pkey')) {
+            throw new InvalidClientData(error.message);
+        } else {
+            throw error;
+        }
+    } finally {
+        client.release();
+    }
+};
+
+exports.update = async function update(clientData) {
+    const pool = Pool.getInstance();
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const updateStatement = {
+            name: 'update-client-data',
+            text: 'UPDATE client SET name = $1, activepartnernumber = $2, backends = $3, email = $4, basicauthuser = $5, basicauthpassword = $6, handbook = $7' +
+                'WHERE id = $8',
+            values: [
+                clientData.name,
+                clientData.activePartnerNumber,
+                clientData.backends,
+                clientData.email,
+                clientData.basicAuthUser,
+                clientData.basicAuthPassword,
+                clientData.handbook,
+                clientData.id
+            ]
+        };
+        await client.query(updateStatement);
+        await Promise.all(clientData.secrets.map(secret => {
+            const updateSecrets = {
+                name: 'insert-new-client-secrets',
+                text: 'INSERT INTO ClientSecret (secret, clientid) VALUES ($1, $2) ON CONFLICT DO NOTHING;',
+                values: [
+                    secret,
+                    clientData.id
+                ]
+            };
+            return client.query(updateSecrets);
+        }));
+        await Promise.all(clientData.publicClientIds.map(publicClientId => {
+            const updatePublicClientIds = {
+                name: 'insert-new-client-public-ids',
+                text: 'INSERT INTO ClientPublicId (publicid, clientid) VALUES ($1, $2) ON CONFLICT DO NOTHING;',
+                values: [
+                    publicClientId,
+                    clientData.id
+                ]
+            };
+            return client.query(updatePublicClientIds);
+        }));
         await client.query('COMMIT');
         return await this.findClientById(clientData.id);
     } catch (error) {
