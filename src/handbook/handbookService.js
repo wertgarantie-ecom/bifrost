@@ -119,16 +119,16 @@ const CryptoJS = require('crypto-js');
 const sessionId = req.cookies['wertgarantie-session-id'];
 
 // encrypt retrieved sessionID with secret client ID provided by Wertgarantie team
-const encryptedSessionId = CryptoJS.HmacSHA256(sessionId, "yourSecretClientIDFromWertgarantie").toString();
+const encryptedSessionId = CryptoJS.HmacSHA256(sessionId, "${client.secrets[0]}").toString();
 
 // Buffer stringified Object and convert to base64
 const wertgarantieCheckoutDataBuffer = Buffer.from(JSON.stringify({
         purchasedProducts: [
             {
                 price: 86000, // in minor units (cent)
-                manufacturer: "XXXPhones Inc.",
-                deviceClass: "Smartphone",
-                name: "Example Phone",
+                manufacturer: "Hersteller Inc.",
+                deviceClass: ${configuredDeviceClasses[0]},
+                name: "Example Product",
                 orderId: "orderNo1"
             }       
         ],
