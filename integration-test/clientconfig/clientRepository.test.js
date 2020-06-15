@@ -189,42 +189,28 @@ describe("should handle client config for product offers", () => {
                         productType: "KOMPLETTSCHUTZ_2019",
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
+                        priceRanges: [
+                            {
+                                minClose: 0,
+                                maxOpen: 300
+                            },
+                            {
+                                minClose: 300,
+                                maxOpen: 800
+                            },
+                            {
+                                minClose: 800,
+                                maxOpen: 1800
+                            }
+                        ],
                         deviceClasses: [
                             {
                                 objectCode: "9025",
-                                objectCodeExternal: "Smartphone",
-                                priceRanges: [
-                                    {
-                                        minClose: 0,
-                                        maxOpen: 300
-                                    },
-                                    {
-                                        minClose: 300,
-                                        maxOpen: 800
-                                    },
-                                    {
-                                        minClose: 800,
-                                        maxOpen: 1800
-                                    }
-                                ]
+                                objectCodeExternal: "Smartphone"
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Mobilfunk",
-                                priceRanges: [
-                                    {
-                                        minClose: 0,
-                                        maxOpen: 300
-                                    },
-                                    {
-                                        minClose: 300,
-                                        maxOpen: 800
-                                    },
-                                    {
-                                        minClose: 800,
-                                        maxOpen: 1800
-                                    }
-                                ]
+                                objectCodeExternal: "Mobilfunk"
                             }
 
                         ],

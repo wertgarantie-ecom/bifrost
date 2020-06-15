@@ -164,26 +164,26 @@ test('should findMaxPriceForDeviceClass', async () => {
 });
 
 test('should getIntervalPremiumsForPriceRanges', async () => {
+    const priceRanges = [
+        {
+            minClose: 0,
+            maxOpen: 30000
+        },
+        {
+            minClose: 30000,
+            maxOpen: 80000
+        },
+        {
+            minClose: 80000,
+            maxOpen: 180000
+        }
+    ];
     const deviceClassConfig = {
         objectCode: "9025",
         objectCodeExternal: "Smartphone",
-        priceRanges: [
-            {
-                minClose: 0,
-                maxOpen: 30000
-            },
-            {
-                minClose: 30000,
-                maxOpen: 80000
-            },
-            {
-                minClose: 80000,
-                maxOpen: 180000
-            }
-        ]
     };
     const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT;
-    const result = await webservicesService.getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", ["KOMPLETTSCHUTZ"], mockWebservicesClient);
+    const result = await webservicesService.getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, priceRanges, "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", ["KOMPLETTSCHUTZ"], mockWebservicesClient);
     expect(result.length).toBe(4);
     expect(result[0]).toEqual({
         "intervalCode": "1",
@@ -216,6 +216,20 @@ test('should getDevicePremiums', async () => {
         productType: "KOMPLETTSCHUTZ_2019",
         applicationCode: "GU WG DE KS 0419",
         basicRiskType: "KOMPLETTSCHUTZ",
+        priceRanges: [
+            {
+                minClose: 0,
+                maxOpen: 30000
+            },
+            {
+                minClose: 30000,
+                maxOpen: 80000
+            },
+            {
+                minClose: 80000,
+                maxOpen: 180001
+            }
+        ],
         deviceClasses: [
             {
                 objectCode: "9025",
@@ -237,23 +251,8 @@ test('should getDevicePremiums', async () => {
             },
             {
                 objectCode: "73",
-                objectCodeExternal: "Test",
-                priceRanges: [
-                    {
-                        minClose: 0,
-                        maxOpen: 30000
-                    },
-                    {
-                        minClose: 30000,
-                        maxOpen: 80000
-                    },
-                    {
-                        minClose: 80000,
-                        maxOpen: 180001
-                    }
-                ]
+                objectCodeExternal: "Test"
             }
-
         ],
         risks: ["DIEBSTAHLSCHUTZ"]
     };
@@ -271,24 +270,24 @@ test('should assemble product offers for client', async () => {
         applicationCode: "GU WG DE KS 0419",
         basicRiskType: "KOMPLETTSCHUTZ",
         defaultPaymentInterval: "monthly",
+        priceRanges: [
+            {
+                minClose: 0,
+                maxOpen: 30000
+            },
+            {
+                minClose: 30000,
+                maxOpen: 80000
+            },
+            {
+                minClose: 80000,
+                maxOpen: 180001
+            }
+        ],
         deviceClasses: [
             {
                 objectCode: "9025",
                 objectCodeExternal: "Smartphone",
-                priceRanges: [
-                    {
-                        minClose: 0,
-                        maxOpen: 30000
-                    },
-                    {
-                        minClose: 30000,
-                        maxOpen: 80000
-                    },
-                    {
-                        minClose: 80000,
-                        maxOpen: 180001
-                    }
-                ]
             }
         ],
         documents: {

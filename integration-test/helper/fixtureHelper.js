@@ -161,42 +161,28 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
                         defaultPaymentInterval: "monthly",
+                        priceRanges: [
+                            {
+                                minClose: 0,
+                                maxOpen: 30000
+                            },
+                            {
+                                minClose: 30000,
+                                maxOpen: 80000
+                            },
+                            {
+                                minClose: 80000,
+                                maxOpen: 180001
+                            }
+                        ],
                         deviceClasses: [
                             {
                                 objectCode: "9025",
-                                objectCodeExternal: "Smartphone",
-                                priceRanges: [
-                                    {
-                                        minClose: 0,
-                                        maxOpen: 30000
-                                    },
-                                    {
-                                        minClose: 30000,
-                                        maxOpen: 80000
-                                    },
-                                    {
-                                        minClose: 80000,
-                                        maxOpen: 180001
-                                    }
-                                ]
+                                objectCodeExternal: "Smartphone"
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Test",
-                                priceRanges: [
-                                    {
-                                        minClose: 0,
-                                        maxOpen: 30000
-                                    },
-                                    {
-                                        minClose: 30000,
-                                        maxOpen: 80000
-                                    },
-                                    {
-                                        minClose: 80000,
-                                        maxOpen: 180001
-                                    }
-                                ]
+                                objectCodeExternal: "Test"
                             }
 
                         ],
@@ -218,42 +204,28 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
                         defaultPaymentInterval: "monthly",
+                        priceRanges: [
+                            {
+                                minClose: 0,
+                                maxOpen: 30000
+                            },
+                            {
+                                minClose: 30000,
+                                maxOpen: 80000
+                            },
+                            {
+                                minClose: 80000,
+                                maxOpen: 180001
+                            }
+                        ],
                         deviceClasses: [
                             {
                                 objectCode: "9025",
-                                objectCodeExternal: "Smartphone",
-                                priceRanges: [
-                                    {
-                                        minClose: 0,
-                                        maxOpen: 30000
-                                    },
-                                    {
-                                        minClose: 30000,
-                                        maxOpen: 80000
-                                    },
-                                    {
-                                        minClose: 80000,
-                                        maxOpen: 180001
-                                    }
-                                ]
+                                objectCodeExternal: "Smartphone"
                             },
                             {
                                 objectCode: "73",
-                                objectCodeExternal: "Test",
-                                priceRanges: [
-                                    {
-                                        minClose: 0,
-                                        maxOpen: 30000
-                                    },
-                                    {
-                                        minClose: 30000,
-                                        maxOpen: 80000
-                                    },
-                                    {
-                                        minClose: 80000,
-                                        maxOpen: 180001
-                                    }
-                                ]
+                                objectCodeExternal: "Test"
                             }
 
                         ],
@@ -327,6 +299,32 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                         "defaultPaymentInterval": "monthly",
+                        "priceRanges": [
+                            {
+                                "minClose": 0,
+                                "maxOpen": 50001
+                            },
+                            {
+                                "minClose": 50001,
+                                "maxOpen": 75001
+                            },
+                            {
+                                "minClose": 75001,
+                                "maxOpen": 100001
+                            },
+                            {
+                                "minClose": 100001,
+                                "maxOpen": 150001
+                            },
+                            {
+                                "minClose": 150001,
+                                "maxOpen": 200001
+                            },
+                            {
+                                "minClose": 200001,
+                                "maxOpen": 400000
+                            }
+                        ],
                         "lock": {
                             "priceRanges": [
                                 {
@@ -344,33 +342,7 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "deviceClasses": [
                             {
                                 "objectCode": "27",
-                                "objectCodeExternal": "Bike",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 50001
-                                    },
-                                    {
-                                        "minClose": 50001,
-                                        "maxOpen": 75001
-                                    },
-                                    {
-                                        "minClose": 75001,
-                                        "maxOpen": 100001
-                                    },
-                                    {
-                                        "minClose": 100001,
-                                        "maxOpen": 150001
-                                    },
-                                    {
-                                        "minClose": 150001,
-                                        "maxOpen": 200001
-                                    },
-                                    {
-                                        "minClose": 200001,
-                                        "maxOpen": 400000
-                                    }
-                                ]
+                                "objectCodeExternal": "Bike"
                             }
 
                         ],
@@ -404,38 +376,37 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                         "defaultPaymentInterval": "yearly",
+                        "priceRanges": [
+                            {
+                                "minClose": 0,
+                                "maxOpen": 50001
+                            },
+                            {
+                                "minClose": 50001,
+                                "maxOpen": 75001
+                            },
+                            {
+                                "minClose": 75001,
+                                "maxOpen": 100001
+                            },
+                            {
+                                "minClose": 100001,
+                                "maxOpen": 150001
+                            },
+                            {
+                                "minClose": 150001,
+                                "maxOpen": 200001
+                            },
+                            {
+                                "minClose": 200001,
+                                "maxOpen": 400000
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "27",
-                                "objectCodeExternal": "Bike",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 50001
-                                    },
-                                    {
-                                        "minClose": 50001,
-                                        "maxOpen": 75001
-                                    },
-                                    {
-                                        "minClose": 75001,
-                                        "maxOpen": 100001
-                                    },
-                                    {
-                                        "minClose": 100001,
-                                        "maxOpen": 150001
-                                    },
-                                    {
-                                        "minClose": 150001,
-                                        "maxOpen": 200001
-                                    },
-                                    {
-                                        "minClose": 200001,
-                                        "maxOpen": 400000
-                                    }
-                                ]
+                                "objectCodeExternal": "Bike"
                             }
-
                         ],
                         "documents": {
                             "legalDocuments": [
@@ -466,30 +437,29 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                         "defaultPaymentInterval": "monthly",
+                        "priceRanges": [
+                            {
+                                "minClose": 0,
+                                "maxOpen": 150001
+                            },
+                            {
+                                "minClose": 150001,
+                                "maxOpen": 300001
+                            },
+                            {
+                                "minClose": 300001,
+                                "maxOpen": 400001
+                            },
+                            {
+                                "minClose": 400001,
+                                "maxOpen": 600000
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "270009",
-                                "objectCodeExternal": "E-Bike",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 150001
-                                    },
-                                    {
-                                        "minClose": 150001,
-                                        "maxOpen": 300001
-                                    },
-                                    {
-                                        "minClose": 300001,
-                                        "maxOpen": 400001
-                                    },
-                                    {
-                                        "minClose": 400001,
-                                        "maxOpen": 600000
-                                    }
-                                ]
+                                "objectCodeExternal": "E-Bike"
                             }
-
                         ],
                         "documents": {
                             "legalDocuments": [
@@ -526,30 +496,29 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                         "defaultPaymentInterval": "yearly",
+                        "priceRanges": [
+                            {
+                                "minClose": 0,
+                                "maxOpen": 150001
+                            },
+                            {
+                                "minClose": 150001,
+                                "maxOpen": 300001
+                            },
+                            {
+                                "minClose": 300001,
+                                "maxOpen": 400001
+                            },
+                            {
+                                "minClose": 400001,
+                                "maxOpen": 600000
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "270009",
                                 "objectCodeExternal": "E-Bike",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 150001
-                                    },
-                                    {
-                                        "minClose": 150001,
-                                        "maxOpen": 300001
-                                    },
-                                    {
-                                        "minClose": 300001,
-                                        "maxOpen": 400001
-                                    },
-                                    {
-                                        "minClose": 400001,
-                                        "maxOpen": 600000
-                                    }
-                                ]
                             }
-
                         ],
                         "documents": {
                             "legalDocuments": [

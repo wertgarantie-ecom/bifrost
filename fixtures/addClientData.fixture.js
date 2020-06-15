@@ -30,47 +30,33 @@ describe('add phone test shop client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Komplettschutz mit Premium-Option",
-                            "shorName": "Premiumschutz",
+                            "shortName": "Premiumschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
                             "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 30001
+                                },
+                                {
+                                    "minClose": 30001,
+                                    "maxOpen": 80001
+                                },
+                                {
+                                    "minClose": 80001,
+                                    "maxOpen": 180000
+                                }
+                            ],
                             "deviceClasses": [
                                 {
                                     "objectCode": "9025",
-                                    "objectCodeExternal": "Smartphone",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
+                                    "objectCodeExternal": "Smartphone"
                                 },
                                 {
                                     "objectCode": "73",
-                                    "objectCodeExternal": "Mobilfunk",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
+                                    "objectCodeExternal": "Mobilfunk"
                                 }
 
                             ],
@@ -99,47 +85,33 @@ describe('add phone test shop client config', () => {
                         },
                         {
                             "name": "Komplettschutz",
-                            "shorName": "Basisschutz",
+                            "shortName": "Basisschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
                             "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 30001
+                                },
+                                {
+                                    "minClose": 30001,
+                                    "maxOpen": 80001
+                                },
+                                {
+                                    "minClose": 80001,
+                                    "maxOpen": 180000
+                                }
+                            ],
                             "deviceClasses": [
                                 {
                                     "objectCode": "9025",
-                                    "objectCodeExternal": "Smartphone",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
+                                    "objectCodeExternal": "Smartphone"
                                 },
                                 {
                                     "objectCode": "73",
-                                    "objectCodeExternal": "Mobilfunk",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
+                                    "objectCodeExternal": "Mobilfunk"
                                 }
                             ],
                             "documents": {
@@ -220,6 +192,32 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD KS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                             "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 50001
+                                },
+                                {
+                                    "minClose": 50001,
+                                    "maxOpen": 75001
+                                },
+                                {
+                                    "minClose": 75001,
+                                    "maxOpen": 100001
+                                },
+                                {
+                                    "minClose": 100001,
+                                    "maxOpen": 150001
+                                },
+                                {
+                                    "minClose": 150001,
+                                    "maxOpen": 200001
+                                },
+                                {
+                                    "minClose": 200001,
+                                    "maxOpen": 400000
+                                }
+                            ],
                             "lock": {
                                 "priceRanges": [
                                     {
@@ -238,32 +236,6 @@ describe('add bike test shop client config', () => {
                                 {
                                     "objectCode": "27",
                                     "objectCodeExternal": "Bike",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 50001
-                                        },
-                                        {
-                                            "minClose": 50001,
-                                            "maxOpen": 75001
-                                        },
-                                        {
-                                            "minClose": 75001,
-                                            "maxOpen": 100001
-                                        },
-                                        {
-                                            "minClose": 100001,
-                                            "maxOpen": 150001
-                                        },
-                                        {
-                                            "minClose": 150001,
-                                            "maxOpen": 200001
-                                        },
-                                        {
-                                            "minClose": 200001,
-                                            "maxOpen": 400000
-                                        }
-                                    ]
                                 }
 
                             ],
@@ -297,6 +269,32 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD KS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                             "defaultPaymentInterval": "yearly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 50001
+                                },
+                                {
+                                    "minClose": 50001,
+                                    "maxOpen": 75001
+                                },
+                                {
+                                    "minClose": 75001,
+                                    "maxOpen": 100001
+                                },
+                                {
+                                    "minClose": 100001,
+                                    "maxOpen": 150001
+                                },
+                                {
+                                    "minClose": 150001,
+                                    "maxOpen": 200001
+                                },
+                                {
+                                    "minClose": 200001,
+                                    "maxOpen": 400000
+                                }
+                            ],
                             "lock": {
                                 "priceRanges": [
                                     {
@@ -315,32 +313,6 @@ describe('add bike test shop client config', () => {
                                 {
                                     "objectCode": "27",
                                     "objectCodeExternal": "Bike",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 50001
-                                        },
-                                        {
-                                            "minClose": 50001,
-                                            "maxOpen": 75001
-                                        },
-                                        {
-                                            "minClose": 75001,
-                                            "maxOpen": 100001
-                                        },
-                                        {
-                                            "minClose": 100001,
-                                            "maxOpen": 150001
-                                        },
-                                        {
-                                            "minClose": 150001,
-                                            "maxOpen": 200001
-                                        },
-                                        {
-                                            "minClose": 200001,
-                                            "maxOpen": 400000
-                                        }
-                                    ]
                                 }
 
                             ],
@@ -373,6 +345,24 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD EBS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                             "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 150001
+                                },
+                                {
+                                    "minClose": 150001,
+                                    "maxOpen": 300001
+                                },
+                                {
+                                    "minClose": 300001,
+                                    "maxOpen": 400001
+                                },
+                                {
+                                    "minClose": 400001,
+                                    "maxOpen": 600000
+                                }
+                            ],
                             "lock": {
                                 "priceRanges": [
                                     {
@@ -386,24 +376,6 @@ describe('add bike test shop client config', () => {
                                 {
                                     "objectCode": "270009",
                                     "objectCodeExternal": "E-Bike",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 150001
-                                        },
-                                        {
-                                            "minClose": 150001,
-                                            "maxOpen": 300001
-                                        },
-                                        {
-                                            "minClose": 300001,
-                                            "maxOpen": 400001
-                                        },
-                                        {
-                                            "minClose": 400001,
-                                            "maxOpen": 600000
-                                        }
-                                    ]
                                 }
 
                             ],
@@ -442,6 +414,24 @@ describe('add bike test shop client config', () => {
                             "applicationCode": "GU WG DE RAD EBS 0818",
                             "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                             "defaultPaymentInterval": "yearly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 150001
+                                },
+                                {
+                                    "minClose": 150001,
+                                    "maxOpen": 300001
+                                },
+                                {
+                                    "minClose": 300001,
+                                    "maxOpen": 400001
+                                },
+                                {
+                                    "minClose": 400001,
+                                    "maxOpen": 600000
+                                }
+                            ],
                             "lock": {
                                 "priceRanges": [
                                     {
@@ -455,24 +445,6 @@ describe('add bike test shop client config', () => {
                                 {
                                     "objectCode": "270009",
                                     "objectCodeExternal": "E-Bike",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 150001
-                                        },
-                                        {
-                                            "minClose": 150001,
-                                            "maxOpen": 300001
-                                        },
-                                        {
-                                            "minClose": 300001,
-                                            "maxOpen": 400001
-                                        },
-                                        {
-                                            "minClose": 400001,
-                                            "maxOpen": 600000
-                                        }
-                                    ]
                                 }
 
                             ],
@@ -573,47 +545,33 @@ describe('add Handyflash Local test client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Komplettschutz mit Premium-Option",
-                            "shorName": "Premiumschutz",
+                            "shortName": "Premiumschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
                             "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 30001
+                                },
+                                {
+                                    "minClose": 30001,
+                                    "maxOpen": 80001
+                                },
+                                {
+                                    "minClose": 80001,
+                                    "maxOpen": 180000
+                                }
+                            ],
                             "deviceClasses": [
                                 {
                                     "objectCode": "9025",
                                     "objectCodeExternal": "Smartphone",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
                                 },
                                 {
                                     "objectCode": "73",
                                     "objectCodeExternal": "Mobilfunk",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
                                 }
 
                             ],
@@ -642,47 +600,33 @@ describe('add Handyflash Local test client config', () => {
                         },
                         {
                             "name": "Komplettschutz",
-                            "shorName": "Basisschutz",
+                            "shortName": "Basisschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
                             "basicRiskType": "KOMPLETTSCHUTZ",
                             "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 30001
+                                },
+                                {
+                                    "minClose": 30001,
+                                    "maxOpen": 80001
+                                },
+                                {
+                                    "minClose": 80001,
+                                    "maxOpen": 180000
+                                }
+                            ],
                             "deviceClasses": [
                                 {
                                     "objectCode": "9025",
                                     "objectCodeExternal": "Smartphone",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
                                 },
                                 {
                                     "objectCode": "73",
                                     "objectCodeExternal": "Mobilfunk",
-                                    "priceRanges": [
-                                        {
-                                            "minClose": 0,
-                                            "maxOpen": 30001
-                                        },
-                                        {
-                                            "minClose": 30001,
-                                            "maxOpen": 80001
-                                        },
-                                        {
-                                            "minClose": 80001,
-                                            "maxOpen": 180000
-                                        }
-                                    ]
                                 }
                             ],
                             "documents": {

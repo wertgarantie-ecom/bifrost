@@ -13,6 +13,7 @@ module.exports.productOffersConfigSchema = {
             "documents",
             "advantages",
             "defaultPaymentInterval",
+            "priceRanges",
             "risks"
         ],
         "properties": {
@@ -32,6 +33,25 @@ module.exports.productOffersConfigSchema = {
                 "type": "string",
                 "enum": ["monthly", "quarterly", "halfYearly", "yearly"]
             },
+            "priceRanges": {
+                "type": "array",
+                "additionalItems": true,
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "minClose",
+                        "maxOpen"
+                    ],
+                    "properties": {
+                        "minClose": {
+                            "type": "integer",
+                        },
+                        "maxOpen": {
+                            "type": "integer",
+                        }
+                    }
+                }
+            },
             "deviceClasses": {
                 "type": "array",
                 "items": {
@@ -39,7 +59,6 @@ module.exports.productOffersConfigSchema = {
                     "required": [
                         "objectCode",
                         "objectCodeExternal",
-                        "priceRanges"
                     ],
                     "properties": {
                         "objectCode": {
@@ -47,25 +66,6 @@ module.exports.productOffersConfigSchema = {
                         },
                         "objectCodeExternal": {
                             "type": "string",
-                        },
-                        "priceRanges": {
-                            "type": "array",
-                            "additionalItems": true,
-                            "items": {
-                                "type": "object",
-                                "required": [
-                                    "minClose",
-                                    "maxOpen"
-                                ],
-                                "properties": {
-                                    "minClose": {
-                                        "type": "integer",
-                                    },
-                                    "maxOpen": {
-                                        "type": "integer",
-                                    }
-                                }
-                            }
                         }
                     }
                 }

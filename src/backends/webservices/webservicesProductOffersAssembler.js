@@ -94,7 +94,7 @@ function parseStringToMinorUnit(string) {
     return Math.round(minorUnits);
 }
 
-async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, applicationCode, productType, riskTypes, webservicesClient = _webservicesClient) {
+async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, priceRanges, applicationCode, productType, riskTypes, webservicesClient = _webservicesClient) {
     return await Promise.all(webservicesProduct.PAYMENTINTERVALS.INTERVAL.map(async interval => {
         const intervalData = {
             intervalCode: interval.VALUE,
@@ -102,7 +102,7 @@ async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, de
             priceRangePremiums: []
         };
         // pro Intervall für jede Price Range premiums abfragen
-        const priceRangePremiums = await Promise.all(deviceClassConfig.priceRanges.map(async (range) => {
+        const priceRangePremiums = await Promise.all(priceRanges.map(async (range) => {
             const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, range.maxOpen, riskTypes);
             return {
                 minClose: range.minClose,
@@ -115,8 +115,8 @@ async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, de
     }));
 }
 
-function findMaxPriceFromPriceRanges(deviceClassConfig) {
-    return _.max(deviceClassConfig.priceRanges.map(range => range.maxOpen));
+function findMaxPriceFromPriceRanges(priceRanges) {
+    return _.max(priceRanges.map(range => range.maxOpen));
 }
 
 async function getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient = _webservicesClient) {
@@ -124,12 +124,12 @@ async function getDevicePremiums(session, productOfferConfig, webservicesProduct
         const deviceClass = {
             objectCode: deviceClassConfig.objectCode,
             objectCodeExternal: deviceClassConfig.objectCodeExternal,
-            maxPriceLimitation: findMaxPriceForDeviceClass(webservicesProduct, deviceClassConfig) || findMaxPriceFromPriceRanges(deviceClassConfig),
+            maxPriceLimitation: findMaxPriceForDeviceClass(webservicesProduct, deviceClassConfig) || findMaxPriceFromPriceRanges(productOfferConfig.priceRanges),
             intervals: []
         };
 
         const riskTypesToConsider = [productOfferConfig.basicRiskType].concat(productOfferConfig.risks);
-        const intervals = await getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, productOfferConfig.applicationCode, productOfferConfig.productType, riskTypesToConsider, webservicesClient);
+        const intervals = await getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, productOfferConfig.priceRanges, productOfferConfig.applicationCode, productOfferConfig.productType, riskTypesToConsider, webservicesClient);
 
         deviceClass.intervals.push(...intervals);
         return deviceClass;

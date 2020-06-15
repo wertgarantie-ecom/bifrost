@@ -53,37 +53,37 @@ module.exports = {
                             "Diebstahl des Fahrrads",
                             "Teilediebstahl"
                         ],
+                        "priceRanges": [
+                            {
+                                "maxOpen": 50001,
+                                "minClose": 0
+                            },
+                            {
+                                "maxOpen": 75001,
+                                "minClose": 50001
+                            },
+                            {
+                                "maxOpen": 100001,
+                                "minClose": 75001
+                            },
+                            {
+                                "maxOpen": 150001,
+                                "minClose": 100001
+                            },
+                            {
+                                "maxOpen": 200001,
+                                "minClose": 150001
+                            },
+                            {
+                                "maxOpen": 400000,
+                                "minClose": 200001
+                            }
+                        ],
                         "productType": "KOMPLETTSCHUTZ_RAD_M_2018",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                         "deviceClasses": [
                             {
                                 "objectCode": "27",
-                                "priceRanges": [
-                                    {
-                                        "maxOpen": 50001,
-                                        "minClose": 0
-                                    },
-                                    {
-                                        "maxOpen": 75001,
-                                        "minClose": 50001
-                                    },
-                                    {
-                                        "maxOpen": 100001,
-                                        "minClose": 75001
-                                    },
-                                    {
-                                        "maxOpen": 150001,
-                                        "minClose": 100001
-                                    },
-                                    {
-                                        "maxOpen": 200001,
-                                        "minClose": 150001
-                                    },
-                                    {
-                                        "maxOpen": 400000,
-                                        "minClose": 200001
-                                    }
-                                ],
                                 "objectCodeExternal": "Bike"
                             }
                         ],
@@ -131,35 +131,35 @@ module.exports = {
                         ],
                         "productType": "KOMPLETTSCHUTZ_RAD_J_2018",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
+                        "priceRanges": [
+                            {
+                                "maxOpen": 50001,
+                                "minClose": 0
+                            },
+                            {
+                                "maxOpen": 75001,
+                                "minClose": 50001
+                            },
+                            {
+                                "maxOpen": 100001,
+                                "minClose": 75001
+                            },
+                            {
+                                "maxOpen": 150001,
+                                "minClose": 100001
+                            },
+                            {
+                                "maxOpen": 200001,
+                                "minClose": 150001
+                            },
+                            {
+                                "maxOpen": 400000,
+                                "minClose": 200001
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "27",
-                                "priceRanges": [
-                                    {
-                                        "maxOpen": 50001,
-                                        "minClose": 0
-                                    },
-                                    {
-                                        "maxOpen": 75001,
-                                        "minClose": 50001
-                                    },
-                                    {
-                                        "maxOpen": 100001,
-                                        "minClose": 75001
-                                    },
-                                    {
-                                        "maxOpen": 150001,
-                                        "minClose": 100001
-                                    },
-                                    {
-                                        "maxOpen": 200001,
-                                        "minClose": 150001
-                                    },
-                                    {
-                                        "maxOpen": 400000,
-                                        "minClose": 200001
-                                    }
-                                ],
                                 "objectCodeExternal": "Bike"
                             }
                         ],
@@ -209,27 +209,27 @@ module.exports = {
                         ],
                         "productType": "KOMPLETTSCHUTZ_EBIKE_M_2018",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
+                        "priceRanges": [
+                            {
+                                "maxOpen": 150001,
+                                "minClose": 0
+                            },
+                            {
+                                "maxOpen": 300001,
+                                "minClose": 150001
+                            },
+                            {
+                                "maxOpen": 400001,
+                                "minClose": 300001
+                            },
+                            {
+                                "maxOpen": 600000,
+                                "minClose": 400001
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "270009",
-                                "priceRanges": [
-                                    {
-                                        "maxOpen": 150001,
-                                        "minClose": 0
-                                    },
-                                    {
-                                        "maxOpen": 300001,
-                                        "minClose": 150001
-                                    },
-                                    {
-                                        "maxOpen": 400001,
-                                        "minClose": 300001
-                                    },
-                                    {
-                                        "maxOpen": 600000,
-                                        "minClose": 400001
-                                    }
-                                ],
                                 "objectCodeExternal": "E-Bike"
                             }
                         ],
@@ -278,27 +278,27 @@ module.exports = {
                         ],
                         "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
+                        "priceRanges": [
+                            {
+                                "maxOpen": 150001,
+                                "minClose": 0
+                            },
+                            {
+                                "maxOpen": 300001,
+                                "minClose": 150001
+                            },
+                            {
+                                "maxOpen": 400001,
+                                "minClose": 300001
+                            },
+                            {
+                                "maxOpen": 600000,
+                                "minClose": 400001
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "270009",
-                                "priceRanges": [
-                                    {
-                                        "maxOpen": 150001,
-                                        "minClose": 0
-                                    },
-                                    {
-                                        "maxOpen": 300001,
-                                        "minClose": 150001
-                                    },
-                                    {
-                                        "maxOpen": 400001,
-                                        "minClose": 300001
-                                    },
-                                    {
-                                        "maxOpen": 600000,
-                                        "minClose": 400001
-                                    }
-                                ],
                                 "objectCodeExternal": "E-Bike"
                             }
                         ],
@@ -321,42 +321,28 @@ module.exports = {
                         "applicationCode": "GU WG DE KS 0419",
                         "basicRiskType": "KOMPLETTSCHUTZ",
                         "defaultPaymentInterval": "monthly",
+                        "priceRanges": [
+                            {
+                                "minClose": 0,
+                                "maxOpen": 30001
+                            },
+                            {
+                                "minClose": 30001,
+                                "maxOpen": 80001
+                            },
+                            {
+                                "minClose": 80001,
+                                "maxOpen": 180000
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "9025",
-                                "objectCodeExternal": "Smartphone",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 30001
-                                    },
-                                    {
-                                        "minClose": 30001,
-                                        "maxOpen": 80001
-                                    },
-                                    {
-                                        "minClose": 80001,
-                                        "maxOpen": 180000
-                                    }
-                                ]
+                                "objectCodeExternal": "Smartphone"
                             },
                             {
                                 "objectCode": "73",
-                                "objectCodeExternal": "Mobilfunk",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 30001
-                                    },
-                                    {
-                                        "minClose": 30001,
-                                        "maxOpen": 80001
-                                    },
-                                    {
-                                        "minClose": 80001,
-                                        "maxOpen": 180000
-                                    }
-                                ]
+                                "objectCodeExternal": "Mobilfunk"
                             }
                         ],
                         "documents": {
@@ -392,42 +378,28 @@ module.exports = {
                         "applicationCode": "GU WG DE KS 0419",
                         "basicRiskType": "KOMPLETTSCHUTZ",
                         "defaultPaymentInterval": "monthly",
+                        "priceRanges": [
+                            {
+                                "minClose": 0,
+                                "maxOpen": 30001
+                            },
+                            {
+                                "minClose": 30001,
+                                "maxOpen": 80001
+                            },
+                            {
+                                "minClose": 80001,
+                                "maxOpen": 180000
+                            }
+                        ],
                         "deviceClasses": [
                             {
                                 "objectCode": "9025",
-                                "objectCodeExternal": "Smartphone",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 30001
-                                    },
-                                    {
-                                        "minClose": 30001,
-                                        "maxOpen": 80001
-                                    },
-                                    {
-                                        "minClose": 80001,
-                                        "maxOpen": 180000
-                                    }
-                                ]
+                                "objectCodeExternal": "Smartphone"
                             },
                             {
                                 "objectCode": "73",
-                                "objectCodeExternal": "Mobilfunk",
-                                "priceRanges": [
-                                    {
-                                        "minClose": 0,
-                                        "maxOpen": 30001
-                                    },
-                                    {
-                                        "minClose": 30001,
-                                        "maxOpen": 80001
-                                    },
-                                    {
-                                        "minClose": 80001,
-                                        "maxOpen": 180000
-                                    }
-                                ]
+                                "objectCodeExternal": "Mobilfunk"
                             }
                         ],
                         "documents": {
