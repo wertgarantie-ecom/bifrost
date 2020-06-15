@@ -49,6 +49,7 @@ function devNullMetricsSender() {
     const identity = _ => _;
 
     return {
+        increment: identity,
         incrementShowComponentRequest: identity,
         incrementComponentRequest: identity,
         recordSubmitProposalRequest: identity
