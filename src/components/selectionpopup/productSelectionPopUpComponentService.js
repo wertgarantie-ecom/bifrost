@@ -10,17 +10,15 @@ const util = require('util');
 const _ = require('lodash');
 const metrics = require('../../framework/metrics')();
 
-exports.getProductOffers = async function getProductOffers(deviceClass,
-                                                           devicePrice,
-                                                           clientConfig,
-                                                           locale = "de",
-                                                           orderItemId,
-                                                           shoppingCart) {
+exports.showSelectionPopUpComponent = async function showSelectionPopUpComponent(deviceClass,
+                                                                                 devicePrice,
+                                                                                 clientConfig,
+                                                                                 locale = "de",
+                                                                                 orderItemId,
+                                                                                 shoppingCart) {
 
     const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, orderItemId, shoppingCart);
-    const resultKey = (result) ? 'success' : 'skipped';
-
-    metrics.increment(`requests.selection-pop-up.${resultKey}`, 1, ["client:" + clientConfig.name]);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
     return result;
 }
 

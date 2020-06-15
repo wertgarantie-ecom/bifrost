@@ -6,7 +6,7 @@ const webservicesInsuranceProposalService = require('../backends/webservices/web
 const ClientError = require('../errors/ClientError');
 const mailSender = require('../mails/mailSender');
 const _productOfferService = require('../productoffers/productOffersService');
-const metrics = require('../framework/metrics');
+const metrics = require('../framework/metrics')();
 
 
 exports.addProductToShoppingCart = async function addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, orderId = uuid(), productOfferService = _productOfferService) {
@@ -23,18 +23,29 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(shopp
         const newItemsLockPrice = productOfferService.getMinimumLockPriceForProduct(completeProductToAdd, productToAdd.shopProduct.price);
         updatedShoppingCart.confirmations.requiredLockPrice = _.max([updatedShoppingCart.confirmations.requiredLockPrice, newItemsLockPrice]);
     }
+    const tags = [
+        `client:${clientConfig.name}`,
+        `product:${productToAdd.wertgarantieProduct.name}`
+    ]
+    metrics.increment('bifrost.shoppingcart.orders.add', 1, tags);
     return updatedShoppingCart;
 };
 
-exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute) {
+exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute, clientName) {
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmations[confirmationAttribute] = true;
+    const tags = [`client:${clientName}`,
+        `attribute:${confirmationAttribute}`];
+    metrics.increment(`bifrost.shoppingcart.confirmations.confirm`, 1, tags);
     return clone;
 };
 
-exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmationAttribute) {
+exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmationAttribute, clientName) {
     const clone = _.cloneDeep(shoppingCart);
     clone.confirmations[confirmationAttribute] = false;
+    const tags = [`client:${clientName}`,
+        `attribute:${confirmationAttribute}`];
+    metrics.increment(`bifrost.shoppingcart.confirmations.unconfirm`, 1, tags);
     return clone;
 };
 
@@ -79,18 +90,28 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
 
     await repository.persist(checkoutData);
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
-    sendCheckoutMetrics(clientConfig, checkoutData);
+    metrics.recordSubmitProposalRequest(checkoutData, clientConfig.name);
     return checkoutData;
 };
 
-function sendCheckoutMetrics(clientConfig, checkoutData) {
-    const tags = ["client:" + clientConfig.name];
-    if (checkoutData.test) {
-        tags.push('test:true');
 
+exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(id, shoppingCart, clientName) {
+    if (!shoppingCart) {
+        return undefined;
     }
-    metrics().increment('proposals.count', checkoutData.purchases.length, tags);
-}
+    for (var i = 0; i < shoppingCart.orders.length; i++) {
+        if (shoppingCart.orders[i].id === id) {
+            const tags = [
+                `client:${clientName}`,
+                `product:${shoppingCart.order[i].wertgarantieProduct.name}`
+            ]
+            metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
+            shoppingCart.orders.splice(i, 1);
+            i--;
+        }
+    }
+    return shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+};
 
 exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {
     function resultWitEmptyChanges(wertgarantieShoppingCart) {
@@ -110,7 +131,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
     }
 
     async function updateLockPrice(updatedShoppingCart, changes) {
-        if (!(_.isEmpty(changes.updated) && _.isEmpty(changes.deleted) )) {
+        if (!(_.isEmpty(changes.updated) && _.isEmpty(changes.deleted))) {
             const lockPrices = await Promise.all(updatedShoppingCart.orders.map(async order => {
                 const productOffer = await productOfferService.getProductOfferById(order.wertgarantieProduct.id);
                 if (!productOffer.lock) {
@@ -247,6 +268,7 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
     }
     return result;
 };
+
 
 class InvalidPublicClientIdError extends Error {
     constructor(message) {

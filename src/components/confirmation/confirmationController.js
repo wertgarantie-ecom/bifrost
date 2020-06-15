@@ -5,9 +5,9 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
     const wertgarantieShoppingCart = req.shoppingCart;
     const shopShoppingCart = req.body.shopShoppingCart ? JSON.parse(Buffer.from(req.body.shopShoppingCart, 'base64').toString()) : undefined;
     try {
-        const result = await confirmationService.prepareConfirmationData(wertgarantieShoppingCart, req.clientConfig, shopShoppingCart, req.locale.language);
+        const result = await confirmationService.showConfirmationComponent(wertgarantieShoppingCart, req.clientConfig, shopShoppingCart, req.locale.language);
         if (result) {
-            return res.status(200).send(result.instance);
+            return res.status(200).send(result);
         } else {
             return sendEmptyShoppingCart(res);
         }
@@ -18,12 +18,12 @@ exports.getConfirmationComponentData = async function getConfirmationComponentDa
 
 exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res, next) {
     try {
-        const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart);
+        const updatedShoppingCart = await shoppingCartService.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart, req.clientConfig.name);
 
         if (updatedShoppingCart) {
             const result = await confirmationService.prepareConfirmationData(updatedShoppingCart, req.clientConfig);
             if (result) {
-                return res.status(200).send(result.instance);
+                return res.status(200).send(result);
             } else {
                 return sendEmptyShoppingCart(res);
             }
@@ -41,7 +41,7 @@ exports.confirmAttribute = function confirmAttribute(req, res) {
     if (!shoppingCart) {
         res.status(400).send("signedShoppingCart is required");
     } else {
-        const confirmedShoppingCart = shoppingCartService.confirmAttribute(shoppingCart, confirmationAttribute);
+        const confirmedShoppingCart = shoppingCartService.confirmAttribute(shoppingCart, confirmationAttribute, req.clientConfig.name);
         res.status(200).send({
             message: "confirmed shopping cart",
             shoppingCart: confirmedShoppingCart
@@ -55,7 +55,7 @@ exports.unconfirmAttribute = function unconfirmAttribute(req, res) {
     if (!shoppingCart) {
         res.status(400).send("signedShoppingCart is required");
     } else {
-        const unconfirmedShoppingCart = shoppingCartService.unconfirmAttribute(shoppingCart, confirmationAttribute);
+        const unconfirmedShoppingCart = shoppingCartService.unconfirmAttribute(shoppingCart, confirmationAttribute, req.clientConfig.name);
         res.status(200).send({
             message: "unconfirmed shopping cart",
             shoppingCart: unconfirmedShoppingCart

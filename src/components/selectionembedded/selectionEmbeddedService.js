@@ -7,10 +7,12 @@ const schema = require('../selectionembedded/selectionEmbeddedResponseSchema').s
 const component = require('./../components').components.selectionembedded;
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
-const _ = require('lodash');
+const metrics = require('../../framework/metrics')();
 
 exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientConfig, locale, shoppingCart) {
-    return await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, shoppingCart);
+    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, shoppingCart);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    return result;
 };
 
 async function prepareProductSelectionData(deviceClass,
