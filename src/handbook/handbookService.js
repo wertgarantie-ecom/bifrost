@@ -47,7 +47,7 @@ Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents),
     <wertgarantie-selection-pop-up id="wertgarantie-selection" ${bifrostUriDateAttribute} 
         data-shop-product-name="example Product"
         data-device-price=86000
-        data-device-class=${configuredDeviceClasses[0]} ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\t\tdata-order-item-id="1234-12309aj1-321"' : ''}
+        data-device-class="${configuredDeviceClasses[0]}" ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\t\tdata-order-item-id="1234-12309aj1-321"' : ''}
         data-client-id="${client.publicClientIds[0]}">
     </wertgarantie-selection-pop-up>
     
@@ -127,7 +127,7 @@ const wertgarantieCheckoutDataBuffer = Buffer.from(JSON.stringify({
             {
                 price: 86000, // in minor units (cent)
                 manufacturer: "Hersteller Inc.",
-                deviceClass: ${configuredDeviceClasses[0]},
+                deviceClass: "${configuredDeviceClasses[0]}",
                 name: "Example Product",
                 orderId: "orderNo1"
             }       
