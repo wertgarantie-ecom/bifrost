@@ -129,7 +129,7 @@ exports.addNewClient = async function addNewClient(req, res) {
                 password: req.body.webservicesPassword
             }
         },
-        shopName: req.body.activePartnernumber,
+        shopName: req.body.activePartnerNumber,
     };
     await clientService.addNewClientFromDefaults(newClientData, req.body.type)
     res.redirect('/admin');
