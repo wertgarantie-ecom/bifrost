@@ -1,5 +1,4 @@
 const productOffersService = require('../../src/productoffers/productOffersService');
-const heimdallProductOffers = require('../../integration-test/backends/heimdall/heimdallResponses').getProductOffersResponse;
 
 test("test webservices product offer conversion", async () => {
     process.env.BACKEND = "webservices";
@@ -9,7 +8,7 @@ test("test webservices product offer conversion", async () => {
     const mockProductOffersRepository = {
         findByClientId: () => productOffersResult
     };
-    const result = await productOffersService.getProductOffers(clientConfig, "Smartphone", 80000, mockProductOffersRepository);
+    const result = await productOffersService.getProductOffers(clientConfig, "Smartphone", 80000, undefined, mockProductOffersRepository);
 
     expect(result).toEqual(
         [

@@ -35,7 +35,10 @@ async function prepareProductSelectionData(deviceClass,
         return undefined;
     }
 
-    const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
+    const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice, 2);
+    if (!productOffers) {
+        return undefined;
+    }
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
@@ -44,10 +47,6 @@ async function prepareProductSelectionData(deviceClass,
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
         products.push(product);
     });
-    if (products.length !== 2) {
-        return undefined;
-    }
-
     this.products = products;
 
     const data = {

@@ -17,13 +17,20 @@ async function getProductOfferById(productOfferId, webserviceProductOffersReposi
     return webserviceProductOffersRepository.findById(productOfferId);
 }
 
-async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
+async function getProductOffers(clientConfig, deviceClass, price, offerCount, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
+    let productOffers;
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-        return webserviceProductOffersToGeneralProductOffers(clientProductOffers, deviceClass, price)
+        productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, deviceClass, price)
     } else {
         const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, deviceClass, price);
-        return heimdallProductOffersToGeneralProductOffers(heimdallResponse)
+        productOffers = heimdallProductOffersToGeneralProductOffers(heimdallResponse)
+    }
+
+    if (!offerCount) {
+        return productOffers;
+    } else {
+        return productOffers.length < offerCount ? undefined : productOffers.slice(0, offerCount);
     }
 }
 
