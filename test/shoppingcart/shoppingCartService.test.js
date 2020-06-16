@@ -8,10 +8,10 @@ const validCustomer = require('../../integration-test/helper/fixtureHelper').val
 const clientConfig = require('../../integration-test/helper/fixtureHelper').createDefaultClient();
 const getRequiredLockPrice = require('../../src/productoffers/productOffersService').getMinimumLockPriceForProduct;
 const mockProductOfferServicePhone = {
-    getProductOfferById: () => productOffersTestResponses.productOffersPhone.productOffers[0]
+    getProductOfferById: () => productOffersTestResponses.productOffersPhone[0]
 };
 const mockProductOfferServiceBike = {
-    getProductOfferById: () => productOffersTestResponses.productOffersBike.productOffers[0],
+    getProductOfferById: () => productOffersTestResponses.productOffersBike[0],
     getMinimumLockPriceForProduct: getRequiredLockPrice
 };
 
@@ -450,7 +450,7 @@ test("should update wertgarantieShoppingCart order if price of matching shopShop
 
         const mockProductOffersService = {
             getPriceForSelectedProductOffer: () => wertgarantieProductPrice,
-            getProductOfferById: () => productOffersTestResponses.productOffersPhone.productOffers[0]
+            getProductOfferById: () => productOffersTestResponses.productOffersPhone[0]
         };
         const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOffersService);
         expect(result.shoppingCart.orders[0].shopProduct.price).toEqual(updatedPrice);
@@ -499,7 +499,7 @@ test("should update price of wertgarantie product if price of matching shopShopp
         const newWertgarantieProductPrice = 1000000;
         const mockProductOffersService = {
             getPriceForSelectedProductOffer: () => newWertgarantieProductPrice,
-            getProductOfferById: () => productOffersTestResponses.productOffersPhone.productOffers[0]
+            getProductOfferById: () => productOffersTestResponses.productOffersPhone[0]
         };
         const result = await service.syncShoppingCart(wertgarantieShoppingCart, shopShoppingCart, undefined, mockProductOffersService);
         expect(result.shoppingCart.orders[0].wertgarantieProduct.price).toEqual(newWertgarantieProductPrice);

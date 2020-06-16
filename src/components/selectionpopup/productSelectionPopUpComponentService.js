@@ -35,8 +35,7 @@ async function prepareProductSelectionData(deviceClass,
         return undefined;
     }
 
-    const productOffersData = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
-    const productOffers = productOffersData.productOffers;
+    const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);

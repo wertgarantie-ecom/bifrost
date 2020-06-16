@@ -13,23 +13,17 @@ async function getPriceForSelectedProductOffer(clientConfig, deviceClass, produc
     }
 }
 
-async function getProductOfferById (productOfferId, webserviceProductOffersRepository = _webserviceProductOffersRepository) {
+async function getProductOfferById(productOfferId, webserviceProductOffersRepository = _webserviceProductOffersRepository) {
     return webserviceProductOffersRepository.findById(productOfferId);
 }
 
 async function getProductOffers(clientConfig, deviceClass, price, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-        return {
-            generalDocuments: [],
-            productOffers: webserviceProductOffersToGeneralProductOffers(clientProductOffers, deviceClass, price)
-        };
+        return webserviceProductOffersToGeneralProductOffers(clientProductOffers, deviceClass, price)
     } else {
         const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, deviceClass, price);
-        return {
-            generalDocuments: [],
-            productOffers: heimdallProductOffersToGeneralProductOffers(heimdallResponse)
-        };
+        return heimdallProductOffersToGeneralProductOffers(heimdallResponse)
     }
 }
 

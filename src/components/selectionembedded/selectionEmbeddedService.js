@@ -23,8 +23,7 @@ async function prepareProductSelectionData(deviceClass,
                                            productOffersService = _productOffersService,
                                            productImageService = _productImageService,
                                            clientComponentTextService = _clientComponentTextService) {
-    const productOffersData = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
-    const productOffers = productOffersData.productOffers;
+    const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);

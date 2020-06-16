@@ -92,7 +92,7 @@ async function prepareConfirmationData(wertgarantieShoppingCart,
 exports.prepareConfirmationData = prepareConfirmationData;
 
 async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts, listOfUpdates) {
-    const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price)).productOffers;
+    const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price));
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
