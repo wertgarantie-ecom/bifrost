@@ -33,6 +33,7 @@ exports.generateHandbookForClient = function generateHandbookForClient(client) {
 ## Konfiguration
 * public Client Ids: \`${client.publicClientIds}\`
 * secrets: \`${client.secrets}\`
+* email: \`${client.email || 'TODO'}\`
 
 ## Konfigurierte Device Classes
 ${configuredDeviceClasses.map(deviceClass => `* ${deviceClass}`).join("\n")}
