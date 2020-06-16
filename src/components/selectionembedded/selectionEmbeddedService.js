@@ -9,8 +9,8 @@ const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 const metrics = require('../../framework/metrics')();
 
-exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientConfig, locale, shoppingCart) {
-    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, shoppingCart);
+exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientConfig, locale) {
+    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
     return result;
 };
@@ -19,11 +19,13 @@ async function prepareProductSelectionData(deviceClass,
                                            devicePrice,
                                            clientConfig,
                                            locale = "de",
-                                           shoppingCart,
                                            productOffersService = _productOffersService,
                                            productImageService = _productImageService,
                                            clientComponentTextService = _clientComponentTextService) {
     const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
+    if (!productOffers) {
+        return undefined;
+    }
     const products = [];
     let imageLinks = [];
     imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);

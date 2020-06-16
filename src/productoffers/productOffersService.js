@@ -158,6 +158,9 @@ function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
 
 function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, deviceClass, price) {
     const filteredProductOffers = filterProductOffers(webservicesProductOffers, deviceClass, price);
+    if (filteredProductOffers.length < 1) {
+        return undefined;
+    }
     return filteredProductOffers.map(webservicesProductOffer => {
         return getProductOfferWithCorrectPrice(webservicesProductOffer, price);
     });

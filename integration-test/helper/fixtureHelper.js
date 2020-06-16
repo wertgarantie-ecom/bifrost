@@ -1,4 +1,4 @@
-const signatureService = require('../../src/shoppingcart/signatureService');
+const signatureService = require('../../src/framework/signatureService');
 const clientService = require('../../src/clientconfig/clientService');
 const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');

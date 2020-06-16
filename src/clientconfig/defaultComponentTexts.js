@@ -51,6 +51,13 @@ exports.defaultComponentTexts = {
             "documents": documents
         }
     },
+    "listselection": {
+        "de": {
+            "title": "Extra Schutz? Jetzt direkt prüfen",
+            "includedTax": "*inkl. 19% Versicherungssteuer",
+            "addInsuranceButtonText": "Versicherungen hinzufügen"
+        }
+    },
     "landingpage": {
         "de": {}
     },

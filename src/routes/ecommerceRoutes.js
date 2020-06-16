@@ -3,6 +3,7 @@ const router = express.Router();
 
 const selectionPopUpController = require("../components/selectionpopup/selectionPopUpController");
 const selectionEmbeddedController = require("../components/selectionembedded/selectionEmbeddedController");
+const listSelectionController = require("../components/list-selection/listSelectionController");
 const confirmationController = require("../components/confirmation/confirmationController");
 const afterSalesController = require("../components/aftersales/afterSalesController");
 const landingPageController = require("../components/landingpage/landingPageController");
@@ -28,6 +29,8 @@ router.post("/clients/:publicClientId/components/selection-popup/cancel", setCli
 router.put("/clients/:publicClientId/components/selection-embedded", validate({body: selectionGetProductsSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.getProducts);
 router.post("/clients/:publicClientId/components/selection-embedded/select", validate({body: productSelectionClickedSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.registerProductSelected);
 router.delete("/clients/:publicClientId/components/selection-embedded/select", validate({body: productSelectionClickedSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.registerProductUnselected);
+
+router.put("/clients/:publicClientId/components/list-selection", setClientConfigByPublicClientId, listSelectionController.getListSelectionData);
 
 router.put("/clients/:publicClientId/components/confirmation", setClientConfigByPublicClientId, confirmationController.getConfirmationComponentData);
 router.put("/clients/:publicClientId/components/confirmation/:confirmationAttribute", setClientConfigByPublicClientId, confirmationController.confirmAttribute);

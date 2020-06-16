@@ -4,6 +4,7 @@ const selectionPopUpTextsSchema = require('./selectionpopup/selectionPopUpTextsS
 const confirmationTextsSchema = require('./confirmation/confirmationTextsSchema');
 const afterSalesTextsSchema = require('./aftersales/afterSalesTextsSchema');
 const selectionEmbeddedTextsSchema = require('./selectionembedded/selectionEmbeddedTextsSchema');
+const listSelectionTextsSchema = require('./list-selection/listSelectionTextsSchema');
 
 exports.components = {
     rating: {
@@ -21,6 +22,10 @@ exports.components = {
     selectionembedded: {
         name: "selectionembedded",
         textsSchema: selectionEmbeddedTextsSchema
+    },
+    listselection: {
+        name: "listselection",
+        textsSchema: listSelectionTextsSchema
     },
     confirmation: {
         name: "confirmation",

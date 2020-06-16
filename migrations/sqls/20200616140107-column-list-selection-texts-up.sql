@@ -1,0 +1,1 @@
+ALTER TABLE client_component_texts ADD COLUMN listselection jsonb;
