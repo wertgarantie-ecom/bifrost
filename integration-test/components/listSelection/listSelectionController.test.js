@@ -47,159 +47,90 @@ describe("list selection tests", () => {
             shopShoppingCart: base64ShopShoppingCart
         });
         expect(result.status).toEqual(200);
+        const embeddedSelectionData = {
+            "texts": {
+                "title": "Extra Schutz? Jetzt direkt prüfen",
+                "documents": {
+                    "PIS": "Produktinformationsblatt",
+                    "ROW": "Widerrufsrecht",
+                    "GDPR": "Datenschutz",
+                    "GTCI": "Allgemeine Versicherungsbedingungen",
+                    "IPID": "Informationsblatt für Versicherungsprodukte"
+                },
+                "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testClient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+                "includedTax": "*inkl. 19% Versicherungssteuer",
+                "partnerShop": "testClient",
+                "productTexts": {
+                    "taxInformation": "(inkl. %s VerSt**)",
+                    "paymentIntervals": {
+                        "yearly": "jährl.",
+                        "monthly": "monatl.",
+                        "quarterly": "vierteljährl.",
+                        "halfYearly": "habljährl."
+                    }
+                },
+                "productPanelTitle": "Ihr Wertgarantie Rundumschutz",
+                "productFurtherInformation": "Weitere Informationen",
+                "productPanelDetailsHeader": "Weitere Vorteile",
+                "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>"
+            },
+            "products": [
+                {
+                    "paymentInterval": "monatl.",
+                    "intervalCode": "monthly",
+                    "id": productOffers[0].id,
+                    "name": "Komplettschutz",
+                    "shortName": "Basisschutz",
+                    "top3": [
+                        {
+                            "included": true
+                        }
+                    ],
+                    "advantages": [],
+                    "GTCIText": "Allgemeine Versicherungsbedingungen",
+                    "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
+                    "IPIDText": "Informationsblatt für Versicherungsprodukte",
+                    "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
+                    "priceFormatted": "23,40 €",
+                    "price": 2340,
+                    "taxFormatted": "(inkl. 3,74 € VerSt**)",
+                    "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
+                },
+                {
+                    "paymentInterval": "monatl.",
+                    "intervalCode": "monthly",
+                    "id": productOffers[1].id,
+                    "name": "Komplettschutz mit Premium-Option",
+                    "shortName": "Premiumschutz",
+                    "top3": [
+                        {
+                            "included": true
+                        }
+                    ],
+                    "advantages": [],
+                    "GTCIText": "Allgemeine Versicherungsbedingungen",
+                    "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
+                    "IPIDText": "Informationsblatt für Versicherungsprodukte",
+                    "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
+                    "priceFormatted": "23,40 €",
+                    "price": 2340,
+                    "taxFormatted": "(inkl. 3,74 € VerSt**)",
+                    "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
+                }
+            ]
+        };
+        const embeddedSelectionDataBase64 = Buffer.from(JSON.stringify(embeddedSelectionData)).toString("base64");
         expect(result.body).toEqual({
             "insurableProductRows": [
                 {
                     "shopProductImageLink": "https://imageDomain.com/produktimage.jpg",
                     "shopProductName": "Test Produkt",
-                    "embeddedSelectionData": {
-                        "texts": {
-                            "title": "Extra Schutz? Jetzt direkt prüfen",
-                            "documents": {
-                                "PIS": "Produktinformationsblatt",
-                                "ROW": "Widerrufsrecht",
-                                "GDPR": "Datenschutz",
-                                "GTCI": "Allgemeine Versicherungsbedingungen",
-                                "IPID": "Informationsblatt für Versicherungsprodukte"
-                            },
-                            "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testClient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
-                            "includedTax": "*inkl. 19% Versicherungssteuer",
-                            "partnerShop": "testClient",
-                            "productTexts": {
-                                "taxInformation": "(inkl. %s VerSt**)",
-                                "paymentIntervals": {
-                                    "yearly": "jährl.",
-                                    "monthly": "monatl.",
-                                    "quarterly": "vierteljährl.",
-                                    "halfYearly": "habljährl."
-                                }
-                            },
-                            "productPanelTitle": "Ihr Wertgarantie Rundumschutz",
-                            "productFurtherInformation": "Weitere Informationen",
-                            "productPanelDetailsHeader": "Weitere Vorteile",
-                            "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>"
-                        },
-                        "products": [
-                            {
-                                "paymentInterval": "monatl.",
-                                "intervalCode": "monthly",
-                                "id": productOffers[0].id,
-                                "name": "Komplettschutz",
-                                "shortName": "Basisschutz",
-                                "top3": [
-                                    {
-                                        "included": true
-                                    }
-                                ],
-                                "advantages": [],
-                                "GTCIText": "Allgemeine Versicherungsbedingungen",
-                                "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
-                                "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                                "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-                                "priceFormatted": "23,40 €",
-                                "price": 2340,
-                                "taxFormatted": "(inkl. 3,74 € VerSt**)",
-                                "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
-                            },
-                            {
-                                "paymentInterval": "monatl.",
-                                "intervalCode": "monthly",
-                                "id": productOffers[1].id,
-                                "name": "Komplettschutz mit Premium-Option",
-                                "shortName": "Premiumschutz",
-                                "top3": [
-                                    {
-                                        "included": true
-                                    }
-                                ],
-                                "advantages": [],
-                                "GTCIText": "Allgemeine Versicherungsbedingungen",
-                                "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
-                                "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                                "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-                                "priceFormatted": "23,40 €",
-                                "price": 2340,
-                                "taxFormatted": "(inkl. 3,74 € VerSt**)",
-                                "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
-                            }
-                        ]
-                    }
+                    "embeddedSelectionDataBase64": embeddedSelectionDataBase64
                 },
                 {
                     "shopProductImageLink": "https://imageDomain.com/produktimage.jpg",
                     "shopProductName": "Test Produkt3",
-                    "embeddedSelectionData": {
-                        "texts": {
-                            "title": "Extra Schutz? Jetzt direkt prüfen",
-                            "documents": {
-                                "PIS": "Produktinformationsblatt",
-                                "ROW": "Widerrufsrecht",
-                                "GDPR": "Datenschutz",
-                                "GTCI": "Allgemeine Versicherungsbedingungen",
-                                "IPID": "Informationsblatt für Versicherungsprodukte"
-                            },
-                            "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testClient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
-                            "includedTax": "*inkl. 19% Versicherungssteuer",
-                            "partnerShop": "testClient",
-                            "productTexts": {
-                                "taxInformation": "(inkl. %s VerSt**)",
-                                "paymentIntervals": {
-                                    "yearly": "jährl.",
-                                    "monthly": "monatl.",
-                                    "quarterly": "vierteljährl.",
-                                    "halfYearly": "habljährl."
-                                }
-                            },
-                            "productPanelTitle": "Ihr Wertgarantie Rundumschutz",
-                            "productFurtherInformation": "Weitere Informationen",
-                            "productPanelDetailsHeader": "Weitere Vorteile",
-                            "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>"
-                        },
-                        "products": [
-                            {
-                                "paymentInterval": "monatl.",
-                                "intervalCode": "monthly",
-                                "id": productOffers[0].id,
-                                "name": "Komplettschutz",
-                                "shortName": "Basisschutz",
-                                "top3": [
-                                    {
-                                        "included": true
-                                    }
-                                ],
-                                "advantages": [],
-                                "GTCIText": "Allgemeine Versicherungsbedingungen",
-                                "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
-                                "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                                "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-                                "priceFormatted": "23,40 €",
-                                "price": 2340,
-                                "taxFormatted": "(inkl. 3,74 € VerSt**)",
-                                "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
-                            },
-                            {
-                                "paymentInterval": "monatl.",
-                                "intervalCode": "monthly",
-                                "id": productOffers[1].id,
-                                "name": "Komplettschutz mit Premium-Option",
-                                "shortName": "Premiumschutz",
-                                "top3": [
-                                    {
-                                        "included": true
-                                    }
-                                ],
-                                "advantages": [],
-                                "GTCIText": "Allgemeine Versicherungsbedingungen",
-                                "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
-                                "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                                "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-                                "priceFormatted": "23,40 €",
-                                "price": 2340,
-                                "taxFormatted": "(inkl. 3,74 € VerSt**)",
-                                "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png"
-                            }
-                        ]
-                    }
+                    "embeddedSelectionDataBase64": embeddedSelectionDataBase64
                 }
             ],
             "listSelectionComponentTexts": {

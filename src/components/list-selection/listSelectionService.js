@@ -11,10 +11,11 @@ exports.prepareListSelectionData = async function prepareListSelectionData(clien
     const insurableProductRows = await Promise.all(shopShoppingCart.map(async shopProduct => {
         const embeddedSelectionData = await embeddedSelectionService.prepareProductSelectionData(shopProduct.deviceClass, shopProduct.price, clientConfig, locale);
         if (embeddedSelectionData) {
+            const embeddedSelectionDataBase64 = Buffer.from(JSON.stringify(embeddedSelectionData)).toString('base64');
             return {
                 shopProductImageLink: shopProduct.imageLink,
                 shopProductName: shopProduct.name,
-                embeddedSelectionData
+                embeddedSelectionDataBase64
             }
         } else {
             return undefined;

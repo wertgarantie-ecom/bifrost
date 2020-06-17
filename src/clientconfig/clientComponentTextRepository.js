@@ -41,6 +41,7 @@ function toComponentTextRessource(rows) {
             ratingTexts: row.rating,
             selectionPopUpTexts: row.selectionpopup,
             selectionEmbedded: row.selectionembedded,
+            listSelection: row.listselection,
             confirmationTexts: row.confirmation,
             aftersalesTexts: row.aftersales,
             landingPageTexts: row.landingpage

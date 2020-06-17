@@ -70,6 +70,9 @@ function renderComponentTextEditor(componentTexts, component, selectedLanguage, 
         case "selectionEmbedded":
             componentName = "selectionembedded";
             return getComponentTextsEditor(componentName, componentTexts, client.id, selectedLanguage, ["documents", "productTexts"]);
+        case "listSelection":
+            componentName = "listselection";
+            return getComponentTextsEditor(componentName, componentTexts, client.id, selectedLanguage, ["documents", "productTexts"]);
         case "confirmationTexts":
             componentName = "confirmation";
             return getComponentTextsEditor(componentName, componentTexts, client.id, selectedLanguage, ["documents", "productTexts"]);

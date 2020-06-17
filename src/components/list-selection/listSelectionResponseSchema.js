@@ -1,5 +1,4 @@
 const listSelectionTextsSchema = require('./listSelectionTextsSchema').listSelectionTextsSchema;
-const selectionEmbeddedResponseSchema = require('../selectionembedded/selectionEmbeddedResponseSchema').selectionEmbeddedResponseSchema;
 
 exports.listSelectionResponseSchema = {
     type: "object",
@@ -15,8 +14,14 @@ exports.listSelectionResponseSchema = {
                     shopProductName: {
                         type: "string"
                     },
-                    embeddedSelectionData: selectionEmbeddedResponseSchema
-                }
+                    embeddedSelectionDataBase64: {
+                        type: "string"
+                    }
+                },
+                required: [
+                    "shopProductName",
+                    "embeddedSelectionDataBase64"
+                ]
             }
         },
         listSelectionComponentTexts: listSelectionTextsSchema
