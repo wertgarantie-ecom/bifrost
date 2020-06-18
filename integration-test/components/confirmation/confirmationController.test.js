@@ -62,6 +62,7 @@ test("should return valid confirmation data", async () => {
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
         deviceClass: "Smartphone",
+        shopDeviceClass: "Smartphone",
         name: "Test Handy",
         wertgarantieProductId: productOffers[0].id,
         wertgarantieProductName: productOffers[0].name
@@ -89,6 +90,7 @@ test("should remove order from shopping cart", async () => {
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
         deviceClass: "Smartphone",
+        shopDeviceClass: "Smartphone",
         name: "Test Handy",
         wertgarantieProductId: productOffers[0].id,
         wertgarantieProductName: productOffers[0].name,
@@ -111,12 +113,12 @@ test("should remove order from shopping cart", async () => {
 test('should return proper data if wertgarantieShoppingCart must be synced with shop provided cart', async () => {
     const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
     const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
-    const deviceClass = "Smartphone";
+    const shopDeviceClass = "Smartphone";
     const selectedWertgarantieProduct = productOffers[0].id;
     const signedShoppingCart = testhelper.createSignedShoppingCart({
         publicClientId: clientData.publicClientIds[0],
         devicePrice: 80000,
-        deviceClass: deviceClass,
+        shopDeviceClass: shopDeviceClass,
         name: "Test Handy",
         wertgarantieProductId: selectedWertgarantieProduct,
         wertgarantieProductName: productOffers[0].name
@@ -134,7 +136,7 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
     ];
     const encodedShopShoppingCart = Buffer.from(JSON.stringify(shopShoppingCart)).toString("base64");
 
-    const expectedPrice = await productOffersService.getPriceForSelectedProductOffer(clientData, deviceClass, selectedWertgarantieProduct, shopShoppingCart[0].price, wertgarantieOrder.wertgarantieProduct.paymentInterval);
+    const expectedPrice = await productOffersService.getPriceForSelectedProductOffer(clientData, shopDeviceClass, selectedWertgarantieProduct, shopShoppingCart[0].price, wertgarantieOrder.wertgarantieProduct.paymentInterval);
 
     const response = await request.agent(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/confirmation`)
         .send({
@@ -146,12 +148,14 @@ test('should return proper data if wertgarantieShoppingCart must be synced with 
     expect(response.body.signedShoppingCart.shoppingCart.orders[0]).toEqual({
         "id": wertgarantieOrder.id,
         "shopProduct": {
-            "deviceClass": "Smartphone",
+            "deviceClasses": "Smartphone",
             "name": shopShoppingCart[0].name,
             "orderItemId": orderItemId,
             "price": shopShoppingCart[0].price
         },
         "wertgarantieProduct": {
+            "deviceClass": "73",
+            "shopDeviceClass": "Smartphone",
             "id": selectedWertgarantieProduct,
             "name": "Komplettschutz",
             "paymentInterval": "monthly",

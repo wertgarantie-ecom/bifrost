@@ -21,7 +21,7 @@ exports.nockHeimdallLogin = function nockHeimdallLogin(clientData) {
 };
 
 exports.getNockedHeimdallProductOffers = function getNockedHeimdallProductOffers(signedShoppingCart, clientConfig, response = defaultProductOffersResponse, responseStatus = 200) {
-    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === signedShoppingCart.shoppingCart.orders[0].shopProduct.deviceClass).heimdallDeviceClass;
+    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === signedShoppingCart.shoppingCart.orders[0].wertgarantieProduct.deviceClass).heimdallDeviceClass;
     nock(process.env.HEIMDALL_URI)
         .get(`/api/v1/product-offers?device_class=${heimdallDeviceClass}&device_purchase_price=${signedShoppingCart.shoppingCart.orders[0].shopProduct.price / 100}&device_purchase_date=${dateformat(new Date(), 'yyyy-mm-dd')}`)
         .reply(responseStatus, response);

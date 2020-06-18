@@ -18,6 +18,7 @@ exports.selectionEmbeddedResponseSchema = {
                 "type": "object",
                 "required": [
                     "id",
+                    "shopDeviceClass",
                     "name",
                     "shortName",
                     "top3",
@@ -33,6 +34,9 @@ exports.selectionEmbeddedResponseSchema = {
                 ],
                 "properties": {
                     "id": {
+                        "type": "string",
+                    },
+                    "shopDeviceClass": {
                         "type": "string",
                     },
                     "name": {

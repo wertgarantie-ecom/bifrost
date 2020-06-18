@@ -173,7 +173,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
                 order.shopProduct.name = matchingShopOrderItem.name;
                 let priceUpdated = false;
                 if (order.shopProduct.price !== matchingShopOrderItem.price) {
-                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.shopProduct.deviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
+                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.wertgarantieProduct.shopDeviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
                     if (!newPrice) {
                         result.changes.deleted.push(order.id);
                         return;

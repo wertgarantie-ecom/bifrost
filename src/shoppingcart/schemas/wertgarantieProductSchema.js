@@ -12,12 +12,20 @@ exports.wertgarantieProductSchema = {
         },
         price: {
             type: "integer"
+        },
+        deviceClass: {
+            type: "string"
+        },
+        shopDeviceClass: {
+            type: "string"
         }
     },
     required: [
         "id",
         "name",
         "price",
-        "paymentInterval"
+        "paymentInterval",
+        "deviceClass",
+        "shopDeviceClass"
     ]
 };

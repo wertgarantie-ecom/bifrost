@@ -21,46 +21,50 @@ test('should return proper product data', async () => {
     expect(result.status).toBe(expectedStatusCode);
     expect(result.body.products).toEqual([
         {
-            "paymentInterval": "monatl.",
-            "intervalCode": "monthly",
-            "id": productOffers[0].id,
-            "name": "Komplettschutz",
-            "shortName": "Basisschutz",
-            "top3": [
-                {
-                    "included": true
-                }
-            ],
-            "advantages": [],
             "GTCIText": "Allgemeine Versicherungsbedingungen",
             "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
             "IPIDText": "Informationsblatt für Versicherungsprodukte",
             "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-            "priceFormatted": "23,40 €",
-            "price": 2340,
-            "taxFormatted": "(inkl. 3,74 € VerSt**)",
+            "advantages": [],
+            "deviceClass": "73",
+            "id": productOffers[0].id,
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
+            "intervalCode": "monthly",
+            "name": "Komplettschutz",
+            "paymentInterval": "monatl.",
+            "price": 2340,
+            "priceFormatted": "23,40 €",
+            "shopDeviceClass": "Test",
+            "shortName": "Basisschutz",
+            "taxFormatted": "(inkl. 3,74 € VerSt**)",
+            "top3": [
+                {
+                    "included": true
+                }
+            ]
         },
         {
-            "paymentInterval": "monatl.",
-            "intervalCode": "monthly",
-            "id": productOffers[1].id,
-            "name": "Komplettschutz mit Premium-Option",
-            "shortName": "Premiumschutz",
-            "top3": [
-                {
-                    "included": true
-                }
-            ],
-            "advantages": [],
             "GTCIText": "Allgemeine Versicherungsbedingungen",
             "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
             "IPIDText": "Informationsblatt für Versicherungsprodukte",
             "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-            "priceFormatted": "23,40 €",
-            "price": 2340,
-            "taxFormatted": "(inkl. 3,74 € VerSt**)",
+            "advantages": [],
+            "deviceClass": "73",
+            "id": productOffers[1].id,
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
+            "intervalCode": "monthly",
+            "name": "Komplettschutz mit Premium-Option",
+            "paymentInterval": "monatl.",
+            "price": 2340,
+            "priceFormatted": "23,40 €",
+            "shopDeviceClass": "Test",
+            "shortName": "Premiumschutz",
+            "taxFormatted": "(inkl. 3,74 € VerSt**)",
+            "top3": [
+                {
+                    "included": true
+                }
+            ]
         }
     ]);
 });

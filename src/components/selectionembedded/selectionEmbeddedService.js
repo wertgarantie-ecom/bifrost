@@ -9,13 +9,13 @@ const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 const metrics = require('../../framework/metrics')();
 
-exports.getProductOffers = async function getProductOffers(deviceClass, devicePrice, clientConfig, locale, shoppingCart) {
-    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, shoppingCart);
+exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart) {
+    const result = await prepareProductSelectionData(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
     return result;
 };
 
-async function prepareProductSelectionData(deviceClass,
+async function prepareProductSelectionData(shopDeviceClassesString,
                                            devicePrice,
                                            clientConfig,
                                            locale = "de",
@@ -23,10 +23,11 @@ async function prepareProductSelectionData(deviceClass,
                                            productOffersService = _productOffersService,
                                            productImageService = _productImageService,
                                            clientComponentTextService = _clientComponentTextService) {
-    const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice);
+    const shopDeviceClasses = shopDeviceClassesString.split(',');
+    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice);
     const products = [];
     let imageLinks = [];
-    imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    imageLinks = productImageService.getRandomImageLinksForDeviceClass(productOffers[0].shopDeviceClass, productOffers.length);
     const selectionEmbeddedTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     productOffers.forEach((offer, idx) => {
         const product = convertPayloadToSelectionEmbeddedProduct(offer, imageLinks[idx], productOffers, locale, selectionEmbeddedTexts);
@@ -58,6 +59,8 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer, imageLink, allPr
         paymentInterval: productOffer.payment,
         intervalCode: productOffer.defaultPaymentInterval,
         id: productOffer.id,
+        deviceClass: productOffer.deviceClass,
+        shopDeviceClass: productOffer.shopDeviceClass,
         name: productOffer.name,
         shortName: productOffer.shortName,
         top3: advantageCategories.top3,

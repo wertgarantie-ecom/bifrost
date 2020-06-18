@@ -3,11 +3,13 @@ const signedShoppingCartSchema = require("../../shoppingcart/schemas/signedShopp
 exports.selectionPopUpGetProductsSchema = {
     type: "object",
     required: [
-        "deviceClass",
         "devicePrice"
     ],
     properties: {
         signedShoppingCart: signedShoppingCartSchema,
+        deviceClasses: {
+            type: "string"
+        },
         deviceClass: {
             type: "string"
         },
