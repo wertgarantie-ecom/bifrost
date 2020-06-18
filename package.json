@@ -40,6 +40,7 @@
     "express-jsonschema": "^1.1.6",
     "express-locale": "^2.0.0",
     "express-mung": "^0.5.1",
+    "express-winston": "^4.0.3",
     "form-data": "^3.0.0",
     "generate-password": "^1.5.1",
     "globalize": "^1.5.0",
@@ -61,6 +62,7 @@
     "request": "^2.88.0",
     "testcontainers": "^2.2.0",
     "uuid": "^3.3.3",
+    "winston": "^3.2.1",
     "xmlbuilder2": "^2.1.1"
   },
   "devDependencies": {

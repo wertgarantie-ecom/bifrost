@@ -2,13 +2,14 @@ const createError = require('http-errors');
 const express = require('express');
 require('express-async-errors');
 const path = require('path');
-const logger = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const sslRedirect = require('heroku-ssl-redirect');
 const bodyParser = require('body-parser');
 const localeParser = require('express-locale')();
 const localeFilter = require('./framework/localeRequestFilter');
+const expressWinston = require('express-winston');
+const winston = require('winston');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -23,7 +24,19 @@ const adminUIRoutes = require('./routes/adminUIRoutes');
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.Console()
+    ],
+    format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+    ),
+    requestWhitelist: [...expressWinston.requestWhitelist, "body"],
+    expressFormat: true,
+    colorize: true,
+}));
 app.use(express.json());
 app.use(localeParser, localeFilter);
 app.use(express.urlencoded({extended: false}));
@@ -37,9 +50,7 @@ var corsOptions = {
     ]
 };
 
-app.use(bodyParser.json());
 app.use(cors(corsOptions));
-
 app.options('*', cors(corsOptions));
 app.use(sslRedirect(['production', 'dev', 'staging']));
 
