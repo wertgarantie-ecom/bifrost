@@ -96,7 +96,6 @@ describe("Checkout Shopping Cart", () => {
             .send({
                 purchasedProducts: [{
                     price: 139999,
-                    manufacturer: "Super Bike Inc.",
                     deviceClass: "Bike",
                     name: "SuperBike 3000"
                 }],

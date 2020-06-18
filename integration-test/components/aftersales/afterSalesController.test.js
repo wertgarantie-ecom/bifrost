@@ -128,7 +128,6 @@ describe("Check Checkout via after sales component ", () => {
         const webshopData = {
             purchasedProducts: [{
                 price: 139999,
-                manufacturer: "Super Bike Inc.",
                 deviceClass: "Test",
                 name: "SuperBike 3000"
             }],

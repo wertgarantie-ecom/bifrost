@@ -37,7 +37,6 @@ describe("should submit insurance proposal and persist purchase data", () => {
     const purchasedShopProducts = [
         {
             price: "1000",
-            manufacturer: "Apple Inc",
             deviceClass: "Smartphone",
             name: "IPhone X",
         }

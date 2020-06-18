@@ -31,7 +31,6 @@ module.exports.checkoutSchema = {
                     },
                     required: [
                         "price",
-                        "manufacturer",
                         "deviceClass",
                         "name"
                     ]
