@@ -220,3 +220,33 @@ ${client.handbook.components.selectionpopup.sample
 Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
     ` : '';
 }
+
+function generateSelectionEmbeddedDescription(client, configuredDeviceClasses, bifrostUriDateAttribute) {
+    return client.handbook.components.selectionembedded ? `
+### Selection Embedded Component
+
+Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents), konfigurierter DeviceClass und einer der public Client IDs:
+\`\`\`html
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-embedded.css">
+    <wertgarantie-selection-embedded
+        ${bifrostUriDateAttribute}
+        data-client-id="${client.publicClientIds[0]}"
+        data-device-class="${configuredDeviceClasses[0]}" 
+        data-device-price="79999"
+        data-product-base-identifier="216001"
+        data-complete-product-name="GHOST KATO 700 LE 29 ZOLL, ALU, DEORE XT, 30-GANG"
+        data-product-selection-trigger-element-identifier="#addToShoppingCart"
+        data-product-selection-trigger-event="click">
+    </wertgarantie-selection-embedded>
+    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-selection-embedded@0/dist/selection-embedded.min.js" crossorigin="anonymous"></script>
+\`\`\`
+
+${client.handbook.components.selectionembedded.sample
+        ? `Eine beispielhafte Integration kann hier gefunden werden: [embedded-integration-sample](${client.handbook.components.selectionembedded.sample})`
+        : ''}
+
+
+Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
+    ` : '';
+}
