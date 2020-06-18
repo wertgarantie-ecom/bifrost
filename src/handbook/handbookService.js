@@ -26,7 +26,7 @@ exports.generateHandbookForClient = function generateHandbookForClient(client) {
         configuredDeviceClassesArray.push(...offerConfig.deviceClasses.map(deviceClass => deviceClass.objectCodeExternal));
     });
     const configuredDeviceClasses = _.uniqBy(configuredDeviceClassesArray, deviceClass => deviceClass);
-    const bifrostUriDateAttribute = `${process.env.NODE_ENV !== "production" ? `\n\tdata-bifrost-uri="${process.env.BASE_URI}/wertgarantie"` : ``}`;
+    const bifrostUriDataAttribute = `${process.env.NODE_ENV !== "production" ? `\n\tdata-bifrost-uri="${process.env.BASE_URI}/wertgarantie"` : ``}`;
     // language=md
     const installationInstructionsMarkdown = md.render(`# Installationsanleitung für ${client.name} für Umgebung ${process.env.NODE_ENV}
 
@@ -39,30 +39,10 @@ exports.generateHandbookForClient = function generateHandbookForClient(client) {
 ${configuredDeviceClasses.map(deviceClass => `* ${deviceClass}`).join("\n")}
 
 ## Integration der Komponenten
-### 1. Selection Pop Up Component
 
-Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents), konfigurierter DeviceClass und einer der public Client IDs:
-\`\`\`html
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-pop-up.css">
+${generateSelectionPopUpDescription(client, configuredDeviceClasses, bifrostUriDataAttribute)}
 
-    <wertgarantie-selection-pop-up id="wertgarantie-selection" ${bifrostUriDateAttribute} 
-        data-shop-product-name="example Product"
-        data-device-price=86000
-        data-device-class="${configuredDeviceClasses[0]}" ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\t\tdata-order-item-id="1234-12309aj1-321"' : ''}
-        data-client-id="${client.publicClientIds[0]}">
-    </wertgarantie-selection-pop-up>
-    
-    <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-selection-popup@2/dist/selection-popup.min.js" crossorigin="anonymous"></script>
-\`\`\`
-
-${client.handbook.components.selectionpopup.sample
-        ? `Eine beispielhafte Integration kann hier gefunden werden: [pop-up-integration-sample](${client.handbook.components.selectionpopup.sample})`
-        : ''}
-
-
-Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
-
-### 2. Confirmation Component
+### Confirmation Component
 ${client.handbook.features.includes('SHOPPING_CART_SYNC')
         ? `
 Die Confirmation Component benötigt zur Initialisierung den aktuellen Handyflash Shopping Cart (zumindest alle Artikel deren deviceClass versicherbar ist).
@@ -92,7 +72,7 @@ Wurde nicht bestätigt, wird diese Aktion unterbrochen und die Komponente zeigt 
 
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-confirmation.css">
-<wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation" ${bifrostUriDateAttribute} 
+<wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation" ${bifrostUriDataAttribute} 
         data-validation-trigger-selector="#orderbutton"
         data-validation-trigger-event="click" ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\tdata-shop-order-base64="JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL08..."' : ''}
         data-client-id="${client.publicClientIds[0]}">
@@ -108,7 +88,7 @@ ${client.handbook.components.confirmation.sample
 
 Weitere Details zur Confirmation-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-confirmation--confirmation-component-phone-shop) zu finden.
 
-### 3. After Sales Component
+### After Sales Component
 Die After-Sales Komponente benötigt zur Initialisierung ein Base64 enkodiertes JSON Object mit den Produkten, die bei ${client.name} gekauft wurden, sowie die Kundendaten und die mit einem secret verschlüsselte SessionID aus dem Cookie \`wertgaranite-session-id\`.
 Das zugehörige Schema des JSON Objects ist [hier](https://github.com/wertgarantie-ecom/bifrost/blob/master/src/components/aftersales/afterSalesComponentCheckoutSchema.js) zu finden.
 
@@ -154,7 +134,7 @@ Weiterhin ist die public client ID erforderlich:
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-after-sales.css ">
 
-<wertgarantie-after-sales id="wertgarantie-after-sales" ${bifrostUriDateAttribute} 
+<wertgarantie-after-sales id="wertgarantie-after-sales" ${bifrostUriDataAttribute} 
         data-shop-purchase-data="eyJwdXJjaGFzZWRQcm9kdWN0cyI6W3sicHJpY2UiOjg..."
         data-client-id="${client.publicClientIds[0]}">
 </wertgarantie-after-sales>
@@ -212,7 +192,31 @@ Weitere Details zur Implementierung befinden sich [hier](https://wertgarantie-ec
     </div>
 </body>
 </html>`;
+};
+
+function generateSelectionPopUpDescription(client, configuredDeviceClasses, bifrostUriDateAttribute) {
+    return client.handbook.components.selectionpopup ? `
+### Selection Pop Up Component
+
+Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents), konfigurierter DeviceClass und einer der public Client IDs:
+\`\`\`html
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-pop-up.css">
+
+    <wertgarantie-selection-pop-up id="wertgarantie-selection" ${bifrostUriDateAttribute} 
+        data-shop-product-name="example Product"
+        data-device-price=86000
+        data-device-class="${configuredDeviceClasses[0]}" ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\t\tdata-order-item-id="1234-12309aj1-321"' : ''}
+        data-client-id="${client.publicClientIds[0]}">
+    </wertgarantie-selection-pop-up>
+    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-selection-popup@2/dist/selection-popup.min.js" crossorigin="anonymous"></script>
+\`\`\`
+
+${client.handbook.components.selectionpopup.sample
+        ? `Eine beispielhafte Integration kann hier gefunden werden: [pop-up-integration-sample](${client.handbook.components.selectionpopup.sample})`
+        : ''}
+
+
+Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
+    ` : '';
 }
-
-
-;

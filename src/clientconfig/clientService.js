@@ -64,6 +64,7 @@ exports.findAllClients = async function findAllClients() {
     return await _repository.findAllClients();
 };
 
+
 exports.addNewClientFromDefaults = async function addNewClientFromDefaults(newClientData, type) {
     const defaultConfig = defaultClientConfigs[type];
     if (!defaultConfig) {
