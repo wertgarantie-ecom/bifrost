@@ -92,7 +92,7 @@ async function prepareConfirmationData(wertgarantieShoppingCart,
 exports.prepareConfirmationData = prepareConfirmationData;
 
 async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts, listOfUpdates) {
-    const productOffers = (await productOfferService.getProductOffers(client, order.shopProduct.deviceClass, order.shopProduct.price));
+    const productOffers = (await productOfferService.getProductOffers(client, [order.wertgarantieProduct.shopDeviceClass], order.shopProduct.price));
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
         const matchingOffer = productOffers[productIndex];
@@ -108,7 +108,7 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
                 top3: matchingOffer.advantages.splice(0, 3),
                 IPIDUri: IPID.uri,
                 IPIDText: IPID.name,
-                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.shopProduct.deviceClass, 1)[0],
+                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.wertgarantieProduct.shopDeviceClass, 1)[0],
                 shopProductShortName: order.shopProduct.name,
                 orderId: order.id,
                 updated: listOfUpdates.find(updatedId => updatedId === order.id) !== undefined

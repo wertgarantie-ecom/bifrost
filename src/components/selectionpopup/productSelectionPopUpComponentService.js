@@ -10,19 +10,19 @@ const util = require('util');
 const _ = require('lodash');
 const metrics = require('../../framework/metrics')();
 
-exports.showSelectionPopUpComponent = async function showSelectionPopUpComponent(deviceClass,
+exports.showSelectionPopUpComponent = async function showSelectionPopUpComponent(shopDeviceClassesString,
                                                                                  devicePrice,
                                                                                  clientConfig,
                                                                                  locale = "de",
                                                                                  orderItemId,
                                                                                  shoppingCart) {
-
-    const result = await prepareProductSelectionData(deviceClass, devicePrice, clientConfig, locale, orderItemId, shoppingCart);
+    const shopDeviceClasses = shopDeviceClassesString.split(',');
+    const result = await prepareProductSelectionData(shopDeviceClasses, devicePrice, clientConfig, locale, orderItemId, shoppingCart);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
     return result;
 }
 
-async function prepareProductSelectionData(deviceClass,
+async function prepareProductSelectionData(shopDeviceClasses,
                                            devicePrice,
                                            clientConfig,
                                            locale = "de",
@@ -35,13 +35,13 @@ async function prepareProductSelectionData(deviceClass,
         return undefined;
     }
 
-    const productOffers = await productOffersService.getProductOffers(clientConfig, deviceClass, devicePrice, 2);
+    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice, 2);
     if (!productOffers) {
         return undefined;
     }
     const products = [];
     let imageLinks = [];
-    imageLinks = productImageService.getRandomImageLinksForDeviceClass(deviceClass, productOffers.length);
+    imageLinks = productImageService.getRandomImageLinksForDeviceClass(productOffers[0].shopDeviceClass, productOffers.length);
     const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     productOffers.forEach((offer, idx) => {
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
@@ -72,6 +72,8 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         paymentInterval: productOffer.payment,
         intervalCode: productOffer.defaultPaymentInterval,
         id: productOffer.id,
+        deviceClass: productOffer.deviceClass,
+        shopDeviceClass: productOffer.shopDeviceClass,
         name: productOffer.name,
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,

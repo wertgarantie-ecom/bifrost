@@ -1,5 +1,4 @@
 const wertgarantieProductSchema = require('./wertgarantieProductSchema').wertgarantieProductSchema;
-const shopProductSchema = require('./shopProductSchema').shopProductSchema;
 
 exports.orderSchema = {
     type: "object",
@@ -8,7 +7,28 @@ exports.orderSchema = {
             type: "string"
         },
         wertgarantieProduct: wertgarantieProductSchema,
-        shopProduct: shopProductSchema
+        shopProduct: {
+            type: "object",
+            properties: {
+                name: {
+                    type: "string"
+                },
+                price: {
+                    type: "integer"
+                },
+                deviceClasses: {
+                    type: "string"
+                },
+                orderItemId: {
+                    type: "string"
+                }
+            },
+            required: [
+                "name",
+                "price",
+                "deviceClasses"
+            ]
+        }
     },
     required: [
         "wertgarantieProduct",

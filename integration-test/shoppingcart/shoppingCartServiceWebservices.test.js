@@ -19,12 +19,14 @@ describe("should submit insurance proposal and persist purchase data", () => {
                 wertgarantieProduct: {
                     id: "2",
                     name: "Basis",
-                    paymentInterval: "monthly"
+                    paymentInterval: "monthly",
+                    deviceClass: "9025",
+                    shopDeviceClass: "Smartphone"
                 },
                 shopProduct: {
                     price: "1000",
                     name: "IPhone X",
-                    deviceClass: "Smartphone",
+                    deviceClasses: "Smartphone",
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
@@ -59,7 +61,8 @@ describe("should submit insurance proposal and persist purchase data", () => {
         const purchase = result.purchases[0];
         expect(purchase.backend).toEqual("webservices");
         expect(purchase.wertgarantieProductName).toEqual("Komplettschutz");
-        expect(purchase.deviceClass).toEqual(wertgarantieShoppingCart.orders[0].shopProduct.deviceClass);
+        expect(purchase.deviceClass).toEqual(wertgarantieShoppingCart.orders[0].wertgarantieProduct.deviceClass);
+        expect(purchase.shopDeviceClass).toEqual(wertgarantieShoppingCart.orders[0].wertgarantieProduct.shopDeviceClass);
         expect(purchase.success).toBe(true);
         expect(purchase.contractNumber).toEqual(contractNumber);
     });
@@ -69,7 +72,8 @@ describe("should submit insurance proposal and persist purchase data", () => {
         const purchase = order.purchases[0];
         expect(purchase.backend).toEqual("webservices");
         expect(purchase.wertgarantieProductName).toEqual("Komplettschutz");
-        expect(purchase.deviceClass).toEqual(wertgarantieShoppingCart.orders[0].shopProduct.deviceClass);
+        expect(purchase.deviceClass).toEqual(wertgarantieShoppingCart.orders[0].wertgarantieProduct.deviceClass);
+        expect(purchase.shopDeviceClass).toEqual(wertgarantieShoppingCart.orders[0].wertgarantieProduct.shopDeviceClass);
         expect(purchase.success).toBe(true);
         expect(purchase.contractNumber).toEqual(contractNumber);
         expect(purchase.backendResponseInfo).toEqual({

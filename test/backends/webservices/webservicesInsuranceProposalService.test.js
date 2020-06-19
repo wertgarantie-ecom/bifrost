@@ -56,7 +56,7 @@ test("should return valid insurance proposal XML", () => {
         country: "Deutschland",
         email: "max.mustermann1234@test.com"
     };
-    const setXMLInterfaceXML = webservicesInsuranceProposalService.getInsuranceProposalXML("12345678", "87654321", "12345", customer, purchasedProduct, productOffer, new Date(2020, 3, 22));
+    const setXMLInterfaceXML = webservicesInsuranceProposalService.getInsuranceProposalXML("12345678", "87654321", "12345", customer, purchasedProduct, productOffer, "9025", new Date(2020, 3, 22));
     expect(setXMLInterfaceXML).toEqual("<?xml version=\"1.0\"?><Antraege><Herkunft>WG_E-COMMERCE_COMPONENTS</Herkunft><Exportdatum>22.04.2020</Exportdatum><Antrag><Vertragsnummer>12345678</Vertragsnummer><Satznummer>87654321</Satznummer><Antragsdatum>22.04.2020</Antragsdatum><Vermittlernummer>12345</Vermittlernummer><Kundendaten><Anrede>Herr</Anrede><Vorname>Max</Vorname><Nachname>Mustermann</Nachname><Anschrift><Strasse>Unter den Linden</Strasse><PLZ>52345</PLZ><Ort>Köln</Ort></Anschrift></Kundendaten><Kommunikation><Position>1</Position><Hersteller>Super Phones Inc.</Hersteller><Geraetekennzeichen>9025</Geraetekennzeichen><Modellbezeichnung>Smartphone 11x</Modellbezeichnung><Kaufdatum>22.04.2020</Kaufdatum><Kaufpreis>1399,99</Kaufpreis><Risiken><Risiko><Risikotyp>KOMPLETTSCHUTZ</Risikotyp></Risiko><Risiko><Risikotyp>DIEBSTAHLSCHUTZ</Risikotyp></Risiko></Risiken></Kommunikation><Produktdetails><Antragskodierung>GU WG DE KS 0419</Antragskodierung><Produkttyp>KOMPLETTSCHUTZ_2019</Produkttyp></Produktdetails><Zahlung><Selbstzahler>true</Selbstzahler></Zahlung></Antrag></Antraege>");
 });
 
@@ -64,14 +64,16 @@ test("should submit insurance proposal", async () => {
     const clientConfig = fixtureHelper.createDefaultClient();
     const productOrder = {
         shopProduct: {
-            deviceClass: "Smartphone",
+            deviceClasses: "Smartphone",
             price: 139999,
             name: "Smartphone 11x"
         },
         wertgarantieProduct: {
             id: "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
             name: "Komplettschutz",
-            paymentInterval: "monthly"
+            paymentInterval: "monthly",
+            deviceClass: "9025",
+            shopDeviceClass: "Smartphone",
         }
     };
     const purchasedProduct = {
@@ -107,7 +109,8 @@ test("should submit insurance proposal", async () => {
     expect(result).toEqual({
         "backend": "webservices",
         "contractNumber": "12345678",
-        "deviceClass": "Smartphone",
+        "deviceClass": "9025",
+        "shopDeviceClass": "Smartphone",
         "devicePrice": 139999,
         "id": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
         "message": "successfully transmitted insurance proposal",

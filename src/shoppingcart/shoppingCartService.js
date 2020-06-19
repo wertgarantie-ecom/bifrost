@@ -50,6 +50,11 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
 };
 
 exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
+    purchasedShopProducts.map(product => {
+        const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
+        delete product.deviceClass;
+        product.deviceClasses = deviceClasses;
+    })
     const confirmations = shoppingCart.confirmations;
     if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
         throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
@@ -62,7 +67,8 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
                 id: idGenerator(),
                 wertgarantieProductId: order.wertgarantieProduct.id,
                 wertgarantieProductName: order.wertgarantieProduct.name,
-                deviceClass: order.shopProduct.deviceClass,
+                deviceClass: order.wertgarantieProduct.deviceClass,
+                shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
                 devicePrice: order.shopProduct.price,
                 success: false,
                 message: "couldn't find matching product in shop cart for wertgarantie product",
@@ -173,7 +179,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
                 order.shopProduct.name = matchingShopOrderItem.name;
                 let priceUpdated = false;
                 if (order.shopProduct.price !== matchingShopOrderItem.price) {
-                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.shopProduct.deviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
+                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.wertgarantieProduct.shopDeviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
                     if (!newPrice) {
                         result.changes.deleted.push(order.id);
                         return;
@@ -214,10 +220,11 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
 
 function findIndex(shopSubmittedPurchases, wertgarantieShoppingCartOrder) {
     const wertgarantieSubmittedPurchase = wertgarantieShoppingCartOrder.shopProduct;
+    const wertgarantieSelectedShopProductDeviceClass = wertgarantieShoppingCartOrder.wertgarantieProduct.shopDeviceClass;
     return _.findIndex(shopSubmittedPurchases, shopSubmittedPurchase =>
         shopSubmittedPurchase.name === wertgarantieSubmittedPurchase.name
         && shopSubmittedPurchase.price === wertgarantieSubmittedPurchase.price
-        && shopSubmittedPurchase.deviceClass === wertgarantieSubmittedPurchase.deviceClass);
+        && shopSubmittedPurchase.deviceClasses.includes(wertgarantieSelectedShopProductDeviceClass));
 }
 
 function newShoppingCart(clientId) {

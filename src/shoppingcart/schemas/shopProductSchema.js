@@ -7,7 +7,7 @@ exports.shopProductSchema = {
         price: {
             type: "integer"
         },
-        deviceClass: {
+        deviceClasses: {
             type: "string"
         },
         orderItemId: {
@@ -17,6 +17,6 @@ exports.shopProductSchema = {
     required: [
         "name",
         "price",
-        "deviceClass"
+        "deviceClasses"
     ]
 };

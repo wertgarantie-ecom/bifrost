@@ -2,12 +2,12 @@ const _heimdallClient = require('../backends/heimdall/heimdallClient');
 const _webserviceProductOffersRepository = require('../backends/webservices/webserviceProductOffersRepository');
 const _ = require('lodash');
 
-async function getPriceForSelectedProductOffer(clientConfig, deviceClass, productId, shopProductPrice, paymentInterval) {
+async function getPriceForSelectedProductOffer(clientConfig, shopDeviceClass, productId, shopProductPrice, paymentInterval) {
     const productOffer = await getProductOfferById(productId);
     if (!productOffer) {
         return undefined;
     } else {
-        const preparedProductOffer = webserviceProductOffersToGeneralProductOffers([productOffer], deviceClass, shopProductPrice);
+        const preparedProductOffer = webserviceProductOffersToGeneralProductOffers([productOffer], [shopDeviceClass], shopProductPrice);
         const paymentIntervalPrice = preparedProductOffer[0].prices[paymentInterval];
         return (paymentIntervalPrice) ? paymentIntervalPrice.netAmount : undefined;
     }
@@ -17,14 +17,15 @@ async function getProductOfferById(productOfferId, webserviceProductOffersReposi
     return webserviceProductOffersRepository.findById(productOfferId);
 }
 
-async function getProductOffers(clientConfig, deviceClass, price, offerCount, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
+async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
     let productOffers;
     if (process.env.BACKEND === "webservices") {
         const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-        productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, deviceClass, price)
+        productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price)
     } else {
-        const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, deviceClass, price);
-        productOffers = heimdallProductOffersToGeneralProductOffers(heimdallResponse)
+        const shopDeviceClass = shopDeviceClasses[0];
+        const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, shopDeviceClass, price);
+        productOffers = heimdallProductOffersToGeneralProductOffers(heimdallResponse, shopDeviceClass)
     }
 
     if (!offerCount) {
@@ -34,10 +35,12 @@ async function getProductOffers(clientConfig, deviceClass, price, offerCount, pr
     }
 }
 
-function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse) {
+function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse, deviceClass) {
     return heimdallClientResponse.map(heimdallOffer => {
         return {
             id: heimdallOffer.id + "",
+            deviceClass: deviceClass,
+            shopDeviceClass: deviceClass,
             name: heimdallOffer.name,
             advantages: [...heimdallOffer.advantages, ...heimdallOffer.services, ...heimdallOffer.special_advantages],
             defaultPaymentInterval: toDefaultPaymentInterval(heimdallOffer.payment),
@@ -145,6 +148,8 @@ function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
         shortName: webservicesProductOffer.shortName,
         advantages: [...webservicesProductOffer.advantages],
         defaultPaymentInterval: webservicesProductOffer.defaultPaymentInterval,
+        deviceClass: webservicesProductOffer.device.objectCode,
+        shopDeviceClass: webservicesProductOffer.device.objectCodeExternal,
         prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
         documents: webservicesProductOffer.documents.map(document => {
             return {
@@ -156,11 +161,13 @@ function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
     }
 }
 
-function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, deviceClass, price) {
-    const filteredProductOffers = filterProductOffers(webservicesProductOffers, deviceClass, price);
-    return filteredProductOffers.map(webservicesProductOffer => {
-        return getProductOfferWithCorrectPrice(webservicesProductOffer, price);
-    });
+function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers, shopDeviceClasses, price) {
+    return shopDeviceClasses.flatMap(shopDeviceClass => {
+        const filteredProductOffers = filterProductOffers(webservicesProductOffers, shopDeviceClass, price);
+        return filteredProductOffers.map(webservicesProductOffer => {
+            return getProductOfferWithCorrectPrice(webservicesProductOffer, price);
+        });
+    })
 }
 
 class ProductOffersError extends Error {

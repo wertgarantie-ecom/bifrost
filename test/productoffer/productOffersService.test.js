@@ -8,90 +8,93 @@ test("test webservices product offer conversion", async () => {
     const mockProductOffersRepository = {
         findByClientId: () => productOffersResult
     };
-    const result = await productOffersService.getProductOffers(clientConfig, "Smartphone", 80000, undefined, mockProductOffersRepository);
+    const result = await productOffersService.getProductOffers(clientConfig, ["Kühlschrank", "Smartphone", "ein ponny"], 80000, undefined, mockProductOffersRepository);
 
     expect(result).toEqual(
         [
             {
-                "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
-                "name": "Komplettschutz",
                 "advantages": [
                     "Das schon toll hier",
                     "alles wird gut",
                     "Corona Party!!!"
                 ],
                 "defaultPaymentInterval": "monthly",
+                "deviceClass": "9025",
+                "documents": [
+                    {
+                        "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                        "type": "LN",
+                        "uri": "http://localhost:3000/wertgarantie/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                    }
+                ],
+                "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
+                "name": "Komplettschutz",
                 "prices": {
-                    "monthly": {
-                        "netAmount": 800,
+                    "halfYearly": {
                         "currency": "EUR",
+                        "netAmount": 4800,
+                        "taxAmount": 766
+                    },
+                    "monthly": {
+                        "currency": "EUR",
+                        "netAmount": 800,
                         "taxAmount": 128
                     },
                     "quarterly": {
-                        "netAmount": 2400,
                         "currency": "EUR",
+                        "netAmount": 2400,
                         "taxAmount": 383
                     },
-                    "halfYearly": {
-                        "netAmount": 4800,
-                        "currency": "EUR",
-                        "taxAmount": 766
-                    },
                     "yearly": {
-                        "netAmount": 9600,
                         "currency": "EUR",
+                        "netAmount": 9600,
                         "taxAmount": 1533
                     }
                 },
-                "documents": [
-                    {
-                        "uri": "http://localhost:3000/wertgarantie/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                        "type": "LN",
-                        "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
-                    }
-                ]
+                "shopDeviceClass": "Smartphone"
             },
             {
-                "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-                "name": "Komplettschutz mit Premium-Option",
                 "advantages": [
                     "total geiler diebstahlschutz",
                     "was gegen Wasser",
                     "mit Soße"
                 ],
                 "defaultPaymentInterval": "monthly",
+                "deviceClass": "9025",
+                "documents": [
+                    {
+                        "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF",
+                        "type": "LN",
+                        "uri": "http://localhost:3000/wertgarantie/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709"
+                    }
+                ],
+                "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+                "name": "Komplettschutz mit Premium-Option",
                 "prices": {
-                    "monthly": {
-                        "netAmount": 995,
+                    "halfYearly": {
                         "currency": "EUR",
+                        "netAmount": 5970,
+                        "taxAmount": 953
+                    },
+                    "monthly": {
+                        "currency": "EUR",
+                        "netAmount": 995,
                         "taxAmount": 159
                     },
                     "quarterly": {
-                        "netAmount": 2985,
                         "currency": "EUR",
+                        "netAmount": 2985,
                         "taxAmount": 477
                     },
-                    "halfYearly": {
-                        "netAmount": 5970,
-                        "currency": "EUR",
-                        "taxAmount": 953
-                    },
                     "yearly": {
-                        "netAmount": 11940,
                         "currency": "EUR",
+                        "netAmount": 11940,
                         "taxAmount": 1906
                     }
                 },
-                "documents": [
-                    {
-                        "uri": "http://localhost:3000/wertgarantie/documents/da39a3ee5e6b4b0d3255bfef95601890afd80709",
-                        "type": "LN",
-                        "name": "GU WG DE KS 0419_RECHTSDOKUMENTE.PDF"
-                    }
-                ]
+                "shopDeviceClass": "Smartphone"
             }
-        ]
-    )
+        ])
 });
 
 test("should get correct required lock price for bike", () => {

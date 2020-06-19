@@ -30,50 +30,52 @@ test('should return proper product data', async () => {
                 "IPIDUri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
                 "advantages": [
                     {
-                        "text": "Volle Kostenübernahme bei Reparaturen",
-                        "included": true
+                        "included": true,
+                        "text": "Volle Kostenübernahme bei Reparaturen"
                     },
                     {
-                        "text": "Bei Totalschaden zählt der Zeitwert",
-                        "included": true
+                        "included": true,
+                        "text": "Bei Totalschaden zählt der Zeitwert"
                     },
                     {
-                        "text": "Für private und berufliche Nutzung",
-                        "included": true
+                        "included": true,
+                        "text": "Für private und berufliche Nutzung"
                     },
                     {
-                        "text": "Weltweiter Schutz",
-                        "included": true
+                        "included": true,
+                        "text": "Weltweiter Schutz"
                     },
                     {
-                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                        "included": true
+                        "included": true,
+                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte"
                     },
                     {
-                        "text": "Unsachgemäße Handhabung",
-                        "included": true
+                        "included": true,
+                        "text": "Unsachgemäße Handhabung"
                     }
                 ],
                 "id": "1",
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
+                "intervalCode": "monthly",
                 "name": "Basis",
                 "paymentInterval": "monatl.",
-                "intervalCode": "monthly",
-                "priceFormatted": "5,00 €",
                 "price": 500,
+                "priceFormatted": "5,00 €",
+                "shopDeviceClass": "Test",
+                "deviceClass": "Test",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     {
-                        "text": "Für private und berufliche Nutzung",
-                        "included": true
+                        "included": true,
+                        "text": "Für private und berufliche Nutzung"
                     },
                     {
-                        "text": "Unsachgemäße Handhabung",
-                        "included": true
+                        "included": true,
+                        "text": "Unsachgemäße Handhabung"
                     },
                     {
-                        "text": "Weltweiter Schutz",
-                        "included": true
+                        "included": true,
+                        "text": "Weltweiter Schutz"
                     }
                 ]
             },
@@ -84,50 +86,52 @@ test('should return proper product data', async () => {
                 "IPIDUri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
                 "advantages": [
                     {
-                        "text": "Volle Kostenübernahme bei Reparaturen",
-                        "included": true
+                        "included": true,
+                        "text": "Volle Kostenübernahme bei Reparaturen"
                     },
                     {
-                        "text": "Bei Totalschaden zählt der Zeitwert",
-                        "included": true
+                        "included": true,
+                        "text": "Bei Totalschaden zählt der Zeitwert"
                     },
                     {
-                        "text": "Für private und berufliche Nutzung",
-                        "included": true
+                        "included": true,
+                        "text": "Für private und berufliche Nutzung"
                     },
                     {
-                        "text": "Weltweiter Schutz",
-                        "included": true
+                        "included": true,
+                        "text": "Weltweiter Schutz"
                     },
                     {
-                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
-                        "included": true
+                        "included": true,
+                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte"
                     },
                     {
-                        "text": "Unsachgemäße Handhabung",
-                        "included": true
+                        "included": true,
+                        "text": "Unsachgemäße Handhabung"
                     }
                 ],
                 "id": "2",
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
+                "intervalCode": "monthly",
                 "name": "Premium",
                 "paymentInterval": "monatl.",
-                "intervalCode": "monthly",
-                "priceFormatted": "5,00 €",
                 "price": 500,
+                "priceFormatted": "5,00 €",
+                "shopDeviceClass": "Test",
+                "deviceClass": "Test",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     {
-                        "text": "Für private und berufliche Nutzung",
-                        "included": true
+                        "included": true,
+                        "text": "Für private und berufliche Nutzung"
                     },
                     {
-                        "text": "Unsachgemäße Handhabung",
-                        "included": true
+                        "included": true,
+                        "text": "Unsachgemäße Handhabung"
                     },
                     {
-                        "text": "Weltweiter Schutz",
-                        "included": true
+                        "included": true,
+                        "text": "Weltweiter Schutz"
                     }
                 ]
             }
@@ -136,30 +140,30 @@ test('should return proper product data', async () => {
             "cancelButtonText": "Nein, danke",
             "confirmButtonText": "Versicherung hinzufügen",
             "detailsHeader": "Weitere Vorteile:",
-            "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testclient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
-            "hideDetailsText": "Details ausblenden",
-            "partnerShop": "testclient",
-            "showDetailsText": "Details anzeigen",
-            "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
-            "furtherInformation": "Weitere Informationen:",
-            "title": "Vergessen Sie nicht Ihren Wertgarantie Rundumschutz",
-            "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>",
             "documents": {
+                "GDPR": "Datenschutz",
                 "GTCI": "Allgemeine Versicherungsbedingungen",
                 "IPID": "Informationsblatt für Versicherungsprodukte",
                 "PIS": "Produktinformationsblatt",
-                "GDPR": "Datenschutz",
                 "ROW": "Widerrufsrecht"
             },
+            "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testclient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+            "furtherInformation": "Weitere Informationen:",
+            "hideDetailsText": "Details ausblenden",
+            "partnerShop": "testclient",
             "productTexts": {
                 "paymentIntervals": {
+                    "halfYearly": "habljährl.",
                     "monthly": "monatl.",
                     "quarterly": "vierteljährl.",
-                    "halfYearly": "habljährl.",
                     "yearly": "jährl."
                 },
                 "taxInformation": "(inkl. %s VerSt**)"
-            }
+            },
+            "showDetailsText": "Details anzeigen",
+            "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
+            "title": "Vergessen Sie nicht Ihren Wertgarantie Rundumschutz",
+            "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>"
         }
     });
 });

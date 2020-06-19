@@ -22,7 +22,7 @@ exports.showAfterSalesComponent = async function showAfterSalesComponent(session
 async function getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) {
     const successfulOrders = [];
     checkoutData.purchases.filter(purchase => purchase.success).map(checkoutItem => {
-        const imageLink = productImageService.getRandomImageLinksForDeviceClass(checkoutItem.deviceClass, 1)[0];
+        const imageLink = productImageService.getRandomImageLinksForDeviceClass(checkoutItem.shopDeviceClass, 1)[0];
         successfulOrders.push({
             insuranceProductTitle: checkoutItem.wertgarantieProductName,
             productTitle: checkoutItem.shopProduct,

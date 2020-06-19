@@ -26,6 +26,8 @@ test("should prepare correct product offers", async () => {
     expect(result.products.length).toEqual(2);
     expect(result.products[0]).toEqual({
         "paymentInterval": "monatl.",
+        "deviceClass": "9025",
+        "shopDeviceClass": "Smartphone",
         "intervalCode": "monthly",
         "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
         "name": "Komplettschutz",
@@ -82,6 +84,8 @@ test("should prepare correct product offers", async () => {
     expect(result.products[1]).toEqual({
         "paymentInterval": "monatl.",
         "intervalCode": "monthly",
+        "deviceClass": "9025",
+        "shopDeviceClass": "Smartphone",
         "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
         "name": "Komplettschutz mit Premium-Option",
         "shortName": "Premiumschutz",

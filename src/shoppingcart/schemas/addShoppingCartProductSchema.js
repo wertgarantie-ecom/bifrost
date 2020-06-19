@@ -1,4 +1,3 @@
-const shopProductSchema = require('./shopProductSchema').shopProductSchema;
 const wertgarantieProductSchema = require('./wertgarantieProductSchema').wertgarantieProductSchema;
 const signedShoppingCartSchema = require('./signedShoppingCartSchema').signedSchoppingCartSchema;
 
@@ -10,7 +9,27 @@ exports.addShoppingCartProductSchema = {
     ],
     additionalProperties: false,
     properties: {
-        shopProduct: shopProductSchema,
+        shopProduct: {
+            type: "object",
+            properties: {
+                name: {
+                    type: "string"
+                },
+                price: {
+                    type: "integer"
+                },
+                deviceClasses: {
+                    type: "string"
+                },
+                orderItemId: {
+                    type: "string"
+                }
+            },
+            required: [
+                "name",
+                "price"
+            ]
+        },
         wertgarantieProduct: wertgarantieProductSchema,
         signedShoppingCart: signedShoppingCartSchema
     }

@@ -2,6 +2,8 @@ exports.productOffersPhone =
     [
         {
             "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
+            "deviceClass": "9025",
+            "shopDeviceClass": "Smartphone",
             "name": "Komplettschutz",
             "shortName": "Basisschutz",
             "advantages": [
@@ -60,6 +62,8 @@ exports.productOffersPhone =
         },
         {
             "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
+            "deviceClass": "9025",
+            "shopDeviceClass": "Smartphone",
             "name": "Komplettschutz mit Premium-Option",
             "shortName": "Premiumschutz",
             "advantages": [
@@ -140,6 +144,8 @@ exports.productOffersBike = [
         },
         "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
         "shortName": "Variante A",
+        "deviceClass": "73",
+        "shopDeviceClass": "Bike",
         "risks": [
             "KOMPLETTSCHUTZ_RAD"
         ],
@@ -353,6 +359,8 @@ exports.productOffersBike = [
             ]
         },
         "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+        "deviceClass": "73",
+        "shopDeviceClass": "Bike",
         "shortName": "Variante B",
         "risks": [
             "KOMPLETTSCHUTZ_RAD"
@@ -718,6 +726,8 @@ exports.productOffersWithoutDocuments = [
     {
         "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
         "name": "Komplettschutz",
+        "deviceClass": "9025",
+        "shopDeviceClass": "Smartphone",
         "advantages": [
             "Das schon toll hier",
             "alles wird gut",
@@ -751,6 +761,8 @@ exports.productOffersWithoutDocuments = [
     {
         "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
         "name": "Komplettschutz mit Premium-Option",
+        "deviceClass": "9025",
+        "shopDeviceClass": "Smartphone",
         "advantages": [
             "total geiler diebstahlschutz",
             "was gegen Wasser",
