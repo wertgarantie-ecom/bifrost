@@ -62,6 +62,7 @@ test('should return proper product data', async () => {
                 "price": 500,
                 "priceFormatted": "5,00 €",
                 "shopDeviceClass": "Test",
+                "deviceClass": "Test",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     {
@@ -117,6 +118,7 @@ test('should return proper product data', async () => {
                 "price": 500,
                 "priceFormatted": "5,00 €",
                 "shopDeviceClass": "Test",
+                "deviceClass": "Test",
                 "taxFormatted": "(inkl. 0,80 € VerSt**)",
                 "top3": [
                     {

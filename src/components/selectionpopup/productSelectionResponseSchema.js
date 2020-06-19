@@ -15,6 +15,8 @@ module.exports.productSelectionResponseSchema = {
                 "type": "object",
                 "required": [
                     "id",
+                    "deviceClass",
+                    "shopDeviceClass",
                     "name",
                     "top3",
                     "advantages",
@@ -29,6 +31,12 @@ module.exports.productSelectionResponseSchema = {
                 ],
                 "properties": {
                     "id": {
+                        "type": "string",
+                    },
+                    "deviceClass": {
+                        "type": "string",
+                    },
+                    "shopDeviceClass": {
                         "type": "string",
                     },
                     "name": {

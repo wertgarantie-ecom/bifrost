@@ -41,7 +41,7 @@ async function prepareProductSelectionData(shopDeviceClasses,
     }
     const products = [];
     let imageLinks = [];
-    imageLinks = productImageService.getRandomImageLinksForDeviceClass(productOffers[0].deviceClass, productOffers.length);
+    imageLinks = productImageService.getRandomImageLinksForDeviceClass(productOffers[0].shopDeviceClass, productOffers.length);
     const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     productOffers.forEach((offer, idx) => {
         const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
@@ -72,6 +72,7 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         paymentInterval: productOffer.payment,
         intervalCode: productOffer.defaultPaymentInterval,
         id: productOffer.id,
+        deviceClass: productOffer.deviceClass,
         shopDeviceClass: productOffer.shopDeviceClass,
         name: productOffer.name,
         top3: advantageCategories.top3,
