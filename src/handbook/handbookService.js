@@ -7,6 +7,7 @@ const md = new MarkdownIt(
                 try {
                     return hljs.highlight(lang, str).value;
                 } catch (__) {
+                    //nothing
                 }
             }
 
@@ -26,7 +27,7 @@ exports.generateHandbookForClient = function generateHandbookForClient(client) {
         configuredDeviceClassesArray.push(...offerConfig.deviceClasses.map(deviceClass => deviceClass.objectCodeExternal));
     });
     const configuredDeviceClasses = _.uniqBy(configuredDeviceClassesArray, deviceClass => deviceClass);
-    const bifrostUriDataAttribute = `${process.env.NODE_ENV !== "production" ? `\n\tdata-bifrost-uri="${process.env.BASE_URI}/wertgarantie"` : ``}`;
+    const bifrostUriDataAttribute = `${process.env.NODE_ENV !== "production" ? `data-bifrost-uri="${process.env.BASE_URI}/wertgarantie"` : ``}`;
     // language=md
     const installationInstructionsMarkdown = md.render(`# Installationsanleitung für ${client.name} für Umgebung ${process.env.NODE_ENV}
 
@@ -41,11 +42,13 @@ ${configuredDeviceClasses.map(deviceClass => `* ${deviceClass}`).join("\n")}
 ## Integration der Komponenten
 
 ${generateSelectionPopUpDescription(client, configuredDeviceClasses, bifrostUriDataAttribute)}
+${generateSelectionEmbeddedDescription(client, configuredDeviceClasses, bifrostUriDataAttribute)}
 
 ### Confirmation Component
 ${client.handbook.features.includes('SHOPPING_CART_SYNC')
         ? `
-Die Confirmation Component benötigt zur Initialisierung den aktuellen Handyflash Shopping Cart (zumindest alle Artikel deren deviceClass versicherbar ist).
+Die Confirmation Component wird am besten auf der Seite integriert welche die Bestätigung der Shop AGBs enthält. Dieses ist meist die letzte Seite vor dem finalen Checkout.
+Die Component benötigt zur Initialisierung den aktuellen Shopping Cart (zumindest alle Artikel deren deviceClass versicherbar ist).
 Die Artikel müssen in einem Base64 enkodierten JSON Array übergeben werden (das zugehörige Schema ist [hier](https://github.com/wertgarantie-ecom/bifrost/blob/master/src/shoppingcart/schemas/shopProductSchema.js) zu finden). 
 
 Hier ein Beispiel Code in Javascript:
@@ -66,13 +69,16 @@ const confirmationShopOrderBase64 = Buffer.from(JSON.stringify(confirmationCompD
         : ''}
 
 Die Confirmation Component ist designed, um im Warenkorb eingebunden zu werden. Im Warenkorb wird es ein HTMLElement geben, das den Einkauf der Shop-Produkte abschließt. 
+
 Ein Selector dieses HTMLElements wird mit dem Attribut \`data-validation-trigger-selector\` der Komponente übergeben. Dahinter kann sich z. B. eine Form verbergen oder ein Button. Darauf setzt die Komponente automatisch einen Event-Listener auf den Event-Typ, der mit 
 dem Attribut \`data-validation-trigger-event\` (form -> "submit", button -> "click", ...) übergeben wird. Beim entsprechenden Event führt die Komponente eine Prüfung durch, ob die Einverständniserklärung bestätigt wurde, bevor die eigentliche Aktion des Shops ausgeführt wird. 
+
 Wurde nicht bestätigt, wird diese Aktion unterbrochen und die Komponente zeigt eine entsprechende Meldung an. Wurde bestätigt, wird der reguläre Vorgang im Shop ausgelöst.
 
 \`\`\`html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations@0/src/${client.name}/wertgarantie-confirmation.css">
-<wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation" ${bifrostUriDataAttribute} 
+<wertgarantie-confirmation class="wertgarantie-confirmation" id="wg-confirmation"
+        ${bifrostUriDataAttribute} 
         data-validation-trigger-selector="#orderbutton"
         data-validation-trigger-event="click" ${client.handbook.features.includes('SHOPPING_CART_SYNC') ? '\n\tdata-shop-order-base64="JVBERi0xLjYNJeLjz9MNCjI1IDAgb2JqDTw8L0xpbmVhcml6ZWQgMS9MIDgxNTAyL08..."' : ''}
         data-client-id="${client.publicClientIds[0]}">
@@ -89,7 +95,10 @@ ${client.handbook.components.confirmation.sample
 Weitere Details zur Confirmation-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-confirmation--confirmation-component-phone-shop) zu finden.
 
 ### After Sales Component
-Die After-Sales Komponente benötigt zur Initialisierung ein Base64 enkodiertes JSON Object mit den Produkten, die bei ${client.name} gekauft wurden, sowie die Kundendaten und die mit einem secret verschlüsselte SessionID aus dem Cookie \`wertgaranite-session-id\`.
+Die After-Sales Komponente sollte auf der ersten Seite nach dem erfolgreichen Checkout eingebettet werden. Dieses ist meist eine "Vielen Dank für Ihren Einkauf bei uns" Seite.
+Die Komponente benötigt zur Initialisierung ein Base64 enkodiertes JSON Object mit den Produkten, die bei ${client.name} gekauft wurden, sowie die Kundendaten und die mit einem secret verschlüsselte SessionID aus dem Cookie \`wertgaranite-session-id\`.
+Da das Secret nicht veröffnetlicht werden darf muss die Verschlüsselung zwingend auf dem Server erfolgen.
+
 Das zugehörige Schema des JSON Objects ist [hier](https://github.com/wertgarantie-ecom/bifrost/blob/master/src/components/aftersales/afterSalesComponentCheckoutSchema.js) zu finden.
 
 Hier ein Beispiel-Code in JavaScript:
@@ -202,7 +211,8 @@ Initialisierung der Komponente mit Produktname, Preis (in minor Units -> Cents),
 \`\`\`html
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-pop-up.css">
 
-    <wertgarantie-selection-pop-up id="wertgarantie-selection" ${bifrostUriDateAttribute} 
+    <wertgarantie-selection-pop-up id="wertgarantie-selection" 
+        ${bifrostUriDateAttribute} 
         data-shop-product-name="example Product"
         data-device-price=86000
         data-device-classes="sample1,sample2,sample3,${configuredDeviceClasses[0]}"
@@ -219,5 +229,37 @@ ${client.handbook.components.selectionpopup.sample
 
 
 Weitere Details zur Selection-PopUp-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-pop-up--product-selection-popup) zu finden.
+    ` : '';
+}
+
+function generateSelectionEmbeddedDescription(client, configuredDeviceClasses, bifrostUriDateAttribute) {
+    return client.handbook.components.selectionembedded ? `
+### Selection Embedded Component
+
+Die Selection Embedded Component wird am besten direkt auf der Product Details Page eingebettet, z.B. in einer vorhandenen Seitenleiste.
+Die Initialisierung der Komponente erfolgt mit Produktname, Preis (in minor Units -> Cents), konfigurierter DeviceClass und einer der public Client IDs.
+"Product base" ist ein Identifier für das Basis Produkt ohne Varianten, hierdruch speichert die Komponente die Auswahl auch bei einem reload aufgrund eines Variantenwechsels.
+\`\`\`html
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/wertgarantie-integrations/src/${client.name}/wertgarantie-selection-embedded.css">
+    <wertgarantie-selection-embedded
+        ${bifrostUriDateAttribute}
+        data-client-id="${client.publicClientIds[0]}"
+        data-device-class="${configuredDeviceClasses[0]}" 
+        data-device-price="79999"
+        data-product-base-identifier="216001"
+        data-complete-product-name="GHOST KATO 700 LE 29 ZOLL, ALU, DEORE XT, 30-GANG"
+        data-product-selection-trigger-element-identifier="#addToShoppingCart"
+        data-product-selection-trigger-event="click">
+    </wertgarantie-selection-embedded>
+    
+    <script type="module" src="https://cdn.jsdelivr.net/npm/wertgarantie-selection-embedded@0/dist/selection-embedded.min.js" crossorigin="anonymous"></script>
+\`\`\`
+
+${client.handbook.components.selectionembedded.sample
+        ? `Eine beispielhafte Integration kann hier gefunden werden: [embedded-integration-sample](${client.handbook.components.selectionembedded.sample})`
+        : ''}
+
+
+Weitere Details zur Selection-Emedded-Component sind [hier](https://wertgarantie-ecom.github.io/bifrost-components/?path=/story/components-embedded-selection--embedded-selection-phone) zu finden.
     ` : '';
 }
