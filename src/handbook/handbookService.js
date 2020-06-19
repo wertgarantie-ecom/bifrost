@@ -119,7 +119,7 @@ const wertgarantieCheckoutDataBuffer = Buffer.from(JSON.stringify({
                 manufacturer: "Hersteller Inc.",
                 deviceClasses: "sample1,sample2,${configuredDeviceClasses[0]}",
                 name: "Example Product",
-                orderId: "orderNo1"
+                orderItemId: "orderNo1"
             }       
         ],
         customer: {
