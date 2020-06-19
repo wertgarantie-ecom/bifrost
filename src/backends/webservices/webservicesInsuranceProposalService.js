@@ -16,7 +16,7 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
         if (!productOffer) {
             throw new Error("No product offer for wertgarantie product id " + order.wertgarantieProduct.id);
         }
-        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer);
+        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer, order.wertgarantieProduct.deviceClass);
 
         const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
 
@@ -24,7 +24,8 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
             id: idGenerator(),
             wertgarantieProductId: order.wertgarantieProduct.id,
             wertgarantieProductName: order.wertgarantieProduct.name,
-            deviceClass: order.shopProduct.deviceClass,
+            deviceClass: order.wertgarantieProduct.deviceClass,
+            shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
             devicePrice: order.shopProduct.price,
             orderItemId: matchingShopProduct.orderItemId,
             success: true,
@@ -56,13 +57,8 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
     }
 };
 
-function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer, date = new Date()) {
-    function findObjectCode(externalObjectCode, productOffer) {
-        return _.find(productOffer.devices, device => device.objectCodeExternal === externalObjectCode).objectCode;
-    }
-
+function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer, deviceClass, date = new Date()) {
     const formattedDate = dateformat(date, 'dd.mm.yyyy');
-    const objectCode = findObjectCode(shopProduct.deviceClass, productOffer);
     const proposal = {
         "Vertragsnummer": contractNumber,
         "Satznummer": satznummer,
@@ -79,7 +75,7 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
             }
         }
     };
-    getInsuranceProposalSpecifics(proposal, objectCode, shopProduct, formattedDate, productOffer);
+    getInsuranceProposalSpecifics(proposal, deviceClass, shopProduct, formattedDate, productOffer);
     proposal["Produktdetails"] = {
         "Antragskodierung": productOffer.applicationCode,
         "Produkttyp": productOffer.productType

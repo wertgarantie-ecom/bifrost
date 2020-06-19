@@ -129,12 +129,15 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 wertgarantieProduct: {
                     id: "2",
                     name: "Basis",
-                    paymentInterval: "monthly"
+                    paymentInterval: "monthly",
+                    deviceClass: "9025",
+                    shopDeviceClass: "Smartphone"
+
                 },
                 shopProduct: {
                     price: "1000",
                     name: "IPhone X",
-                    deviceClass: "Smartphone",
+                    deviceClasses: "Smartphone",
                 },
                 id: "18ff0413-bcfd-48f8-b003-04b57762067a"
             }
@@ -148,7 +151,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         {
             price: "1200.93",
             manufacturer: "Apple Inc",
-            deviceClass: "Smartphone",
+            deviceClasses: "Kühlschrank,Smartphone,ein Ponny",
             name: "IPhone X",
         }
     ];
@@ -177,7 +180,8 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 "id": "2fcb053d-873c-4046-87e4-bbd75566901d",
                 "wertgarantieProductId": "2",
                 "wertgarantieProductName": "Basis",
-                "deviceClass": "Smartphone",
+                "shopDeviceClass": "Smartphone",
+                "deviceClass": "9025",
                 "devicePrice": "1000",
                 "success": false,
                 "message": "couldn't find matching product in shop cart for wertgarantie product",
@@ -186,7 +190,11 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                     {
                         "price": "1200.93",
                         "manufacturer": "Apple Inc",
-                        "deviceClass": "Smartphone",
+                        "deviceClasses": [
+                            "Kühlschrank",
+                            "Smartphone",
+                            "ein Ponny"
+                        ],
                         "name": "IPhone X"
                     }
                 ]

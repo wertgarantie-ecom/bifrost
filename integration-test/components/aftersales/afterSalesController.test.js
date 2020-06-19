@@ -22,13 +22,15 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                         id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46",
                         shopProduct: {
                             name: "SuperBike 3000",
-                            deviceClass: "Test",
+                            deviceClasses: "Test",
                             price: 139999
                         },
                         wertgarantieProduct: {
                             id: wertgarantieProductId,
                             name: wertgarantieProductName,
-                            paymentInterval: "monthly"
+                            paymentInterval: "monthly",
+                            deviceClass: "73",
+                            shopDeviceClass: "Test"
                         }
                     }
                 ],
@@ -110,13 +112,15 @@ describe("Check Checkout via after sales component ", () => {
                         id: "ef6ab539-13d8-451c-b8c3-aa2c498f8e46",
                         shopProduct: {
                             name: "SuperBike 3000",
-                            deviceClass: "Test",
+                            deviceClasses: "Test",
                             price: 139999
                         },
                         wertgarantieProduct: {
                             id: wertgarantieProductId,
                             name: wertgarantieProductName,
-                            paymentInterval: "monthly"
+                            paymentInterval: "monthly",
+                            deviceClass: "73",
+                            shopDeviceClass: "Test",
                         }
                     }
                 ],

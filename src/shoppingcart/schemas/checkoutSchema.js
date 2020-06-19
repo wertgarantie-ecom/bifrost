@@ -22,6 +22,9 @@ module.exports.checkoutSchema = {
                         deviceClass: {
                             type: "string"
                         },
+                        deviceClasses: {
+                            type: "string"
+                        },
                         name: {
                             type: "string"
                         },
@@ -31,7 +34,6 @@ module.exports.checkoutSchema = {
                     },
                     required: [
                         "price",
-                        "deviceClass",
                         "name"
                     ]
                 }

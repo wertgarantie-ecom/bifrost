@@ -4,7 +4,7 @@ const _heimdallClient = require('./heimdallClient');
 const _ = require('lodash');
 
 module.exports.checkout = async function checkout(clientConfig, order, customer, shopSubmittedPurchase, date = new Date(), heimdallClient = _heimdallClient, idGenerator = uuid) {
-    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === shopSubmittedPurchase.deviceClass).heimdallDeviceClass;
+    const heimdallDeviceClass = _.find(clientConfig.backends.heimdall.deviceClassMappings, mapping => mapping.shopDeviceClass === shopSubmittedPurchase.deviceClasses[0]).heimdallDeviceClass;
     const requestBody = prepareHeimdallCheckoutData(order, customer, shopSubmittedPurchase, date, heimdallDeviceClass);
     try {
         const responseBody = await heimdallClient.sendWertgarantieProductCheckout(requestBody, clientConfig);

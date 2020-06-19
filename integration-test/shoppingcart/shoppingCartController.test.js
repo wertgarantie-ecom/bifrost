@@ -69,10 +69,12 @@ describe("Checkout Shopping Cart", () => {
                     wertgarantieProduct: {
                         id: wertgarantieProductId,
                         name: wertgarantieProductName,
-                        paymentInterval: "monthly"
+                        paymentInterval: "monthly",
+                        deviceClass: "73",
+                        shopDeviceClass: "Bike"
                     },
                     shopProduct: {
-                        deviceClass: "Bike",
+                        deviceClasses: "Bike",
                         price: 139999,
                         name: "SuperBike 3000",
                     },
