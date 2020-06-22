@@ -1,4 +1,3 @@
-const _heimdallClient = require('../backends/heimdall/heimdallClient');
 const _webserviceProductOffersRepository = require('../backends/webservices/webserviceProductOffersRepository');
 const _ = require('lodash');
 
@@ -17,16 +16,10 @@ async function getProductOfferById(productOfferId, webserviceProductOffersReposi
     return webserviceProductOffersRepository.findById(productOfferId);
 }
 
-async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, productOffersRepository = _webserviceProductOffersRepository, heimdallClient = _heimdallClient) {
+async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, productOffersRepository = _webserviceProductOffersRepository) {
     let productOffers;
-    if (process.env.BACKEND === "webservices") {
-        const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-        productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price)
-    } else {
-        const shopDeviceClass = shopDeviceClasses[0];
-        const heimdallResponse = await heimdallClient.getProductOffers(clientConfig, shopDeviceClass, price);
-        productOffers = heimdallProductOffersToGeneralProductOffers(heimdallResponse, shopDeviceClass)
-    }
+    const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
+    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price)
 
     if (!offerCount) {
         return productOffers;
@@ -35,61 +28,6 @@ async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCou
     }
 }
 
-function heimdallProductOffersToGeneralProductOffers(heimdallClientResponse, deviceClass) {
-    return heimdallClientResponse.map(heimdallOffer => {
-        return {
-            id: heimdallOffer.id + "",
-            deviceClass: deviceClass,
-            shopDeviceClass: deviceClass,
-            name: heimdallOffer.name,
-            advantages: [...heimdallOffer.advantages, ...heimdallOffer.services, ...heimdallOffer.special_advantages],
-            defaultPaymentInterval: toDefaultPaymentInterval(heimdallOffer.payment),
-            prices: {
-                monthly: {
-                    "netAmount": parseInt(heimdallOffer.prices.monthly.price.replace(",", "")),
-                    "currency": "EUR",
-                    "taxAmount": parseInt(heimdallOffer.prices.monthly.price_tax.replace(",", ""))
-                },
-                quarterly: {
-                    "netAmount": parseInt(heimdallOffer.prices.quarterly.price.replace(",", "")),
-                    "currency": "EUR",
-                    "taxAmount": parseInt(heimdallOffer.prices.quarterly.price_tax.replace(",", ""))
-                },
-                halfYearly: {
-                    "netAmount": parseInt(heimdallOffer.prices.half_yearly.price.replace(",", "")),
-                    "currency": "EUR",
-                    "taxAmount": parseInt(heimdallOffer.prices.half_yearly.price_tax.replace(",", ""))
-                },
-                yearly: {
-                    "netAmount": parseInt(heimdallOffer.prices.yearly.price.replace(",", "")),
-                    "currency": "EUR",
-                    "taxAmount": parseInt(heimdallOffer.prices.yearly.price_tax.replace(",", ""))
-                }
-            },
-            documents: heimdallOffer.documents.map(document => {
-                return {
-                    type: document.document_type,
-                    name: document.document_title,
-                    uri: document.document_link
-                };
-            })
-        };
-    });
-}
-
-function toDefaultPaymentInterval(heimdallPaymentInterval) {
-    switch (heimdallPaymentInterval) {
-        case "Monat":
-            return "monthly";
-        case "Quartal":
-            return "quaterly";
-        case "Halbjahr":
-            return "halfYearly";
-        case "Jahr":
-            return "yearly";
-    }
-
-}
 
 function filterProductOffers(productOffers, deviceClass, price) {
     const filteredProductOffers = _.filter(productOffers, offer => hasDeviceClassAndIsInLimit(offer, deviceClass, price));
@@ -181,7 +119,6 @@ class ProductOffersError extends Error {
 exports.getProductOffers = getProductOffers;
 exports.getProductOfferById = getProductOfferById;
 exports.getMinimumLockPriceForProduct = getMinimumLockPriceForProduct;
-exports.heimdallProductOffersToGeneralProductOffers = heimdallProductOffersToGeneralProductOffers;
 exports.filterProductOffers = filterProductOffers;
 exports.hasDeviceClassAndIsInLimit = hasDeviceClassAndIsInLimit;
 exports.mapIntervalDescription = mapIntervalCode;

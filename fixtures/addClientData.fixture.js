@@ -15,15 +15,6 @@ describe('add phone test shop client config', () => {
             "name": "Test Shop Handy",
             "email": "wertgarantie.bifrost@gmail.com",
             "backends": {
-                "heimdall": {
-                    "clientId": "test-phone-heimdall-clientId",
-                    "deviceClassMappings": [
-                        {
-                            "shopDeviceClass": "Smartphone",
-                            "heimdallDeviceClass": "1dfd4549-9bdc-4285-9047-e5088272dade"
-                        }
-                    ]
-                },
                 "webservices": {
                     "username": "test-phone-user",
                     "password": "test-phone-password",
@@ -172,15 +163,6 @@ describe('add bike test shop client config', () => {
             "id": bocClientId,
             "name": "Test Shop Bike",
             "backends": {
-                "heimdall": {
-                    "clientId": "test-bike-heimdall-clientId",
-                    "deviceClassMappings": [
-                        {
-                            "shopDeviceClass": "Bike",
-                            "heimdallDeviceClass": "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                        }
-                    ]
-                },
                 "webservices": {
                     "username": "test-bike-user",
                     "password": "test-bike-password",
@@ -530,15 +512,6 @@ describe('add Handyflash Local test client config', () => {
             "id": handFlashClientId,
             "name": "Handyflash Local",
             "backends": {
-                "heimdall": {
-                    "clientId": "test-handyflash-heimdall-clientId",
-                    "deviceClassMappings": [
-                        {
-                            "shopDeviceClass": "Smartphone",
-                            "heimdallDeviceClass": "1dfd4549-9bdc-4285-9047-e5088272dade"
-                        }
-                    ]
-                },
                 "webservices": {
                     "username": "test-handyflash-user",
                     "password": "test-handyflash-password",

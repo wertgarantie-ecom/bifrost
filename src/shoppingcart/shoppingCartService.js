@@ -1,8 +1,7 @@
 const uuid = require('uuid');
 const _ = require('lodash');
 const checkoutRepository = require('./checkoutRepository');
-const _heimdallCheckoutService = require('../backends/heimdall/heimdallCheckoutService');
-const webservicesInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
+const _webserviceInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 const ClientError = require('../errors/ClientError');
 const mailSender = require('../mails/mailSender');
 const _productOfferService = require('../productoffers/productOffersService');
@@ -49,7 +48,7 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, heimdallCheckoutService = _heimdallCheckoutService, idGenerator = uuid, repository = checkoutRepository) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webserivcesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository) {
     purchasedShopProducts.map(product => {
         const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
         delete product.deviceClass;
@@ -77,11 +76,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             };
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        if (process.env.BACKEND === 'webservices') {
-            return webservicesInsuranceProposalService.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
-        } else {
-            return heimdallCheckoutService.checkout(clientConfig, order, customer, matchingShopProduct);
-        }
+        return _webserviceInsuranceProposalService.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
     }));
 
 

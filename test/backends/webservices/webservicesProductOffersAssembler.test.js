@@ -611,9 +611,6 @@ test('should not fail if no products are matching for the given offers configura
         "id": "99d98769-2b76-43c2-915e-534ee141de9a",
         "name": "handyflash",
         "backends": {
-            "heimdall": {
-                "clientID": "0831cc8d-f5b8-4cfc-9c6c-6a08248348f2"
-            },
             "webservices": {
                 productOffersConfigurations: [
                     {
@@ -697,9 +694,6 @@ test.skip('call webservices dev', async () => {
         "id": uuid(),
         "name": "handyflash",
         backends: {
-            heimdall: {
-                clientId: "0831cc8d-f5b8-4cfc-9c6c-6a08248348f2"
-            },
             "webservices": {
                 username: "test-phone-user",
                 password: "test-phone-password",

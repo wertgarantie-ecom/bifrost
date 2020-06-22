@@ -40,16 +40,6 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                 }
             };
 
-        nockhelper.nockHeimdallLogin(clientData);
-        nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
-            payload: {
-                contract_number: 1234,
-                transaction_number: "28850277",
-                activation_code: "4db56dacfbhce",
-                message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
-            }
-        });
-
         const response = await request(app).post("/wertgarantie/ecommerce/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
@@ -149,15 +139,6 @@ describe("Check Checkout via after sales component ", () => {
             encryptedSessionId: encryptedSessionId
         };
 
-        nockhelper.nockHeimdallLogin(clientData);
-        nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
-            payload: {
-                contract_number: 1234,
-                transaction_number: "28850277",
-                activation_code: "4db56dacfbhce",
-                message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
-            }
-        });
         const base64WebshopData = Buffer.from(JSON.stringify(webshopData)).toString('base64');
 
         const result = await request(app).post(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/after-sales/checkout`)

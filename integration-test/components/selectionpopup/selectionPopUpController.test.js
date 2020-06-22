@@ -11,9 +11,6 @@ test('should return proper product data', async () => {
         devicePrice: 120000
     });
 
-    nockhelper.nockHeimdallLogin(clientData);
-    nockhelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
-
     const expectedStatusCode = 200;
     const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-popup`).send({
         deviceClass: "Test",
@@ -25,9 +22,9 @@ test('should return proper product data', async () => {
         "products": [
             {
                 "GTCIText": "Allgemeine Versicherungsbedingungen",
-                "GTCIUri": "https://heimdall-stg-04.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b",
+                "GTCIUri": "todo",
                 "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                "IPIDUri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
+                "IPIDUri": "todo",
                 "advantages": [
                     {
                         "included": true,
@@ -81,9 +78,9 @@ test('should return proper product data', async () => {
             },
             {
                 "GTCIText": "Allgemeine Versicherungsbedingungen",
-                "GTCIUri": "https://heimdall-stg-04.wertgarantie.com/download/9f1506a9-65e9-467c-a8d0-8f7ccd47d75b",
+                "GTCIUri": "todo",
                 "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                "IPIDUri": "https://heimdall-stg-04.wertgarantie.com/download/1eb7d0ce-6c62-4264-a3e7-58319bd4d4d1",
+                "IPIDUri": "todo",
                 "advantages": [
                     {
                         "included": true,
@@ -176,9 +173,6 @@ test('should return 204 if given orderItemId is already included in existing sho
         deviceClass: "Test",
         devicePrice: 120000
     });
-
-    nockhelper.nockHeimdallLogin(clientData);
-    nockhelper.getNockedHeimdallProductOffers(signedShoppingCart, clientData);
 
     const expectedStatusCode = 204;
     const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-popup`).send({

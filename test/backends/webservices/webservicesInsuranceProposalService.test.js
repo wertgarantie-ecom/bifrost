@@ -133,9 +133,6 @@ test.skip('execute vs webservices dev', async () => {
     const clientConfig = {
         name: "testclient",
         backends: {
-            heimdall: {
-                clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31"
-            },
             webservices: {
                 username: "plz fill me",
                 password: "plz fill me"

@@ -86,16 +86,6 @@ describe("Checkout Shopping Cart", () => {
             }
         };
 
-        nockhelper.nockHeimdallLogin(clientData);
-        nockhelper.nockHeimdallCheckoutShoppingCart(wertgarantieProductId, {
-            payload: {
-                contract_number: "1234",
-                transaction_number: "28850277",
-                activation_code: "4db56dacfbhce",
-                message: "Der Versicherungsantrag wurde erfolgreich übermittelt."
-            }
-        });
-
         const result = await request(app).post("/wertgarantie/ecommerce/shoppingCarts/current/checkout")
             .send({
                 purchasedProducts: [{
@@ -127,11 +117,11 @@ describe("Checkout Shopping Cart", () => {
         expect(purchase.devicePrice).toEqual(139999);
         expect(purchase.success).toBe(true);
         expect(purchase.message).toEqual("successfully transmitted insurance proposal");
-        expect(purchase.backend).toEqual("heimdall");
+        expect(purchase.backend).toEqual("webservices");
         expect(purchase.shopProduct).toEqual("SuperBike 3000");
         expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
-        expect(purchase.backend).toEqual("heimdall");
+        expect(purchase.backend).toEqual("webservices");
         expect(purchase.backendResponseInfo).toEqual({
             activationCode: "4db56dacfbhce"
         });
@@ -154,7 +144,7 @@ describe("Checkout Shopping Cart", () => {
         expect(purchase.shopProduct).toEqual("SuperBike 3000");
         expect(purchase.contractNumber).toEqual("1234");
         expect(purchase.transactionNumber).toEqual("28850277");
-        expect(purchase.backend).toEqual("heimdall");
+        expect(purchase.backend).toEqual("webservices");
         expect(purchase.backendResponseInfo).toEqual({
             activationCode: "4db56dacfbhce"
         });

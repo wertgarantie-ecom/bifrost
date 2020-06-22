@@ -157,9 +157,11 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
     ];
     const customer = validCustomer();
 
-    const mockClient = jest.fn(() => {
-        throw new Error("you should never call me");
-    });
+    const mockClient = {
+        submitInsuranceProposal: jest.fn(() => {
+            throw new Error("you should never call me");
+        })
+    };
 
     const result = await service.checkoutShoppingCart(purchasedProducts,
         customer,
