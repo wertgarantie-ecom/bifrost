@@ -71,7 +71,6 @@ module.exports.checkoutSchema = {
                 }
             },
             required: [
-                "company",
                 "salutation",
                 "firstname",
                 "lastname",
