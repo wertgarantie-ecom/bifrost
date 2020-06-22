@@ -15,9 +15,10 @@ exports.showSelectionPopUpComponent = async function showSelectionPopUpComponent
                                                                                  clientConfig,
                                                                                  locale = "de",
                                                                                  orderItemId,
-                                                                                 shoppingCart) {
+                                                                                 shoppingCart,
+                                                                                 offeredOrderItemIds) {
     const shopDeviceClasses = shopDeviceClassesString.split(',');
-    const result = await prepareProductSelectionData(shopDeviceClasses, devicePrice, clientConfig, locale, orderItemId, shoppingCart);
+    const result = await prepareProductSelectionData(shopDeviceClasses, devicePrice, clientConfig, locale, orderItemId, shoppingCart, offeredOrderItemIds);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
     return result;
 }
@@ -28,9 +29,18 @@ async function prepareProductSelectionData(shopDeviceClasses,
                                            locale = "de",
                                            orderItemId,
                                            shoppingCart,
+                                           offeredOrderItemIds = [],
                                            productOffersService = _productOffersService,
                                            productImageService = _productImageService,
                                            clientComponentTextService = _clientComponentTextService) {
+    if (orderItemId) {
+        if (offeredOrderItemIds.includes(orderItemId)) {
+            return undefined;
+        } else {
+            offeredOrderItemIds.push(orderItemId);
+        }
+    }
+
     if (orderItemId && shoppingCart && shoppingCart.orders && _.find(shoppingCart.orders, order => order.shopProduct.orderItemId === orderItemId)) {
         return undefined;
     }
@@ -51,7 +61,8 @@ async function prepareProductSelectionData(shopDeviceClasses,
 
     const data = {
         texts: popUpTexts,
-        products: products
+        products: products,
+        offeredOrderItemIds
     };
     data.texts.footerHtml = util.format(popUpTexts.footerHtml, popUpTexts.partnerShop);
 

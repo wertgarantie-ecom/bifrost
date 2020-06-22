@@ -24,6 +24,7 @@ test("should return proper product response", async () => {
         "devicePrice",
         clientData,
         undefined,
+        "orderItemId12345",
         undefined,
         undefined,
         mockProductOfferService,
@@ -143,7 +144,7 @@ test("should return proper product response", async () => {
                 GTCIText: "Allgemeine Versicherungsbedingungen",
                 GTCIUri: "http://localhost:3000/documents/justnotthere"
             }],
-
+        offeredOrderItemIds: ["orderItemId12345"],
     };
     expect(result).toEqual(expectedResult);
 });
@@ -153,8 +154,19 @@ test('should return undefined if orderItemId is already included in shoppingCart
     const orderItemId = shoppingCart.orders[0].shopProduct.orderItemId;
     const clientService = {
         findClientForPublicClientId: jest.fn()
-    }
-    const result = await service.prepareProductSelectionData("deviceClass", "devicePrice", "clientId", undefined, orderItemId, shoppingCart, jest.fn(), jest.fn(), clientService, jest.fn());
+    };
+    const result = await service.prepareProductSelectionData("deviceClass", "devicePrice", "clientId", undefined, orderItemId, shoppingCart, undefined, jest.fn(), jest.fn(), clientService, jest.fn());
 
     expect(result).toEqual(undefined);
-})
+});
+
+test('should return undefined if offers for orderItemId have already been shown', async () => {
+    const shoppingCart = createSignedShoppingCart().shoppingCart;
+    const orderItemId = shoppingCart.orders[0].shopProduct.orderItemId;
+    const clientService = {
+        findClientForPublicClientId: jest.fn()
+    };
+    const result = await service.prepareProductSelectionData("deviceClass", "devicePrice", "clientId", undefined, orderItemId, shoppingCart, [orderItemId], jest.fn(), jest.fn(), clientService, jest.fn());
+
+    expect(result).toEqual(undefined);
+});
