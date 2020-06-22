@@ -18,6 +18,12 @@ const productImageMapping = {
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test3.jpg",
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test4.jpg"
     ],
+    "460": [
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test2.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test3.jpg",
+        "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test4.jpg"
+    ],
     // Handy
     "2dc16d28-c7af-4e19-9494-1659e1c27201": [
         "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/phone_displaybruch.jpg",
