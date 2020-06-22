@@ -80,6 +80,13 @@ module.exports.productSelectionResponseSchema = {
                     }
                 }
             }
+        },
+        "offeredOrderItemIds": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
         }
     }
+
 };

@@ -18,6 +18,12 @@ exports.selectionPopUpGetProductsSchema = {
         },
         orderItemId: {
             type: "string"
+        },
+        offeredOrderItemIds: {
+            type: "array",
+            items: {
+                type: "string"
+            }
         }
     }
 };

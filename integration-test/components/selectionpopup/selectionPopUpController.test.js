@@ -164,7 +164,8 @@ test('should return proper product data', async () => {
             "subtitle": "Wählen Sie die Versicherung aus, die Ihnen zusagt",
             "title": "Vergessen Sie nicht Ihren Wertgarantie Rundumschutz",
             "wertgarantieFurtherInfoHtml": "Mehr zur <a target=\"_blank\" href=\"%s\">Wertgarantie</a>"
-        }
+        },
+        "offeredOrderItemIds": []
     });
 });
 
