@@ -8,9 +8,6 @@ test("should login", async () => {
         "id": "8d0f763a-5e5a-41da-9fa8-8b2a8a11fde6",
         "name": "Handyflash DEV",
         "backends": {
-            "heimdall": {
-                "clientId": "test-handyflash-heimdall-clientId"
-            },
             "webservices": {
                 "username": "test-handyflash-user",
                 "password": "test-handyflash-password"
@@ -44,9 +41,6 @@ test("should catch error when login did not succeed", async () => {
         "id": "8d0f763a-5e5a-41da-9fa8-8b2a8a11fde6",
         "name": "Handyflash DEV",
         "backends": {
-            "heimdall": {
-                "clientId": "test-handyflash-heimdall-clientId"
-            },
             "webservices": {
                 "username": "test-handyflash-user",
                 "password": "test-handyflash-password"

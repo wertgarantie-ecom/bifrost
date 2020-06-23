@@ -43,28 +43,6 @@ module.exports.newClientSchema = {
                         "productOffersConfigurations"
                     ]
                 },
-                heimdall: {
-                    type: "object",
-                    properties: {
-                        clientId: {
-                            type: "string"
-                        },
-                        deviceClassMappings: {
-                            type: "array",
-                            items: {
-                                type: "object",
-                                properties: {
-                                    shopDeviceClass: {
-                                        type: "string"
-                                    },
-                                    heimdallDeviceClass: {
-                                        type: "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
             }
         },
         activePartnerNumber: {

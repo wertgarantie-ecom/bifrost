@@ -64,23 +64,6 @@ exports.createDefaultClient = function createDefaultClient() {
         id: uuid(),
         name: "testclient",
         backends: {
-            heimdall: {
-                clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-                deviceClassMappings: [
-                    {
-                        shopDeviceClass: "Smartphone",
-                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
-                    },
-                    {
-                        shopDeviceClass: "Bike",
-                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                    },
-                    {
-                        shopDeviceClass: "Test",
-                        heimdallDeviceClass: "fbfb2d44-4ff8-4579-9cc0-0a3ccb8d6f2d"
-                    }
-                ]
-            },
             webservices: {
                 username: "testusername",
                 password: "testpassword",
@@ -110,7 +93,7 @@ exports.getValidPurchase = function getValidPurchase() {
         shopProduct: "iPhone X",
         contractNumber: "23479998",
         transactionNumber: "7524545",
-        backend: "heimdall",
+        backend: "webservices",
         backendResponseInfo: {
             activationCode: "a447s7s6666f"
         }
@@ -139,19 +122,6 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
         id: uuid(),
         name: "testClient",
         backends: {
-            heimdall: {
-                clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-                deviceClassMappings: [
-                    {
-                        shopDeviceClass: "Smartphone",
-                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
-                    },
-                    {
-                        shopDeviceClass: "Bike",
-                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                    }
-                ]
-            },
             webservices: {
                 username: "testusername",
                 password: "testpassword",
@@ -196,7 +166,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                 documentTypes.RIGHT_OF_WITHDRAWAL
                             ]
                         },
-                        advantages: [],
+                        advantages: ["advantage1", "advantage2", "advantage3"],
                         risks: []
                     },
                     {
@@ -239,7 +209,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                 documentTypes.RIGHT_OF_WITHDRAWAL
                             ]
                         },
-                        advantages: [],
+                        advantages: ["advantage1", "advantage2", "advantage3", "advantage4"],
                         risks: ["DIEBSTAHLSCHUTZ"]
                     }
                 ]
@@ -277,19 +247,6 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
         id: uuid(),
         name: "testClient",
         backends: {
-            heimdall: {
-                clientId: "e4d3237c-7582-11ea-8602-9ba3368ccb31",
-                deviceClassMappings: [
-                    {
-                        shopDeviceClass: "Smartphone",
-                        heimdallDeviceClass: "1dfd4549-9bdc-4285-9047-e5088272dade"
-                    },
-                    {
-                        shopDeviceClass: "Bike",
-                        heimdallDeviceClass: "6bdd2d93-45d0-49e1-8a0c-98eb80342222"
-                    }
-                ]
-            },
             webservices: {
                 username: "test-bike-user",
                 password: "test-bike-password",

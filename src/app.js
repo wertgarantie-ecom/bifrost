@@ -92,10 +92,6 @@ app.use(function (err, req, res, next) {
             validations: err.errors,
             received: err.instance
         };
-    } else if (err.name === 'HeimdallConnectionError') {
-        err.status = 502;
-    } else if (err.name === 'HeimdallClientError') {
-        err.status = 400;
     } else if (err.name === 'WebserviceError') {
         err.status = 400;
     } else if (err.name === 'InvalidClientIdError') {

@@ -22,10 +22,15 @@ test('should return proper product data', async () => {
     expect(result.body.products).toEqual([
         {
             "GTCIText": "Allgemeine Versicherungsbedingungen",
-            "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
+            "GTCIUri": "http://localhost:3000/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
             "IPIDText": "Informationsblatt für Versicherungsprodukte",
-            "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-            "advantages": [],
+            "IPIDUri": "http://localhost:3000/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
+            "advantages": [
+                {
+                    "included": true,
+                    "text": "advantage3"
+                }
+            ],
             "deviceClass": "73",
             "id": productOffers[0].id,
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
@@ -39,16 +44,30 @@ test('should return proper product data', async () => {
             "taxFormatted": "(inkl. 3,74 € VerSt**)",
             "top3": [
                 {
-                    "included": true
+                    "included": true,
+                    "text": "advantage1"
+                },
+                {
+                    "included": true,
+                    "text": "advantage2"
+                },
+                {
+                    "included": false,
+                    "text": "advantage4"
                 }
             ]
         },
         {
             "GTCIText": "Allgemeine Versicherungsbedingungen",
-            "GTCIUri": "undefined/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
+            "GTCIUri": "http://localhost:3000/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
             "IPIDText": "Informationsblatt für Versicherungsprodukte",
-            "IPIDUri": "undefined/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
-            "advantages": [],
+            "IPIDUri": "http://localhost:3000/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
+            "advantages": [
+                {
+                    "included": true,
+                    "text": "advantage4"
+                }
+            ],
             "deviceClass": "73",
             "id": productOffers[1].id,
             "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
@@ -62,7 +81,16 @@ test('should return proper product data', async () => {
             "taxFormatted": "(inkl. 3,74 € VerSt**)",
             "top3": [
                 {
-                    "included": true
+                    "included": true,
+                    "text": "advantage1"
+                },
+                {
+                    "included": true,
+                    "text": "advantage2"
+                },
+                {
+                    "included": true,
+                    "text": "advantage3"
                 }
             ]
         }
