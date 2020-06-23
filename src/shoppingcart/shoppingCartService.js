@@ -90,7 +90,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     };
 
     await repository.persist(checkoutData);
-    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer);
+    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer, checkoutData.test);
     metrics.recordSubmitProposalRequest(checkoutData, clientConfig.name);
     return checkoutData;
 };

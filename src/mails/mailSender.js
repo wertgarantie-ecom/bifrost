@@ -2,28 +2,30 @@ const Mailgun = require('mailgun-js');
 const renderCustomerMailHtml = require('./customerMailHtml');
 const renderShopReportMailHtml = require('./shopReportMailHtml');
 
-module.exports.sendCheckoutMails = function (shopName, shopEmail, purchases, shopOrderId, customer) {
+module.exports.sendCheckoutMails = function (shopName, shopEmail, purchases, shopOrderId, customer, isTestCheckout) {
     purchases.forEach(purchase => {
         if (purchase.success) {
-            sendReportMailToShop(shopName, shopEmail, purchase, shopOrderId, customer);
-            sendCheckoutMailToCustomer(customer.email, purchase.contractNumber);
+            sendReportMailToShop(shopName, shopEmail, purchase, shopOrderId, customer, isTestCheckout);
+            sendCheckoutMailToCustomer(customer.email, purchase.contractNumber, isTestCheckout);
         }
     })
 };
 
-async function sendCheckoutMailToCustomer(customerMailAddress, contractNumber, mailgunOptions = _mailgunOptions) {
+async function sendCheckoutMailToCustomer(customerMailAddress, contractNumber, isTestCheckout, mailgunOptions = _mailgunOptions) {
     const subject = `Vielen Dank für Ihren Auftrag ${contractNumber}`;
     const body = renderCustomerMailHtml(contractNumber);
-    return await sendMail(customerMailAddress, subject, body, mailgunOptions);
+    const to = isTestCheckout ? process.env.BIFROST_EMAIL_ADDRESS : customerMailAddress;
+    return await sendMail(to, subject, body, mailgunOptions);
 }
 
-async function sendReportMailToShop(shopName, shopMailAddress, purchase, shopOrderId, customer, mailgunOptions = _mailgunOptions) {
+async function sendReportMailToShop(shopName, shopMailAddress, purchase, shopOrderId, customer, isTestCheckout, mailgunOptions = _mailgunOptions) {
     if (!shopMailAddress) {
         return;
     }
     const subject = `Wertgarantie Versicherungsantrag ${purchase.contractNumber} erstellt ${shopOrderId ? "für Order " + shopOrderId : "für Produkt " + purchase.shopProduct}`;
     const body = renderShopReportMailHtml(shopName, purchase, shopOrderId, subject, customer);
-    return await sendMail(shopMailAddress, subject, body, mailgunOptions);
+    const to = isTestCheckout ? process.env.BIFROST_EMAIL_ADDRESS : shopMailAddress;
+    return await sendMail(to, subject, body, mailgunOptions);
 }
 
 async function sendMail(to, subject, body, mailgunOptions) {

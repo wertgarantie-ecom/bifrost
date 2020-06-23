@@ -12,7 +12,7 @@ test('should send customer mails without failures', async () => {
             emailBody = payload;
         }
     }
-    await mailSender.sendCheckoutMailToCustomer('myemail@mail.de', "45764565", testOptions);
+    await mailSender.sendCheckoutMailToCustomer('myemail@mail.de', "45764565", false, testOptions);
 
     expect(!!emailBody).toEqual(true);
 })
@@ -42,7 +42,7 @@ test('should send shop report mails without failures', async () => {
         backend: "webservices"
     }
 
-    await mailSender.sendReportMailToShop('handyflash', 'arnelandwehr@gmail.com', purchase, undefined, validCustomer(), testOptions);
+    await mailSender.sendReportMailToShop('handyflash', 'arnelandwehr@gmail.com', purchase, undefined, validCustomer(), false, testOptions);
 
     expect(!!emailBody).toEqual(true);
 })
