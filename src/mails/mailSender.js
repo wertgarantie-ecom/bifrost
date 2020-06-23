@@ -31,7 +31,6 @@ async function sendMail(to, subject, body, mailgunOptions) {
     const data = {
         from: 'e-insurance.wertgarantie.com <no-reply@e-insurance.wertgarantie.com>',
         to: to,
-        bcc: process.env.BIFROST_EMAIL_ADDRESS,
         subject: subject,
         html: body
     };
