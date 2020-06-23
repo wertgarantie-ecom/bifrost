@@ -1,18 +1,28 @@
 const request = require('supertest');
 const app = require('../../../src/app');
-const testhelper = require('../../helper/fixtureHelper');
-const nockhelper = require('../../helper/nockHelper');
+const testHelper = require('../../helper/fixtureHelper');
+const nockHelper = require('../../helper/nockHelper');
+const webservicesProductOfferAssembler = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
+const mockWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig()
 
 test('should return proper product data', async () => {
-    const clientData = await testhelper.createAndPersistDefaultClient();
-    const signedShoppingCart = testhelper.createSignedShoppingCart({
-        publicClientData: clientData.publicClientIds[0],
+    const clientConfig = await testHelper.createAndPersistPhoneClientWithWebservicesConfiguration();
+
+    const signedShoppingCart = testHelper.createSignedShoppingCart({
+        publicClientData: clientConfig.publicClientIds[0],
         deviceClass: "Test",
         devicePrice: 120000
     });
+    const productOffers = await webservicesProductOfferAssembler.updateAllProductOffersForClient(clientConfig, undefined, mockWebservicesClient);
+    signedShoppingCart.shoppingCart.orders[0].wertgarantieProduct.id = productOffers[0].id;
+    signedShoppingCart.shoppingCart.orders[0].wertgarantieProduct.name = productOffers[0].name;
+
+    nockHelper.nockWebservicesLogin("123434");
+    nockHelper.nockGetNewContractNumber("123234234");
+    nockHelper.nockSubmitInsuranceProposal();
 
     const expectedStatusCode = 200;
-    const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-popup`).send({
+    const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientConfig.publicClientIds[0]}/components/selection-popup`).send({
         deviceClass: "Test",
         devicePrice: 120000
     });
@@ -22,113 +32,73 @@ test('should return proper product data', async () => {
         "products": [
             {
                 "GTCIText": "Allgemeine Versicherungsbedingungen",
-                "GTCIUri": "todo",
+                "GTCIUri": "http://localhost:3000/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
                 "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                "IPIDUri": "todo",
+                "IPIDUri": "http://localhost:3000/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
                 "advantages": [
                     {
                         "included": true,
-                        "text": "Volle Kostenübernahme bei Reparaturen"
-                    },
-                    {
-                        "included": true,
-                        "text": "Bei Totalschaden zählt der Zeitwert"
-                    },
-                    {
-                        "included": true,
-                        "text": "Für private und berufliche Nutzung"
-                    },
-                    {
-                        "included": true,
-                        "text": "Weltweiter Schutz"
-                    },
-                    {
-                        "included": true,
-                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte"
-                    },
-                    {
-                        "included": true,
-                        "text": "Unsachgemäße Handhabung"
+                        "text": "advantage3"
                     }
                 ],
-                "id": "1",
+                "deviceClass": "73",
+                "id": productOffers[0].id,
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
                 "intervalCode": "monthly",
-                "name": "Basis",
+                "name": "Komplettschutz",
                 "paymentInterval": "monatl.",
-                "price": 500,
-                "priceFormatted": "5,00 €",
+                "price": 2340,
+                "priceFormatted": "23,40 €",
                 "shopDeviceClass": "Test",
-                "deviceClass": "Test",
-                "taxFormatted": "(inkl. 0,80 € VerSt**)",
+                "taxFormatted": "(inkl. 3,74 € VerSt**)",
                 "top3": [
                     {
                         "included": true,
-                        "text": "Für private und berufliche Nutzung"
+                        "text": "advantage1"
                     },
                     {
                         "included": true,
-                        "text": "Unsachgemäße Handhabung"
+                        "text": "advantage2"
                     },
                     {
-                        "included": true,
-                        "text": "Weltweiter Schutz"
+                        "included": false,
+                        "text": "advantage4"
                     }
                 ]
             },
             {
                 "GTCIText": "Allgemeine Versicherungsbedingungen",
-                "GTCIUri": "todo",
+                "GTCIUri": "http://localhost:3000/wertgarantie/documents/9448f030d5684ed3d587aa4e6167a1fd918aa47b",
                 "IPIDText": "Informationsblatt für Versicherungsprodukte",
-                "IPIDUri": "todo",
+                "IPIDUri": "http://localhost:3000/wertgarantie/documents/8835ff3c803f3e7abc5d49527001678bb179cfaa",
                 "advantages": [
                     {
                         "included": true,
-                        "text": "Volle Kostenübernahme bei Reparaturen"
-                    },
-                    {
-                        "included": true,
-                        "text": "Bei Totalschaden zählt der Zeitwert"
-                    },
-                    {
-                        "included": true,
-                        "text": "Für private und berufliche Nutzung"
-                    },
-                    {
-                        "included": true,
-                        "text": "Weltweiter Schutz"
-                    },
-                    {
-                        "included": true,
-                        "text": "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte"
-                    },
-                    {
-                        "included": true,
-                        "text": "Unsachgemäße Handhabung"
+                        "text": "advantage4"
                     }
                 ],
-                "id": "2",
+                "deviceClass": "73",
+                "id": productOffers[1].id,
                 "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
                 "intervalCode": "monthly",
-                "name": "Premium",
+                "name": "Komplettschutz mit Premium-Option",
                 "paymentInterval": "monatl.",
-                "price": 500,
-                "priceFormatted": "5,00 €",
+                "price": 2340,
+                "priceFormatted": "23,40 €",
                 "shopDeviceClass": "Test",
-                "deviceClass": "Test",
-                "taxFormatted": "(inkl. 0,80 € VerSt**)",
+                "taxFormatted": "(inkl. 3,74 € VerSt**)",
                 "top3": [
                     {
                         "included": true,
-                        "text": "Für private und berufliche Nutzung"
+                        "text": "advantage1"
                     },
                     {
                         "included": true,
-                        "text": "Unsachgemäße Handhabung"
+                        "text": "advantage2"
                     },
                     {
                         "included": true,
-                        "text": "Weltweiter Schutz"
+                        "text": "advantage3"
                     }
                 ]
             }
@@ -144,10 +114,10 @@ test('should return proper product data', async () => {
                 "PIS": "Produktinformationsblatt",
                 "ROW": "Widerrufsrecht"
             },
-            "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testclient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
+            "footerHtml": "Versicherung ist Vertrauenssache, deshalb setzt testClient neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>",
             "furtherInformation": "Weitere Informationen:",
             "hideDetailsText": "Details ausblenden",
-            "partnerShop": "testclient",
+            "partnerShop": "testClient",
             "productTexts": {
                 "paymentIntervals": {
                     "halfYearly": "habljährl.",
@@ -167,8 +137,8 @@ test('should return proper product data', async () => {
 
 test('should return 204 if given orderItemId is already included in existing shoppingCart', async () => {
 
-    const clientData = await testhelper.createAndPersistDefaultClient();
-    const signedShoppingCart = testhelper.createSignedShoppingCart({
+    const clientData = await testHelper.createAndPersistDefaultClient();
+    const signedShoppingCart = testHelper.createSignedShoppingCart({
         publicClientData: clientData.publicClientIds[0],
         deviceClass: "Test",
         devicePrice: 120000

@@ -166,7 +166,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                 documentTypes.RIGHT_OF_WITHDRAWAL
                             ]
                         },
-                        advantages: [],
+                        advantages: ["advantage1", "advantage2", "advantage3"],
                         risks: []
                     },
                     {
@@ -209,7 +209,7 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                                 documentTypes.RIGHT_OF_WITHDRAWAL
                             ]
                         },
-                        advantages: [],
+                        advantages: ["advantage1", "advantage2", "advantage3", "advantage4"],
                         risks: ["DIEBSTAHLSCHUTZ"]
                     }
                 ]

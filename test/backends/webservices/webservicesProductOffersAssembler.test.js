@@ -343,72 +343,452 @@ test('should update all product offers for client', async () => {
     const result = await webservicesService.updateAllProductOffersForClient(clientConfig, uuid, mockWebservicesClient, mockProductOfferRepo, mockDocumentRepo);
     expect(result).toEqual([
         {
-            name: "Komplettschutz",
-            shortName: "Basisschutz",
-            id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
-            clientId: clientConfig.id,
-            applicationCode: "GU WG DE KS 0419",
-            productType: "KOMPLETTSCHUTZ_2019",
-            defaultPaymentInterval: "monthly",
-            risks: ["KOMPLETTSCHUTZ"],
-            documents: [
+            "advantages": [
+                "advantage1",
+                "advantage2",
+                "advantage3"
+            ],
+            "applicationCode": "GU WG DE KS 0419",
+            "clientId": clientConfig.id,
+            "defaultPaymentInterval": "monthly",
+            "devices": [
                 {
-                    documentTitle: "GTCI.pdf",
-                    documentType: "GTCI",
-                    documentId: "1234"
+                    "intervals": [
+                        {
+                            "description": "monatlich",
+                            "intervalCode": "1",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "vierteljährlich",
+                            "intervalCode": "3",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "halbjährlich",
+                            "intervalCode": "6",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "jährlich",
+                            "intervalCode": "12",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        }
+                    ],
+                    "maxPriceLimitation": 180000,
+                    "objectCode": "9025",
+                    "objectCodeExternal": "Smartphone"
                 },
                 {
-                    documentTitle: "IPID.pdf",
-                    documentType: "IPID",
-                    documentId: "1234"
-                },
-                {
-                    documentId: "1234",
-                    documentTitle: "GDPR.pdf",
-                    documentType: "GDPR",
-                },
-                {
-                    documentId: "1234",
-                    documentTitle: "Widerrufsbelehrung für Komplettschutz.pdf",
-                    documentType: "ROW",
+                    "intervals": [
+                        {
+                            "description": "monatlich",
+                            "intervalCode": "1",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "vierteljährlich",
+                            "intervalCode": "3",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "halbjährlich",
+                            "intervalCode": "6",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "jährlich",
+                            "intervalCode": "12",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        }
+                    ],
+                    "maxPriceLimitation": 180000,
+                    "objectCode": "73",
+                    "objectCodeExternal": "Test"
                 }
             ],
-            advantages: [],
-            devices: expectedIntervalPremiumsForKS
+            "documents": [
+                {
+                    "documentId": "1234",
+                    "documentTitle": "GTCI.pdf",
+                    "documentType": "GTCI"
+                },
+                {
+                    "documentId": "1234",
+                    "documentTitle": "IPID.pdf",
+                    "documentType": "IPID"
+                },
+                {
+                    "documentId": "1234",
+                    "documentTitle": "GDPR.pdf",
+                    "documentType": "GDPR"
+                },
+                {
+                    "documentId": "1234",
+                    "documentTitle": "Widerrufsbelehrung für Komplettschutz.pdf",
+                    "documentType": "ROW"
+                }
+            ],
+            "id": "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
+            "name": "Komplettschutz",
+            "productType": "KOMPLETTSCHUTZ_2019",
+            "risks": [
+                "KOMPLETTSCHUTZ"
+            ],
+            "shortName": "Basisschutz"
         },
         {
-            name: "Komplettschutz mit Premium-Option",
-            shortName: "Premiumschutz",
-            id: "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
-            clientId: clientConfig.id,
-            applicationCode: "GU WG DE KS 0419",
-            productType: "KOMPLETTSCHUTZ_2019",
-            defaultPaymentInterval: "monthly",
-            risks: ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"],
-            documents: [
+            "advantages": [
+                "advantage1",
+                "advantage2",
+                "advantage3",
+                "advantage4"
+            ],
+            "applicationCode": "GU WG DE KS 0419",
+            "clientId": clientConfig.id,
+            "defaultPaymentInterval": "monthly",
+            "devices": [
                 {
-                    documentTitle: "GTCI.pdf",
-                    documentType: "GTCI",
-                    documentId: "1234"
+                    "intervals": [
+                        {
+                            "description": "monatlich",
+                            "intervalCode": "1",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "vierteljährlich",
+                            "intervalCode": "3",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "halbjährlich",
+                            "intervalCode": "6",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "jährlich",
+                            "intervalCode": "12",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        }
+                    ],
+                    "maxPriceLimitation": 180000,
+                    "objectCode": "9025",
+                    "objectCodeExternal": "Smartphone"
                 },
                 {
-                    documentTitle: "IPID.pdf",
-                    documentType: "IPID",
-                    documentId: "1234"
-                },
-                {
-                    documentId: "1234",
-                    documentTitle: "GDPR.pdf",
-                    documentType: "GDPR",
-                },
-                {
-                    documentId: "1234",
-                    documentTitle: "Widerrufsbelehrung für Komplettschutz.pdf",
-                    documentType: "ROW",
+                    "intervals": [
+                        {
+                            "description": "monatlich",
+                            "intervalCode": "1",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "vierteljährlich",
+                            "intervalCode": "3",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "halbjährlich",
+                            "intervalCode": "6",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        },
+                        {
+                            "description": "jährlich",
+                            "intervalCode": "12",
+                            "priceRangePremiums": [
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 30000,
+                                    "minClose": 0
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 80000,
+                                    "minClose": 30000
+                                },
+                                {
+                                    "insurancePremium": 2340,
+                                    "maxOpen": 180001,
+                                    "minClose": 80000
+                                }
+                            ]
+                        }
+                    ],
+                    "maxPriceLimitation": 180000,
+                    "objectCode": "73",
+                    "objectCodeExternal": "Test"
                 }
             ],
-            advantages: [],
-            devices: expectedIntervalPremiumsForKS
+            "documents": [
+                {
+                    "documentId": "1234",
+                    "documentTitle": "GTCI.pdf",
+                    "documentType": "GTCI"
+                },
+                {
+                    "documentId": "1234",
+                    "documentTitle": "IPID.pdf",
+                    "documentType": "IPID"
+                },
+                {
+                    "documentId": "1234",
+                    "documentTitle": "GDPR.pdf",
+                    "documentType": "GDPR"
+                },
+                {
+                    "documentId": "1234",
+                    "documentTitle": "Widerrufsbelehrung für Komplettschutz.pdf",
+                    "documentType": "ROW"
+                }
+            ],
+            "id": "f3125c49-5c7b-41b8-acfe-2dffe91cc3dd",
+            "name": "Komplettschutz mit Premium-Option",
+            "productType": "KOMPLETTSCHUTZ_2019",
+            "risks": [
+                "KOMPLETTSCHUTZ",
+                "DIEBSTAHLSCHUTZ"
+            ],
+            "shortName": "Premiumschutz"
         }
     ]);
 });
