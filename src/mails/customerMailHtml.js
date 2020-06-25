@@ -4,7 +4,8 @@ module.exports = function renderCustomerMailHtml(contractNumber) {
         Kunden in den Testsieger in Sachen Sicherheit, Service und Zufriedenheit setzen.</p>
         
         <p>Wir informieren Sie erneut per E-Mail, sobald wir Ihren Auftrag ${contractNumber} bearbeitet haben und gratulieren zu Ihrer
-        Entscheidung.</p>
+        Entscheidung. <br>
+        Ihr Versicherungsschutz gilt ab dem Ersten des kommenden Monats.</p>
         
         <p>Herzlichst, <br>
         Ihr digitalpersönlicher Auftragsservice</p>
