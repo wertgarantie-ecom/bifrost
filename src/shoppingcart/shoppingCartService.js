@@ -90,7 +90,8 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     };
 
     await repository.persist(checkoutData);
-    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer, checkoutData.test);
+    const isTest = false //TODO replace with checkoutData.test once CwMobile finished testing
+    mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer, isTest);
     metrics.recordSubmitProposalRequest(checkoutData, clientConfig.name);
     return checkoutData;
 };
