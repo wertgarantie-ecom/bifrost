@@ -71,7 +71,6 @@ module.exports.checkoutSchema = {
                 }
             },
             required: [
-                "salutation",
                 "firstname",
                 "lastname",
                 "street",
