@@ -48,7 +48,7 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webserivcesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webservicesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository) {
     purchasedShopProducts.map(product => {
         const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
         delete product.deviceClass;
@@ -59,24 +59,37 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
         throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
     }
 
-    const purchaseResults = await Promise.all(shoppingCart.orders.map(order => {
+    const purchaseResults = await Promise.all(shoppingCart.orders.map(async order => {
+        const purchaseResult = {
+            id: idGenerator(),
+            wertgarantieProductId: order.wertgarantieProduct.id,
+            wertgarantieProductName: order.wertgarantieProduct.name,
+            wertgarantieProductPremium: order.wertgarantieProduct.price,
+            wertgarantieProductPaymentInterval: order.wertgarantieProduct.paymentInterval,
+            deviceClass: order.wertgarantieProduct.deviceClass,
+            shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
+            devicePrice: order.shopProduct.price,
+            shopProduct: order.shopProduct.name,
+        }
         const shopProductIndex = findIndex(purchasedShopProducts, order);
         if (shopProductIndex === -1) {
-            return {
-                id: idGenerator(),
-                wertgarantieProductId: order.wertgarantieProduct.id,
-                wertgarantieProductName: order.wertgarantieProduct.name,
-                deviceClass: order.wertgarantieProduct.deviceClass,
-                shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
-                devicePrice: order.shopProduct.price,
-                success: false,
-                message: "couldn't find matching product in shop cart for wertgarantie product",
-                shopProduct: order.shopProduct.name,
-                availableShopProducts: purchasedShopProducts || []
-            };
+            purchaseResult.success = false;
+            purchaseResult.availableShopProducts = purchasedShopProducts;
+            purchaseResult.message = "couldn't find matching product in shop cart for wertgarantie product";
+            return purchaseResult;
         }
         const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        return _webserviceInsuranceProposalService.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
+        purchaseResult.orderItemId = matchingShopProduct.orderItemId;
+        const backendResult = await webservicesClient.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
+
+        purchaseResult.success = backendResult.success;
+        purchaseResult.message = backendResult.message;
+        purchaseResult.contractNumber = backendResult.contractNumber;
+        purchaseResult.transactionNumber = backendResult.transactionNumber;
+        purchaseResult.backend = backendResult.backend;
+        purchaseResult.backendResponseInfo = backendResult.backendResponseInfo
+
+        return purchaseResult;
     }));
 
 
@@ -92,7 +105,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     await repository.persist(checkoutData);
     const isTest = false //TODO replace with checkoutData.test once CwMobile finished testing
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer, isTest);
-    metrics.recordSubmitProposalRequest(checkoutData, clientConfig.name);
+    metrics.recordSubmitProposal(checkoutData, clientConfig.name);
     return checkoutData;
 };
 

@@ -129,6 +129,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 wertgarantieProduct: {
                     id: "2",
                     name: "Basis",
+                    price: "500",
                     paymentInterval: "monthly",
                     deviceClass: "9025",
                     shopDeviceClass: "Smartphone"
@@ -186,6 +187,8 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
                 "deviceClass": "9025",
                 "devicePrice": "1000",
                 "success": false,
+                "wertgarantieProductPaymentInterval": "monthly",
+                "wertgarantieProductPremium": "500",
                 "message": "couldn't find matching product in shop cart for wertgarantie product",
                 "shopProduct": "IPhone X",
                 "availableShopProducts": [

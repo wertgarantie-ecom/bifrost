@@ -21,16 +21,8 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
         const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
 
         return {
-            id: idGenerator(),
-            wertgarantieProductId: order.wertgarantieProduct.id,
-            wertgarantieProductName: order.wertgarantieProduct.name,
-            deviceClass: order.wertgarantieProduct.deviceClass,
-            shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
-            devicePrice: order.shopProduct.price,
-            orderItemId: matchingShopProduct.orderItemId,
             success: true,
             message: "successfully transmitted insurance proposal",
-            shopProduct: order.shopProduct.name,
             contractNumber: contractnumber,
             transactionNumber: satznummer,
             backend: "webservices",
@@ -43,15 +35,8 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
     } catch (e) {
         console.error(e);
         return {
-            id: idGenerator(),
-            wertgarantieProductId: order.wertgarantieProduct.id,
-            wertgarantieProductName: order.wertgarantieProduct.name,
-            orderItemId: order.shopProduct.orderItemId,
-            deviceClass: order.shopProduct.deviceClass,
-            devicePrice: order.shopProduct.price,
             success: false,
             message: e.message,
-            shopProduct: order.shopProduct.name,
             backend: "webservices",
         };
     }

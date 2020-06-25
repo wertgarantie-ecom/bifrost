@@ -108,22 +108,15 @@ test("should submit insurance proposal", async () => {
     const result = await webservicesInsuranceProposalService.submitInsuranceProposal(productOrder, customer, purchasedProduct, clientConfig, mockWebservicesClient, mockWebservicesProductOffersRepository, satznummerGenerator);
     expect(result).toEqual({
         "backend": "webservices",
-        "contractNumber": "12345678",
-        "deviceClass": "9025",
-        "shopDeviceClass": "Smartphone",
-        "devicePrice": 139999,
-        "id": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
-        "message": "successfully transmitted insurance proposal",
-        "shopProduct": "Smartphone 11x",
-        "success": true,
-        "transactionNumber": "dd2209dc-fa26-444d-b1ce-2995b9340aac",
-        "wertgarantieProductId": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
-        "wertgarantieProductName": "Komplettschutz",
         "backendResponseInfo": {
-            "statusText": "Verarbeitet",
+            "requestId": "98889510",
             "statusCode": "3",
-            "requestId": "98889510"
-        }
+            "statusText": "Verarbeitet"
+        },
+        "contractNumber": "12345678",
+        "message": "successfully transmitted insurance proposal",
+        "success": true,
+        "transactionNumber": "dd2209dc-fa26-444d-b1ce-2995b9340aac"
     });
 });
 

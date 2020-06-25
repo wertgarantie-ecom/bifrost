@@ -33,23 +33,27 @@ function activeMetricsSender(dogstatsD) {
     const incrementShowComponentRequest = (componentName, componentDisplayData, clientName) => {
         return incrementComponentRequest(componentName, "show", componentDisplayData ? "show" : "hide", clientName)
     }
-    const recordSubmitProposalRequest = (checkoutData, clientName) => {
+    const recordSubmitProposal = (checkoutData, clientName) => {
         // shop checkouts count: by supported device class | by insured (wertgarantie product attached)
-        // wie viele Anträge werden erstellt
-        // wertgarantie checkouts count: by deviceClass | by productName
-        // umsatz: prämien count: by interval | normalized to one year
-        const result = checkoutData.purchases.length === 0 ? 'no_proposals' : 'proposals_created';
-        const tags = [`test:${checkoutData.test}`,
-            `result:${result}`,
-            `client:${clientName}`];
-        dogstatsD.increment('bifrost.proposals', checkoutData.purchases.length, tags);
+        checkoutData.purchases
+            .forEach(purchase => {
+                const tags = [
+                    `test:${checkoutData.test}`,
+                    `deviceClass:${purchase.deviceClass}`,
+                    `paymentInterval:${purchase.wertgarantieProductPaymentInterval}`,
+                    `productName:${purchase.wertgarantieProductName}`,
+                    `success:${purchase.success}`,
+                    `client:${clientName}`];
+                dogstatsD.increment('bifrost.proposals', 1, tags);
+                dogstatsD.increment('bifrost.proposals.premiums', purchase.wertgarantieProductPremium, tags);
+            })
     }
 
     return {
         increment,
         incrementShowComponentRequest,
         incrementComponentRequest,
-        recordSubmitProposalRequest
+        recordSubmitProposal
     }
 }
 
@@ -60,7 +64,7 @@ function devNullMetricsSender() {
         increment: identity,
         incrementShowComponentRequest: identity,
         incrementComponentRequest: identity,
-        recordSubmitProposalRequest: identity
+        recordSubmitProposal: identity
     }
 
 }
