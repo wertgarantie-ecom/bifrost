@@ -60,6 +60,7 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                 }],
                 customer: {
                     company: "INNOQ",
+                    salutation: null,
                     firstname: "Max",
                     lastname: "Mustermann",
                     street: "Unter den Linden",

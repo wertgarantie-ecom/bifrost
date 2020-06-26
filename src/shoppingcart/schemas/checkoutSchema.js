@@ -46,7 +46,7 @@ module.exports.checkoutSchema = {
                     type: "string"
                 },
                 salutation: {
-                    type: "string"
+                    type: ["string", null]
                 },
                 firstname: {
                     type: "string"
