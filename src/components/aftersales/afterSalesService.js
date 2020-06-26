@@ -41,6 +41,9 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
 }
 
 exports.checkout = async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+    if (!shoppingCart) {
+        return undefined;
+    }
     const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientConfig, shoppingCart.sessionId);
     if (!sessionIdValid) {
         throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");

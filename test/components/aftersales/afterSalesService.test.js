@@ -70,3 +70,8 @@ test('should return failed orders', async () => {
     expect(result).toEqual(undefined);
 });
 
+test('should return undefined for missing wertgarantie shopping cart', async () => {
+
+    const result = await afterSalesService.checkout(undefined);
+    expect(result).toBe(undefined);
+})
