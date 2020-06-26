@@ -49,6 +49,7 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
 };
 
 exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webservicesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository) {
+    trimCustomerNames(customer);
     purchasedShopProducts.map(product => {
         const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
         delete product.deviceClass;
@@ -108,6 +109,11 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     metrics.recordSubmitProposal(checkoutData, clientConfig.name);
     return checkoutData;
 };
+
+function trimCustomerNames(customer) {
+    customer.lastname = customer.lastname.trim();
+    customer.firstname = customer.firstname.trim();
+}
 
 
 exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(id, shoppingCart, clientName) {
