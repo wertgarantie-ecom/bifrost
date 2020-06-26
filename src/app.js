@@ -25,18 +25,7 @@ const adminUIRoutes = require('./routes/adminUIRoutes');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(expressWinston.logger({
-    transports: [
-        new winston.transports.Console()
-    ],
-    format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-    ),
-    requestWhitelist: [...expressWinston.requestWhitelist, "body"],
-    expressFormat: true,
-    colorize: true,
-}));
+app.use(setUpAccessLogger());
 app.use(express.json());
 app.use(localeParser, localeFilter);
 app.use(express.urlencoded({extended: false}));
@@ -115,5 +104,22 @@ app.use(function (err, req, res, next) {
         message: err.message
     });
 });
+
+function setUpAccessLogger() {
+    const stage = process.env.NODE_ENV;
+    const format = (stage === 'local' || stage === 'dockerlocal') ? winston.format.simple() : winston.format.json();
+    return expressWinston.logger({
+        transports: [
+            new winston.transports.Console()
+        ],
+        format: winston.format.combine(
+            winston.format.colorize(),
+            format
+        ),
+        requestWhitelist: [...expressWinston.requestWhitelist, "body"],
+        expressFormat: true,
+        colorize: true,
+    })
+}
 
 module.exports = app;
