@@ -1,5 +1,6 @@
 const service = require('./selectionEmbeddedService');
 const ClientError = require('../../errors/ClientError');
+const shoppingCartService = require('../../shoppingcart/shoppingCartService');
 
 exports.getProducts = async function getProducts(req, res, next) {
     const shopDeviceClasses = req.body.deviceClass ? req.body.deviceClass : req.body.deviceClasses;
@@ -19,6 +20,36 @@ exports.getProducts = async function getProducts(req, res, next) {
     }
 };
 
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res, next) {
+    try {
+        const updatedShoppingCart = await service.removeProductFromShoppingCart(req.body.wertgarantieProductId, req.shoppingCart, req.clientConfig.name, req.body.orderItemId, req.body.devicePrice);
+
+        if (updatedShoppingCart) {
+            return res.status(200).send({
+                shoppingCart: updatedShoppingCart,
+                message: `OrderId ${req.body.ordreId} removed from shoppingCart`
+            });
+        } else {
+            return sendEmptyShoppingCart(res);
+        }
+    } catch (error) {
+        return next(error);
+    }
+};
+
+exports.updateProductForOrderId = async function updateProductForOrderId(req, res, next) {
+    try {
+        const updatedShoppingCart = shoppingCartService.updateShoppingCart(req.shoppingCart, req.body.orderId, req.body.shopProduct, req.body.wertgarantieProduct);
+        return res.status(200).send({
+            shoppingCart: updatedShoppingCart,
+            message: `Updated OrderId ${req.body.orderId}`,
+            newProduct: req.body.wertgarantieProduct
+        });
+    } catch (error) {
+        return next(error);
+    }
+};
+
 exports.registerProductSelected = async function registerProductSelected(req, res) {
     // const selectedProduct = req.body;
     // metrics here
@@ -31,4 +62,9 @@ exports.registerProductUnselected = async function registerProductUnselected(req
     // metrics here
     res.sendStatus(204);
 };
+
+function sendEmptyShoppingCart(res) {
+    res.set('X-wertgarantie-shopping-cart-delete', true);
+    res.sendStatus(204);
+}
 

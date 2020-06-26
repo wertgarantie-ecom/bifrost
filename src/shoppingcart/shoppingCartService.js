@@ -116,22 +116,15 @@ function trimCustomerNames(customer) {
 }
 
 
-exports.removeProductFromShoppingCart = function removeProductFromShoppingCart(id, shoppingCart, clientName) {
-    if (!shoppingCart) {
-        return undefined;
-    }
-    for (var i = 0; i < shoppingCart.orders.length; i++) {
-        if (shoppingCart.orders[i].id === id) {
-            const tags = [
-                `client:${clientName}`,
-                `product:${shoppingCart.order[i].wertgarantieProduct.name}`
-            ]
-            metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
-            shoppingCart.orders.splice(i, 1);
-            i--;
+exports.updateShoppingCart = function updateShoppingCart(shoppingCart, orderId, shopProduct, wertgarantieProduct) {
+    shoppingCart.orders = shoppingCart.orders.map(order => {
+        if (order.id === orderId) {
+            order.shopProduct = shopProduct;
+            order.wertgarantieProduct = wertgarantieProduct;
         }
-    }
-    return shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+        return order;
+    });
+    return shoppingCart
 };
 
 exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgarantieShoppingCart, shopShoppingCart, clientConfig, productOfferService = _productOfferService) {
@@ -253,8 +246,8 @@ function newShoppingCart(clientId) {
     };
 }
 
-async function updateLockPrices(result, productOffersService = _productOfferService) {
-    const lockPrices = await Promise.all(result.orders.map(async order => {
+async function updateLockPrices(shoppingCart, productOffersService = _productOfferService) {
+    const lockPrices = await Promise.all(shoppingCart.orders.map(async order => {
         const productOffer = await productOffersService.getProductOfferById(order.wertgarantieProduct.id);
         if (productOffer.lock) {
             return productOffersService.getMinimumLockPriceForProduct(productOffer, order.shopProduct.price);
@@ -263,23 +256,29 @@ async function updateLockPrices(result, productOffersService = _productOfferServ
     }));
     const newLockPrice = _.max(lockPrices);
     if (!newLockPrice) {
-        delete result.confirmations.lockConfirmed;
-        delete result.confirmations.requiredLockPrice;
+        delete shoppingCart.confirmations.lockConfirmed;
+        delete shoppingCart.confirmations.requiredLockPrice;
     } else {
-        const currentLockPrice = result.confirmations.requiredLockPrice;
+        const currentLockPrice = shoppingCart.confirmations.requiredLockPrice;
         if (currentLockPrice !== newLockPrice) {
-            result.confirmations.requiredLockPrice = newLockPrice;
-            result.confirmations.lockConfirmed = false;
+            shoppingCart.confirmations.requiredLockPrice = newLockPrice;
+            shoppingCart.confirmations.lockConfirmed = false;
         }
     }
 }
+exports.updateLockPrices = updateLockPrices;
 
-exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(id, shoppingCart, productOffersService = _productOfferService) {
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(id, shoppingCart, clientName, productOffersService = _productOfferService) {
     if (!shoppingCart) {
         return undefined;
     }
     for (var i = 0; i < shoppingCart.orders.length; i++) {
         if (shoppingCart.orders[i].id === id) {
+            const tags = [
+                `client:${clientName}`,
+                `product:${shoppingCart.orders[i].wertgarantieProduct.name}`
+            ]
+            metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
             shoppingCart.orders.splice(i, 1);
             i--;
         }

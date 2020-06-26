@@ -361,6 +361,20 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 "maxOpen": 400000
                             }
                         ],
+                        "lock": {
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 100001,
+                                    "requiredLockPrice": 1900
+                                },
+                                {
+                                    "minClose": 100001,
+                                    "maxOpen": 400001,
+                                    "requiredLockPrice": 4900
+                                }
+                            ]
+                        },
                         "deviceClasses": [
                             {
                                 "objectCode": "27",
@@ -414,6 +428,15 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 "maxOpen": 600000
                             }
                         ],
+                        "lock": {
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 600001,
+                                    "requiredLockPrice": 4900
+                                }
+                            ]
+                        },
                         "deviceClasses": [
                             {
                                 "objectCode": "270009",
@@ -473,6 +496,15 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                                 "maxOpen": 600000
                             }
                         ],
+                        "lock": {
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 600001,
+                                    "requiredLockPrice": 4900
+                                }
+                            ]
+                        },
                         "deviceClasses": [
                             {
                                 "objectCode": "270009",

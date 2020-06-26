@@ -1,6 +1,7 @@
 const _productImageService = require('../../images/productImageService');
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
+const shoppingCartService = require("../../shoppingcart/shoppingCartService");
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const documentTypes = require("../../documents/documentTypes").documentTypes;
 const schema = require('../selectionembedded/selectionEmbeddedResponseSchema').selectionEmbeddedResponseSchema;
@@ -47,9 +48,6 @@ async function prepareProductSelectionData(shopDeviceClassesString,
     return result.instance;
 }
 
-exports.prepareProductSelectionData = prepareProductSelectionData;
-
-
 function convertPayloadToSelectionEmbeddedProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {
     const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);
     productOffer.payment = displayableProductOffer.getPaymentInterval();
@@ -75,3 +73,29 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer, imageLink, allPr
         imageLink: imageLink
     }
 }
+
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(productId, shoppingCart, clientName, orderItemId, devicePrice, productOffersService = _productOffersService) {
+    if (!shoppingCart) {
+        return undefined;
+    }
+    for (var i = 0; i < shoppingCart.orders.length; i++) {
+        const order = shoppingCart.orders[i];
+        if (order.wertgarantieProduct.id === productId && order.shopProduct.orderItemId === orderItemId && order.shopProduct.price === devicePrice) {
+            const tags = [
+                `client:${clientName}`,
+                `product:${shoppingCart.orders[i].wertgarantieProduct.name}`
+            ];
+            metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
+            shoppingCart.orders.splice(i, 1);
+            i--;
+        }
+    }
+    const result = shoppingCart.orders.length > 0 ? shoppingCart : undefined;
+    if (result && result.confirmations.requiredLockPrice) {
+        await shoppingCartService.updateLockPrices(result, productOffersService);
+    }
+    return result;
+};
+
+exports.prepareProductSelectionData = prepareProductSelectionData;
+
