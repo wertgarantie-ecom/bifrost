@@ -856,7 +856,7 @@ test("should update lock price if product is deleted from shopping cart and chea
         }
     };
 
-    const result = await service.removeProductFromShoppingCart(orderIdToDelete, currentShoppingCart, mockProductOfferServiceBike);
+    const result = await service.removeProductFromShoppingCart(orderIdToDelete, currentShoppingCart, "testClient", mockProductOfferServiceBike);
     expect(result.orders.length).toEqual(1);
     expect(result.confirmations.requiredLockPrice).toEqual(1900);
 });
