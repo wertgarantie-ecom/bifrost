@@ -2,7 +2,8 @@ const request = require('supertest');
 const app = require('../../../src/app');
 const testhelper = require('../../helper/fixtureHelper');
 const webservicesProductOffersAssembler = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
-const mockWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig();
+const mockPhoneWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClientWithPhoneConfig();
+const mockBikeWebservicesClient = require('../../../test/helpers/webserviceMockClient').createMockWebserviceClientWithBikeConfig();
 
 beforeAll(() => {
     process.env = Object.assign(process.env, {BACKEND: "webservices"});
@@ -10,7 +11,7 @@ beforeAll(() => {
 
 test('should return proper product data', async () => {
     const clientData = await testhelper.createAndPersistPhoneClientWithWebservicesConfiguration();
-    const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockWebservicesClient);
+    const productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockPhoneWebservicesClient);
 
     const expectedStatusCode = 200;
     const result = await request(app).put(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-embedded`).send({
@@ -95,4 +96,63 @@ test('should return proper product data', async () => {
             ]
         }
     ]);
+});
+
+describe("should add, update and delete product from shopping cart on product selection click", () => {
+    let clientData;
+    let productOffers;
+    let signedShoppingCart;
+    it("should update product in existing shopping cart", async () => {
+        clientData = await testhelper.createAndPersistBikeClientWithWebservicesConfiguration();
+        productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockBikeWebservicesClient);
+        signedShoppingCart = testhelper.createSignedShoppingCart({
+            publicClientId: clientData.publicClientIds[0],
+            wertgarantieProductId: productOffers[0].id
+        });
+        const orderToChange = signedShoppingCart.shoppingCart.orders[0];
+        const result = await request(app).post(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-embedded/product`).send({
+            orderId: orderToChange.id,
+            shopProduct: {
+                deviceClass: orderToChange.shopProduct.deviceClass,
+                name: orderToChange.shopProduct.name,
+                orderItemId: orderToChange.shopProduct.orderItemId,
+                price: orderToChange.shopProduct.price
+            },
+            wertgarantieProduct: {
+                deviceClass: "27",
+                id: productOffers[0].id,
+                name: "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                paymentInterval: "yearly",
+                price: 2340,
+                shopDeviceClass: "Bike"
+            },
+            signedShoppingCart: signedShoppingCart
+        });
+        expect(result.body.signedShoppingCart.shoppingCart.orders.length).toEqual(1);
+        expect(result.body.signedShoppingCart.shoppingCart.orders[0].wertgarantieProduct).toEqual({
+            deviceClass: "27",
+            id: productOffers[0].id,
+            name: "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+            paymentInterval: "yearly",
+            price: 2340,
+            shopDeviceClass: "Bike"
+        });
+        expect(result.body.signedShoppingCart.signature).not.toEqual(signedShoppingCart.signature);
+    });
+
+    it("should delete product from existing shopping cart", async () => {
+        clientData = await testhelper.createAndPersistBikeClientWithWebservicesConfiguration();
+        productOffers = await webservicesProductOffersAssembler.updateAllProductOffersForClient(clientData, undefined, mockBikeWebservicesClient);
+        signedShoppingCart = testhelper.createSignedShoppingCart({
+            publicClientId: clientData.publicClientIds[0],
+            wertgarantieProductId: productOffers[0].id
+        });
+        const result = await request(app).delete(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-embedded/product`).send({
+            wertgarantieProductId: signedShoppingCart.shoppingCart.orders[0].wertgarantieProduct.id,
+            orderItemId: signedShoppingCart.shoppingCart.orders[0].shopProduct.orderItemId,
+            devicePrice: signedShoppingCart.shoppingCart.orders[0].shopProduct.price,
+            signedShoppingCart: signedShoppingCart
+        });
+        expect(result.status).toEqual(204);
+    });
 });
