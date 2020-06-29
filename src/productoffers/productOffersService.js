@@ -19,7 +19,7 @@ async function getProductOfferById(productOfferId, webserviceProductOffersReposi
 async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, productOffersRepository = _webserviceProductOffersRepository) {
     let productOffers;
     const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price)
+    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price);
 
     if (!offerCount) {
         return productOffers;
@@ -79,6 +79,18 @@ function getMinimumLockPriceForProduct(webservicesProductOffer, price) {
     return lockPriceRange.requiredLockPrice;
 }
 
+function getPriceRange(webservicesProductOffer, price) {
+    const interval = webservicesProductOffer.device.intervals[0];
+    const priceRangePremium = _.find(interval.priceRangePremiums, priceRangePremium => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen);
+    if (!priceRangePremium) {
+        return undefined;
+    }
+    return {
+        minClose: priceRangePremium.minClose,
+        maxOpen: priceRangePremium.maxOpen
+    }
+}
+
 function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
     return {
         id: webservicesProductOffer.id,
@@ -88,6 +100,7 @@ function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
         defaultPaymentInterval: webservicesProductOffer.defaultPaymentInterval,
         deviceClass: webservicesProductOffer.device.objectCode,
         shopDeviceClass: webservicesProductOffer.device.objectCodeExternal,
+        priceRange: getPriceRange(webservicesProductOffer, price),
         prices: getPricesForWebservicesProductOffer(webservicesProductOffer, price),
         documents: webservicesProductOffer.documents.map(document => {
             return {

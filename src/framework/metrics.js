@@ -1,3 +1,4 @@
+const _ = require('lodash');
 var StatsD = require('hot-shots');
 
 let metricsSender;
@@ -29,12 +30,13 @@ function activeMetricsSender(dogstatsD) {
             `result:${result}`,
             `client:${clientName}`];
         dogstatsD.increment(`bifrost.requests.components`, 1, tags);
-    }
+    };
     const incrementShowComponentRequest = (componentName, componentDisplayData, clientName) => {
         return incrementComponentRequest(componentName, "show", componentDisplayData ? "show" : "hide", clientName)
-    }
+    };
     const recordSubmitProposal = (checkoutData, clientName) => {
         // shop checkouts count: by supported device class | by insured (wertgarantie product attached)
+
         checkoutData.purchases
             .forEach(purchase => {
                 const tags = [
@@ -47,13 +49,31 @@ function activeMetricsSender(dogstatsD) {
                 dogstatsD.increment('bifrost.proposals', 1, tags);
                 dogstatsD.increment('bifrost.proposals.premiums', purchase.wertgarantieProductPremium, tags);
             })
-    }
+    };
+
+    const recordShopCheckout = async (purchasedShopProducts, clientConfig, productOffersService) => {
+        await Promise.all(purchasedShopProducts.map(async shopProduct => {
+            const productOffers = await productOffersService.getProductOffers(clientConfig, shopProduct.deviceClasses , shopProduct.price, 2);
+            let isInsurable = false;
+            let priceRange = "none";
+            if (productOffers) {
+                isInsurable = true;
+                priceRange = productOffers[0].priceRange.minClose + " - " + productOffers[0].priceRange.maxOpen;
+            }
+            const tags = [
+                `insurable:${isInsurable}`,
+                `priceRange:${priceRange}`,
+                `client:${clientConfig.name}`];
+            dogstatsD.increment('bifrost.shop.purchasedProducts', 1, tags)
+        }));
+    };
 
     return {
         increment,
         incrementShowComponentRequest,
         incrementComponentRequest,
-        recordSubmitProposal
+        recordSubmitProposal,
+        recordShopCheckout
     }
 }
 
@@ -64,7 +84,8 @@ function devNullMetricsSender() {
         increment: identity,
         incrementShowComponentRequest: identity,
         incrementComponentRequest: identity,
-        recordSubmitProposal: identity
+        recordSubmitProposal: identity,
+        recordShopCheckout: identity
     }
 
 }

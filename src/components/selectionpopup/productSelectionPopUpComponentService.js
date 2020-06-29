@@ -21,7 +21,7 @@ exports.showSelectionPopUpComponent = async function showSelectionPopUpComponent
     const result = await prepareProductSelectionData(shopDeviceClasses, devicePrice, clientConfig, locale, orderItemId, shoppingCart, offeredOrderItemIds);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
     return result;
-}
+};
 
 async function prepareProductSelectionData(shopDeviceClasses,
                                            devicePrice,

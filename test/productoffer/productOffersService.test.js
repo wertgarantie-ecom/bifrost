@@ -29,6 +29,10 @@ test("test webservices product offer conversion", async () => {
                 ],
                 "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
                 "name": "Komplettschutz",
+                "priceRange": {
+                    "maxOpen": 80001,
+                    "minClose": 30001
+                },
                 "prices": {
                     "halfYearly": {
                         "currency": "EUR",
@@ -70,6 +74,10 @@ test("test webservices product offer conversion", async () => {
                 ],
                 "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
                 "name": "Komplettschutz mit Premium-Option",
+                "priceRange": {
+                    "maxOpen": 80001,
+                    "minClose": 30001
+                },
                 "prices": {
                     "halfYearly": {
                         "currency": "EUR",

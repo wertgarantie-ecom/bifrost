@@ -35,4 +35,4 @@ exports.orderSchema = {
         "shopProduct",
         "id"
     ]
-}
+};

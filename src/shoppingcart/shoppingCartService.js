@@ -48,18 +48,18 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webservicesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webservicesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository, productOffersService = _productOfferService) {
     trimCustomerNames(customer);
     purchasedShopProducts.map(product => {
         const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
         delete product.deviceClass;
         product.deviceClasses = deviceClasses;
-    })
+    });
     const confirmations = shoppingCart.confirmations;
     if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
         throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
     }
-
+    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
     const purchaseResults = await Promise.all(shoppingCart.orders.map(async order => {
         const purchaseResult = {
             id: idGenerator(),
@@ -71,7 +71,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
             shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
             devicePrice: order.shopProduct.price,
             shopProduct: order.shopProduct.name,
-        }
+        };
         const shopProductIndex = findIndex(purchasedShopProducts, order);
         if (shopProductIndex === -1) {
             purchaseResult.success = false;
