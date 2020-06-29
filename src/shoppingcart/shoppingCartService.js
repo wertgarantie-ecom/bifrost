@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 const _ = require('lodash');
+const signatureService = require('../shoppingcart/signatureService');
 const checkoutRepository = require('./checkoutRepository');
 const _webserviceInsuranceProposalService = require('../backends/webservices/webservicesInsuranceProposalService');
 const ClientError = require('../errors/ClientError');
@@ -48,52 +49,80 @@ exports.unconfirmAttribute = function unconfirmAttribute(shoppingCart, confirmat
     return clone;
 };
 
-exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, webservicesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository, productOffersService = _productOfferService) {
+exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShopProducts, customer, shopOrderId, shoppingCart, clientConfig, encryptedSessionId, webservicesClient = _webserviceInsuranceProposalService, idGenerator = uuid, repository = checkoutRepository, productOffersService = _productOfferService) {
+    correctDeviceClasses(purchasedShopProducts);
+    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
+
+    if (!shoppingCart) {
+        return undefined;
+    }
+
+    verifySessionId(encryptedSessionId, clientConfig, shoppingCart);
+    verifyConfirmations(shoppingCart);
     trimCustomerNames(customer);
+
+    const purchaseResults = await Promise.all(shoppingCart.orders.map(order => checkoutOrder(order, purchasedShopProducts, customer, clientConfig, idGenerator, webservicesClient)));
+    return handlePurchaseResults(purchaseResults, shoppingCart, customer, clientConfig, shopOrderId, repository);
+};
+
+function verifySessionId(encryptedSessionId, clientConfig, shoppingCart) {
+    if (encryptedSessionId) {
+        const sessionIdValid = signatureService.verifySessionId(encryptedSessionId, clientConfig, shoppingCart.sessionId);
+        if (!sessionIdValid) {
+            throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");
+        }
+    }
+}
+
+function verifyConfirmations(shoppingCart) {
+    const confirmations = shoppingCart.confirmations;
+    if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
+        throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
+    }
+}
+
+async function checkoutOrder(order, purchasedShopProducts, customer, clientConfig, idGenerator, webservicesClient) {
+    const purchaseResult = {
+        id: idGenerator(),
+        wertgarantieProductId: order.wertgarantieProduct.id,
+        wertgarantieProductName: order.wertgarantieProduct.name,
+        wertgarantieProductPremium: order.wertgarantieProduct.price,
+        wertgarantieProductPaymentInterval: order.wertgarantieProduct.paymentInterval,
+        deviceClass: order.wertgarantieProduct.deviceClass,
+        shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
+        devicePrice: order.shopProduct.price,
+        shopProduct: order.shopProduct.name,
+    };
+    const shopProductIndex = findIndex(purchasedShopProducts, order);
+    if (shopProductIndex === -1) {
+        purchaseResult.success = false;
+        purchaseResult.availableShopProducts = purchasedShopProducts;
+        purchaseResult.message = "couldn't find matching product in shop cart for wertgarantie product";
+        return purchaseResult;
+    }
+    const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
+    purchaseResult.orderItemId = matchingShopProduct.orderItemId;
+    const backendResult = await webservicesClient.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
+
+    purchaseResult.success = backendResult.success;
+    purchaseResult.message = backendResult.message;
+    purchaseResult.contractNumber = backendResult.contractNumber;
+    purchaseResult.transactionNumber = backendResult.transactionNumber;
+    purchaseResult.backend = backendResult.backend;
+    purchaseResult.backendResponseInfo = backendResult.backendResponseInfo
+
+    return purchaseResult;
+}
+
+function correctDeviceClasses(purchasedShopProducts) {
     purchasedShopProducts.map(product => {
         const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
         delete product.deviceClass;
         product.deviceClasses = deviceClasses;
     });
-    const confirmations = shoppingCart.confirmations;
-    if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
-        throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
-    }
-    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
-    const purchaseResults = await Promise.all(shoppingCart.orders.map(async order => {
-        const purchaseResult = {
-            id: idGenerator(),
-            wertgarantieProductId: order.wertgarantieProduct.id,
-            wertgarantieProductName: order.wertgarantieProduct.name,
-            wertgarantieProductPremium: order.wertgarantieProduct.price,
-            wertgarantieProductPaymentInterval: order.wertgarantieProduct.paymentInterval,
-            deviceClass: order.wertgarantieProduct.deviceClass,
-            shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
-            devicePrice: order.shopProduct.price,
-            shopProduct: order.shopProduct.name,
-        };
-        const shopProductIndex = findIndex(purchasedShopProducts, order);
-        if (shopProductIndex === -1) {
-            purchaseResult.success = false;
-            purchaseResult.availableShopProducts = purchasedShopProducts;
-            purchaseResult.message = "couldn't find matching product in shop cart for wertgarantie product";
-            return purchaseResult;
-        }
-        const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        purchaseResult.orderItemId = matchingShopProduct.orderItemId;
-        const backendResult = await webservicesClient.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
+}
 
-        purchaseResult.success = backendResult.success;
-        purchaseResult.message = backendResult.message;
-        purchaseResult.contractNumber = backendResult.contractNumber;
-        purchaseResult.transactionNumber = backendResult.transactionNumber;
-        purchaseResult.backend = backendResult.backend;
-        purchaseResult.backendResponseInfo = backendResult.backendResponseInfo
-
-        return purchaseResult;
-    }));
-
-
+async function handlePurchaseResults(purchaseResults, shoppingCart, customer, clientConfig, shopOrderId, repository) {
     const checkoutData = {
         sessionId: shoppingCart.sessionId,
         shopOrderId: shopOrderId,
@@ -108,7 +137,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     mailSender.sendCheckoutMails(clientConfig.name, clientConfig.email, checkoutData.purchases, checkoutData.shopOrderId, customer, isTest);
     metrics.recordSubmitProposal(checkoutData, clientConfig.name);
     return checkoutData;
-};
+}
 
 function trimCustomerNames(customer) {
     customer.lastname = customer.lastname.trim();
@@ -266,6 +295,7 @@ async function updateLockPrices(shoppingCart, productOffersService = _productOff
         }
     }
 }
+
 exports.updateLockPrices = updateLockPrices;
 
 exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(id, shoppingCart, clientName, productOffersService = _productOfferService) {

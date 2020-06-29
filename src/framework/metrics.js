@@ -35,8 +35,6 @@ function activeMetricsSender(dogstatsD) {
         return incrementComponentRequest(componentName, "show", componentDisplayData ? "show" : "hide", clientName)
     };
     const recordSubmitProposal = (checkoutData, clientName) => {
-        // shop checkouts count: by supported device class | by insured (wertgarantie product attached)
-
         checkoutData.purchases
             .forEach(purchase => {
                 const tags = [
@@ -53,7 +51,7 @@ function activeMetricsSender(dogstatsD) {
 
     const recordShopCheckout = async (purchasedShopProducts, clientConfig, productOffersService) => {
         await Promise.all(purchasedShopProducts.map(async shopProduct => {
-            const productOffers = await productOffersService.getProductOffers(clientConfig, shopProduct.deviceClasses , shopProduct.price, 2);
+            const productOffers = await productOffersService.getProductOffers(clientConfig, shopProduct.deviceClasses, shopProduct.price, 2);
             let isInsurable = false;
             let priceRange = "none";
             if (productOffers) {

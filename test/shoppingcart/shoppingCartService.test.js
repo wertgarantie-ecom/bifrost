@@ -169,6 +169,7 @@ test("on checkout call shop price differs from wertgarantie price", async () => 
         undefined,
         wertgarantieShoppingCart,
         clientConfig,
+        undefined,
         mockClient,
         generateIds(["2fcb053d-873c-4046-87e4-bbd75566901d"]),
         mockRepository);
@@ -860,3 +861,9 @@ test("should update lock price if product is deleted from shopping cart and chea
     expect(result.orders.length).toEqual(1);
     expect(result.confirmations.requiredLockPrice).toEqual(1900);
 });
+
+test('should return undefined for missing wertgarantie shopping cart', async () => {
+
+    const result = await service.checkoutShoppingCart([], {}, undefined, undefined, {});
+    expect(result).toBe(undefined);
+})
