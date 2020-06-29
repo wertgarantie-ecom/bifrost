@@ -72,6 +72,6 @@ test('should return failed orders', async () => {
 
 test('should return undefined for missing wertgarantie shopping cart', async () => {
 
-    const result = await afterSalesService.checkout(undefined);
+    const result = await afterSalesService.checkoutAndShowAfterSalesComponent(undefined, {});
     expect(result).toBe(undefined);
 })

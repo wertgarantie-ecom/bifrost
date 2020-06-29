@@ -40,7 +40,13 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
     };
 }
 
-exports.checkout = async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfterSalesComponent(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+    const result = await checkout(shoppingCart, clientConfig, webshopData, locale, productImageService, clientComponentTextService);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    return result;
+};
+
+async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     if (!shoppingCart) {
         return undefined;
     }
@@ -50,8 +56,5 @@ exports.checkout = async function checkout(shoppingCart, clientConfig, webshopDa
     }
 
     const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig);
-    const result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
-    const metricsResult = result ? 'display_proposals' : 'no_proposals';
-    metrics.incrementComponentRequest(component.name, "checkout", metricsResult, clientConfig.name);
-    return result;
-};
+    return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+}
