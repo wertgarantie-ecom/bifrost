@@ -46,5 +46,5 @@ exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfter
 
 async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig, webshopData.encryptedSessionId);
-    return getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+    return checkoutData ? getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) : undefined;
 }
