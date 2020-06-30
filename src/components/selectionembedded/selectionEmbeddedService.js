@@ -10,9 +10,9 @@ const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 const metrics = require('../../framework/metrics')();
 
-exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart) {
+exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, userAgent) {
     const result = await prepareProductSelectionData(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart);
-    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
 

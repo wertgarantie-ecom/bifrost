@@ -10,6 +10,7 @@ const localeParser = require('express-locale')();
 const localeFilter = require('./framework/localeRequestFilter');
 const expressWinston = require('express-winston');
 const winston = require('winston');
+const useragent = require('express-useragent');
 
 const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
 dotenv.config({path: resolvedPath});
@@ -24,6 +25,7 @@ const adminUIRoutes = require('./routes/adminUIRoutes');
 
 const app = express();
 
+app.use(useragent.express());
 app.use(bodyParser.json());
 app.use(setUpAccessLogger());
 app.use(express.json());

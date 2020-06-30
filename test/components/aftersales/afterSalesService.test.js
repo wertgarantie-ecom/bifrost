@@ -34,7 +34,7 @@ test('should return proper after sales data for checkout data', async () => {
             }
         }
     };
-    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', 'de', checkoutRepository, productImageService, clientComponentTextService);
+    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', 'de', undefined, checkoutRepository, productImageService, clientComponentTextService);
     expect(result.texts.success.title).toEqual('Länger Freude am Einkauf');
     expect(result.texts.success.subtitle).toEqual('Folgende Geräte werden übermittelt');
     expect(result.texts.success.contractNumber).toEqual('Auftragsnummer:');
@@ -66,7 +66,7 @@ test('should return failed orders', async () => {
         }
     };
 
-    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', "de", checkoutRepository, undefined, clientComponentTextService);
+    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', "de", undefined, checkoutRepository, undefined, clientComponentTextService);
     expect(result).toEqual(undefined);
 });
 

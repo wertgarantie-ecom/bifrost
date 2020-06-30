@@ -16,10 +16,11 @@ exports.showSelectionPopUpComponent = async function showSelectionPopUpComponent
                                                                                  locale = "de",
                                                                                  orderItemId,
                                                                                  shoppingCart,
-                                                                                 offeredOrderItemIds) {
+                                                                                 offeredOrderItemIds,
+                                                                                 userAgent) {
     const shopDeviceClasses = shopDeviceClassesString.split(',');
     const result = await prepareProductSelectionData(shopDeviceClasses, devicePrice, clientConfig, locale, orderItemId, shoppingCart, offeredOrderItemIds);
-    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
 

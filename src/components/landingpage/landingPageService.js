@@ -2,7 +2,7 @@ const metrics = require('../../framework/metrics')();
 const component = require('../components').components.landingpage;
 
 
-exports.showLandingPage = async function showLandingPage(clientConfig) {
+exports.showLandingPage = async function showLandingPage(clientConfig, userAgent) {
     const result = {
         headImageLink: 'https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/landing-page/Banner_clean.png',
         textSections: {
@@ -13,7 +13,7 @@ exports.showLandingPage = async function showLandingPage(clientConfig) {
             bottom: bottom
         }
     }
-    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
 

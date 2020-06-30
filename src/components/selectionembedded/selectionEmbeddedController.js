@@ -10,7 +10,7 @@ exports.getProducts = async function getProducts(req, res, next) {
     const devicePrice = req.body.devicePrice;
 
     try {
-        const result = await service.getProductOffers(shopDeviceClasses, devicePrice, req.clientConfig, req.locale.language, req.shoppingCart);
+        const result = await service.getProductOffers(shopDeviceClasses, devicePrice, req.clientConfig, req.locale.language, req.shoppingCart, req.useragent);
         if (result.products.length > 0) {
             return res.status(200).send(result);
         }

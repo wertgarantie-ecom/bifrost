@@ -14,9 +14,10 @@ const metrics = require('../../framework/metrics')();
 exports.showConfirmationComponent = async function showConfirmationComponent(wertgarantieShoppingCart,
                                                                              clientConfig,
                                                                              shopShoppingCart,
-                                                                             locale = 'de') {
+                                                                             locale = 'de',
+                                                                             userAgent) {
     const result = await prepareConfirmationData(wertgarantieShoppingCart, clientConfig, shopShoppingCart, locale);
-    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
 

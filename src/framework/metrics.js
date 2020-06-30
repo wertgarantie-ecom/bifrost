@@ -24,15 +24,17 @@ function metrics() {
 
 function activeMetricsSender(dogstatsD) {
     const increment = (metrik, count, tags) => dogstatsD.increment(metrik, count, tags)
-    const incrementComponentRequest = (componentName, request, result, clientName) => {
+    const incrementComponentRequest = (componentName, request, result, clientName, userAgent) => {
+        let userAgentTag = userAgent.isDesktop ? 'desktop' : userAgent.isTablet ? 'tablet' : userAgent.isMobile ? 'mobile' : 'unknown';
         const tags = [`component:${componentName}`,
             `request:${request}`,
             `result:${result}`,
+            `userAgent:${userAgentTag}`,
             `client:${clientName}`];
         dogstatsD.increment(`bifrost.requests.components`, 1, tags);
     };
-    const incrementShowComponentRequest = (componentName, componentDisplayData, clientName) => {
-        return incrementComponentRequest(componentName, "show", componentDisplayData ? "show" : "hide", clientName)
+    const incrementShowComponentRequest = (componentName, componentDisplayData, clientName, userAgent) => {
+        return incrementComponentRequest(componentName, "show", componentDisplayData ? "show" : "hide", clientName, userAgent)
     };
     const recordSubmitProposal = (checkoutData, clientName) => {
         checkoutData.purchases

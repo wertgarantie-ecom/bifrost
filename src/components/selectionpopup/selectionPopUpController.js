@@ -13,7 +13,7 @@ exports.getProducts = async function getProducts(req, res, next, service = _serv
     const offeredOrderItemIds = req.body.offeredOrderItemIds;
 
     try {
-        const result = await service.showSelectionPopUpComponent(shopDeviceClasses, devicePrice, req.clientConfig, req.locale.language, orderItemId, req.shoppingCart, offeredOrderItemIds);
+        const result = await service.showSelectionPopUpComponent(shopDeviceClasses, devicePrice, req.clientConfig, req.locale.language, orderItemId, req.shoppingCart, offeredOrderItemIds, req.useragent);
         return result
             ? res.status(200).send(result)
             : res.status(204).send("could not assemple exactly two product offers");

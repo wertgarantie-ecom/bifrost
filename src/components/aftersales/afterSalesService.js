@@ -5,7 +5,7 @@ const component = require('../components').components.aftersales;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const metrics = require('../../framework/metrics')();
 
-exports.showAfterSalesComponent = async function showAfterSalesComponent(sessionId, clientName, locale = 'de', checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+exports.showAfterSalesComponent = async function showAfterSalesComponent(sessionId, clientName, locale = 'de', userAgent, checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const checkoutData = await checkoutRepository.findBySessionId(sessionId);
     let result = undefined;
     if (!checkoutData) {
@@ -13,7 +13,7 @@ exports.showAfterSalesComponent = async function showAfterSalesComponent(session
     } else {
         result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
     }
-    metrics.incrementShowComponentRequest(component.name, result, clientName);
+    metrics.incrementShowComponentRequest(component.name, result, clientName, userAgent);
     return result
 };
 
@@ -38,9 +38,9 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
     };
 }
 
-exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfterSalesComponent(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfterSalesComponent(shoppingCart, clientConfig, webshopData, locale = 'de', userAgent, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
     const result = await checkout(shoppingCart, clientConfig, webshopData, locale, productImageService, clientComponentTextService);
-    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name);
+    metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
 
