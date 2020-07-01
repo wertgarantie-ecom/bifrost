@@ -8,10 +8,6 @@ const clientData = {
     publicClientIds: ["public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"]
 };
 
-const productImagesServiceMock = {
-    getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
-};
-
 const mockProductOfferService = {
     getProductOffers: () => productOffersTestResponses.productOffersPhone
 };
@@ -21,13 +17,14 @@ const mockComponentTextsService = {
 };
 
 test("should prepare correct product offers", async () => {
-    const result = await selectionEmbeddedService.prepareProductSelectionData("Smartphone", 90000, clientData, "de", undefined, mockProductOfferService, productImagesServiceMock, mockComponentTextsService);
+    const result = await selectionEmbeddedService.prepareProductSelectionData("Smartphone", 90000, clientData, "de", undefined, mockProductOfferService, mockComponentTextsService);
     expect(result.texts.footerHtml).toEqual("Versicherung ist Vertrauenssache, deshalb setzt Testshop neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>");
     expect(result.products.length).toEqual(2);
     expect(result.products[0]).toEqual({
         "paymentInterval": "monatl.",
         "deviceClass": "9025",
         "shopDeviceClass": "Smartphone",
+        "backgroundStyle": "primary",
         "intervalCode": "monthly",
         "id": "9338a770-0d0d-4203-8d54-583a03bdebf3",
         "name": "Komplettschutz",
@@ -79,13 +76,14 @@ test("should prepare correct product offers", async () => {
         "priceFormatted": "8,00 €",
         "price": 800,
         "taxFormatted": "(inkl. 1,28 € VerSt**)",
-        "imageLink": "imageLink1"
+        "productImageLink": "imageLink"
     });
     expect(result.products[1]).toEqual({
         "paymentInterval": "monatl.",
         "intervalCode": "monthly",
         "deviceClass": "9025",
         "shopDeviceClass": "Smartphone",
+        "backgroundStyle": "secondary",
         "id": "bb91b2de-cbb9-49e8-a3a5-1b6e8296403d",
         "name": "Komplettschutz mit Premium-Option",
         "shortName": "Premiumschutz",
@@ -136,6 +134,6 @@ test("should prepare correct product offers", async () => {
         "priceFormatted": "9,95 €",
         "price": 995,
         "taxFormatted": "(inkl. 1,59 € VerSt**)",
-        "imageLink": "imageLink2"
+        "productImageLink": "imageLink"
     });
 });

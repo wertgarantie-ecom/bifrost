@@ -14,7 +14,9 @@ module.exports.productOffersConfigSchema = {
             "advantages",
             "defaultPaymentInterval",
             "priceRanges",
-            "risks"
+            "risks",
+            "productImageLink",
+            "backgroundStyle"
         ],
         "properties": {
             "name": {
@@ -95,6 +97,16 @@ module.exports.productOffersConfigSchema = {
                 "items": {
                     "type": "string"
                 }
+            },
+            "productImageLink": {
+                "type": "string"
+            },
+            "backgroundStyle": {
+                "type": "string",
+                "enum": [
+                    "primary",
+                    "secondary"
+                ]
             },
             "lock": lockSchema
         }

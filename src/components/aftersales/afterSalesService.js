@@ -1,31 +1,32 @@
 const defaultCheckoutRepository = require('../../shoppingcart/checkoutRepository');
 const shoppingCartService = require('../../shoppingcart/shoppingCartService');
-const _productImageService = require('../../images/productImageService');
 const component = require('../components').components.aftersales;
+const signatureService = require('../../shoppingcart/signatureService');
+const ClientError = require('../../errors/ClientError');
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const metrics = require('../../framework/metrics')();
 
-exports.showAfterSalesComponent = async function showAfterSalesComponent(sessionId, clientName, locale = 'de', userAgent, checkoutRepository = defaultCheckoutRepository, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
+exports.showAfterSalesComponent = async function showAfterSalesComponent(sessionId, clientName, locale = 'de', userAgent, checkoutRepository = defaultCheckoutRepository, clientComponentTextService = _clientComponentTextService) {
     const checkoutData = await checkoutRepository.findBySessionId(sessionId);
-    let result = undefined;
+    let result;
     if (!checkoutData) {
         result = undefined;
     } else {
-        result = getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService);
+        result = getAfterSalesDataForCheckoutData(checkoutData, locale, clientComponentTextService);
     }
     metrics.incrementShowComponentRequest(component.name, result, clientName, userAgent);
     return result
 };
 
-async function getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) {
+async function getAfterSalesDataForCheckoutData(checkoutData, locale, clientComponentTextService) {
     const successfulOrders = [];
     checkoutData.purchases.filter(purchase => purchase.success).map(checkoutItem => {
-        const imageLink = productImageService.getRandomImageLinksForDeviceClass(checkoutItem.shopDeviceClass, 1)[0];
         successfulOrders.push({
             insuranceProductTitle: checkoutItem.wertgarantieProductName,
             productTitle: checkoutItem.shopProduct,
             contractNumber: checkoutItem.contractNumber,
-            imageLink: imageLink
+            productImageLink: checkoutItem.productImageLink,
+            backgroundStyle: checkoutItem.backgroundStyle
         });
     });
     if (successfulOrders.length === 0) {
@@ -38,13 +39,21 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, productIma
     };
 }
 
-exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfterSalesComponent(shoppingCart, clientConfig, webshopData, locale = 'de', userAgent, productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
-    const result = await checkout(shoppingCart, clientConfig, webshopData, locale, productImageService, clientComponentTextService);
+exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfterSalesComponent(shoppingCart, clientConfig, webshopData, locale = 'de', userAgent, clientComponentTextService = _clientComponentTextService) {
+    const result = await checkout(shoppingCart, clientConfig, webshopData, locale, clientComponentTextService);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
 
-async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', productImageService = _productImageService, clientComponentTextService = _clientComponentTextService) {
-    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig, webshopData.encryptedSessionId);
-    return checkoutData ? getAfterSalesDataForCheckoutData(checkoutData, locale, productImageService, clientComponentTextService) : undefined;
+async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', clientComponentTextService = _clientComponentTextService) {
+    if (!shoppingCart) {
+        return undefined;
+    }
+    const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientConfig, shoppingCart.sessionId);
+    if (!sessionIdValid) {
+        throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");
+    }
+
+    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig);
+    return getAfterSalesDataForCheckoutData(checkoutData, locale, clientComponentTextService);
 }

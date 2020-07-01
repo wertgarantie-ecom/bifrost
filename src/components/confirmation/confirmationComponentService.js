@@ -1,7 +1,6 @@
 const productOfferFormattingService = require('../../productoffers/productOfferFormattingService');
 const _productOfferService = require('../../productoffers/productOffersService');
 const documentTypes = require('../../documents/documentTypes').documentTypes;
-const _productImageService = require('../../images/productImageService');
 const component = require('../components').components.confirmation;
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const confirmationResponseSchema = require('./confirmationResponseSchema').confirmationResponseSchema;
@@ -26,7 +25,6 @@ async function prepareConfirmationData(wertgarantieShoppingCart,
                                        shopShoppingCart,
                                        locale = 'de',
                                        productOfferService = _productOfferService,
-                                       productImageService = _productImageService,
                                        clientComponentTextService = _clientComponentTextService,
                                        shoppingCartService = _shoppingCartService) {
     if (!wertgarantieShoppingCart) {
@@ -64,7 +62,7 @@ async function prepareConfirmationData(wertgarantieShoppingCart,
 
     for (var i = 0; i < updatedWertgarantieShoppingCart.orders.length; i++) {
         const order = updatedWertgarantieShoppingCart.orders[i];
-        const confirmationProductData = await getConfirmationProductData(order, clientConfig, locale, productOfferService, productImageService, componentTexts, idsOfProductsWithPriceChange);
+        const confirmationProductData = await getConfirmationProductData(order, clientConfig, locale, productOfferService, componentTexts, idsOfProductsWithPriceChange);
         if (confirmationProductData) {
             result.orders.push(confirmationProductData.product);
             avbHref = confirmationProductData.avbHref;
@@ -92,7 +90,7 @@ async function prepareConfirmationData(wertgarantieShoppingCart,
 
 exports.prepareConfirmationData = prepareConfirmationData;
 
-async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, productImageService = _productImageService, componentTexts, listOfUpdates) {
+async function getConfirmationProductData(order, client, locale, productOfferService = _productOfferService, componentTexts, listOfUpdates) {
     const productOffers = (await productOfferService.getProductOffers(client, [order.wertgarantieProduct.shopDeviceClass], order.shopProduct.price));
     const productIndex = _.findIndex(productOffers, productOffer => productOffer.id === order.wertgarantieProduct.id);
     if (productIndex !== -1) {
@@ -109,7 +107,8 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
                 top3: matchingOffer.advantages.splice(0, 3),
                 IPIDUri: IPID.uri,
                 IPIDText: IPID.name,
-                productBackgroundImageLink: productImageService.getRandomImageLinksForDeviceClass(order.wertgarantieProduct.shopDeviceClass, 1)[0],
+                productImageLink: matchingOffer.productImageLink,
+                backgroundStyle: matchingOffer.backgroundStyle,
                 shopProductShortName: order.shopProduct.name,
                 orderId: order.id,
                 updated: listOfUpdates.find(updatedId => updatedId === order.id) !== undefined
@@ -119,7 +118,6 @@ async function getConfirmationProductData(order, client, locale, productOfferSer
             GDPRHref: productOfferFormatter.getDocument(documentTypes.GENERAL_DATA_PROTECTION_REGULATION).uri
         };
     }
-
     return undefined
 }
 

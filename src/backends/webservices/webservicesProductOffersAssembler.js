@@ -65,6 +65,8 @@ async function assembleProductOffer(session, productOfferConfig, clientId, allWe
         documents: await getDocuments(session, productOfferConfig, webservicesClient, documentRepository),
         advantages: productOfferConfig.advantages,
         devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient),
+        productImageLink: productOfferConfig.productImageLink,
+        backgroundStyle: productOfferConfig.backgroundStyle,
         lock: productOfferConfig.lock
     };
 }

@@ -1,4 +1,3 @@
-const _productImageService = require('../../images/productImageService');
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
 const documentTypes = require("../../documents/documentTypes").documentTypes;
@@ -32,7 +31,6 @@ async function prepareProductSelectionData(shopDeviceClasses,
                                            shoppingCart,
                                            offeredOrderItemIds = [],
                                            productOffersService = _productOffersService,
-                                           productImageService = _productImageService,
                                            clientComponentTextService = _clientComponentTextService) {
     if (orderItemId) {
         if (offeredOrderItemIds.includes(orderItemId)) {
@@ -51,13 +49,8 @@ async function prepareProductSelectionData(shopDeviceClasses,
         return undefined;
     }
     const products = [];
-    let imageLinks = [];
-    imageLinks = productImageService.getRandomImageLinksForDeviceClass(productOffers[0].shopDeviceClass, productOffers.length);
     const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
-    productOffers.forEach((offer, idx) => {
-        const product = convertPayloadToSelectionPopUpProduct(offer, imageLinks[idx], productOffers, locale, popUpTexts);
-        products.push(product);
-    });
+    products.push(...productOffers.map(offer => convertPayloadToSelectionPopUpProduct(offer, productOffers, locale, popUpTexts)));
     this.products = products;
 
     const data = {
@@ -75,7 +68,7 @@ async function prepareProductSelectionData(shopDeviceClasses,
 exports.prepareProductSelectionData = prepareProductSelectionData;
 
 
-function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {
+function convertPayloadToSelectionPopUpProduct(productOffer, allProductOffers, locale, popUpTexts) {
     const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);
     productOffer.payment = displayableProductOffer.getPaymentInterval();
 
@@ -96,7 +89,8 @@ function convertPayloadToSelectionPopUpProduct(productOffer, imageLink, allProdu
         priceFormatted: displayableProductOffer.getPriceFormatted(locale),
         price: productOffer.prices[productOffer.defaultPaymentInterval].netAmount,
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
-        imageLink: imageLink
+        productImageLink: productOffer.productImageLink,
+        backgroundStyle: productOffer.backgroundStyle
     }
 }
 

@@ -7,9 +7,6 @@ const clientComponentTextService = {
 
 test('should return proper after sales data for checkout data', async () => {
     const sessionId = "0b511572-3aa3-4706-8146-d109693cfe37";
-    const productImageService = {
-        getRandomImageLinksForDeviceClass: () => ['linkToProductImage']
-    };
     const checkoutRepository = {
         findBySessionId: () => {
             return {
@@ -28,13 +25,15 @@ test('should return proper after sales data for checkout data', async () => {
                         shopProduct: "Flash Handy 3000 Pro",
                         contractNumber: 28850277,
                         transactionNumber: 28850277,
-                        activationCode: "4db56dacfbhce"
+                        activationCode: "4db56dacfbhce",
+                        backgroundStyle: "primary",
+                        productImageLink: "linkToProductImage"
                     }
                 ]
             }
         }
     };
-    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', 'de', undefined, checkoutRepository, productImageService, clientComponentTextService);
+    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', 'de', undefined, checkoutRepository, clientComponentTextService);
     expect(result.texts.success.title).toEqual('Länger Freude am Einkauf');
     expect(result.texts.success.subtitle).toEqual('Folgende Geräte werden übermittelt');
     expect(result.texts.success.contractNumber).toEqual('Auftragsnummer:');
@@ -45,7 +44,8 @@ test('should return proper after sales data for checkout data', async () => {
         "insuranceProductTitle": "Premium",
         "productTitle": "Flash Handy 3000 Pro",
         "contractNumber": 28850277,
-        "imageLink": "linkToProductImage"
+        "productImageLink": "linkToProductImage",
+        "backgroundStyle": "primary"
     });
 });
 
@@ -66,7 +66,11 @@ test('should return failed orders', async () => {
         }
     };
 
-    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', "de", undefined, checkoutRepository, undefined, clientComponentTextService);
+    const result = await afterSalesService.showAfterSalesComponent(sessionId, 'test shop', "de", undefined, checkoutRepository, clientComponentTextService);
     expect(result).toEqual(undefined);
 });
 
+test('should return undefined for missing wertgarantie shopping cart', async () => {
+    const result = await afterSalesService.checkoutAndShowAfterSalesComponent(undefined, {});
+    expect(result).toBe(undefined);
+});

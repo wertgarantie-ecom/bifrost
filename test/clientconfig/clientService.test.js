@@ -28,6 +28,8 @@ test('should create client with valid offers config', async () => {
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
                         defaultPaymentInterval: "monthly",
+                        backgroundStyle: "primary",
+                        productImageLink: "imageLink",
                         priceRanges: [
                             {
                                 minClose: 0,

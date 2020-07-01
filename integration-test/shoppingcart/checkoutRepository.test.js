@@ -47,7 +47,6 @@ describe("test persist and find by session in checkout repository", () => {
         done();
     });
 
-
     test('should retrieve all persisted sessions', async (done) => {
         const result = await checkoutRepository.findAll(2);
         const expectedResult = [

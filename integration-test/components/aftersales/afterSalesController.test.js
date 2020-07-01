@@ -86,9 +86,10 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
         expect(resultBody.successfulOrders.length).toEqual(1);
         expect(resultBody.successfulOrders[0]).toEqual({
             "contractNumber": "123234234",
-            "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
             "insuranceProductTitle": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
-            "productTitle": "SuperBike 3000"
+            "productTitle": "SuperBike 3000",
+            "backgroundStyle": "primary",
+            "productImageLink": "productImageLink"
         });
 
         expect(result.get('X-wertgarantie-shopping-cart-delete')).toBe("true");
@@ -172,9 +173,10 @@ describe("Check Checkout via after sales component ", () => {
         expect(resultBody.successfulOrders.length).toEqual(1);
         expect(resultBody.successfulOrders[0]).toEqual({
             "contractNumber": "123234234",
-            "imageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Basis.png",
             "insuranceProductTitle": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
-            "productTitle": "SuperBike 3000"
+            "productTitle": "SuperBike 3000",
+            "backgroundStyle": "primary",
+            "productImageLink": "productImageLink"
         });
 
         expect(result.get('X-wertgarantie-shopping-cart-delete')).toBe("true");

@@ -31,7 +31,8 @@ exports.selectionEmbeddedResponseSchema = {
                     "priceFormatted",
                     "price",
                     "taxFormatted",
-                    "imageLink"
+                    "productImageLink",
+                    "backgroundStyle"
                 ],
                 "properties": {
                     "id": {
@@ -79,8 +80,15 @@ exports.selectionEmbeddedResponseSchema = {
                     "taxFormatted": {
                         "type": "string",
                     },
-                    "imageLink": {
+                    "productImageLink": {
                         "type": "string",
+                    },
+                    "backgroundStyle:": {
+                        "type": "string",
+                        "enum": [
+                            "primary",
+                            "secondary"
+                        ]
                     }
                 }
             }

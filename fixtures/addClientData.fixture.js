@@ -21,6 +21,8 @@ describe('add phone test shop client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Komplettschutz mit Premium-Option",
+                            "backgroundStyle": "primary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test2.jpg",
                             "shortName": "Premiumschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
@@ -76,6 +78,8 @@ describe('add phone test shop client config', () => {
                         },
                         {
                             "name": "Komplettschutz",
+                            "backgroundStyle": "secondary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test3.jpg",
                             "shortName": "Basisschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
@@ -169,6 +173,8 @@ describe('add bike test shop client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+                            "backgroundStyle": "primary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Bike/fahrrad_1.jpg",
                             "shortName": "Variante A",
                             "productType": "KOMPLETTSCHUTZ_RAD_M_2018",
                             "applicationCode": "GU WG DE RAD KS 0818",
@@ -246,6 +252,8 @@ describe('add bike test shop client config', () => {
                         },
                         {
                             "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                            "backgroundStyle": "secondary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Bike/fahrrad_2.jpg",
                             "shortName": "Variante B",
                             "productType": "KOMPLETTSCHUTZ_RAD_J_2018",
                             "applicationCode": "GU WG DE RAD KS 0818",
@@ -322,6 +330,8 @@ describe('add bike test shop client config', () => {
                         },
                         {
                             "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+                            "backgroundStyle": "primary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/E-Bike/ebike_1.jpg",
                             "shortName": "Variante A",
                             "productType": "KOMPLETTSCHUTZ_EBIKE_M_2018",
                             "applicationCode": "GU WG DE RAD EBS 0818",
@@ -391,6 +401,8 @@ describe('add bike test shop client config', () => {
                             "risks": []
                         }, {
                             "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+                            "backgroundStyle": "secondary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/E-Bike/ebike_2.jpg",
                             "shortName": "Variante B",
                             "productType": "KOMPLETTSCHUTZ_EBIKE_J_2018",
                             "applicationCode": "GU WG DE RAD EBS 0818",
@@ -518,6 +530,8 @@ describe('add Handyflash Local test client config', () => {
                     "productOffersConfigurations": [
                         {
                             "name": "Komplettschutz mit Premium-Option",
+                            "backgroundStyle": "primary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test2.jpg",
                             "shortName": "Premiumschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",
@@ -573,6 +587,8 @@ describe('add Handyflash Local test client config', () => {
                         },
                         {
                             "name": "Komplettschutz",
+                            "backgroundStyle": "secondary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test.jpg",
                             "shortName": "Basisschutz",
                             "productType": "KOMPLETTSCHUTZ_2019",
                             "applicationCode": "GU WG DE KS 0419",

@@ -30,7 +30,9 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
                 statusText: submitResult.RESULT.STATUS_TEXT,
                 statusCode: submitResult.RESULT.STATUS_CODE,
                 requestId: submitResult.REQUEST_ID
-            }
+            },
+            productImageLink: productOffer.productImageLink,
+            backgroundStyle: productOffer.backgroundStyle
         };
     } catch (e) {
         console.error(e);
