@@ -24,6 +24,6 @@ exports.getProducts = async function getProducts(req, res, next, service = _serv
 
 exports.popUpCanceled = async function popUpCanceled(req, res) {
     const clientConfig = req.clientConfig;
-    metrics().incrementComponentRequest(selectionpopup, "cancel", "canceled", clientConfig.name);
+    metrics().incrementComponentRequest(selectionpopup, "cancel", "canceled", clientConfig.name, req.useragent);
     return res.sendStatus(204);
 };

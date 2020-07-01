@@ -25,7 +25,12 @@ function metrics() {
 function activeMetricsSender(dogstatsD) {
     const increment = (metrik, count, tags) => dogstatsD.increment(metrik, count, tags)
     const incrementComponentRequest = (componentName, request, result, clientName, userAgent) => {
-        let userAgentTag = userAgent.isDesktop ? 'desktop' : userAgent.isTablet ? 'tablet' : userAgent.isMobile ? 'mobile' : 'unknown';
+        let userAgentTag;
+        if (userAgent) {
+             userAgent = userAgent.isDesktop ? 'desktop' : userAgent.isTablet ? 'tablet' : userAgent.isMobile ? 'mobile' : 'unknown';
+        } else {
+            userAgent = 'unknown';
+        }
         const tags = [`component:${componentName}`,
             `request:${request}`,
             `result:${result}`,
