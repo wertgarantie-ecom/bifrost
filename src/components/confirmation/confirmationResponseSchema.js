@@ -57,7 +57,8 @@ exports.confirmationResponseSchema = {
                     "top3",
                     "IPIDUri",
                     "IPIDText",
-                    "productBackgroundImageLink",
+                    "productImageLink",
+                    "backgroundStyle",
                     "shopProductShortName",
                     "orderId",
                     "updated"
@@ -87,8 +88,15 @@ exports.confirmationResponseSchema = {
                     IPIDText: {
                         type: "string"
                     },
-                    productBackgroundImageLink: {
+                    productImageLink: {
                         type: "string"
+                    },
+                    backgroundStyle: {
+                        type: "string",
+                        enum: [
+                            "primary",
+                            "secondary"
+                        ]
                     },
                     shopProductShortName: {
                         type: "string"

@@ -15,6 +15,8 @@ exports.productOffersPhone =
                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
             ],
             "defaultPaymentInterval": "monthly",
+            "productImageLink": "imageLink",
+            "backgroundStyle": "primary",
             "prices": {
                 "monthly": {
                     "netAmount": 800,
@@ -78,6 +80,8 @@ exports.productOffersPhone =
                 "Geräte bis 12 Monate nach Kaufdatum gelten als Neugeräte",
             ],
             "defaultPaymentInterval": "monthly",
+            "productImageLink": "imageLink",
+            "backgroundStyle": "secondary",
             "prices": {
                 "monthly": {
                     "netAmount": 995,
@@ -146,6 +150,8 @@ exports.productOffersBike = [
         "shortName": "Variante A",
         "deviceClass": "73",
         "shopDeviceClass": "Bike",
+        "productImageLink": "imageLink",
+        "backgroundStyle": "primary",
         "risks": [
             "KOMPLETTSCHUTZ_RAD"
         ],
@@ -362,6 +368,8 @@ exports.productOffersBike = [
         "deviceClass": "73",
         "shopDeviceClass": "Bike",
         "shortName": "Variante B",
+        "productImageLink": "imageLink",
+        "backgroundStyle": "secondary",
         "risks": [
             "KOMPLETTSCHUTZ_RAD"
         ],
@@ -462,6 +470,8 @@ exports.productOffersBike = [
         },
         "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
         "shortName": "Variante A",
+        "productImageLink": "imageLink",
+        "backgroundStyle": "primary",
         "risks": [
             "KOMPLETTSCHUTZ_EBIKE"
         ],
@@ -637,6 +647,8 @@ exports.productOffersBike = [
         },
         "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
         "shortName": "Variante B",
+        "productImageLink": "imageLink",
+        "backgroundStyle": "secondary",
         "risks": [
             "KOMPLETTSCHUTZ_EBIKE"
         ],
@@ -728,6 +740,8 @@ exports.productOffersWithoutDocuments = [
         "name": "Komplettschutz",
         "deviceClass": "9025",
         "shopDeviceClass": "Smartphone",
+        "productImageLink": "imageLink",
+        "backgroundStyle": "primary",
         "advantages": [
             "Das schon toll hier",
             "alles wird gut",
@@ -763,6 +777,8 @@ exports.productOffersWithoutDocuments = [
         "name": "Komplettschutz mit Premium-Option",
         "deviceClass": "9025",
         "shopDeviceClass": "Smartphone",
+        "productImageLink": "imageLink",
+        "backgroundStyle": "secondary",
         "advantages": [
             "total geiler diebstahlschutz",
             "was gegen Wasser",

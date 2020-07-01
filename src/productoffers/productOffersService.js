@@ -108,7 +108,9 @@ function getProductOfferWithCorrectPrice(webservicesProductOffer, price) {
                 name: document.documentTitle,
                 uri: `${process.env.BASE_URI}/wertgarantie/documents/${document.documentId}`
             };
-        })
+        }),
+        backgroundStyle: webservicesProductOffer.backgroundStyle,
+        productImageLink: webservicesProductOffer.productImageLink
     }
 }
 

@@ -7,10 +7,6 @@ const productOffersMock = {
     getProductOffers: async () => _.cloneDeep(productOffersTestResponse)
 };
 
-const productImageServiceMock = {
-    getRandomImageLinksForDeviceClass: () => ["imageLink"]
-};
-
 const shoppingCartServiceMock = {
     syncShoppingCart: (wertgarantieShoppingCart) => {
         return {
@@ -75,6 +71,7 @@ const expectedResponse = {
     },
     showPriceChangedWarning: false,
     texts: {
+        boxTitle: undefined,
         title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
@@ -89,7 +86,8 @@ const expectedResponse = {
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
             IPIDUri: 'http://localhost:3000/documents/justnotthere',
             IPIDText: "Informationsblatt für Versicherungsprodukte",
-            productBackgroundImageLink: 'imageLink',
+            productImageLink: 'imageLink',
+            backgroundStyle: "primary",
             shopProductShortName: 'Super Bike',
             updated: false,
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
@@ -102,7 +100,8 @@ const expectedResponse = {
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
             IPIDUri: "http://localhost:3000/documents/justnotthere",
             IPIDText: "Informationsblatt für Versicherungsprodukte",
-            productBackgroundImageLink: 'imageLink',
+            productImageLink: 'imageLink',
+            backgroundStyle: "secondary",
             shopProductShortName: 'Super Bike',
             updated: false,
             orderId: "28ff0413-bcfd-48f8-b003-04b57762067a"
@@ -119,6 +118,7 @@ const updatedShoppingCartExpectedResponse = {
     },
     showPriceChangedWarning: true,
     texts: {
+        boxTitle: undefined,
         title: 'Glückwunsch! Dieser Einkauf wird bestens abgesichert',
         subtitle: 'Bitte bestätige noch kurz:',
         priceChangedWarning: "Der Preis deiner Versicherung hat sich geändert!",
@@ -133,7 +133,8 @@ const updatedShoppingCartExpectedResponse = {
             top3: ["Für private und berufliche Nutzung", "Unsachgemäße Handhabung", "Weltweiter Schutz"],
             IPIDUri: 'http://localhost:3000/documents/justnotthere',
             IPIDText: "Informationsblatt für Versicherungsprodukte",
-            productBackgroundImageLink: 'imageLink',
+            backgroundStyle: "primary",
+            productImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             updated: true,
             orderId: "18ff0413-bcfd-48f8-b003-04b57762067a"
@@ -146,7 +147,8 @@ const updatedShoppingCartExpectedResponse = {
             top3: ["Cyberschutz bei Missbrauch von Online-Accounts und Zahlungsdaten", "Diebstahlschutz", "Keine Selbstbeteiligung im Schadensfall"],
             IPIDUri: "http://localhost:3000/documents/justnotthere",
             IPIDText: "Informationsblatt für Versicherungsprodukte",
-            productBackgroundImageLink: 'imageLink',
+            backgroundStyle: "secondary",
+            productImageLink: 'imageLink',
             shopProductShortName: 'Super Bike',
             updated: true,
             orderId: "28ff0413-bcfd-48f8-b003-04b57762067a"
@@ -161,14 +163,14 @@ test("should return proper confirmation component data for one product", async (
     };
 
 
-    const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, productImageServiceMock, clientComponentTextService, shoppingCartServiceMock);
+    const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, clientComponentTextService, shoppingCartServiceMock);
     expect(confirmationData).toEqual(expectedResponse);
 });
 
 test('should return proper confirmation data for not updated ordered', async () => {
     const order = testShoppingCart.orders[0];
     const listOfUpdatedIds = ["anything"];
-    const orderData = await service.getConfirmationProductData(order, clientData, "de", productOffersMock, productImageServiceMock, defaultConfirmationTextsDE, listOfUpdatedIds);
+    const orderData = await service.getConfirmationProductData(order, clientData, "de", productOffersMock, defaultConfirmationTextsDE, listOfUpdatedIds);
 
     expect(orderData.product.updated).toEqual(false);
 });
@@ -177,7 +179,7 @@ test('should return proper confirmation data for not updated ordered', async () 
 test('should return proper confirmation data for updated ordered', async () => {
     const order = testShoppingCart.orders[0];
     const listOfUpdatedIds = [order.id];
-    const orderData = await service.getConfirmationProductData(order, clientData, "de", productOffersMock, productImageServiceMock, defaultConfirmationTextsDE, listOfUpdatedIds);
+    const orderData = await service.getConfirmationProductData(order, clientData, "de", productOffersMock, defaultConfirmationTextsDE, listOfUpdatedIds);
 
     expect(orderData.product.updated).toEqual(true);
 });
@@ -208,7 +210,7 @@ test("should return proper confirmation component data for updated shoppingCart"
         }
     };
 
-    const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, productImageServiceMock, clientComponentTextService, shoppingCartServiceMock);
+    const confirmationData = await service.prepareConfirmationData(testShoppingCart, clientData, undefined, undefined, productOffersMock, clientComponentTextService, shoppingCartServiceMock);
     expect(confirmationData).toEqual(updatedShoppingCartExpectedResponse);
 });
 

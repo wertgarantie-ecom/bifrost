@@ -343,6 +343,7 @@ test('should update all product offers for client', async () => {
     const result = await webservicesService.updateAllProductOffersForClient(clientConfig, uuid, mockWebservicesClient, mockProductOfferRepo, mockDocumentRepo);
     expect(result).toEqual([
         {
+            "lock": undefined,
             "advantages": [
                 "advantage1",
                 "advantage2",
@@ -351,6 +352,8 @@ test('should update all product offers for client', async () => {
             "applicationCode": "GU WG DE KS 0419",
             "clientId": clientConfig.id,
             "defaultPaymentInterval": "monthly",
+            "backgroundStyle": "primary",
+            "productImageLink": "productImageLink",
             "devices": [
                 {
                     "intervals": [
@@ -566,6 +569,7 @@ test('should update all product offers for client', async () => {
             "shortName": "Basisschutz"
         },
         {
+            "lock": undefined,
             "advantages": [
                 "advantage1",
                 "advantage2",
@@ -575,6 +579,8 @@ test('should update all product offers for client', async () => {
             "applicationCode": "GU WG DE KS 0419",
             "clientId": clientConfig.id,
             "defaultPaymentInterval": "monthly",
+            "backgroundStyle": "secondary",
+            "productImageLink": "productImageLink",
             "devices": [
                 {
                     "intervals": [

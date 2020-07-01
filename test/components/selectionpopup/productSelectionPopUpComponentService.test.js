@@ -3,10 +3,6 @@ const productOffersTestResponses = require("../../productoffer/productOffersTest
 const {createSignedShoppingCart} = require("../../../integration-test/helper/fixtureHelper");
 const selectionPopUpDefaultTexts = require('../../../src/clientconfig/defaultComponentTexts').defaultComponentTexts.selectionpopup.de;
 
-const productImagesServiceMock = {
-    getRandomImageLinksForDeviceClass: () => ["imageLink1", "imageLink2"]
-};
-
 const clientData = {
     name: "bikeShop",
     secrets: ["bikesecret1"],
@@ -28,7 +24,6 @@ test("should return proper product response", async () => {
         undefined,
         undefined,
         mockProductOfferService,
-        productImagesServiceMock,
         mockComponentTextsService);
     const expectedResult = {
         texts: selectionPopUpDefaultTexts,
@@ -41,6 +36,7 @@ test("should return proper product response", async () => {
             shopDeviceClass: "Smartphone",
             priceFormatted: "8,00 €",
             price: 800,
+            backgroundStyle: "primary",
             taxFormatted: "(inkl. 1,28 € VerSt**)",
             top3: [
                 {
@@ -84,7 +80,7 @@ test("should return proper product response", async () => {
             ],
             IPIDText: "Informationsblatt für Versicherungsprodukte",
             IPIDUri: "http://localhost:3000/documents/justnotthere",
-            imageLink: "imageLink1",
+            productImageLink: "imageLink",
             GTCIText: "Allgemeine Versicherungsbedingungen",
             GTCIUri: "http://localhost:3000/documents/justnotthere"
         },
@@ -97,6 +93,7 @@ test("should return proper product response", async () => {
                 shopDeviceClass: "Smartphone",
                 priceFormatted: "9,95 €",
                 price: 995,
+                backgroundStyle: "secondary",
                 taxFormatted: "(inkl. 1,59 € VerSt**)",
                 top3: [
                     {
@@ -140,7 +137,7 @@ test("should return proper product response", async () => {
                 ],
                 IPIDText: "Informationsblatt für Versicherungsprodukte",
                 IPIDUri: "http://localhost:3000/documents/justnotthere",
-                imageLink: "imageLink2",
+                productImageLink: "imageLink",
                 GTCIText: "Allgemeine Versicherungsbedingungen",
                 GTCIUri: "http://localhost:3000/documents/justnotthere"
             }],

@@ -61,6 +61,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     verifyConfirmations(shoppingCart);
     trimCustomerNames(customer);
 
+    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
     const purchaseResults = await Promise.all(shoppingCart.orders.map(order => checkoutOrder(order, purchasedShopProducts, customer, clientConfig, idGenerator, webservicesClient)));
     return handlePurchaseResults(purchaseResults, shoppingCart, customer, clientConfig, shopOrderId, repository);
 };
@@ -106,10 +107,14 @@ async function checkoutOrder(order, purchasedShopProducts, customer, clientConfi
 
     purchaseResult.success = backendResult.success;
     purchaseResult.message = backendResult.message;
-    purchaseResult.contractNumber = backendResult.contractNumber;
-    purchaseResult.transactionNumber = backendResult.transactionNumber;
     purchaseResult.backend = backendResult.backend;
-    purchaseResult.backendResponseInfo = backendResult.backendResponseInfo
+    if (purchaseResult.success) {
+        purchaseResult.contractNumber = backendResult.contractNumber;
+        purchaseResult.transactionNumber = backendResult.transactionNumber;
+        purchaseResult.backendResponseInfo = backendResult.backendResponseInfo;
+        purchaseResult.backgroundStyle = backendResult.backgroundStyle;
+        purchaseResult.productImageLink = backendResult.productImageLink;
+    }
 
     return purchaseResult;
 }
@@ -307,7 +312,7 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
             const tags = [
                 `client:${clientName}`,
                 `product:${shoppingCart.orders[i].wertgarantieProduct.name}`
-            ]
+            ];
             metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
             shoppingCart.orders.splice(i, 1);
             i--;

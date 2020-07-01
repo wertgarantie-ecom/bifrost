@@ -47,13 +47,13 @@ const testOptions = {
     testModeLogger: (httpOptions, payload) => {
         console.log('Mail send with payload:' + payload)
     }
-}
+};
 
 const prodOptions = {
     apiKey: process.env.MAILGUN_API_KEY,
     domain: process.env.MAILGUN_DOMAIN,
     host: process.env.MAILGUN_HOST
-}
+};
 
 function isMailEnabled() {
     return process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'production';

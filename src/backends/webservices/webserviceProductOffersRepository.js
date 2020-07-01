@@ -7,7 +7,9 @@ function hashProductOffers(productOffers) {
             documents: offer.documents,
             advantages: offer.advantages,
             devices: offer.devices,
-            lock: offer.lock
+            lock: offer.lock,
+            backgroundStyle: offer.backgroundStyle,
+            productImageLink: offer.productImageLink
         };
     });
 

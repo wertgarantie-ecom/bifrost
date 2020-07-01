@@ -32,6 +32,16 @@ module.exports.productOfferSchema = {
             "type": "string",
             "enum": ["monthly", "quarterly", "halfYearly", "yearly"]
         },
+        "productImageLink": {
+            "type": "string"
+        },
+        "backgroundStyle": {
+            "type": "string",
+            "enum": [
+                "primary",
+                "secondary"
+            ]
+        },
         "documents": {
             "type": "array",
             "items": {

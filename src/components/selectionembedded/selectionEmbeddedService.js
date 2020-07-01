@@ -1,4 +1,3 @@
-const _productImageService = require('../../images/productImageService');
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
 const shoppingCartService = require("../../shoppingcart/shoppingCartService");
@@ -22,18 +21,12 @@ async function prepareProductSelectionData(shopDeviceClassesString,
                                            locale = "de",
                                            shoppingCart,
                                            productOffersService = _productOffersService,
-                                           productImageService = _productImageService,
                                            clientComponentTextService = _clientComponentTextService) {
     const shopDeviceClasses = shopDeviceClassesString.split(',');
     const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice);
     const products = [];
-    let imageLinks = [];
-    imageLinks = productImageService.getRandomImageLinksForDeviceClass(productOffers[0].shopDeviceClass, productOffers.length);
     const selectionEmbeddedTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
-    productOffers.forEach((offer, idx) => {
-        const product = convertPayloadToSelectionEmbeddedProduct(offer, imageLinks[idx], productOffers, locale, selectionEmbeddedTexts);
-        products.push(product);
-    });
+    products.push(...productOffers.map(offer => convertPayloadToSelectionEmbeddedProduct(offer, productOffers, locale, selectionEmbeddedTexts)));
 
     this.products = products;
 
@@ -48,7 +41,7 @@ async function prepareProductSelectionData(shopDeviceClassesString,
     return result.instance;
 }
 
-function convertPayloadToSelectionEmbeddedProduct(productOffer, imageLink, allProductOffers, locale, popUpTexts) {
+function convertPayloadToSelectionEmbeddedProduct(productOffer, allProductOffers, locale, popUpTexts) {
     const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);
     productOffer.payment = displayableProductOffer.getPaymentInterval();
 
@@ -70,7 +63,8 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer, imageLink, allPr
         priceFormatted: displayableProductOffer.getPriceFormatted(locale),
         price: productOffer.prices[productOffer.defaultPaymentInterval].netAmount,
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
-        imageLink: imageLink
+        productImageLink: productOffer.productImageLink,
+        backgroundStyle: productOffer.backgroundStyle
     }
 }
 

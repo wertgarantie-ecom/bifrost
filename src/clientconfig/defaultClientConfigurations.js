@@ -29,6 +29,8 @@ module.exports = {
                             ]
                         },
                         "name": "Fahrrad-Komplettschutz mit monatlicher Zahlweise",
+                        "backgroundStyle": "primary",
+                        "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Bike/fahrrad_1.jpg",
                         "risks": [],
                         "documents": {
                             "legalDocuments": [
@@ -106,6 +108,8 @@ module.exports = {
                             ]
                         },
                         "name": "Fahrrad-Komplettschutz mit jährlicher Zahlweise",
+                        "backgroundStyle": "secondary",
+                        "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Bike/fahrrad_2.jpg",
                         "risks": [],
                         "documents": {
                             "legalDocuments": [
@@ -177,6 +181,8 @@ module.exports = {
                             ]
                         },
                         "name": "E-Bike-Komplettschutz mit monatlicher Zahlweise",
+                        "backgroundStyle": "primary",
+                        "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/E-Bike/ebike_1.jpg",
                         "risks": [],
                         "documents": {
                             "legalDocuments": [
@@ -247,6 +253,8 @@ module.exports = {
                             ]
                         },
                         "name": "E-Bike-Komplettschutz mit jährlicher Zahlweise",
+                        "backgroundStyle": "secondary",
+                        "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/E-Bike/ebike_2.jpg",
                         "risks": [],
                         "documents": {
                             "legalDocuments": [
@@ -316,6 +324,8 @@ module.exports = {
                 "productOffersConfigurations": [
                     {
                         "name": "Komplettschutz mit Premium-Option",
+                        "backgroundStyle": "primary",
+                        "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test.jpg",
                         "shortName": "Premiumschutz",
                         "productType": "KOMPLETTSCHUTZ_2019",
                         "applicationCode": "GU WG DE KS 0419",
@@ -373,6 +383,8 @@ module.exports = {
                     },
                     {
                         "name": "Komplettschutz",
+                        "backgroundStyle": "secondary",
+                        "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/Smartphone/test2.jpg",
                         "shortName": "Basisschutz",
                         "productType": "KOMPLETTSCHUTZ_2019",
                         "applicationCode": "GU WG DE KS 0419",

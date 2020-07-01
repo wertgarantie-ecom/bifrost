@@ -98,7 +98,7 @@ exports.getValidPurchase = function getValidPurchase() {
             activationCode: "a447s7s6666f"
         }
     }
-}
+};
 
 exports.createAndPersistPhoneClientWithWebservicesConfiguration = async function createAndPersistPhoneClientWithWebservicesConfiguration() {
     const addNewClientRequest = this.createDefaultClientWithWebservicesConfiguration();
@@ -113,7 +113,7 @@ exports.createAndPersistBikeClientWithWebservicesConfiguration = async function 
 async function createAndPersistClient(clientConfig) {
     const doNotAssembleProductOffers = {
         updateAllProductOffersForClient: _ => _
-    }
+    };
     return await clientService.addNewClient(clientConfig, undefined, undefined, doNotAssembleProductOffers);
 }
 
@@ -133,6 +133,8 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
                         defaultPaymentInterval: "monthly",
+                        productImageLink: "productImageLink",
+                        backgroundStyle: "primary",
                         priceRanges: [
                             {
                                 minClose: 0,
@@ -176,6 +178,8 @@ exports.createDefaultClientWithWebservicesConfiguration = function createDefault
                         applicationCode: "GU WG DE KS 0419",
                         basicRiskType: "KOMPLETTSCHUTZ",
                         defaultPaymentInterval: "monthly",
+                        productImageLink: "productImageLink",
+                        backgroundStyle: "secondary",
                         priceRanges: [
                             {
                                 minClose: 0,
@@ -258,6 +262,8 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                         "defaultPaymentInterval": "monthly",
+                        "productImageLink": "productImageLink",
+                        "backgroundStyle": "primary",
                         "priceRanges": [
                             {
                                 "minClose": 0,
@@ -335,6 +341,8 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD KS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_RAD",
                         "defaultPaymentInterval": "yearly",
+                        "productImageLink": "productImageLink",
+                        "backgroundStyle": "secondary",
                         "priceRanges": [
                             {
                                 "minClose": 0,
@@ -410,6 +418,8 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                         "defaultPaymentInterval": "monthly",
+                        "productImageLink": "productImageLink",
+                        "backgroundStyle": "primary",
                         "priceRanges": [
                             {
                                 "minClose": 0,
@@ -478,6 +488,8 @@ exports.createBikeClientWithWebservicesConfiguration = function createBikeClient
                         "applicationCode": "GU WG DE RAD EBS 0818",
                         "basicRiskType": "KOMPLETTSCHUTZ_EBIKE",
                         "defaultPaymentInterval": "yearly",
+                        "productImageLink": "productImageLink",
+                        "backgroundStyle": "secondary",
                         "priceRanges": [
                             {
                                 "minClose": 0,
