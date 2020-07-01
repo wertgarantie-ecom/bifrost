@@ -61,6 +61,7 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     verifyConfirmations(shoppingCart);
     trimCustomerNames(customer);
 
+    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
     const purchaseResults = await Promise.all(shoppingCart.orders.map(order => checkoutOrder(order, purchasedShopProducts, customer, clientConfig, idGenerator, webservicesClient)));
     return handlePurchaseResults(purchaseResults, shoppingCart, customer, clientConfig, shopOrderId, repository);
 };
@@ -79,7 +80,6 @@ function verifyConfirmations(shoppingCart) {
     if (!(confirmations && confirmations.termsAndConditionsConfirmed)) {
         throw new ClientError("The wertgarantie shopping hasn't been confirmed by the user");
     }
-<<<<<<< HEAD
 }
 
 async function checkoutOrder(order, purchasedShopProducts, customer, clientConfig, idGenerator, webservicesClient) {
@@ -99,42 +99,6 @@ async function checkoutOrder(order, purchasedShopProducts, customer, clientConfi
         purchaseResult.success = false;
         purchaseResult.availableShopProducts = purchasedShopProducts;
         purchaseResult.message = "couldn't find matching product in shop cart for wertgarantie product";
-=======
-    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
-    const purchaseResults = await Promise.all(shoppingCart.orders.map(async order => {
-        const purchaseResult = {
-            id: idGenerator(),
-            wertgarantieProductId: order.wertgarantieProduct.id,
-            wertgarantieProductName: order.wertgarantieProduct.name,
-            wertgarantieProductPremium: order.wertgarantieProduct.price,
-            wertgarantieProductPaymentInterval: order.wertgarantieProduct.paymentInterval,
-            deviceClass: order.wertgarantieProduct.deviceClass,
-            shopDeviceClass: order.wertgarantieProduct.shopDeviceClass,
-            devicePrice: order.shopProduct.price,
-            shopProduct: order.shopProduct.name,
-        };
-        const shopProductIndex = findIndex(purchasedShopProducts, order);
-        if (shopProductIndex === -1) {
-            purchaseResult.success = false;
-            purchaseResult.availableShopProducts = purchasedShopProducts;
-            purchaseResult.message = "couldn't find matching product in shop cart for wertgarantie product";
-            return purchaseResult;
-        }
-        const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
-        purchaseResult.orderItemId = matchingShopProduct.orderItemId;
-        const backendResult = await webservicesClient.submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig);
-
-        purchaseResult.success = backendResult.success;
-        purchaseResult.message = backendResult.message;
-        purchaseResult.backend = backendResult.backend;
-        if (purchaseResult.success) {
-            purchaseResult.contractNumber = backendResult.contractNumber;
-            purchaseResult.transactionNumber = backendResult.transactionNumber;
-            purchaseResult.backendResponseInfo = backendResult.backendResponseInfo;
-            purchaseResult.backgroundStyle = backendResult.backgroundStyle;
-            purchaseResult.productImageLink = backendResult.productImageLink;
-        }
->>>>>>> SWDBECOM-274 append productImageLink and background style on product offer configuration
         return purchaseResult;
     }
     const matchingShopProduct = purchasedShopProducts.splice(shopProductIndex, 1)[0];
@@ -143,10 +107,14 @@ async function checkoutOrder(order, purchasedShopProducts, customer, clientConfi
 
     purchaseResult.success = backendResult.success;
     purchaseResult.message = backendResult.message;
-    purchaseResult.contractNumber = backendResult.contractNumber;
-    purchaseResult.transactionNumber = backendResult.transactionNumber;
     purchaseResult.backend = backendResult.backend;
-    purchaseResult.backendResponseInfo = backendResult.backendResponseInfo
+    if (purchaseResult.success) {
+        purchaseResult.contractNumber = backendResult.contractNumber;
+        purchaseResult.transactionNumber = backendResult.transactionNumber;
+        purchaseResult.backendResponseInfo = backendResult.backendResponseInfo;
+        purchaseResult.backgroundStyle = backendResult.backgroundStyle;
+        purchaseResult.productImageLink = backendResult.productImageLink;
+    }
 
     return purchaseResult;
 }
@@ -344,7 +312,7 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
             const tags = [
                 `client:${clientName}`,
                 `product:${shoppingCart.orders[i].wertgarantieProduct.name}`
-            ]
+            ];
             metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
             shoppingCart.orders.splice(i, 1);
             i--;

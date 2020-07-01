@@ -863,7 +863,6 @@ test("should update lock price if product is deleted from shopping cart and chea
 });
 
 test('should return undefined for missing wertgarantie shopping cart', async () => {
-
     const result = await service.checkoutShoppingCart([], {}, undefined, undefined, {});
     expect(result).toBe(undefined);
-})
+});
