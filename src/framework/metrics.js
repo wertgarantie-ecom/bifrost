@@ -27,9 +27,9 @@ function activeMetricsSender(dogstatsD) {
     const incrementComponentRequest = (componentName, request, result, clientName, userAgent) => {
         let userAgentTag;
         if (userAgent) {
-             userAgent = userAgent.isDesktop ? 'desktop' : userAgent.isTablet ? 'tablet' : userAgent.isMobile ? 'mobile' : 'unknown';
+            userAgentTag = userAgent.isDesktop ? 'desktop' : userAgent.isTablet ? 'tablet' : userAgent.isMobile ? 'mobile' : 'unknown';
         } else {
-            userAgent = 'unknown';
+            userAgentTag = 'unknown';
         }
         const tags = [`component:${componentName}`,
             `request:${request}`,
