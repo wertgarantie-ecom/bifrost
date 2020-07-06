@@ -61,7 +61,6 @@ exports.checkoutShoppingCart = async function checkoutShoppingCart(purchasedShop
     verifyConfirmations(shoppingCart);
     trimCustomerNames(customer);
 
-    await metrics.recordShopCheckout(purchasedShopProducts, clientConfig, productOffersService);
     const purchaseResults = await Promise.all(shoppingCart.orders.map(order => checkoutOrder(order, purchasedShopProducts, customer, clientConfig, idGenerator, webservicesClient)));
     return handlePurchaseResults(purchaseResults, shoppingCart, customer, clientConfig, shopOrderId, repository);
 };

@@ -1,8 +1,6 @@
 const defaultCheckoutRepository = require('../../shoppingcart/checkoutRepository');
 const shoppingCartService = require('../../shoppingcart/shoppingCartService');
 const component = require('../components').components.aftersales;
-const signatureService = require('../../shoppingcart/signatureService');
-const ClientError = require('../../errors/ClientError');
 const _clientComponentTextService = require('../../clientconfig/clientComponentTextService');
 const metrics = require('../../framework/metrics')();
 
@@ -46,14 +44,6 @@ exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfter
 };
 
 async function checkout(shoppingCart, clientConfig, webshopData, locale = 'de', clientComponentTextService = _clientComponentTextService) {
-    if (!shoppingCart) {
-        return undefined;
-    }
-    const sessionIdValid = signatureService.verifySessionId(webshopData.encryptedSessionId, clientConfig, shoppingCart.sessionId);
-    if (!sessionIdValid) {
-        throw new ClientError("sessionId from shopping cart and webshop do not match! Checkout will not be executed.");
-    }
-
-    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig);
-    return getAfterSalesDataForCheckoutData(checkoutData, locale, clientComponentTextService);
+    const checkoutData = await shoppingCartService.checkoutShoppingCart(webshopData.purchasedProducts, webshopData.customer, webshopData.orderId, shoppingCart, clientConfig, webshopData.encryptedSessionId);
+    return checkoutData ? getAfterSalesDataForCheckoutData(checkoutData, locale, clientComponentTextService) : undefined;
 }
