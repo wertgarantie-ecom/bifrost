@@ -103,9 +103,9 @@ async function getIntervalPremiumsForPriceRanges(session, webservicesProduct, de
             description: interval.DESCRIPTION,
             priceRangePremiums: []
         };
-        // pro Intervall für jede Price Range premiums abfragen
         const priceRangePremiums = await Promise.all(priceRanges.map(async (range) => {
-            const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, range.maxOpen, riskTypes);
+            const requestPrice = Math.round((range.maxOpen + range.minClose) / 2);
+            const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, requestPrice, riskTypes);
             return {
                 minClose: range.minClose,
                 maxOpen: range.maxOpen,

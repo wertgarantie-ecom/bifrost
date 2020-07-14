@@ -6,6 +6,7 @@ const features = require('../src/handbook/features');
 const phoneClientId = "433295ef-ec5d-45d2-8701-d530e44fcf88";
 const bocClientId = "ad0a99e6-a165-4eda-91fc-564fb3f935b4";
 const handFlashClientId = "9302410c-fbbe-44e3-a628-0d42d3944078";
+const ceClientId = "e544fad2-c290-11ea-b918-b3bb267064b0";
 
 describe('add phone test shop client config', () => {
 
@@ -141,6 +142,350 @@ describe('add phone test shop client config', () => {
             ],
             "basicAuthUser": "testshophandy",
             "basicAuthPassword": "testshophandy"
+        };
+
+        const response = await request(app)
+            .get(`/wertgarantie/clients/${validData.id}`)
+            .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+            .set('Accept', 'application/json')
+            .send(validData);
+
+        if (response.status !== 200) {
+            await request(app)
+                .post("/wertgarantie/clients")
+                .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
+                .set('Accept', 'application/json')
+                .send(validData)
+                .expect(200);
+        }
+    });
+});
+
+describe('add ce test shop client config', () => {
+
+    test('should add ce test shop client configuration', async () => {
+        const validData = {
+            "id": ceClientId,
+            "name": "Test Shop CE",
+            "email": "wertgarantie.bifrost@gmail.com",
+            "backends": {
+                "webservices": {
+                    "username": "test-ce-user",
+                    "password": "test-ce-password",
+                    "productOffersConfigurations": [
+                        {
+                            "name": "Komplettschutz mit Premium-Option",
+                            "backgroundStyle": "primary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/CE/ce_auswahl_02.jpg",
+                            "shortName": "Premiumschutz",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 100001
+                                },
+                                {
+                                    "minClose": 100001,
+                                    "maxOpen": 1000001
+                                }
+                            ],
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "25",
+                                    "objectCodeExternal": "366"
+                                },
+                                {
+                                    "objectCode": "26",
+                                    "objectCodeExternal": "208"
+                                },
+                                {
+                                    "objectCode": "30",
+                                    "objectCodeExternal": "130"
+                                },
+                                {
+                                    "objectCode": "30",
+                                    "objectCodeExternal": "5052"
+                                },
+                                {
+                                    "objectCode": "37",
+                                    "objectCodeExternal": "322"
+                                },
+                                {
+                                    "objectCode": "38",
+                                    "objectCodeExternal": "426"
+                                },
+                                {
+                                    "objectCode": "39",
+                                    "objectCodeExternal": "423"
+                                },
+                                {
+                                    "objectCode": "53",
+                                    "objectCodeExternal": "332"
+                                },
+                                {
+                                    "objectCode": "53",
+                                    "objectCodeExternal": "5080"
+                                },
+                                {
+                                    "objectCode": "53",
+                                    "objectCodeExternal": "4983"
+                                },
+                                {
+                                    "objectCode": "56",
+                                    "objectCodeExternal": "315"
+                                },
+                                {
+                                    "objectCode": "59",
+                                    "objectCodeExternal": "190"
+                                },
+                                {
+                                    "objectCode": "60",
+                                    "objectCodeExternal": "5271"
+                                },
+                                {
+                                    "objectCode": "61",
+                                    "objectCodeExternal": "5271"
+                                },
+                                {
+                                    "objectCode": "72",
+                                    "objectCodeExternal": "105"
+                                },
+                                {
+                                    "objectCode": "76",
+                                    "objectCodeExternal": "5272"
+                                },
+                                {
+                                    "objectCode": "77",
+                                    "objectCodeExternal": "371"
+                                },
+                                {
+                                    "objectCode": "88",
+                                    "objectCodeExternal": "5261"
+                                },
+                                {
+                                    "objectCode": "89",
+                                    "objectCodeExternal": "346"
+                                },
+                                {
+                                    "objectCode": "91",
+                                    "objectCodeExternal": "255"
+                                },
+                                {
+                                    "objectCode": "97",
+                                    "objectCodeExternal": "164"
+                                },
+                                {
+                                    "objectCode": "9026",
+                                    "objectCodeExternal": "4692"
+                                },
+                                {
+                                    "objectCode": "9026",
+                                    "objectCodeExternal": "4961"
+                                },
+                                {
+                                    "objectCode": "59005",
+                                    "objectCodeExternal": "219"
+                                },
+                                {
+                                    "objectCode": "59005",
+                                    "objectCodeExternal": "5060"
+                                }
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ]
+                            },
+                            "advantages": [
+                                "Diebstahlschutz",
+                                "ohne Selbstbeteiligung",
+                                "Cyberschutz",
+                                "Materialfehler",
+                                "Konstruktionsfehler",
+                                "Produktionsfehler",
+                                "Arbeitslohn, Ersatzteile, Fahrt- bzw. Versandkosten",
+                                "Ersatzleistung bei Totalschaden",
+                                "Unsachgemäße Handhabung",
+                                "Wasser- / Feuchtigkeitsschäden",
+                                "Überspannung",
+                                "Elektronikschäden",
+                                "Fall- und Sturzschäden",
+                                "Display- / Panel- / Glaskeramik-Bruch",
+                                "Originalzubehör / Fernbedienung im Hersteller-Lieferumfang",
+                                "TV-Einstellarbeiten bei anbieterseitiger Kanalwechsel",
+                                "TV-Software-Updates",
+                                "Verschleiß / Verkalkung",
+                                "Akku-Defekte"
+                            ],
+                            "risks": ["DIEBSTAHLSCHUTZ"]
+                        },
+                        {
+                            "name": "Komplettschutz",
+                            "backgroundStyle": "secondary",
+                            "productImageLink": "https://wertgarantie-bifrost.s3.eu-central-1.amazonaws.com/CE/ce_auswahl_01.jpg",
+                            "shortName": "Basisschutz",
+                            "productType": "KOMPLETTSCHUTZ_2019",
+                            "applicationCode": "GU WG DE KS 0419",
+                            "basicRiskType": "KOMPLETTSCHUTZ",
+                            "defaultPaymentInterval": "monthly",
+                            "priceRanges": [
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 100001
+                                },
+                                {
+                                    "minClose": 100001,
+                                    "maxOpen": 1000001
+                                }
+                            ],
+                            "deviceClasses": [
+                                {
+                                    "objectCode": "25",
+                                    "objectCodeExternal": "366"
+                                },
+                                {
+                                    "objectCode": "26",
+                                    "objectCodeExternal": "208"
+                                },
+                                {
+                                    "objectCode": "30",
+                                    "objectCodeExternal": "130"
+                                },
+                                {
+                                    "objectCode": "30",
+                                    "objectCodeExternal": "5052"
+                                },
+                                {
+                                    "objectCode": "37",
+                                    "objectCodeExternal": "322"
+                                },
+                                {
+                                    "objectCode": "38",
+                                    "objectCodeExternal": "426"
+                                },
+                                {
+                                    "objectCode": "39",
+                                    "objectCodeExternal": "423"
+                                },
+                                {
+                                    "objectCode": "53",
+                                    "objectCodeExternal": "332"
+                                },
+                                {
+                                    "objectCode": "53",
+                                    "objectCodeExternal": "5080"
+                                },
+                                {
+                                    "objectCode": "53",
+                                    "objectCodeExternal": "4983"
+                                },
+                                {
+                                    "objectCode": "56",
+                                    "objectCodeExternal": "315"
+                                },
+                                {
+                                    "objectCode": "59",
+                                    "objectCodeExternal": "190"
+                                },
+                                {
+                                    "objectCode": "60",
+                                    "objectCodeExternal": "5271"
+                                },
+                                {
+                                    "objectCode": "61",
+                                    "objectCodeExternal": "5271"
+                                },
+                                {
+                                    "objectCode": "72",
+                                    "objectCodeExternal": "105"
+                                },
+                                {
+                                    "objectCode": "76",
+                                    "objectCodeExternal": "5272"
+                                },
+                                {
+                                    "objectCode": "77",
+                                    "objectCodeExternal": "371"
+                                },
+                                {
+                                    "objectCode": "88",
+                                    "objectCodeExternal": "5261"
+                                },
+                                {
+                                    "objectCode": "89",
+                                    "objectCodeExternal": "346"
+                                },
+                                {
+                                    "objectCode": "91",
+                                    "objectCodeExternal": "255"
+                                },
+                                {
+                                    "objectCode": "97",
+                                    "objectCodeExternal": "164"
+                                },
+                                {
+                                    "objectCode": "9026",
+                                    "objectCodeExternal": "4692"
+                                },
+                                {
+                                    "objectCode": "9026",
+                                    "objectCodeExternal": "4961"
+                                },
+                                {
+                                    "objectCode": "59005",
+                                    "objectCodeExternal": "219"
+                                },
+                                {
+                                    "objectCode": "59005",
+                                    "objectCodeExternal": "5060"
+                                }
+                            ],
+                            "documents": {
+                                "legalDocuments": [
+                                    documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE,
+                                    documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,
+                                    documentTypes.GENERAL_DATA_PROTECTION_REGULATION,
+                                    documentTypes.RIGHT_OF_WITHDRAWAL
+                                ]
+                            },
+                            "advantages": [
+                                "Materialfehler",
+                                "Konstruktionsfehler",
+                                "Produktionsfehler",
+                                "Arbeitslohn, Ersatzteile, Fahrt- bzw. Versandkosten",
+                                "Ersatzleistung bei Totalschaden",
+                                "Unsachgemäße Handhabung",
+                                "Wasser- / Feuchtigkeitsschäden",
+                                "Überspannung",
+                                "Elektronikschäden",
+                                "Fall- und Sturzschäden",
+                                "Display- / Panel- / Glaskeramik-Bruch",
+                                "Originalzubehör / Fernbedienung im Hersteller-Lieferumfang",
+                                "TV-Einstellarbeiten bei anbieterseitiger Kanalwechsel",
+                                "TV-Software-Updates",
+                                "Verschleiß / Verkalkung",
+                                "Akku-Defekte"
+                            ],
+                            "risks": []
+                        }
+                    ]
+                },
+            },
+            "activePartnerNumber": 11111,
+            "secrets": [
+                "secret:test-ce-secret"
+            ],
+            "publicClientIds": [
+                "public:76b31bb2-c4f7-11ea-9487-6fcbeb12db26"
+            ],
+            "basicAuthUser": "testshopce",
+            "basicAuthPassword": "testshopce"
         };
 
         const response = await request(app)
