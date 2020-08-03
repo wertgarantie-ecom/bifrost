@@ -302,6 +302,10 @@ const deviceClassesConfig = {
         proposalType: proposalType.ce,
         description: "Smart Home Komponente"
     },
+    490128: {
+        proposalType: proposalType.ce,
+        description: "Drucker"
+    },
     270009: {
         proposalType: proposalType.bike,
         description: "E-Bike"
