@@ -20,7 +20,7 @@ exports.insert = async function insert(clientData) {
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: "INSERT INTO client (id, name, email, backends, activePartnerNumber, basicauthuser, basicauthpassword, handbook) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8, $9);",
+            text: "INSERT INTO client (id, name, email, backends, activePartnerNumber, basicauthuser, basicauthpassword, handbook, loaderConfig) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8, $9);",
             values: [
                 clientData.id,
                 clientData.name,
