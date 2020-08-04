@@ -6,6 +6,7 @@ const selectionEmbeddedController = require("../components/selectionembedded/sel
 const confirmationController = require("../components/confirmation/confirmationController");
 const afterSalesController = require("../components/aftersales/afterSalesController");
 const landingPageController = require("../components/landingpage/landingPageController");
+const loaderConfigController = require("../components/loader/loaderConfigController");
 const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppingCartProductSchema").addShoppingCartProductSchema;
 const selectionGetProductsSchema = require("../components/selectiongeneral/selectionGetProductsSchema").selectionPopUpGetProductsSchema;
 const productSelectionClickedSchema = require("../components/selectionembedded/productSelectionClickedSchema").productSelectionClickedSchema;
@@ -43,6 +44,7 @@ router.get("/clients/:publicClientId/components/after-sales/:sessionId", setClie
 router.post("/clients/:publicClientId/components/after-sales/checkout", setClientConfigByPublicClientId, filterAndValidateBase64EncodedWebshopData, afterSalesController.componentCheckout);
 
 router.get("/clients/:publicClientId/components/landing-page", setClientConfigByPublicClientId, landingPageController.getLandingPageData);
+router.get("/clients/:publicClientId/loader-config", setClientConfigByPublicClientId, loaderConfigController.getLoaderConfig);
 
 // shopping cart
 router.post("/clients/:publicClientId/shoppingCart", validate({body: addShoppingCartProductSchema}), setClientConfigByPublicClientId, shoppingCartController.addProductToShoppingCart);
