@@ -141,7 +141,53 @@ describe('add phone test shop client config', () => {
                 "public:5209d6ea-1a6e-11ea-9f8d-778f0ad9137f"
             ],
             "basicAuthUser": "testshophandy",
-            "basicAuthPassword": "testshophandy"
+            "basicAuthPassword": "testshophandy",
+            "loaderConfig": [
+                {
+                    "name": "selection-pop-up",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-popup/dist/selection-popup.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": "body"
+                    }
+                },
+                {
+                    "name": "selection-embedded",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".embedded-selection-placeholder"
+                    }
+                },
+                {
+                    "name": "confirmation",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-confirmation/dist/confirmation.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".confirmation-container",
+                        "validation": {
+                            "inputSelector": "#checkout-form",
+                            "event": "submit"
+                        }
+                    }
+                },
+                {
+                    "name": "after-sales",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-after-sales/dist/after-sales.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/checkout",
+                        "parentElementSelector": "body"
+                    }
+                }
+            ]
         };
 
         const response = await request(app)
@@ -485,7 +531,53 @@ describe('add ce test shop client config', () => {
                 "public:76b31bb2-c4f7-11ea-9487-6fcbeb12db26"
             ],
             "basicAuthUser": "testshopce",
-            "basicAuthPassword": "testshopce"
+            "basicAuthPassword": "testshopce",
+            "loaderConfig": [
+                {
+                    "name": "selection-pop-up",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-popup/dist/selection-popup.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": "body"
+                    }
+                },
+                {
+                    "name": "selection-embedded",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".embedded-selection-placeholder"
+                    }
+                },
+                {
+                    "name": "confirmation",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-confirmation/dist/confirmation.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".confirmation-container",
+                        "validation": {
+                            "inputSelector": "#checkout-form",
+                            "event": "submit"
+                        }
+                    }
+                },
+                {
+                    "name": "after-sales",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-after-sales/dist/after-sales.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/checkout",
+                        "parentElementSelector": "body"
+                    }
+                }
+            ]
         };
 
         const response = await request(app)
@@ -841,7 +933,53 @@ describe('add bike test shop client config', () => {
                     }
 
                 }
-            }
+            },
+            "loaderConfig": [
+                {
+                    "name": "selection-pop-up",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-popup/dist/selection-popup.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": "body"
+                    }
+                },
+                {
+                    "name": "selection-embedded",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".embedded-selection-placeholder"
+                    }
+                },
+                {
+                    "name": "confirmation",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-confirmation/dist/confirmation.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".confirmation-container",
+                        "validation": {
+                            "inputSelector": "#checkout-form",
+                            "event": "submit"
+                        }
+                    }
+                },
+                {
+                    "name": "after-sales",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-after-sales/dist/after-sales.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/checkout",
+                        "parentElementSelector": "body"
+                    }
+                }
+            ]
         };
 
         const response = await request(app)
@@ -994,7 +1132,53 @@ describe('add Handyflash Local test client config', () => {
                 "public:b9f303d0-74e1-11ea-b9e9-034d1bd36e8d"
             ],
             "basicAuthUser": "handyflash-dev",
-            "basicAuthPassword": "handyflash-dev"
+            "basicAuthPassword": "handyflash-dev",
+            "loaderConfig": [
+                {
+                    "name": "selection-pop-up",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-popup/dist/selection-popup.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": "body"
+                    }
+                },
+                {
+                    "name": "selection-embedded",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".embedded-selection-placeholder"
+                    }
+                },
+                {
+                    "name": "confirmation",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-confirmation/dist/confirmation.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/shoppingCart",
+                        "parentElementSelector": ".confirmation-container",
+                        "validation": {
+                            "inputSelector": "#checkout-form",
+                            "event": "submit"
+                        }
+                    }
+                },
+                {
+                    "name": "after-sales",
+                    "sources": {
+                        "js": "http://localhost:3334/packages/package-after-sales/dist/after-sales.min.js"
+                    },
+                    "target": {
+                        "pageSelector": "/checkout",
+                        "parentElementSelector": "body"
+                    }
+                }
+            ]
         };
 
         const response = await request(app)
