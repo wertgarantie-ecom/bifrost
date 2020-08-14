@@ -66,6 +66,12 @@ module.exports.newClientSchema = {
         basicAuthPassword: {
             type: "string"
         },
+        loaderConfig: {
+            type: "array",
+            items: {
+                type: "object"
+            }
+        },
         handbook: {
             type: "object",
             properties: {

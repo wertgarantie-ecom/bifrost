@@ -159,7 +159,7 @@ describe('add phone test shop client config', () => {
                         "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
                     },
                     "target": {
-                        "pageSelector": "/shoppingCart",
+                        "pageSelector": "/nothing",
                         "parentElementSelector": ".embedded-selection-placeholder"
                     }
                 },
@@ -549,7 +549,7 @@ describe('add ce test shop client config', () => {
                         "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
                     },
                     "target": {
-                        "pageSelector": "/shoppingCart",
+                        "pageSelector": "/nothing",
                         "parentElementSelector": ".embedded-selection-placeholder"
                     }
                 },
@@ -951,7 +951,7 @@ describe('add bike test shop client config', () => {
                         "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
                     },
                     "target": {
-                        "pageSelector": "/shoppingCart",
+                        "pageSelector": "/nothing",
                         "parentElementSelector": ".embedded-selection-placeholder"
                     }
                 },
@@ -1150,7 +1150,7 @@ describe('add Handyflash Local test client config', () => {
                         "js": "http://localhost:3334/packages/package-selection-embedded/dist/selection-embedded.min.js"
                     },
                     "target": {
-                        "pageSelector": "/shoppingCart",
+                        "pageSelector": "/nothing",
                         "parentElementSelector": ".embedded-selection-placeholder"
                     }
                 },
