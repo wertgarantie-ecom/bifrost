@@ -17,14 +17,27 @@ async function updateProductOffersForAllClients(clients) {
     if (!clients) {
         clients = await clientService.findAllClients();
     }
-
+    const updateResults = {
+        success: [],
+        failure: []
+    };
     await Promise.all(clients.map(async client => {
         try {
             await updateAllProductOffersForClient(client);
+            updateResults.success.push({
+                clientId: client.id,
+                clientName: client.name
+            })
         } catch (error) {
             console.error("could not update product offers for client: " + client.id);
+            updateResults.failure.push({
+                clientId: client.id,
+                clientName: client.name,
+                error: JSON.stringify(error, null, 2)
+            })
         }
     }));
+    return updateResults;
 }
 
 async function updateAllProductOffersForClient(clientConfig, uuid = _uuid, webservicesClient = _webservicesClient, productOfferRepository = _productOfferRepository, documentRepository = _documentRespository) {

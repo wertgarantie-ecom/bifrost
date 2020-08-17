@@ -4,8 +4,11 @@ const clientService = require('../../clientconfig/clientService');
 
 exports.triggerProductOffersAssembly = async function triggerProductOffersAssembly(req, res, next) {
     try {
-        await webservicesProductOffersAssembler.updateProductOffersForAllClients();
-        return res.status(200).send("updated all webservices product offers for all clients");
+        const updateResults = await webservicesProductOffersAssembler.updateProductOffersForAllClients();
+        if (updateResults.failure.length > 0) {
+            return res.status(400).send(updateResults)
+        }
+        return res.status(200).send(updateResults);
     } catch (error) {
         return next(error);
     }
