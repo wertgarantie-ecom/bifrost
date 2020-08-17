@@ -30,7 +30,7 @@ exports.insert = async function insert(clientData) {
                 clientData.basicAuthUser,
                 clientData.basicAuthPassword,
                 clientData.handbook,
-                clientData.loaderConfig
+                JSON.stringify(clientData.loaderConfig)
             ]
         };
         await client.query(query);

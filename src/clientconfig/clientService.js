@@ -89,7 +89,8 @@ async function addNewClient(createClientRequest, clientRepository = _repository,
         publicClientIds: createClientRequest.publicClientIds || ['public:' + uuid()],
         basicAuthUser: createClientRequest.basicAuthUser || createClientRequest.name,
         basicAuthPassword: createClientRequest.basicAuthPassword || generatePassword.generate(),
-        handbook: createClientRequest.handbook
+        handbook: createClientRequest.handbook,
+        loaderConfig: createClientRequest.loaderConfig
     };
     validate(clientData, newClientSchema);
     const createdClientConfig = await clientRepository.insert(clientData);
