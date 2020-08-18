@@ -22,12 +22,12 @@ exports.getProducts = async function getProducts(req, res, next) {
 
 exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(req, res, next) {
     try {
-        const updatedShoppingCart = await service.removeProductFromShoppingCart(req.body.wertgarantieProductId, req.shoppingCart, req.clientConfig.name, req.body.orderItemId, req.body.devicePrice);
+        const updatedShoppingCart = await service.removeProductFromShoppingCart(req.body.orderId, req.shoppingCart, req.clientConfig.name);
 
         if (updatedShoppingCart) {
             return res.status(200).send({
                 shoppingCart: updatedShoppingCart,
-                message: `OrderId ${req.body.ordreId} removed from shoppingCart`
+                message: `OrderId ${req.body.orderId} removed from shoppingCart`
             });
         } else {
             return sendEmptyShoppingCart(res);

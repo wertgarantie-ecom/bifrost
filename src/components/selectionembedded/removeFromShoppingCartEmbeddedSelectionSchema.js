@@ -3,14 +3,8 @@ const signedShoppingCart = require('../../shoppingcart/schemas/signedShoppingCar
 exports.removeFromShoppingCartEmbeddedSelectionSchema = {
     type: "object",
     properties: {
-        wertgarantieProductId: {
+        orderId: {
             type: "string"
-        },
-        orderItemId: {
-            type: "string"
-        },
-        devicePrice: {
-            type: "integer"
         },
         signedShoppingCart: signedShoppingCart
     }

@@ -8,6 +8,7 @@ const component = require('./../components').components.selectionembedded;
 const validate = require('../../framework/validation/validator').validate;
 const util = require('util');
 const metrics = require('../../framework/metrics')();
+const _ = require('lodash');
 
 exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, userAgent) {
     const result = await prepareProductSelectionData(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart);
@@ -68,22 +69,17 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer, allProductOffers
     }
 }
 
-exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(productId, shoppingCart, clientName, orderItemId, devicePrice, productOffersService = _productOffersService) {
+exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(orderId, shoppingCart, clientName, productOffersService = _productOffersService) {
     if (!shoppingCart) {
         return undefined;
     }
-    for (var i = 0; i < shoppingCart.orders.length; i++) {
-        const order = shoppingCart.orders[i];
-        if (order.wertgarantieProduct.id === productId && order.shopProduct.orderItemId === orderItemId && order.shopProduct.price === devicePrice) {
-            const tags = [
-                `client:${clientName}`,
-                `product:${shoppingCart.orders[i].wertgarantieProduct.name}`
-            ];
-            metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
-            shoppingCart.orders.splice(i, 1);
-            i--;
-        }
-    }
+    const orderIndexToBeDeleted = _.findIndex(shoppingCart.orders, order => order.id === orderId);
+    const tags = [
+        `client:${clientName}`,
+        `product:${shoppingCart.orders[orderIndexToBeDeleted].wertgarantieProduct.name}`
+    ];
+    metrics.increment('bifrost.shoppingcart.orders.remove', 1, tags);
+    shoppingCart.orders.splice(orderIndexToBeDeleted, 1);
     const result = shoppingCart.orders.length > 0 ? shoppingCart : undefined;
     if (result && result.confirmations.requiredLockPrice) {
         await shoppingCartService.updateLockPrices(result, productOffersService);

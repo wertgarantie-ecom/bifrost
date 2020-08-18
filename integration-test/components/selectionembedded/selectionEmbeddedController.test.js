@@ -150,9 +150,7 @@ describe("should add, update and delete product from shopping cart on product se
             wertgarantieProductId: productOffers[0].id
         });
         const result = await request(app).delete(`/wertgarantie/ecommerce/clients/${clientData.publicClientIds[0]}/components/selection-embedded/product`).send({
-            wertgarantieProductId: signedShoppingCart.shoppingCart.orders[0].wertgarantieProduct.id,
-            orderItemId: signedShoppingCart.shoppingCart.orders[0].shopProduct.orderItemId,
-            devicePrice: signedShoppingCart.shoppingCart.orders[0].shopProduct.price,
+            orderId: signedShoppingCart.shoppingCart.orders[0].id,
             signedShoppingCart: signedShoppingCart
         });
         expect(result.status).toEqual(204);

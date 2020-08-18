@@ -11,7 +11,7 @@ const addShoppingCartProductSchema = require("../shoppingcart/schemas/addShoppin
 const selectionGetProductsSchema = require("../components/selectiongeneral/selectionGetProductsSchema").selectionPopUpGetProductsSchema;
 const productSelectionClickedSchema = require("../components/selectionembedded/productSelectionClickedSchema").productSelectionClickedSchema;
 const updateShoppingCartProductSchema = require("../components/selectionembedded/updateShoppingCartProductSchema").updateShoppingCartProductSchema;
-const removeFromShoppingCartEmbeddedSelectionSchema = require('../components/selectionembedded/removeFromShoppingCartEmbeddedSelectionSchema')
+const removeFromShoppingCartEmbeddedSelectionSchema = require('../components/selectionembedded/removeFromShoppingCartEmbeddedSelectionSchema').removeFromShoppingCartEmbeddedSelectionSchema;
 const shoppingCartController = require("../shoppingcart/shoppingCartController");
 const filterAndValidateBase64EncodedWebshopData = require("../shoppingcart/shoppingCartRequestFilter").filterAndValidateBase64EncodedWebshopData;
 const validate = require('express-jsonschema').validate;
@@ -31,7 +31,6 @@ router.post("/clients/:publicClientId/components/selection-popup/cancel", setCli
 router.put("/clients/:publicClientId/components/selection-embedded", validate({body: selectionGetProductsSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.getProducts);
 router.post("/clients/:publicClientId/components/selection-embedded/product", validate({body: updateShoppingCartProductSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.updateProductForOrderId);
 router.delete("/clients/:publicClientId/components/selection-embedded/product", setClientConfigByPublicClientId, validate({body: removeFromShoppingCartEmbeddedSelectionSchema}), selectionEmbeddedController.removeProductFromShoppingCart);
-router.patch("/clients/:publicClientId/components/selection-embedded/product", validate({body: selectionGetProductsSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.getProducts);
 router.post("/clients/:publicClientId/components/selection-embedded/select", validate({body: productSelectionClickedSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.registerProductSelected);
 router.delete("/clients/:publicClientId/components/selection-embedded/select", validate({body: productSelectionClickedSchema}), setClientConfigByPublicClientId, selectionEmbeddedController.registerProductUnselected);
 

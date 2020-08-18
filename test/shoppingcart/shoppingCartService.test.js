@@ -59,17 +59,17 @@ const validShoppingCart = {
 
 test("should create and fill new shopping cart if no cart is given", async () => {
     const result = await addProductToShoppingCartWithOrderId(undefined, validProduct(), clientConfig, "9fd47b8a-f984-11e9-adcf-afabcc521083", mockProductOfferServicePhone);
-    expect(result.orders).toEqual([validProduct()]);
+    expect(result.shoppingCart.orders).toEqual([validProduct()]);
 });
 
 test("new created shopping cart should have given clientId", async () => {
     const result = await addProductToShoppingCartWithOrderId(undefined, validProduct(), clientConfig, "9fd47b8a-f984-11e9-adcf-afabcc521083", mockProductOfferServicePhone);
-    expect(result.publicClientId).toEqual(clientConfig.publicClientIds[0]);
+    expect(result.shoppingCart.publicClientId).toEqual(clientConfig.publicClientIds[0]);
 });
 
 test("should add product to existing shopping cart", async () => {
     const result = await addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), clientConfig, "9fd47b8a-f984-11e9-adcf-afabcc521083", mockProductOfferServicePhone);
-    expect(result.orders).toEqual([includedOrder, validProduct()]);
+    expect(result.shoppingCart.orders).toEqual([includedOrder, validProduct()]);
 });
 
 
@@ -83,7 +83,7 @@ test("should allow duplicate products", async () => {
         }
     };
     const result = await addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), publicClientId, "9fd47b8a-f984-11e9-adcf-afabcc521083", mockProductOfferServicePhone);
-    expect(result.orders).toEqual([validProduct(), validProduct()]);
+    expect(result.shoppingCart.orders).toEqual([validProduct(), validProduct()]);
 });
 
 test("should confirm valid shopping cart", () => {
@@ -115,8 +115,8 @@ test("should unconfirm valid shopping cart", () => {
 });
 
 test("added product should always reject confirmation", async () => {
-    const shoppingCartWithAddedProduct = await addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083", mockProductOfferServicePhone);
-    expect(shoppingCartWithAddedProduct.confirmations.termsAndConditionsConfirmed).toEqual(false);
+    const addResult = await addProductToShoppingCartWithOrderId(validShoppingCart, validProduct(), "5209d6ea-1a6e-11ea-9f8d-778f0ad9137f", "9fd47b8a-f984-11e9-adcf-afabcc521083", mockProductOfferServicePhone);
+    expect(addResult.shoppingCart.confirmations.termsAndConditionsConfirmed).toEqual(false);
 });
 
 
@@ -723,8 +723,8 @@ test("should add bike product to shopping cart with lock requirement", async () 
         }
     };
     const newOrderId = uuid();
-    const updatedShoppingCart = await service.addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, newOrderId, mockProductOfferServiceBike);
-    expect(updatedShoppingCart).toEqual({
+    const addResult = await service.addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, newOrderId, mockProductOfferServiceBike);
+    expect(addResult.shoppingCart).toEqual({
         "orders": [
             {
                 "id": orderId,
@@ -806,8 +806,8 @@ test("should update lock price if more expensive lock is required", async () => 
         }
     };
 
-    const updatedShoppingCart = await service.addProductToShoppingCart(currentShoppingCart, productToAdd, clientConfig, undefined, mockProductOfferServiceBike);
-    expect(updatedShoppingCart.confirmations).toEqual({
+    const addResult = await service.addProductToShoppingCart(currentShoppingCart, productToAdd, clientConfig, undefined, mockProductOfferServiceBike);
+    expect(addResult.shoppingCart.confirmations).toEqual({
         "termsAndConditionsConfirmed": false,
         "lockConfirmed": false,
         "requiredLockPrice": 4900
