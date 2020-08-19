@@ -39,7 +39,16 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
 
 exports.updateProductForOrderId = async function updateProductForOrderId(req, res, next) {
     try {
-        const updatedShoppingCart = shoppingCartService.updateShoppingCart(req.shoppingCart, req.body.orderId, req.body.shopProduct, req.body.wertgarantieProduct);
+        let updatedShoppingCart;
+        if (!req.shoppingCart) {
+            const productToAdd = {
+                wertgarantieProduct: req.body.wertgarantieProduct,
+                shopProduct: req.body.shopProduct
+            }
+            updatedShoppingCart = await shoppingCartService.addProductToShoppingCart(undefined, productToAdd, req.clientConfig, req.body.orderId);
+        } else {
+            updatedShoppingCart = shoppingCartService.updateShoppingCart(req.shoppingCart, req.body.orderId, req.body.shopProduct, req.body.wertgarantieProduct);
+        }
         return res.status(200).send({
             shoppingCart: updatedShoppingCart,
             message: `Updated OrderId ${req.body.orderId}`,
