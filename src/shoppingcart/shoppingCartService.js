@@ -26,9 +26,12 @@ exports.addProductToShoppingCart = async function addProductToShoppingCart(shopp
     const tags = [
         `client:${clientConfig.name}`,
         `product:${productToAdd.wertgarantieProduct.name}`
-    ]
+    ];
     metrics.increment('bifrost.shoppingcart.orders.add', 1, tags);
-    return updatedShoppingCart;
+    return {
+        shoppingCart: updatedShoppingCart,
+        orderId
+    };
 };
 
 exports.confirmAttribute = function confirmAttribute(shoppingCart, confirmationAttribute, clientName) {

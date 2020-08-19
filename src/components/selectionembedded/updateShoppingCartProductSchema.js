@@ -6,8 +6,7 @@ exports.updateShoppingCartProductSchema = {
     required: [
         "orderId",
         "shopProduct",
-        "wertgarantieProduct",
-        "signedShoppingCart"
+        "wertgarantieProduct"
     ],
     additionalProperties: false,
     properties: {
