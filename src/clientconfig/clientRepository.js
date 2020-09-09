@@ -83,12 +83,12 @@ exports.update = async function update(clientData) {
             values: [
                 clientData.name,
                 clientData.activePartnerNumber,
-                clientData.backends,
+                JSON.stringify(clientData.backends),
                 clientData.email,
                 clientData.basicAuthUser,
                 clientData.basicAuthPassword,
                 clientData.handbook,
-                clientData.loaderConfig,
+                JSON.stringify(clientData.loaderConfig),
                 clientData.id
             ]
         };

@@ -3,6 +3,13 @@ const htmlTemplate = require('../../htmlTemplates/htmlTemplate').htmlTemplate;
 const clientConfigNavbar = require('../../htmlTemplates/htmlTemplate').clientConfigurationNavbar;
 const baseDataEditor = require('../../htmlTemplates/baseDataEditor');
 const baseConfigStyling = require('../../css/baseConfigStyling').css;
+const jsonAttributeFields = [
+    "backends",
+    "secrets",
+    "publicClientIds",
+    "handbook",
+    "loaderConfig"
+];
 
 exports.showAllClients = async function showAllClients(req, res) {
     const clients = await clientService.findAllClients();
@@ -110,10 +117,18 @@ exports.showClient = async function showClient(req, res) {
     return res.status(200).send(htmlTemplate(client.name, [baseConfigStyling], body))
 };
 
+function evaluateJsonAttribute(value) {
+    try {
+        return JSON.parse(value);
+    } catch (e) {
+        return value;
+    }
+}
+
 exports.saveBaseClientConfig = async function saveBaseClientConfig(req, res) {
     const clientData = await clientService.findClientById(req.params.clientId);
     const attribute = req.body.attribute;
-    const newValue = attribute === 'activePartnerNumber' ? parseInt(req.body.value) : req.body.value;
+    const newValue = attribute === 'activePartnerNumber' ? parseInt(req.body.value) : evaluateJsonAttribute(req.body.value);
     clientData[attribute] = newValue;
     await clientService.updateClientData(clientData);
     res.redirect(req.originalUrl);
