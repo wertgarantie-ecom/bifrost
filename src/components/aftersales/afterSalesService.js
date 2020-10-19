@@ -31,10 +31,26 @@ async function getAfterSalesDataForCheckoutData(checkoutData, locale, clientComp
         return undefined;
     }
     const componentTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(checkoutData.clientId, component.name, locale);
+
     return {
+        proposalsInformation: toProposalsInformation(checkoutData),
         texts: componentTexts,
         successfulOrders: successfulOrders,
     };
+}
+
+function toProposalsInformation(checkoutData) {
+    return checkoutData.purchases.map(purchase => {
+        return {
+            "success": purchase.success,
+            "contractNumber": purchase.contractNumber,
+            "transactionNumber": purchase.transactionNumber,
+            "insuranceProductId": purchase.wertgarantieProductId,
+            "productName": purchase.wertgarantieProductName,
+            "id": purchase.id,
+            "shopProduct": purchase.shopProduct
+        }
+    })
 }
 
 exports.checkoutAndShowAfterSalesComponent = async function checkoutAndShowAfterSalesComponent(shoppingCart, clientConfig, webshopData, locale = 'de', userAgent, clientComponentTextService = _clientComponentTextService) {
