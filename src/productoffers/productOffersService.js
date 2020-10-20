@@ -20,7 +20,7 @@ async function getProductOfferById(productOfferId, webserviceProductOffersReposi
 async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, shopProductCondition, productOffersRepository = _webserviceProductOffersRepository) {
     let productOffers;
     if (getCondition(clientConfig.conditionsMapping, shopProductCondition) !== NEW) {
-        return undefined;
+        return [];
     }
     const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
     productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price);
@@ -28,7 +28,7 @@ async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCou
     if (!offerCount) {
         return productOffers;
     } else {
-        return productOffers.length < offerCount ? undefined : productOffers.slice(0, offerCount);
+        return productOffers.length < offerCount ? [] : productOffers.slice(0, offerCount);
     }
 }
 
