@@ -25,7 +25,7 @@ async function prepareProductSelectionData(shopDeviceClassesString,
                                            productOffersService = _productOffersService,
                                            clientComponentTextService = _clientComponentTextService) {
     const shopDeviceClasses = shopDeviceClassesString.split(',');
-    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice, shopProductCondition);
+    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice, undefined, shopProductCondition);
     const products = [];
     const selectionEmbeddedTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     products.push(...productOffers.map(offer => convertPayloadToSelectionEmbeddedProduct(offer, productOffers, locale, selectionEmbeddedTexts)));
