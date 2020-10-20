@@ -33,6 +33,9 @@ async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCou
 }
 
 function getCondition(conditionsMapping, shopProductCondition) {
+    if (!shopProductCondition) {
+        return NEW;
+    }
     let condition = NEW;
     if (conditionsMapping) {
         const mapping = conditionsMapping.find(mapping => mapping.shopCondition === shopProductCondition);

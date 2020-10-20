@@ -570,3 +570,15 @@ test('getCondition should return mapped condition', () => {
     const condition = productOffersService.getCondition(mapping, "finest");
     expect(condition).toEqual(NEW);
 });
+
+test('getCondition should return NEW if given condition is undefined', () => {
+    const mapping = [
+        {
+            shopCondition: "finest",
+            bifrostCondition: NEW
+        }
+    ]
+    const condition = productOffersService.getCondition(mapping, undefined);
+    expect(condition).toEqual(NEW);
+});
+
