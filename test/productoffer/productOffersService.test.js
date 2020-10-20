@@ -1,4 +1,5 @@
 const productOffersService = require('../../src/productoffers/productOffersService');
+const {NEW, UNKNOWN} = require('../../src/productoffers/productConditions').condition;
 
 test("test webservices product offer conversion", async () => {
     process.env.BACKEND = "webservices";
@@ -8,7 +9,7 @@ test("test webservices product offer conversion", async () => {
     const mockProductOffersRepository = {
         findByClientId: () => productOffersResult
     };
-    const result = await productOffersService.getProductOffers(clientConfig, ["Kühlschrank", "Smartphone", "ein ponny"], 80000, undefined, mockProductOffersRepository);
+    const result = await productOffersService.getProductOffers(clientConfig, ["Kühlschrank", "Smartphone", "ein ponny"], 80000, undefined, undefined, mockProductOffersRepository);
 
     expect(result).toEqual(
         [
@@ -542,3 +543,30 @@ const productOffersResult = [
         "applicationCode": "GU WG DE KS 0419"
     }
 ];
+
+test('getCondition should return NEW if no mapping is specified', () => {
+    const condition = productOffersService.getCondition(undefined, "anything");
+    expect(condition).toEqual(NEW);
+});
+
+test('getCondition should return UNKNOWN if mapping is specified but shop condition not found', () => {
+    const mapping = [
+        {
+            shopCondition: "NEW",
+            bifrostCondition: NEW
+        }
+    ]
+    const condition = productOffersService.getCondition(mapping, "unknown condition");
+    expect(condition).toEqual(UNKNOWN);
+});
+
+test('getCondition should return mapped condition', () => {
+    const mapping = [
+        {
+            shopCondition: "finest",
+            bifrostCondition: NEW
+        }
+    ]
+    const condition = productOffersService.getCondition(mapping, "finest");
+    expect(condition).toEqual(NEW);
+});

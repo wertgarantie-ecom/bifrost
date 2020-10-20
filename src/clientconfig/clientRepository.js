@@ -20,7 +20,7 @@ exports.insert = async function insert(clientData) {
         await client.query('BEGIN');
         const query = {
             name: 'insert-client',
-            text: "INSERT INTO client (id, name, email, backends, activePartnerNumber, basicauthuser, basicauthpassword, handbook, loaderConfig) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8, $9);",
+            text: "INSERT INTO client (id, name, email, backends, activePartnerNumber, basicauthuser, basicauthpassword, handbook, loaderConfig, conditionsMapping) VALUES ($1 , $2, $3, $4, $5, $6, $7, $8, $9, $10);",
             values: [
                 clientData.id,
                 clientData.name,
@@ -30,7 +30,8 @@ exports.insert = async function insert(clientData) {
                 clientData.basicAuthUser,
                 clientData.basicAuthPassword,
                 clientData.handbook,
-                JSON.stringify(clientData.loaderConfig)
+                JSON.stringify(clientData.loaderConfig),
+                JSON.stringify(clientData.conditionsMapping)
             ]
         };
         await client.query(query);
@@ -78,8 +79,8 @@ exports.update = async function update(clientData) {
         await client.query('BEGIN');
         const updateStatement = {
             name: 'update-client-data',
-            text: 'UPDATE client SET name = $1, activepartnernumber = $2, backends = $3, email = $4, basicauthuser = $5, basicauthpassword = $6, handbook = $7, loaderConfig = $8' +
-                'WHERE id = $9',
+            text: 'UPDATE client SET name = $1, activepartnernumber = $2, backends = $3, email = $4, basicauthuser = $5, basicauthpassword = $6, handbook = $7, loaderConfig = $8, conditionsmapping = $9' +
+                'WHERE id = $10',
             values: [
                 clientData.name,
                 clientData.activePartnerNumber,
@@ -89,6 +90,7 @@ exports.update = async function update(clientData) {
                 clientData.basicAuthPassword,
                 clientData.handbook,
                 JSON.stringify(clientData.loaderConfig),
+                JSON.stringify(clientData.conditionsMapping),
                 clientData.id
             ]
         };
@@ -133,7 +135,7 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientsecret
@@ -152,7 +154,7 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-public-id',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid 
                 INNER JOIN clientpublicid cp on c.id = cp.clientid 
                 WHERE c.id = (SELECT clientid from clientpublicid 
@@ -171,7 +173,7 @@ async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
                 WHERE c.id = $1
@@ -201,7 +203,7 @@ exports.findAllClients = async function findAllClients() {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-all-clients',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
                 FROM client c
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
@@ -218,7 +220,7 @@ exports.findByUsername = async function findByUsername(username) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-all-clients',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
+        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
                 FROM client c
                 INNER JOIN clientsecret cs on c.id = cs.clientid
                 INNER JOIN clientpublicid cp on c.id = cp.clientid
@@ -249,7 +251,8 @@ function toClientData(row) {
         basicAuthUser: row.basicauthuser || undefined,
         basicAuthPassword: row.basicauthpassword || undefined,
         handbook: row.handbook || undefined,
-        loaderConfig: row.loaderconfig || undefined
+        loaderConfig: row.loaderconfig || undefined,
+        conditionsMapping: row.conditionsmapping || undefined
     }
 }
 

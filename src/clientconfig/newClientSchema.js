@@ -72,6 +72,20 @@ module.exports.newClientSchema = {
                 type: "object"
             }
         },
+        conditionsMapping: {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    shopCondition: {
+                        type: "string"
+                    },
+                    bifrostCondition: {
+                        type: "string"
+                    }
+                }
+            }
+        },
         handbook: {
             type: "object",
             properties: {

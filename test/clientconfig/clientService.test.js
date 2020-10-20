@@ -1,6 +1,7 @@
 const clientService = require('../../src/clientconfig/clientService');
 const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
+const {NEW, USED} = require("../../src/productoffers/productConditions").condition;
 
 const mockClientRepository = {
     insert: _ => _
@@ -108,9 +109,43 @@ test('should reject client with invalid offers config', async () => {
 
     try {
         await clientService.addNewClient(data);
+        // eslint-disable-next-line no-undef
         fail();
     } catch (error) {
         console.log(error);
         // should throw an error
     }
+});
+
+test('should create client with conditions mapping', async () => {
+    const data = {
+        name: "testclient",
+        conditionsMapping: [
+            {
+                shopCondition: "0",
+                bifrostCondition: NEW,
+            },
+            {
+                shopCondition: "11",
+                bifrostCondition: USED,
+            },
+            {
+                shopCondition: "12",
+                bifrostCondition: USED,
+            },
+            {
+                shopCondition: "13",
+                bifrostCondition: USED,
+            },
+            {
+                shopCondition: "14",
+                bifrostCondition: USED,
+            },
+        ]
+
+    }
+
+    const newClient = await clientService.addNewClient(data, mockClientRepository, mockTextService, mockProductOffersAssembler);
+
+    expect(newClient.conditionsMapping).toEqual(data.conditionsMapping);
 });

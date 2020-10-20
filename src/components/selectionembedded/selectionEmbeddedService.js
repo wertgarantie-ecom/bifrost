@@ -10,8 +10,8 @@ const util = require('util');
 const metrics = require('../../framework/metrics')();
 const _ = require('lodash');
 
-exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, userAgent) {
-    const result = await prepareProductSelectionData(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart);
+exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, userAgent, shopProductCondition) {
+    const result = await prepareProductSelectionData(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, shopProductCondition);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
 };
@@ -21,10 +21,11 @@ async function prepareProductSelectionData(shopDeviceClassesString,
                                            clientConfig,
                                            locale = "de",
                                            shoppingCart,
+                                           shopProductCondition,
                                            productOffersService = _productOffersService,
                                            clientComponentTextService = _clientComponentTextService) {
     const shopDeviceClasses = shopDeviceClassesString.split(',');
-    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice);
+    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice, shopProductCondition);
     const products = [];
     const selectionEmbeddedTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     products.push(...productOffers.map(offer => convertPayloadToSelectionEmbeddedProduct(offer, productOffers, locale, selectionEmbeddedTexts)));

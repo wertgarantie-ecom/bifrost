@@ -8,9 +8,10 @@ exports.getProducts = async function getProducts(req, res, next) {
         throw new ClientError("no shop device class provided!");
     }
     const devicePrice = req.body.devicePrice;
+    const condition = req.body.deviceCondition;
 
     try {
-        const result = await service.getProductOffers(shopDeviceClasses, devicePrice, req.clientConfig, req.locale.language, req.shoppingCart, req.useragent);
+        const result = await service.getProductOffers(shopDeviceClasses, devicePrice, req.clientConfig, req.locale.language, req.shoppingCart, req.useragent, condition);
         if (result.products.length > 0) {
             return res.status(200).send(result);
         }

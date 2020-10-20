@@ -3,13 +3,6 @@ const htmlTemplate = require('../../htmlTemplates/htmlTemplate').htmlTemplate;
 const clientConfigNavbar = require('../../htmlTemplates/htmlTemplate').clientConfigurationNavbar;
 const baseDataEditor = require('../../htmlTemplates/baseDataEditor');
 const baseConfigStyling = require('../../css/baseConfigStyling').css;
-const jsonAttributeFields = [
-    "backends",
-    "secrets",
-    "publicClientIds",
-    "handbook",
-    "loaderConfig"
-];
 
 exports.showAllClients = async function showAllClients(req, res) {
     const clients = await clientService.findAllClients();
@@ -29,7 +22,7 @@ exports.showAllClients = async function showAllClients(req, res) {
                 </div>
             </div>
             <hr/>`).join('')
-        }
+    }
         </div>
         <form action="/admin" method="post">
             <div class="new-client-form">

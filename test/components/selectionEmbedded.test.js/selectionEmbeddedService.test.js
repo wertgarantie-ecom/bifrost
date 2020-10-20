@@ -17,7 +17,7 @@ const mockComponentTextsService = {
 };
 
 test("should prepare correct product offers", async () => {
-    const result = await selectionEmbeddedService.prepareProductSelectionData("Smartphone", 90000, clientData, "de", undefined, mockProductOfferService, mockComponentTextsService);
+    const result = await selectionEmbeddedService.prepareProductSelectionData("Smartphone", 90000, clientData, "de", undefined, undefined, mockProductOfferService, mockComponentTextsService);
     expect(result.texts.footerHtml).toEqual("Versicherung ist Vertrauenssache, deshalb setzt Testshop neben <strong>500.000 zufriedener Kunden</strong> auf die <strong>Wertgarantie</strong>, den <strong>Testsieger in Sachen Sicherheit</strong>");
     expect(result.products.length).toEqual(2);
     expect(result.products[0]).toEqual({

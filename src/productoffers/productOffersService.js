@@ -1,5 +1,6 @@
 const _webserviceProductOffersRepository = require('../backends/webservices/webserviceProductOffersRepository');
 const _ = require('lodash');
+const {NEW, UNKNOWN} = require("./productConditions").condition;
 
 async function getPriceForSelectedProductOffer(clientConfig, shopDeviceClass, productId, shopProductPrice, paymentInterval) {
     const productOffer = await getProductOfferById(productId);
@@ -16,8 +17,11 @@ async function getProductOfferById(productOfferId, webserviceProductOffersReposi
     return webserviceProductOffersRepository.findById(productOfferId);
 }
 
-async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, productOffersRepository = _webserviceProductOffersRepository) {
+async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCount, shopProductCondition, productOffersRepository = _webserviceProductOffersRepository) {
     let productOffers;
+    if (getCondition(clientConfig.conditionsMapping, shopProductCondition) !== NEW) {
+        return undefined;
+    }
     const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
     productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price);
 
@@ -26,6 +30,19 @@ async function getProductOffers(clientConfig, shopDeviceClasses, price, offerCou
     } else {
         return productOffers.length < offerCount ? undefined : productOffers.slice(0, offerCount);
     }
+}
+
+function getCondition(conditionsMapping, shopProductCondition) {
+    let condition = NEW;
+    if (conditionsMapping) {
+        const mapping = conditionsMapping.find(mapping => mapping.shopCondition === shopProductCondition);
+        if (mapping) {
+            condition = mapping.bifrostCondition
+        } else {
+            condition = UNKNOWN;
+        }
+    }
+    return condition;
 }
 
 
@@ -140,3 +157,4 @@ exports.mapIntervalDescription = mapIntervalCode;
 exports.getPricesForWebservicesProductOffer = getPricesForWebservicesProductOffer;
 exports.webserviceProductOffersToGeneralProductOffers = webserviceProductOffersToGeneralProductOffers;
 exports.getPriceForSelectedProductOffer = getPriceForSelectedProductOffer;
+exports.getCondition = getCondition;
