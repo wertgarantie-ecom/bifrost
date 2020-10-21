@@ -6,6 +6,7 @@ process.env.JEST_JUNIT_OUTPUT_DIR = "reports/junit/bifrost-integration-test-resu
 
 module.exports = {
     verbose: true,
+    preset: 'ts-jest',
     testRegex: "/integration-test/.*\.test\..*",
     setupFilesAfterEnv: ['./jest.setup.js'],
     globalSetup: "./testcontainerSetup.js",
