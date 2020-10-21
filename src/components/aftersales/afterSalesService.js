@@ -48,7 +48,9 @@ function toProposalsInformation(checkoutData) {
             "insuranceProductId": purchase.wertgarantieProductId,
             "productName": purchase.wertgarantieProductName,
             "id": purchase.id,
-            "shopProduct": purchase.shopProduct
+            "shopProduct": purchase.shopProduct,
+            "price": purchase.wertgarantieProductPremium,
+            "paymentInterval": purchase.wertgarantieProductPaymentInterval
         }
     })
 }

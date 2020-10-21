@@ -33,7 +33,8 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
                             name: wertgarantieProductName,
                             paymentInterval: "monthly",
                             deviceClass: "73",
-                            shopDeviceClass: "Test"
+                            shopDeviceClass: "Test",
+                            price: 990
                         }
                     }
                 ],
@@ -93,7 +94,6 @@ describe("Check Preparation of After Sales Component Data when checkout happens 
         });
 
         expect(result.get('X-wertgarantie-shopping-cart-delete')).toBe("true");
-
     });
 });
 
