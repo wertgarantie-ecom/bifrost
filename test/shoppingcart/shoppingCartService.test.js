@@ -866,3 +866,51 @@ test('should return undefined for missing wertgarantie shopping cart', async () 
     const result = await service.checkoutShoppingCart([], {}, undefined, undefined, {});
     expect(result).toBe(undefined);
 });
+
+
+test('correct device classes could handle empty string as device class', () => {
+    const shopProduct = {
+        orderId: "3000000041",
+        price: 1000,
+        orderItemId: "207493",
+        name: "Gutschein",
+        deviceClass: "",
+        manufacturer: "Store"
+    }
+    service.correctDeviceClasses([shopProduct]);
+
+    expect(shopProduct.deviceClasses).toEqual([]);
+    expect(shopProduct.deviceClass).toEqual(undefined);
+})
+
+test('correct device classes could prefer given deviceClasses values', () => {
+    const shopProduct = {
+        orderId: "3000000041",
+        price: 1000,
+        orderItemId: "207493",
+        name: "Gutschein",
+        deviceClass: "test",
+        deviceClasses: "class1,class2",
+        manufacturer: "Store"
+    }
+    service.correctDeviceClasses([shopProduct]);
+
+    expect(shopProduct.deviceClasses).toEqual(["class1", "class2"]);
+    expect(shopProduct.deviceClass).toEqual(undefined);
+})
+
+test('correct device classes could set deviceClass value if devicesClasses is not filled', () => {
+    const shopProduct = {
+        orderId: "3000000041",
+        price: 1000,
+        orderItemId: "207493",
+        name: "Gutschein",
+        deviceClass: "test",
+        deviceClasses: "",
+        manufacturer: "Store"
+    }
+    service.correctDeviceClasses([shopProduct]);
+
+    expect(shopProduct.deviceClasses).toEqual(["test"]);
+    expect(shopProduct.deviceClass).toEqual(undefined);
+})

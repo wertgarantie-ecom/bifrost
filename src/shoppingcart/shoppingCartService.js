@@ -123,9 +123,18 @@ async function checkoutOrder(order, purchasedShopProducts, customer, clientConfi
 
 function correctDeviceClasses(purchasedShopProducts) {
     purchasedShopProducts.map(product => {
-        const deviceClasses = product.deviceClass ? [product.deviceClass] : product.deviceClasses.split(',');
+        const originalDeviceClass = product.deviceClass;
+        const originalDeviceClasses = product.deviceClasses;
+        if (_.isEmpty(originalDeviceClasses)) {
+            if (!_.isEmpty(originalDeviceClass)) {
+                product.deviceClasses = [originalDeviceClass];
+            } else {
+                product.deviceClasses = [];
+            }
+        } else {
+            product.deviceClasses = product.deviceClasses.split(',');
+        }
         delete product.deviceClass;
-        product.deviceClasses = deviceClasses;
     });
 }
 
@@ -355,3 +364,4 @@ class UnconfirmedShoppingCartError extends Error {
 exports.InvalidPublicClientIdError = InvalidPublicClientIdError;
 exports.InvalidWertgarantieCartSignatureError = InvalidWertgarantieCartSignatureError;
 exports.UnconfirmedShoppingCartError = UnconfirmedShoppingCartError;
+exports.correctDeviceClasses = correctDeviceClasses;
