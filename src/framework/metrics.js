@@ -59,9 +59,9 @@ function activeMetricsSender(dogstatsD) {
     const recordShopCheckout = async (purchasedShopProducts, clientConfig, productOffersService) => {
         await Promise.all(purchasedShopProducts.map(async shopProduct => {
             const productOffers = await productOffersService.getProductOffers(clientConfig, shopProduct.deviceClasses, shopProduct.price, 2);
-            let isInsurable = false;
+            let isInsurable = productOffers && productOffers.length >= 1;
             let priceRange = "none";
-            if (productOffers) {
+            if (isInsurable) {
                 isInsurable = true;
                 priceRange = productOffers[0].priceRange.minClose + " - " + productOffers[0].priceRange.maxOpen;
             }
