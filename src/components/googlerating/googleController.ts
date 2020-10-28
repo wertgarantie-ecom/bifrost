@@ -1,19 +1,29 @@
-const request = require('request');
-const NodeCache = require("node-cache");
+import {Request, Response} from "express";
+import request from "request";
+import NodeCache from "node-cache";
+
+/**
+ * Google API calls cost money and it's not really important if the results are stale. There for we want to cache them, in memory should be enough for now.
+ */
 const myCache = new NodeCache({
     stdTTL: 3600
 });
 
 const googleApiKey = process.env.GOOGLE_API_KEY;
 
-exports.reviewRatings = function getGoogleReviewRating(req, res) {
+/**
+ * Retrieve googles rating results for wertgarantie.
+ * @param req express request
+ * @param res express response
+ */
+export function getGoogleReviewRating(req: Request, res: Response): void {
     if (!googleApiKey) {
         res.send({
             error: "Google API key not set. Service currently not available!"
         });
     } else {
         const googleRatingUri = 'https://maps.googleapis.com/maps/api/place/details/json?key=' + googleApiKey + '&placeid=ChIJ3_c1mbZ0sEcR98FkiQ6jCVo';
-        const cachedContent = myCache.get(googleRatingUri);
+        const cachedContent: RatingResponse | undefined = myCache.get(googleRatingUri);
         if (cachedContent) {
             sendResponse(res, cachedContent);
         } else {
@@ -24,9 +34,9 @@ exports.reviewRatings = function getGoogleReviewRating(req, res) {
             });
         }
     }
-};
+}
 
-function sendResponse(res, content) {
+function sendResponse(res: Response, content: RatingResponse): void {
     if (!content.error_message) {
         res.send({
             ratingsTotal: content.result.user_ratings_total,
@@ -36,5 +46,13 @@ function sendResponse(res, content) {
         });
     } else {
         res.send(content);
+    }
+}
+
+interface RatingResponse {
+    error_message: string,
+    result: {
+        user_ratings_total: number,
+        rating: number
     }
 }
