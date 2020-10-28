@@ -30,8 +30,6 @@ async function prepareProductSelectionData(shopDeviceClassesString,
     const selectionEmbeddedTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     products.push(...productOffers.map(offer => convertPayloadToSelectionEmbeddedProduct(offer, productOffers, locale, selectionEmbeddedTexts)));
 
-    this.products = products;
-
     const data = {
         texts: selectionEmbeddedTexts,
         products: products
