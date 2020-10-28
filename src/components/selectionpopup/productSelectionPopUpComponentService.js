@@ -51,7 +51,6 @@ async function prepareProductSelectionData(shopDeviceClasses,
     const products = [];
     const popUpTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     products.push(...productOffers.map(offer => convertPayloadToSelectionPopUpProduct(offer, productOffers, locale, popUpTexts)));
-    this.products = products;
 
     const data = {
         texts: popUpTexts,

@@ -4,15 +4,14 @@
   "private": true,
   "scripts": {
     "prestart": "npm run migrate-up",
-    "start": "node ./bin/www",
+    "start": "node ./build/bin/www",
     "prestart-local": "NODE_ENV=local npm run migrate-up && NODE_ENV=local npm run insert-fixtures",
     "start-local": "NODE_ENV=local nodemon ./bin/www",
+    "build": "rimraf ./build && tsc",
     "test": "jest",
     "integration-test": "jest -c jest.config.integration.js",
     "test-all": "npm run test && npm run integration-test",
     "setup-local-db": "NODE_ENV=local db-migrate db:drop bifrost; db-migrate db:create bifrost && npm run migrate-up",
-    "prestart-dev": "NODE_ENV=dev npm run migrate-up",
-    "start-dev": "NODE_ENV=dev nodemon ./bin/www",
     "prestart-docker-compose": "NODE_ENV=dockerlocal npm run migrate-up && NODE_ENV=dockerlocal npm run insert-fixtures",
     "start-docker-compose": "NODE_ENV=dockerlocal nodemon ./bin/www",
     "migrate-create": "db-migrate create",
@@ -67,6 +66,8 @@
     "xmlbuilder2": "^2.1.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/request": "^2.48.5",
     "eslint": "^6.3.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -78,7 +79,11 @@
     "jest-junit": "^10.0.0",
     "nock": "^12.0.3",
     "nodemon": "^2.0.2",
-    "supertest": "^4.0.2"
+    "rimraf": "^3.0.2",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.3.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   },
   "jest": {
     "testEnvironment": "node"

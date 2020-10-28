@@ -1,3 +1,5 @@
 module.exports = {
-    testRegex: "/fixtures/.*.fixture..*"
+    testRegex: "/fixtures/.*.fixture..*",
+    preset: 'ts-jest',
+    setupFilesAfterEnv: ['./jest-default-timeout.js'],
 };

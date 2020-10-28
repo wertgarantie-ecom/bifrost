@@ -20,7 +20,7 @@ const checkoutSchema = require("../shoppingcart/schemas/checkoutSchema").checkou
 const setClientConfigByPublicClientId = require('../clientconfig/publicClientIdFilter');
 
 // components
-router.get("/rating", googleController.reviewRatings);
+router.get("/rating", googleController.getGoogleReviewRating);
 
 // shop api
 router.post("/shoppingCarts/current/checkout", validate({body: checkoutSchema}), shoppingCartController.checkoutCurrentShoppingCart);

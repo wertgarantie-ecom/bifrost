@@ -10,5 +10,7 @@ module.exports = {
         "publicPath": "./reports/html/",
         "filename": "bifrost-unit.html",
         "expand": true
-    }]]
+    }]],
+    preset: 'ts-jest',
+    setupFilesAfterEnv: ['./jest-default-timeout.js'],
 };
