@@ -12,7 +12,7 @@ const expressWinston = require('express-winston');
 const winston = require('winston');
 const useragent = require('express-useragent');
 
-const resolvedPath = path.resolve(__dirname, '../config/' + process.env.NODE_ENV + '.env');
+const resolvedPath = path.resolve(`config/${process.env.NODE_ENV}.env`);
 dotenv.config({path: resolvedPath});
 
 const adminRoutes = require('./routes/adminRoutes');
