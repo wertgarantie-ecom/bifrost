@@ -1,7 +1,7 @@
 const clientService = require('../../src/clientconfig/clientService');
 const documentTypes = require('../../src/documents/documentTypes').documentTypes;
 const uuid = require('uuid');
-const {NEW, USED} = require("../../src/productoffers/productConditions").condition;
+const {NEW, USED} = require("../../src/productoffers/productConditions")
 
 const mockClientRepository = {
     insert: _ => _

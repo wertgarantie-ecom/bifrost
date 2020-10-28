@@ -1,5 +1,7 @@
 const productOffersService = require('../../src/productoffers/productOffersService');
-const {NEW, UNKNOWN} = require('../../src/productoffers/productConditions').condition;
+import condition from '../../src/productoffers/productConditions';
+
+const {NEW, UNKNOWN} = condition;
 
 test("test webservices product offer conversion", async () => {
     process.env.BACKEND = "webservices";
