@@ -46,6 +46,21 @@ interface ConditionMapping {
 
 }
 
+export async function getProductOffers(clientConfig: any, shopDeviceClasses: string[], price: bigint, offerCount: number, shopProductCondition: string, productOffersRepository = _webserviceProductOffersRepository): Promise<ProductOffer[]> {
+    let productOffers;
+    if (getCondition(clientConfig.conditionsMapping, shopProductCondition) !== NEW) {
+        return [];
+    }
+    const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
+    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price);
+
+    if (!offerCount) {
+        return productOffers;
+    } else {
+        return productOffers.length < offerCount ? [] : productOffers.slice(0, offerCount);
+    }
+}
+
 export async function getPriceForSelectedProductOffer(clientConfig: any, shopDeviceClass: string, productId: string, shopProductPrice: bigint, paymentInterval: PaymentIntervalCode): Promise<number | undefined> {
     const productOffer = await _webserviceProductOffersRepository.findById(productId);
     if (!productOffer) {
@@ -60,21 +75,6 @@ export async function getPriceForSelectedProductOffer(clientConfig: any, shopDev
 
 export async function getProductOfferById(productOfferId: string, webserviceProductOffersRepository = _webserviceProductOffersRepository): Promise<WebservicesProduct | undefined> {
     return webserviceProductOffersRepository.findById(productOfferId);
-}
-
-export async function getProductOffers(clientConfig: any, shopDeviceClasses: string[], price: bigint, offerCount: number, shopProductCondition: string, productOffersRepository = _webserviceProductOffersRepository): Promise<ProductOffer[]> {
-    let productOffers;
-    if (getCondition(clientConfig.conditionsMapping, shopProductCondition) !== NEW) {
-        return [];
-    }
-    const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price);
-
-    if (!offerCount) {
-        return productOffers;
-    } else {
-        return productOffers.length < offerCount ? [] : productOffers.slice(0, offerCount);
-    }
 }
 
 export function getCondition(conditionsMapping: ConditionMapping[], shopProductCondition: string): Condition {
@@ -102,11 +102,11 @@ function filterProductOffers(productOffers: ProductOffer[], deviceClass: string,
     return filteredProductOffers
 }
 
-export function hasDeviceClassAndIsInLimit(productOffer: any, deviceClass: string, price: bigint): boolean {
+function hasDeviceClassAndIsInLimit(productOffer: any, deviceClass: string, price: bigint): boolean {
     return _.find(productOffer.devices, (device: any) => device.objectCodeExternal === deviceClass && device.maxPriceLimitation >= price) !== undefined;
 }
 
-export function mapIntervalCode(code: string): string {
+function mapIntervalCode(code: string): string {
     switch (code) {
         case "1":
             return MONTHLY
@@ -157,7 +157,7 @@ function getPriceRange(webservicesProductOffer: WebserviceProductWithFixedDevice
     }
 }
 
-interface ProductOffer {
+export interface ProductOffer {
     id: string,
     name: string,
     shortName: string,

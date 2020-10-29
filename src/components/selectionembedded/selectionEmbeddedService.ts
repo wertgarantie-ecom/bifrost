@@ -1,3 +1,6 @@
+import {PaymentIntervalCode} from "../../backends/webservices/webserviceProductOffersRepository";
+import {ProductOffer} from "../../productoffers/productOffersService";
+
 const _productOffersService = require("../../productoffers/productOffersService");
 const productService = require("../../productoffers/productOfferFormattingService");
 const shoppingCartService = require("../../shoppingcart/shoppingCartService");
@@ -10,22 +13,48 @@ const util = require('util');
 const metrics = require('../../framework/metrics')();
 const _ = require('lodash');
 
-exports.getProductOffers = async function getProductOffers(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, userAgent, shopProductCondition) {
+interface SelectionEmbeddedData {
+    texts: Map<String, String>,
+    products: SelectionEmbeddedProduct[]
+}
+
+interface SelectionEmbeddedProduct {
+    paymentInterval: string,
+    intervalCode: PaymentIntervalCode,
+    id: string,
+    deviceClass: string,
+    shopDeviceClass: string,
+    name: string,
+    shortName: string,
+    top3: string[]
+    advantages: string []
+    GTCIText: string,
+    GTCIUri: string,
+    IPIDText: string,
+    IPIDUri: string
+    priceFormatted: string
+    price: bigint,
+    taxFormatted: string
+    productImageLink: string
+    backgroundStyle: string
+}
+
+export async function getProductOffers(shopDeviceClassesString: string, devicePrice: bigint, clientConfig: any, locale: string, shoppingCart: any, userAgent: any, shopProductCondition: string): Promise<SelectionEmbeddedData> {
     const result = await prepareProductSelectionData(shopDeviceClassesString, devicePrice, clientConfig, locale, shoppingCart, shopProductCondition);
     metrics.incrementShowComponentRequest(component.name, result, clientConfig.name, userAgent);
     return result;
-};
+}
 
-async function prepareProductSelectionData(shopDeviceClassesString,
-                                           devicePrice,
-                                           clientConfig,
-                                           locale = "de",
-                                           shoppingCart,
-                                           shopProductCondition,
-                                           productOffersService = _productOffersService,
-                                           clientComponentTextService = _clientComponentTextService) {
+export async function prepareProductSelectionData(shopDeviceClassesString: string,
+                                                  devicePrice: bigint,
+                                                  clientConfig: any,
+                                                  locale = "de",
+                                                  shoppingCart: any,
+                                                  shopProductCondition: string,
+                                                  productOffersService = _productOffersService,
+                                                  clientComponentTextService = _clientComponentTextService): Promise<SelectionEmbeddedData> {
     const shopDeviceClasses = shopDeviceClassesString.split(',');
-    const productOffers = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice, undefined, shopProductCondition);
+    const productOffers: ProductOffer[] = await productOffersService.getProductOffers(clientConfig, shopDeviceClasses, devicePrice, undefined, shopProductCondition);
     const products = [];
     const selectionEmbeddedTexts = await clientComponentTextService.getComponentTextsForClientAndLocal(clientConfig.id, component.name, locale);
     products.push(...productOffers.map(offer => convertPayloadToSelectionEmbeddedProduct(offer, productOffers, locale, selectionEmbeddedTexts)));
@@ -37,17 +66,14 @@ async function prepareProductSelectionData(shopDeviceClassesString,
     data.texts.footerHtml = util.format(selectionEmbeddedTexts.footerHtml, selectionEmbeddedTexts.partnerShop);
 
     const result = validate(data, schema);
-
     return result.instance;
 }
 
-function convertPayloadToSelectionEmbeddedProduct(productOffer, allProductOffers, locale, popUpTexts) {
+function convertPayloadToSelectionEmbeddedProduct(productOffer: ProductOffer, allProductOffers: ProductOffer[], locale: string, popUpTexts: Map<String, String>): SelectionEmbeddedProduct {
     const displayableProductOffer = productService.fromProductOffer(productOffer, popUpTexts);
-    productOffer.payment = displayableProductOffer.getPaymentInterval();
-
     const advantageCategories = displayableProductOffer.getAdvantageCategories(allProductOffers);
     return {
-        paymentInterval: productOffer.payment,
+        paymentInterval: displayableProductOffer.getPaymentInterval(),
         intervalCode: productOffer.defaultPaymentInterval,
         id: productOffer.id,
         deviceClass: productOffer.deviceClass,
@@ -56,11 +82,12 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer, allProductOffers
         shortName: productOffer.shortName,
         top3: advantageCategories.top3,
         advantages: advantageCategories.advantages,
-        GTCIText: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).name, // GTCI
-        GTCIUri: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri, // GTCI --> naming hier auch ändern infoSheet und detailsDoc is scheiße
-        IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,).name, // IPID
-        IPIDUri: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri, // IPID
+        GTCIText: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).name,
+        GTCIUri: displayableProductOffer.getDocument(documentTypes.GENERAL_TERMS_AND_CONDITIONS_OF_INSURANCE).uri,
+        IPIDText: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION,).name,
+        IPIDUri: displayableProductOffer.getDocument(documentTypes.GENERAL_INSURANCE_PRODUCTS_INFORMATION).uri,
         priceFormatted: displayableProductOffer.getPriceFormatted(locale),
+        // @ts-ignore
         price: productOffer.prices[productOffer.defaultPaymentInterval].netAmount,
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
         productImageLink: productOffer.productImageLink,
@@ -68,11 +95,11 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer, allProductOffers
     }
 }
 
-exports.removeProductFromShoppingCart = async function removeProductFromShoppingCart(orderId, shoppingCart, clientName, productOffersService = _productOffersService) {
+export async function removeProductFromShoppingCart(orderId: string, shoppingCart: any, clientName: string, productOffersService = _productOffersService) {
     if (!shoppingCart) {
         return undefined;
     }
-    const orderIndexToBeDeleted = _.findIndex(shoppingCart.orders, order => order.id === orderId);
+    const orderIndexToBeDeleted = _.findIndex(shoppingCart.orders, (order: any) => order.id === orderId);
     const tags = [
         `client:${clientName}`,
         `product:${shoppingCart.orders[orderIndexToBeDeleted].wertgarantieProduct.name}`
@@ -84,7 +111,5 @@ exports.removeProductFromShoppingCart = async function removeProductFromShopping
         await shoppingCartService.updateLockPrices(result, productOffersService);
     }
     return result;
-};
-
-exports.prepareProductSelectionData = prepareProductSelectionData;
+}
 
