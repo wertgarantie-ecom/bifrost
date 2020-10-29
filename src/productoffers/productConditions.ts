@@ -1,7 +1,7 @@
-enum condition {
+enum Condition {
     NEW = "NEW",
     USED = "USED",
     UNKNOWN = "UNKNOWN"
 }
 
-export default condition;
+export default Condition;

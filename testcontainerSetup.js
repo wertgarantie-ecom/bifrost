@@ -4,7 +4,9 @@ const DBMigrate = require('db-migrate');
 
 module.exports = async () => {
     console.log("setup integration tests");
-    const container = await new GenericContainer("postgres", "11.6")
+    // currently ryuk is really slow to start, let's skip it for now
+    process.env.TESTCONTAINERS_RYUK_DISABLED = "true";
+    const container = await new GenericContainer("postgres", "13")
         .withEnv('POSTGRES_USER', 'admin')
         .withEnv('POSTGRES_PASSWORD', 'bifrost')
         .withExposedPorts(5432)
