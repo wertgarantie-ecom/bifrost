@@ -1,5 +1,10 @@
 import {lockSchema} from './lockSchema';
-import {BackgroundStyle, Lock, PaymentIntervalCode, Range} from "./webserviceProductOffersRepository";
+import {
+    BackgroundStyle,
+    Lock,
+    PaymentIntervalCode,
+    PriceRangePremiums
+} from "./webserviceProductOffersRepository";
 
 export interface DeviceClassConfig {
     objectCode: string,
@@ -13,7 +18,7 @@ export interface WebservicesProductConfig {
     applicationCode: string,
     basicRiskType: string,
     defaultPaymentInterval: PaymentIntervalCode,
-    priceRanges: Range[],
+    priceRanges: PriceRangePremiums[],
     deviceClasses: DeviceClassConfig[],
     documents: {
         legalDocuments: string[]

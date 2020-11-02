@@ -192,17 +192,20 @@ test('should getIntervalPremiumsForPriceRanges', async () => {
             {
                 "minClose": 0,
                 "maxOpen": 30000,
-                "insurancePremium": 2340
+                "insurancePremium": 2340,
+                "condition": "NEW"
             },
             {
                 "minClose": 30000,
                 "maxOpen": 80000,
-                "insurancePremium": 2340
+                "insurancePremium": 2340,
+                "condition": "NEW"
             },
             {
                 "minClose": 80000,
                 "maxOpen": 180000,
-                "insurancePremium": 2340
+                "insurancePremium": 2340,
+                "condition": "NEW"
             }
         ]
     });
@@ -236,14 +239,17 @@ test('should getDevicePremiums', async () => {
                 objectCodeExternal: "Smartphone",
                 priceRanges: [
                     {
+                        condition: "NEW",
                         minClose: 0,
                         maxOpen: 30000
                     },
                     {
+                        condition: "NEW",
                         minClose: 30000,
                         maxOpen: 80000
                     },
                     {
+                        condition: "NEW",
                         minClose: 80000,
                         maxOpen: 180001
                     }
@@ -363,16 +369,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -384,16 +393,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -405,16 +417,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -426,16 +441,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -454,16 +472,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -475,16 +496,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -496,16 +520,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -517,16 +544,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -590,16 +620,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -611,16 +644,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -632,16 +668,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -653,16 +692,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -681,16 +723,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -702,16 +747,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -723,16 +771,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -744,16 +795,19 @@ test('should update all product offers for client', async () => {
                             "priceRangePremiums": [
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 30000,
                                     "minClose": 0
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 80000,
                                     "minClose": 30000
                                 },
                                 {
                                     "insurancePremium": 2340,
+                                    "condition": "NEW",
                                     "maxOpen": 180001,
                                     "minClose": 80000
                                 }
@@ -812,17 +866,20 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
-                        "insurancePremium": 2340
+                        "insurancePremium": 2340,
+                        "condition": "NEW"
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
-                        "insurancePremium": 2340
+                        "insurancePremium": 2340,
+                        "condition": "NEW"
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
-                        "insurancePremium": 2340
+                        "insurancePremium": 2340,
+                        "condition": "NEW"
                     }
                 ]
             },
@@ -833,16 +890,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]
@@ -854,16 +914,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]
@@ -875,16 +938,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]
@@ -903,16 +969,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]
@@ -924,16 +993,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]
@@ -945,16 +1017,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]
@@ -966,16 +1041,19 @@ const expectedIntervalPremiumsForKS = [
                     {
                         "minClose": 0,
                         "maxOpen": 30000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 30000,
                         "maxOpen": 80000,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     },
                     {
                         "minClose": 80000,
                         "maxOpen": 180001,
+                        "condition": "NEW",
                         "insurancePremium": 2340
                     }
                 ]

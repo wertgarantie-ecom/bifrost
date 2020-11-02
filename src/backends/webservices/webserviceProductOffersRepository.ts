@@ -1,5 +1,6 @@
 import {Pool} from "../../framework/postgres";
 import CryptoJS from 'crypto-js';
+import Condition from "../../productoffers/productConditions";
 
 export enum PaymentIntervalCode {
     MONTHLY = "monthly",
@@ -43,7 +44,7 @@ export interface SupportedPaymentInterval {
     priceRangePremiums: PriceRangePremiums[]
 }
 
-export type PriceRangePremiums = Range & { insurancePremium: number }
+export type PriceRangePremiums = Range & { insurancePremium: number, condition: Condition }
 
 export interface WebservicesProduct {
     name: string,

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import _ from 'lodash';
 import {DeviceClassConfig, WebservicesProductConfig} from "./productOffersConfigSchema";
 import {
@@ -8,7 +9,8 @@ import {
     SupportedPaymentInterval,
     WebservicesProduct
 } from "./webserviceProductOffersRepository";
-import {mapIntervalCode, notUndefined} from "../../productoffers/productOffersService";
+import {notUndefined} from "../../productoffers/productOffersService";
+import Condition from "../../productoffers/productConditions";
 
 const _webservicesClient = require('./webservicesClient');
 const _documentRespository = require('../../documents/documentRepository');
@@ -203,10 +205,14 @@ function parseStringToMinorUnit(string: string): number {
     return Math.round(minorUnits);
 }
 
+type PriceRange = Range & {
+    condition?: Condition
+}
+
 async function getIntervalPremiumsForPriceRanges(session: string,
                                                  webservicesProduct: WebservicesAgentDataProduct,
                                                  deviceClassConfig: DeviceClassConfig,
-                                                 priceRanges: Range[],
+                                                 priceRanges: PriceRange[],
                                                  applicationCode: string,
                                                  productType: string,
                                                  riskTypes: string[],
@@ -219,11 +225,14 @@ async function getIntervalPremiumsForPriceRanges(session: string,
         };
         const priceRangePremiums: PriceRangePremiums[] = await Promise.all(priceRanges.map(async (range) => {
             const requestPrice = Math.round((range.maxOpen + range.minClose) / 2);
-            const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, requestPrice, riskTypes);
+            const relevantCondition = (!range.condition) ? Condition.NEW : range.condition;
+            const date = relevantCondition === Condition.USED ? moment().subtract(2, "years").date() : new Date();
+            const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, requestPrice, riskTypes, date);
             return {
                 minClose: range.minClose,
                 maxOpen: range.maxOpen,
-                insurancePremium: parseStringToMinorUnit(result.RESULT.PREMIUM_RECURRING_INTERVAL)
+                insurancePremium: parseStringToMinorUnit(result.RESULT.PREMIUM_RECURRING_INTERVAL),
+                condition: relevantCondition
             };
         }));
         intervalData.priceRangePremiums.push(...priceRangePremiums);

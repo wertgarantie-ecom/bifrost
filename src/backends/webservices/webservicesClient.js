@@ -108,8 +108,7 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
     return await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
-exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes) {
-    const date = new Date();
+exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, date = new Date()) {
     const dateFormatted = dateformat(date, 'dd.mm.yyyy');
     const manufacturerYear = date.getFullYear();
     const objectPriceMajorUnits = (objectPrice / 100) + "";
@@ -145,7 +144,15 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
     return create(parametersJson).end();
 };
 
-exports.getInsurancePremium = async function getInsurancePremium(session, applicationCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, countryCode = 'DE', httpClient = axiosWithCompleteLogging) {
+exports.getInsurancePremium = async function getInsurancePremium(session,
+                                                                 applicationCode,
+                                                                 productType,
+                                                                 paymentInterval,
+                                                                 objectCode,
+                                                                 objectPrice,
+                                                                 riskTypes,
+                                                                 countryCode = 'DE',
+                                                                 httpClient = axiosWithCompleteLogging) {
     if (!(session && productType && applicationCode && objectCode && objectPrice && (riskTypes && riskTypes.length > 0))) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, paymentInterval: ${paymentInterval}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, objectPrice: ${objectPrice}, riskTypes: ${riskTypes}`);
     }
