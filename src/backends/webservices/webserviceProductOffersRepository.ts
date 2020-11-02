@@ -8,42 +8,42 @@ export enum PaymentIntervalCode {
     YEARLY = "yearly"
 }
 
-enum BackgroundStyle {
+export enum BackgroundStyle {
     PRIMARY = "PRIMARY",
     SECONDARY = "SECONDARY"
 }
 
-interface Document {
+export interface Document {
     documentId: string,
     documentTitle: string,
     documentType: string
 }
 
-interface Lock {
+export interface Lock {
     priceRanges: LockPriceRange[]
 }
 
 type LockPriceRange = Range & { requiredLockPrice: bigint }
 
 export interface Range {
-    minClose: bigint,
-    maxOpen: bigint
+    minClose: number,
+    maxOpen: number
 }
 
 export interface SupportedDevice {
     objectCode: string,
     objectCodeExternal: string,
-    maxPriceLimitation: bigint,
-    intervals: SupportedPaymentIntervals[]
+    maxPriceLimitation?: number,
+    intervals: SupportedPaymentInterval[]
 }
 
-interface SupportedPaymentIntervals {
-    intervalCode: PaymentIntervalCode,
+export interface SupportedPaymentInterval {
+    intervalCode: string,
     description: string,
     priceRangePremiums: PriceRangePremiums[]
 }
 
-type PriceRangePremiums = Range & { insurancePremium: bigint }
+export type PriceRangePremiums = Range & { insurancePremium: number }
 
 export interface WebservicesProduct {
     name: string,

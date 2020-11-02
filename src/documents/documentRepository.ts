@@ -1,8 +1,21 @@
 const Pool = require("../framework/postgres").Pool;
-const CryptoJS = require('crypto-js');
+import CryptoJS from 'crypto-js';
 
-exports.persist = async function persist(document) {
-    var hash = CryptoJS.SHA1(document.CONTENT + document.FILENAME + document.type).toString();
+interface Entity {
+    id: string
+}
+
+type Document = PersistableDocument & Entity;
+
+
+interface PersistableDocument {
+    content: string,
+    name: string,
+    type: string
+}
+
+export async function persist(document: PersistableDocument): Promise<string> {
+    var hash = CryptoJS.SHA1(document.content + document.name + document.type).toString();
 
     const pool = Pool.getInstance();
     const client = await pool.connect();
@@ -13,9 +26,9 @@ exports.persist = async function persist(document) {
             text: "INSERT INTO documents (id, name, type, content) VALUES ($1 , $2 , $3, $4) ON CONFLICT DO NOTHING;",
             values: [
                 hash,
-                document.FILENAME,
+                document.name,
                 document.type,
-                document.CONTENT
+                document.content
             ]
         };
         await client.query(query);
@@ -27,9 +40,9 @@ exports.persist = async function persist(document) {
     } finally {
         client.release();
     }
-};
+}
 
-exports.findById = async function findById(id) {
+export async function findById(id: string): Promise<Document | undefined> {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-document-by-id',
@@ -41,9 +54,9 @@ exports.findById = async function findById(id) {
     } else {
         return undefined;
     }
-};
+}
 
-function toDocument(row) {
+function toDocument(row: Document): Document {
     return {
         id: row.id,
         content: row.content,

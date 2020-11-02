@@ -106,7 +106,7 @@ function hasDeviceClassAndIsInLimit(productOffer: any, deviceClass: string, pric
     return _.find(productOffer.devices, (device: any) => device.objectCodeExternal === deviceClass && device.maxPriceLimitation >= price) !== undefined;
 }
 
-function mapIntervalCode(code: string): string {
+export function mapIntervalCode(code: string): PaymentIntervalCode {
     switch (code) {
         case "1":
             return MONTHLY

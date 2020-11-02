@@ -1,6 +1,32 @@
-const lockSchema = require('./lockSchema').lockSchema;
+import {lockSchema} from './lockSchema';
+import {BackgroundStyle, Lock, PaymentIntervalCode, Range} from "./webserviceProductOffersRepository";
 
-module.exports.productOffersConfigSchema = {
+export interface DeviceClassConfig {
+    objectCode: string,
+    objectCodeExternal: string
+}
+
+export interface WebservicesProductConfig {
+    name: string,
+    shortName: string,
+    productType: string,
+    applicationCode: string,
+    basicRiskType: string,
+    defaultPaymentInterval: PaymentIntervalCode,
+    priceRanges: Range[],
+    deviceClasses: DeviceClassConfig[],
+    documents: {
+        legalDocuments: string[]
+    },
+    advantages: string[],
+    risks: string[],
+    productImageLink: string,
+    backgroundStyle: BackgroundStyle,
+    lock: Lock
+}
+
+
+export const productOffersConfigSchema = {
     "type": "array",
     "items": {
         "type": "object",
