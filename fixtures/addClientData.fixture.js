@@ -41,6 +41,11 @@ describe('add phone test shop client config', () => {
                                 {
                                     "minClose": 80001,
                                     "maxOpen": 180000
+                                },
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 180000,
+                                    "condition": "USED"
                                 }
                             ],
                             "deviceClasses": [
@@ -98,6 +103,11 @@ describe('add phone test shop client config', () => {
                                 {
                                     "minClose": 80001,
                                     "maxOpen": 180000
+                                },
+                                {
+                                    "minClose": 0,
+                                    "maxOpen": 180000,
+                                    "condition": "USED"
                                 }
                             ],
                             "deviceClasses": [
@@ -186,6 +196,24 @@ describe('add phone test shop client config', () => {
                         "pageSelector": "/checkout",
                         "parentElementSelector": "body"
                     }
+                }
+            ],
+            "conditionsMapping": [
+                {
+                    "shopCondition": "0",
+                    "bifrostCondition": "NEW"
+                },
+                {
+                    "shopCondition": "11",
+                    "bifrostCondition": "USED"
+                },
+                {
+                    "shopCondition": "12",
+                    "bifrostCondition": "USED"
+                },
+                {
+                    "shopCondition": "13",
+                    "bifrostCondition": "USED"
                 }
             ]
         };

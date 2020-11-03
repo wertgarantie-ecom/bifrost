@@ -1,12 +1,13 @@
 import * as _webserviceProductOffersRepository from '../backends/webservices/webserviceProductOffersRepository';
+import {
+    PaymentIntervalCode,
+    Range,
+    SupportedDevice,
+    WebservicesProduct
+} from '../backends/webservices/webserviceProductOffersRepository';
 
 import _ from 'lodash';
 import Condition from "./productConditions";
-import {
-    PaymentIntervalCode,
-    Range, SupportedDevice,
-    WebservicesProduct
-} from "../backends/webservices/webserviceProductOffersRepository";
 
 const {MONTHLY, HALF_YEARLY, QUARTERLY, YEARLY} = PaymentIntervalCode;
 const {NEW, UNKNOWN} = Condition;
@@ -123,10 +124,10 @@ export function mapIntervalCode(code: string): PaymentIntervalCode {
     }
 }
 
-function getPricesForWebservicesProductOffer(webservicesProductOffer: any, price: bigint): IntervalPrices {
+function getPricesForWebservicesProductOffer(webservicesProductOffer: any, price: bigint, condition: Condition = Condition.NEW): IntervalPrices {
     const intervalPrices: any = {};
     webservicesProductOffer.device.intervals.map((interval: any) => {
-        const priceRangePremium = _.find(interval.priceRangePremiums, (priceRangePremium: any) => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen);
+        const priceRangePremium = _.find(interval.priceRangePremiums, (priceRangePremium: any) => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen && priceRangePremium.condition === condition);
         if (!priceRangePremium) {
             throw new Error(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
         }
@@ -192,7 +193,7 @@ function getProductOfferWithCorrectPrice(webservicesProduct: WebserviceProductWi
         deviceClass: webservicesProduct.device.objectCode,
         shopDeviceClass: webservicesProduct.device.objectCodeExternal,
         priceRange,
-        prices: getPricesForWebservicesProductOffer(webservicesProduct, price),
+        prices: getPricesForWebservicesProductOffer(webservicesProduct, price, condition),
         documents: webservicesProduct.documents.map((document: any) => {
             return {
                 type: document.documentType,
