@@ -127,7 +127,7 @@ export function mapIntervalCode(code: string): PaymentIntervalCode {
 function getPricesForWebservicesProductOffer(webservicesProductOffer: any, price: bigint, condition: Condition = Condition.NEW): IntervalPrices {
     const intervalPrices: any = {};
     webservicesProductOffer.device.intervals.map((interval: any) => {
-        const priceRangePremium = _.find(interval.priceRangePremiums, (priceRangePremium: any) => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen && priceRangePremium.condition === condition);
+        const priceRangePremium = _.find(interval.priceRangePremiums, (priceRangePremium: any) => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen && (priceRangePremium.condition || "NEW") === condition);
         if (!priceRangePremium) {
             throw new Error(`Could not find insurance premium for product offer ${JSON.stringify(webservicesProductOffer)} and price ${price}. This should not happen. Some productOffersConfiguration in the client settings must be invalid.`);
         }
