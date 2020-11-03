@@ -227,7 +227,7 @@ export async function getIntervalPremiumsForPriceRanges(session: string,
             const requestPrice = Math.round((range.maxOpen + range.minClose) / 2);
             const relevantCondition = (!range.condition) ? Condition.NEW : range.condition;
             const date = relevantCondition === Condition.USED ? getUsedDate() : new Date();
-            const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, requestPrice, riskTypes, date);
+            const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, requestPrice, riskTypes, undefined, date);
             return {
                 minClose: range.minClose,
                 maxOpen: range.maxOpen,
