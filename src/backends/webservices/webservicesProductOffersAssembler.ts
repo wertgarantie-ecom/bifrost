@@ -209,14 +209,14 @@ type PriceRange = Range & {
     condition?: Condition
 }
 
-async function getIntervalPremiumsForPriceRanges(session: string,
-                                                 webservicesProduct: WebservicesAgentDataProduct,
-                                                 deviceClassConfig: DeviceClassConfig,
-                                                 priceRanges: PriceRange[],
-                                                 applicationCode: string,
-                                                 productType: string,
-                                                 riskTypes: string[],
-                                                 webservicesClient = _webservicesClient): Promise<SupportedPaymentInterval[]> {
+export async function getIntervalPremiumsForPriceRanges(session: string,
+                                                        webservicesProduct: WebservicesAgentDataProduct,
+                                                        deviceClassConfig: DeviceClassConfig,
+                                                        priceRanges: PriceRange[],
+                                                        applicationCode: string,
+                                                        productType: string,
+                                                        riskTypes: string[],
+                                                        webservicesClient = _webservicesClient): Promise<SupportedPaymentInterval[]> {
     return await Promise.all(webservicesProduct.PAYMENTINTERVALS.INTERVAL.map(async interval => {
         const intervalData: SupportedPaymentInterval = {
             intervalCode: interval.VALUE,
@@ -226,7 +226,7 @@ async function getIntervalPremiumsForPriceRanges(session: string,
         const priceRangePremiums: PriceRangePremiums[] = await Promise.all(priceRanges.map(async (range) => {
             const requestPrice = Math.round((range.maxOpen + range.minClose) / 2);
             const relevantCondition = (!range.condition) ? Condition.NEW : range.condition;
-            const date = relevantCondition === Condition.USED ? moment().subtract(2, "years").date() : new Date();
+            const date = relevantCondition === Condition.USED ? getUsedDate() : new Date();
             const result = await webservicesClient.getInsurancePremium(session, applicationCode, productType, interval.VALUE, deviceClassConfig.objectCode, requestPrice, riskTypes, date);
             return {
                 minClose: range.minClose,
@@ -238,6 +238,10 @@ async function getIntervalPremiumsForPriceRanges(session: string,
         intervalData.priceRangePremiums.push(...priceRangePremiums);
         return intervalData;
     }));
+}
+
+function getUsedDate(): Date {
+    return moment().subtract(2, "years").toDate()
 }
 
 function findMaxPriceFromPriceRanges(priceRanges: Range[]): number | undefined {
@@ -317,7 +321,6 @@ exports.findProductFor = findProductFor;
 exports.assembleProductOffer = assembleProductOffer;
 exports.getDocuments = getDocuments;
 exports.findMaxPriceForDeviceClass = findMaxPriceForDeviceClass;
-exports.getIntervalPremiumsForPriceRanges = getIntervalPremiumsForPriceRanges;
 exports.getDevicePremiums = getDevicePremiums;
 exports.getLegalDocuments = getLegalDocuments;
 exports.updateAllProductOffersForClient = updateAllProductOffersForClient;

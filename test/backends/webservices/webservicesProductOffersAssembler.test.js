@@ -1,3 +1,4 @@
+
 const webservicesResponses = require('../../../integration-test/backends/webservices/webservicesResponses');
 const webservicesService = require('../../../src/backends/webservices/webservicesProductOffersAssembler');
 const fixtureHelper = require('../../../integration-test/helper/fixtureHelper');
@@ -212,6 +213,67 @@ test('should getIntervalPremiumsForPriceRanges', async () => {
     expect(result[1].intervalCode).toEqual("3");
     expect(result[1].description).toEqual("vierteljährlich");
 });
+
+test('should getIntervalPremiumsForPriceRanges', async () => {
+    const priceRanges = [
+        {
+            minClose: 0,
+            maxOpen: 30000
+        },
+        {
+            minClose: 30000,
+            maxOpen: 80000
+        },
+        {
+            minClose: 80000,
+            maxOpen: 180000
+        },
+        {
+            minClose: 80000,
+            maxOpen: 180000,
+            condition: "USED"
+        }
+    ];
+    const deviceClassConfig = {
+        objectCode: "9025",
+        objectCodeExternal: "Smartphone",
+    };
+    const webservicesProduct = webservicesResponses.agentDataSingleProduct.RESULT.PRODUCT_LIST.PRODUCT;
+    const result = await webservicesService.getIntervalPremiumsForPriceRanges(session, webservicesProduct, deviceClassConfig, priceRanges, "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", ["KOMPLETTSCHUTZ"], mockWebservicesClient);
+    expect(result.length).toBe(4);
+    expect(result[0]).toEqual({
+        "intervalCode": "1",
+        "description": "monatlich",
+        "priceRangePremiums": [
+            {
+                "minClose": 0,
+                "maxOpen": 30000,
+                "insurancePremium": 2340,
+                "condition": "NEW"
+            },
+            {
+                "minClose": 30000,
+                "maxOpen": 80000,
+                "insurancePremium": 2340,
+                "condition": "NEW"
+            },
+            {
+                "minClose": 80000,
+                "maxOpen": 180000,
+                "insurancePremium": 2340,
+                "condition": "NEW"
+            },
+            {
+                "minClose": 80000,
+                "maxOpen": 180000,
+                "insurancePremium": 2340,
+                "condition": "USED"
+            }
+        ]
+    });
+    expect(result[1].intervalCode).toEqual("3");
+    expect(result[1].description).toEqual("vierteljährlich");
+})
 
 test('should getDevicePremiums', async () => {
     const productOfferConfig = {
