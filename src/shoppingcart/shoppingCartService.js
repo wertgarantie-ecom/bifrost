@@ -12,9 +12,9 @@ const metrics = require('../framework/metrics')();
 
 
 exports.addProductToShoppingCart = async function addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, orderId = uuid(), productOfferService = _productOfferService) {
+    productToAdd.wertgarantieProduct.shopProductCondition = getCondition(clientConfig.conditionsMapping, productToAdd.shopProduct.deviceCondition);
     const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.publicClientIds[0]);
     const completeProductToAdd = await productOfferService.getProductOfferById(productToAdd.wertgarantieProduct.id);
-    productToAdd.wertgarantieProduct.shopProductCondition = getCondition(productToAdd.shopProduct.condition);
     updatedShoppingCart.orders.push({
         id: orderId,
         shopProduct: productToAdd.shopProduct,
