@@ -108,9 +108,10 @@ exports.getAdvertisingTexts = async function getAdvertisingTexts(session, applic
     return await sendWebservicesRequest(formDataMap, process.env.WEBSERVICES_URI + '/callservice.pl', httpClient, "0");
 };
 
-exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, date = new Date()) {
-    const dateFormatted = dateformat(date, 'dd.mm.yyyy');
-    const manufacturerYear = date.getFullYear();
+exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, deviceDate = new Date()) {
+    const deviceDateFormatted = dateformat(deviceDate, 'dd.mm.yyyy');
+    const todayFormatted = dateformat(new Date(), 'dd.mm.yyyy');
+    const manufacturerYear = deviceDate.getFullYear();
     const objectPriceMajorUnits = (objectPrice / 100) + "";
     const objectPriceFormatted = objectPriceMajorUnits.replace(".", ",");
     const parametersJson = {
@@ -118,8 +119,8 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
             "APPLICATION_CODE": applicationCode,
             "TAX_COUNTRY_CODE": countryCode,
             "PRODUCTTYPE": productType,
-            "DATE": dateFormatted,
-            "APPLICATION_DATE": dateFormatted,
+            "DATE": todayFormatted,
+            "APPLICATION_DATE": todayFormatted,
             "PAYMENT_INTERVAL": paymentInterval
         }
     };
@@ -128,7 +129,7 @@ exports.assembleInsurancePremiumXmlData = function assembleInsurancePremiumXmlDa
             "DEVICE": {
                 "OBJECT_CODE": objectCode,
                 "OBJECT_PRICE": objectPriceFormatted,
-                "PURCHASE_DATE": dateFormatted,
+                "PURCHASE_DATE": deviceDateFormatted,
                 "MANUFACTURER_YEAR": manufacturerYear,
                 "RISKS":
                     {
@@ -152,7 +153,7 @@ exports.getInsurancePremium = async function getInsurancePremium(session,
                                                                  objectPrice,
                                                                  riskTypes,
                                                                  countryCode = 'DE',
-                                                                 date= new Date(),
+                                                                 date = new Date(),
                                                                  httpClient = axiosWithCompleteLogging) {
     if (!(session && productType && applicationCode && objectCode && objectPrice && (riskTypes && riskTypes.length > 0))) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, paymentInterval: ${paymentInterval}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, objectPrice: ${objectPrice}, riskTypes: ${riskTypes}`);
