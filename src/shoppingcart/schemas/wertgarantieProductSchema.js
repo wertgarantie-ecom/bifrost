@@ -18,6 +18,9 @@ exports.wertgarantieProductSchema = {
         },
         shopDeviceClass: {
             type: "string"
+        },
+        shopProductCondition: {
+            typee: "string"
         }
     },
     required: [

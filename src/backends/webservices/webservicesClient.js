@@ -152,11 +152,12 @@ exports.getInsurancePremium = async function getInsurancePremium(session,
                                                                  objectPrice,
                                                                  riskTypes,
                                                                  countryCode = 'DE',
+                                                                 date= new Date(),
                                                                  httpClient = axiosWithCompleteLogging) {
     if (!(session && productType && applicationCode && objectCode && objectPrice && (riskTypes && riskTypes.length > 0))) {
         throw new Error(`request data not provided. Session: ${session}, productType: ${productType}, paymentInterval: ${paymentInterval}, applicationCode: ${applicationCode}, objectCode: ${objectCode}, objectPrice: ${objectPrice}, riskTypes: ${riskTypes}`);
     }
-    const xmlData = this.assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes);
+    const xmlData = this.assembleInsurancePremiumXmlData(applicationCode, countryCode, productType, paymentInterval, objectCode, objectPrice, riskTypes, date);
     const formDataMap = new Map();
     formDataMap.set('FUNCTION', 'GET_PRODUCT_DATA');
     formDataMap.set('SHAPING', 'INSURANCE_PREMIUM');

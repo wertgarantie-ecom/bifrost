@@ -46,13 +46,15 @@ interface ConditionMapping {
 
 }
 
-export async function getProductOffers(clientConfig: any, shopDeviceClasses: string[], price: bigint, offerCount: number, shopProductCondition: string, productOffersRepository = _webserviceProductOffersRepository): Promise<ProductOffer[]> {
+export async function getProductOffers(clientConfig: any,
+                                       shopDeviceClasses: string[],
+                                       price: bigint,
+                                       offerCount: number,
+                                       shopProductCondition: string,
+                                       productOffersRepository = _webserviceProductOffersRepository): Promise<ProductOffer[]> {
     let productOffers;
-    if (getCondition(clientConfig.conditionsMapping, shopProductCondition) !== NEW) {
-        return [];
-    }
     const clientProductOffers = await productOffersRepository.findByClientId(clientConfig.id);
-    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price);
+    productOffers = webserviceProductOffersToGeneralProductOffers(clientProductOffers, shopDeviceClasses, price, shopProductCondition, clientConfig.conditionsMapping);
 
     if (!offerCount) {
         return productOffers;
@@ -61,12 +63,12 @@ export async function getProductOffers(clientConfig: any, shopDeviceClasses: str
     }
 }
 
-export async function getPriceForSelectedProductOffer(clientConfig: any, shopDeviceClass: string, productId: string, shopProductPrice: bigint, paymentInterval: PaymentIntervalCode): Promise<number | undefined> {
+export async function getPriceForSelectedProductOffer(clientConfig: any, shopDeviceClass: string, productId: string, shopProductPrice: bigint, paymentInterval: PaymentIntervalCode, shopProductCondition: string): Promise<number | undefined> {
     const productOffer = await _webserviceProductOffersRepository.findById(productId);
     if (!productOffer) {
         return undefined;
     } else {
-        const preparedProductOffer = webserviceProductOffersToGeneralProductOffers([productOffer], [shopDeviceClass], shopProductPrice);
+        const preparedProductOffer = webserviceProductOffersToGeneralProductOffers([productOffer], [shopDeviceClass], shopProductPrice, shopProductCondition, clientConfig.conditionsMapping);
         // @ts-ignore
         const paymentIntervalPrice = preparedProductOffer[0].prices[paymentInterval];
         return (paymentIntervalPrice) ? paymentIntervalPrice.netAmount : undefined;
@@ -145,9 +147,13 @@ export function getMinimumLockPriceForProduct(webservicesProductOffer: any, pric
     return lockPriceRange.requiredLockPrice;
 }
 
-function getPriceRange(webservicesProductOffer: WebserviceProductWithFixedDevice, price: bigint): Range | undefined {
+function getPriceRange(webservicesProductOffer: WebserviceProductWithFixedDevice, price: bigint, condition: Condition): Range | undefined {
     const interval = webservicesProductOffer.device.intervals[0];
-    const priceRangePremium = _.find(interval.priceRangePremiums, (priceRangePremium: any) => price >= priceRangePremium.minClose && price < priceRangePremium.maxOpen);
+    const priceRangePremium = _.find(interval.priceRangePremiums,
+        (priceRangePremium: any) =>
+            price >= priceRangePremium.minClose
+            && price < priceRangePremium.maxOpen
+            && (priceRangePremium.condition || Condition.NEW) === condition);
     if (!priceRangePremium) {
         return undefined;
     }
@@ -172,8 +178,8 @@ export interface ProductOffer {
     productImageLink: string
 }
 
-function getProductOfferWithCorrectPrice(webservicesProduct: WebserviceProductWithFixedDevice, price: bigint): ProductOffer | undefined {
-    const priceRange = getPriceRange(webservicesProduct, price);
+function getProductOfferWithCorrectPrice(webservicesProduct: WebserviceProductWithFixedDevice, price: bigint, condition: Condition): ProductOffer | undefined {
+    const priceRange = getPriceRange(webservicesProduct, price, condition);
     if (!priceRange) {
         return undefined;
     }
@@ -199,11 +205,12 @@ function getProductOfferWithCorrectPrice(webservicesProduct: WebserviceProductWi
     };
 }
 
-export function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers: any, shopDeviceClasses: string[], price: bigint): ProductOffer[] {
+export function webserviceProductOffersToGeneralProductOffers(webservicesProductOffers: any, shopDeviceClasses: string[], price: bigint, shopProductCondition: string, conditionMapping: ConditionMapping[]): ProductOffer[] {
+    const condition = getCondition(conditionMapping, shopProductCondition);
     return shopDeviceClasses.flatMap(shopDeviceClass => {
         const filteredProductOffers = filterProductOffers(webservicesProductOffers, shopDeviceClass, price);
         return filteredProductOffers.map((webservicesProductOffer: any) => {
-            return getProductOfferWithCorrectPrice(webservicesProductOffer, price);
+            return getProductOfferWithCorrectPrice(webservicesProductOffer, price, condition);
         });
     }).filter(notUndefined);
 }

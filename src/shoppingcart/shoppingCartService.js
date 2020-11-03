@@ -1,3 +1,5 @@
+const getCondition = require("../productoffers/productOffersService").getCondition;
+
 const uuid = require('uuid');
 const _ = require('lodash');
 const signatureService = require('../shoppingcart/signatureService');
@@ -12,6 +14,7 @@ const metrics = require('../framework/metrics')();
 exports.addProductToShoppingCart = async function addProductToShoppingCart(shoppingCart, productToAdd, clientConfig, orderId = uuid(), productOfferService = _productOfferService) {
     const updatedShoppingCart = shoppingCart || newShoppingCart(clientConfig.publicClientIds[0]);
     const completeProductToAdd = await productOfferService.getProductOfferById(productToAdd.wertgarantieProduct.id);
+    productToAdd.wertgarantieProduct.shopProductCondition = getCondition(productToAdd.shopProduct.condition);
     updatedShoppingCart.orders.push({
         id: orderId,
         shopProduct: productToAdd.shopProduct,
@@ -232,7 +235,7 @@ exports.syncShoppingCart = async function updateWertgarantieShoppingCart(wertgar
                 order.shopProduct.name = matchingShopOrderItem.name;
                 let priceUpdated = false;
                 if (order.shopProduct.price !== matchingShopOrderItem.price) {
-                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.wertgarantieProduct.shopDeviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval);
+                    const newPrice = await productOfferService.getPriceForSelectedProductOffer(clientConfig, order.wertgarantieProduct.shopDeviceClass, order.wertgarantieProduct.id, matchingShopOrderItem.price, order.wertgarantieProduct.paymentInterval, order.shopProduct.condition);
                     if (!newPrice) {
                         result.changes.deleted.push(order.id);
                         return;

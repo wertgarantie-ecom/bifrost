@@ -23,6 +23,9 @@ exports.addShoppingCartProductSchema = {
                 },
                 orderItemId: {
                     type: "string"
+                },
+                deviceCondition: {
+                    type: "string"
                 }
             },
             required: [

@@ -31,7 +31,8 @@ function validProduct() {
         wertgarantieProduct: {
             id: "1234",
             name: "Komplettschutz",
-            paymentInterval: "monthly"
+            paymentInterval: "monthly",
+            shopProductCondition: "NEW"
         }
     };
 }
@@ -714,6 +715,7 @@ test("should add bike product to shopping cart with lock requirement", async () 
                     id: productId,
                     name: "Komplettschutz Rad mit monatlicher Zahlweise",
                     price: 500,
+                    shopProductCondition: "NEW",
                     paymentInterval: "monthly"
                 }
             },
@@ -738,7 +740,8 @@ test("should add bike product to shopping cart with lock requirement", async () 
                     "id": productId,
                     "name": "Komplettschutz Rad mit monatlicher Zahlweise",
                     "price": 500,
-                    "paymentInterval": "monthly"
+                    "paymentInterval": "monthly",
+                    "shopProductCondition": "NEW"
                 }
             },
             {
@@ -753,6 +756,7 @@ test("should add bike product to shopping cart with lock requirement", async () 
                     "id": productId,
                     "name": "Komplettschutz Rad mit monatlicher Zahlweise",
                     "paymentInterval": "monthly",
+                    "shopProductCondition": "NEW",
                     "price": 2000
                 }
             }

@@ -137,7 +137,7 @@ test("should retrieve insurance premium for product", async () => {
     });
 
     try {
-        const agentData = await webservicesClient.getInsurancePremium("session", "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", 1, 9025, 699, ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"], 'DE', mockHttpClient);
+        const agentData = await webservicesClient.getInsurancePremium("session", "GU WG DE KS 0419", "KOMPLETTSCHUTZ_2019", 1, 9025, 699, ["KOMPLETTSCHUTZ", "DIEBSTAHLSCHUTZ"], 'DE', undefined, mockHttpClient);
         expect(agentData).toEqual(responses.insurancePremiumResponse);
     } catch (error) {
         fail(error);
