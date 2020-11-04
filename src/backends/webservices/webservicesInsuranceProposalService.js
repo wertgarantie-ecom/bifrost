@@ -16,7 +16,7 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
         if (!productOffer) {
             throw new Error("No product offer for wertgarantie product id " + order.wertgarantieProduct.id);
         }
-        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer, order.wertgarantieProduct.deviceClass, order.wertgarantieProduct.condition);
+        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer, order.wertgarantieProduct.deviceClass, order.wertgarantieProduct.shopProductCondition);
 
         const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
 
