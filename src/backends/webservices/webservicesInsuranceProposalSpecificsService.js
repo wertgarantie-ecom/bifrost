@@ -1,3 +1,6 @@
+const moment = require('moment');
+const dateformat = require("dateformat");
+
 const proposalType = {
     ce: {
         name: "Geraet",
@@ -313,20 +316,20 @@ const deviceClassesConfig = {
 }
 
 
-exports.getInsuranceProposalSpecifics = function getInsuranceProposalSpecifics(antrag, objectCode, shopProduct, formattedDate, productOffer) {
+exports.getInsuranceProposalSpecifics = function getInsuranceProposalSpecifics(antrag, objectCode, shopProduct, formattedDate, productOffer, condition) {
     const config = deviceClassesConfig[objectCode];
     if (config) {
         const proposalType = config.proposalType;
-        return antrag[proposalType.name] = proposalType.proposal(objectCode, shopProduct, formattedDate, productOffer);
+        return antrag[proposalType.name] = proposalType.proposal(objectCode, shopProduct, formattedDate, productOffer, condition);
     } else {
         throw new Error(`Object Code ${objectCode} does not match a specific proposal.`)
     }
 };
 
 
-function smartphoneSpecificProposal(objectCode, shopProduct, formattedDate, productOffer) {
+function smartphoneSpecificProposal(objectCode, shopProduct, formattedDate, productOffer, condition) {
     return {
-        ...bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOffer),
+        ...bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOffer, condition),
         "Modellbezeichnung": shopProduct.name
     };
 }
@@ -335,13 +338,13 @@ function ceSpecificProposal(objectCode, shopProduct, formattedDate, productOffer
     return smartphoneSpecificProposal(objectCode, shopProduct, formattedDate, productOffer);
 }
 
-function bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOffer) {
+function bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOffer, condition) {
     return {
         "Position": 1,
         "Hersteller": shopProduct.manufacturer,
         "Geraetekennzeichen": objectCode,
         "Kaufdatum": formattedDate,
-        "Kaufpreis": ((shopProduct.price / 100) + "").replace(".", ","),
+        ...conditionBasedAttributes(shopProduct.price, condition),
         "Risiken": {
             "Risiko": productOffer.risks.map(risk => {
                 return {
@@ -350,4 +353,24 @@ function bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOff
             })
         }
     };
+}
+
+function conditionBasedAttributes(price, condition) {
+    const kaufpreis = ((price / 100) + "").replace(".", ",");
+    if (condition === "USED") {
+        return {
+            "Baujahr": getUsedDate(),
+            "GebrauchtGeraet": true,
+            "Kaufpreis": kaufpreis
+        }
+    } else {
+        return {
+            "Kaufpreis": kaufpreis,
+        }
+    }
+}
+
+function getUsedDate() {
+    const usedDate = moment().subtract(1, "years").subtract(1, "days").toDate();
+    return dateformat(usedDate, 'dd.mm.yyyy');
 }

@@ -16,7 +16,7 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
         if (!productOffer) {
             throw new Error("No product offer for wertgarantie product id " + order.wertgarantieProduct.id);
         }
-        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer, order.wertgarantieProduct.deviceClass);
+        const insuranceProposalXML = getInsuranceProposalXML(contractnumber, satznummer, clientConfig.activePartnerNumber, customer, matchingShopProduct, productOffer, order.wertgarantieProduct.deviceClass, order.wertgarantieProduct.condition);
 
         const submitResult = await webservicesClient.sendInsuranceProposal(session, insuranceProposalXML);
 
@@ -44,7 +44,7 @@ exports.submitInsuranceProposal = async function submitInsuranceProposal(order, 
     }
 };
 
-function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer, deviceClass, date = new Date()) {
+function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber, customer, shopProduct, productOffer, deviceClass, date = new Date(), condition) {
     const formattedDate = dateformat(date, 'dd.mm.yyyy');
     const proposal = {
         "Vertragsnummer": contractNumber,
@@ -62,7 +62,7 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
             }
         }
     };
-    getInsuranceProposalSpecifics(proposal, deviceClass, shopProduct, formattedDate, productOffer);
+    getInsuranceProposalSpecifics(proposal, deviceClass, shopProduct, formattedDate, productOffer, condition);
     proposal["Produktdetails"] = {
         "Antragskodierung": productOffer.applicationCode,
         "Produkttyp": productOffer.productType
