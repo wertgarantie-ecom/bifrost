@@ -360,7 +360,7 @@ function conditionBasedAttributes(price, condition) {
     if (condition === "USED") {
         return {
             "Baujahr": getUsedDate(),
-            "GebrauchtGeraet": true,
+            "Gebrauchtgeraet": true,
             "Kaufpreis": kaufpreis
         }
     } else {
@@ -371,6 +371,6 @@ function conditionBasedAttributes(price, condition) {
 }
 
 function getUsedDate() {
-    const usedDate = moment().subtract(1, "years").subtract(1, "days").toDate();
-    return dateformat(usedDate, 'dd.mm.yyyy');
+    const usedDate = moment().subtract(2, "years").toDate();
+    return dateformat(usedDate, 'yyyy');
 }
