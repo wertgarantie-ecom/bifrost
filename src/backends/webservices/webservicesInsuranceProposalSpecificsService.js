@@ -330,7 +330,6 @@ exports.getInsuranceProposalSpecifics = function getInsuranceProposalSpecifics(a
 function smartphoneSpecificProposal(objectCode, shopProduct, formattedDate, productOffer, condition) {
     return {
         ...bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOffer, condition),
-        "Modellbezeichnung": shopProduct.name
     };
 }
 
@@ -343,6 +342,7 @@ function bikeSpecificProposal(objectCode, shopProduct, formattedDate, productOff
         "Position": 1,
         "Hersteller": shopProduct.manufacturer,
         "Geraetekennzeichen": objectCode,
+        "Modellbezeichnung": shopProduct.name,
         "Kaufdatum": formattedDate,
         ...conditionBasedAttributes(shopProduct.price, condition),
         "Risiken": {
