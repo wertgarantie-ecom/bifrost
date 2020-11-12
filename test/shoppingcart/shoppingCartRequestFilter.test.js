@@ -132,6 +132,68 @@ test('should convert base64 encoded string to webshopData', async () => {
     expect(mockRequest.body.webshopData).toEqual(expectedResult);
 });
 
+test('should decode html encoding in webshop data', async () => {
+    const webshopData = {
+        "purchasedProducts": [
+            {
+                "price": 86000,
+                "manufacturer": "XXXPhones Inc.",
+                "deviceClass": "Smartphone",
+                "name": "Flash Handy 3000 Pro",
+                "deviceOS": "android"
+            }
+        ],
+        "customer": {
+            "company": "INNOQ",
+            "salutation": "Herr",
+            "firstname": "Max",
+            "lastname": "Mustermann",
+            "street": "Unter den Linden 9",
+            "zip": "52345",
+            "city": "K&ouml;ln",
+            "country": "Deutschland",
+            "email": "max.mustermann1234@test.com"
+        },
+        "encryptedSessionId": "e61b4dba071d5039f100e1338a5b87f603d3fc9a179673c09c2d9a3dee6d9e91"
+    };
+    const webshopDateBase64String = new Buffer(JSON.stringify(webshopData)).toString('base64');
+
+    const mockRequest = {
+        body: {
+            webshopData: webshopDateBase64String
+        }
+    };
+
+    const next = jest.fn();
+
+    await requestFilter.filterAndValidateBase64EncodedWebshopData(mockRequest, {}, next);
+
+    const expectedResult = {
+        "purchasedProducts": [
+            {
+                "price": 86000,
+                "manufacturer": "XXXPhones Inc.",
+                "deviceClass": "Smartphone",
+                "name": "Flash Handy 3000 Pro",
+                "deviceOS": "android"
+            }
+        ],
+        "customer": {
+            "company": "INNOQ",
+            "salutation": "Herr",
+            "firstname": "Max",
+            "lastname": "Mustermann",
+            "street": "Unter den Linden 9",
+            "zip": "52345",
+            "city": "Köln",
+            "country": "Deutschland",
+            "email": "max.mustermann1234@test.com"
+        },
+        "encryptedSessionId": "e61b4dba071d5039f100e1338a5b87f603d3fc9a179673c09c2d9a3dee6d9e91"
+    };
+    expect(mockRequest.body.webshopData).toEqual(expectedResult);
+})
+
 test('should fail if checkout data is incomplete', async () => {
     const mockRequest = {
         body: {

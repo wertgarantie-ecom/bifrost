@@ -1,3 +1,5 @@
+import {NextFunction, Request, Response} from "express";
+
 const _findBySessionId = require('./checkoutRepository').findBySessionId;
 const _verifyShoppingCart = require('./signatureService').verifyShoppingCart;
 const ClientError = require('../errors/ClientError');
@@ -7,8 +9,10 @@ const SESSION_ID_HEADER = 'X-wertgarantie-session-id';
 const afterSalesComponentCheckoutSchema = require('../components/aftersales/afterSalesComponentCheckoutSchema').afterSalesComponentCheckoutSchema;
 const validate = require('../framework/validation/validator').validate;
 const signedShoppingCartSchema = require('./schemas/signedShoppingCartSchema').signedSchoppingCartSchema;
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
 
-exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody(req, res, next) {
+export function detectBase64EncodedRequestBody(req: Request, res: Response, next: NextFunction): void {
     const signedShoppingCart = req.body.signedShoppingCart;
     const options = {allowEmpty: false};
     if (isBase64(signedShoppingCart, options)) {
@@ -17,22 +21,22 @@ exports.detectBase64EncodedRequestBody = function detectBase64EncodedRequestBody
         req.body.signedShoppingCart = JSON.parse(signedShoppingCartString);
     }
     next();
-};
+}
 
-exports.filterAndValidateBase64EncodedWebshopData = function filterAndValidateBase64EncodedWebshopData(req, res, next) {
-    const webshopData = req.body.webshopData;
-    const buffer = Buffer.from(webshopData, 'base64');
-    const webshopDataDecoded = JSON.parse(buffer.toString('utf8'));
+export function filterAndValidateBase64EncodedWebshopData(req: Request, res: Response, next: NextFunction): void {
+    let webshopData = Buffer.from(req.body.webshopData, 'base64').toString('utf8');
+    webshopData = entities.decode(webshopData);
+    webshopData = JSON.parse(webshopData);
     try {
-        validate(webshopDataDecoded, afterSalesComponentCheckoutSchema);
-        req.body.webshopData = webshopDataDecoded;
+        validate(webshopData, afterSalesComponentCheckoutSchema);
+        req.body.webshopData = webshopData;
     } catch (error) {
         return next(error);
     }
     return next();
-};
+}
 
-exports.checkSessionIdCheckout = async function checkSessionIdCheckout(req, res, next, findBySessionId = _findBySessionId) {
+export async function checkSessionIdCheckout(req: Request, res: Response, next: NextFunction, findBySessionId = _findBySessionId): Promise<void> {
     const sessionId = req.get(SESSION_ID_HEADER);
     if (sessionId === undefined) {
         return next();
@@ -50,9 +54,14 @@ exports.checkSessionIdCheckout = async function checkSessionIdCheckout(req, res,
         const clientError = new ClientError(`only uuids are allowed as session id header. Received ${SESSION_ID_HEADER}=${sessionId}`);
         return next(clientError);
     }
-};
+}
 
-exports.validateShoppingCart = function validateShoppingCart(req, res, next, verifyShoppingCart = _verifyShoppingCart) {
+type ECommerceRequest = Request & {
+    shoppingCart: any
+}
+
+
+export function validateShoppingCart(req: ECommerceRequest, res: Response, next: NextFunction, verifyShoppingCart = _verifyShoppingCart) {
     if (!(req.body && req.body.signedShoppingCart)) {
         console.log("Empty body and/or shopping cart not available. Nothing to validate.");
         return next();
@@ -76,12 +85,12 @@ exports.validateShoppingCart = function validateShoppingCart(req, res, next, ver
         req.shoppingCart = signedShoppingCart.shoppingCart;
         return next();
     }
-};
+}
 
 
-function deleteShoppingCart(req, res) {
+function deleteShoppingCart(req: Request, res: Response) {
     if (req.body) {
         delete req.body.signedShoppingCart;
     }
-    res.set('X-wertgarantie-shopping-cart-delete', true);
+    res.set('X-wertgarantie-shopping-cart-delete', "true");
 }
