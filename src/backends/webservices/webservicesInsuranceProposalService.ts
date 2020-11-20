@@ -1,3 +1,5 @@
+import {ClientConfig} from "./webservicesProductOffersAssembler";
+
 const {create} = require('xmlbuilder2');
 const dateformat = require('dateformat');
 const uuid = require('uuid');
@@ -6,7 +8,23 @@ const _productOffersRepository = require('./webserviceProductOffersRepository');
 const getInsuranceProposalSpecifics = require('./webservicesInsuranceProposalSpecificsService').getInsuranceProposalSpecifics;
 const _ = require('lodash');
 
-exports.submitInsuranceProposal = async function submitInsuranceProposal(order, customer, matchingShopProduct, clientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
+interface Customer {
+
+}
+
+interface Order {
+    wertgarantieProduct: WertgarantieProduct
+}
+
+interface ShopProduct {
+
+}
+
+interface WertgarantieProduct {
+    id: string
+}
+
+exports.submitInsuranceProposal = async function submitInsuranceProposal(order: Order, customer: Customer, matchingShopProduct: ShopProduct, clientConfig: ClientConfig, webservicesClient = _webservicesClient, productOffersRepository = _productOffersRepository, idGenerator = uuid) {
     try {
         const session = await webservicesClient.login(clientConfig.backends.webservices);
         const contractnumber = await webservicesClient.getNewContractNumber(session);
@@ -69,6 +87,7 @@ function getInsuranceProposalXML(contractNumber, satznummer, activePartnerNumber
     };
     proposal["Zahlung"] = {
         "Selbstzahler": true
+        // "Intervall": productOffer
     };
 
     const proposalJsonComplete = {

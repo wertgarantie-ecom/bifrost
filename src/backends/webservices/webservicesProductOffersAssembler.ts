@@ -93,9 +93,10 @@ interface SuccessUpdateResult {
 
 type FailureUpdateResult = SuccessUpdateResult & { error: string }
 
-interface ClientConfig {
+export interface ClientConfig {
     id: string,
     name: string,
+    activePartnerNumber: string
     backends: {
         webservices: {
             productOffersConfigurations: WebservicesProductConfig[]
