@@ -128,6 +128,9 @@ module.exports.productOfferSchema = {
                     }
                 }
             }
+        },
+        "title": {
+            "type": "string"
         }
     },
     "required": [

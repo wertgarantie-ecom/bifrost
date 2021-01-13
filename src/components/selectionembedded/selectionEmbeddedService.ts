@@ -31,12 +31,13 @@ interface SelectionEmbeddedProduct {
     GTCIText: string,
     GTCIUri: string,
     IPIDText: string,
-    IPIDUri: string
-    priceFormatted: string
+    IPIDUri: string,
+    priceFormatted: string,
     price: bigint,
-    taxFormatted: string
-    productImageLink: string
-    backgroundStyle: string
+    taxFormatted: string,
+    productImageLink: string,
+    backgroundStyle: string,
+    title: string
 }
 
 export async function getProductOffers(shopDeviceClassesString: string, devicePrice: bigint, clientConfig: any, locale: string, shoppingCart: any, userAgent: any, shopProductCondition: string): Promise<SelectionEmbeddedData> {
@@ -91,7 +92,8 @@ function convertPayloadToSelectionEmbeddedProduct(productOffer: ProductOffer, al
         price: productOffer.prices[productOffer.defaultPaymentInterval].netAmount,
         taxFormatted: displayableProductOffer.getIncludedTaxFormatted(locale),
         productImageLink: productOffer.productImageLink,
-        backgroundStyle: productOffer.backgroundStyle
+        backgroundStyle: productOffer.backgroundStyle,
+        title: productOffer.title
     }
 }
 

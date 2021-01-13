@@ -176,7 +176,8 @@ export interface ProductOffer {
     prices: IntervalPrices,
     documents: Document[],
     backgroundStyle: string,
-    productImageLink: string
+    productImageLink: string,
+    title: string
 }
 
 function getProductOfferWithCorrectPrice(webservicesProduct: WebserviceProductWithFixedDevice, price: bigint, condition: Condition): ProductOffer | undefined {
@@ -202,7 +203,8 @@ function getProductOfferWithCorrectPrice(webservicesProduct: WebserviceProductWi
             };
         }),
         backgroundStyle: webservicesProduct.backgroundStyle,
-        productImageLink: webservicesProduct.productImageLink
+        productImageLink: webservicesProduct.productImageLink,
+        title: webservicesProduct.title
     };
 }
 

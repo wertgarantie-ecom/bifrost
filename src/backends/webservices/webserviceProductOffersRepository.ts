@@ -60,7 +60,8 @@ export interface WebservicesProduct {
     documents: Document[],
     advantages: string[],
     lock: Lock,
-    devices: SupportedDevice[]
+    devices: SupportedDevice[],
+    title: string
 }
 
 export async function persist(productOffers: WebservicesProduct[]): Promise<WebservicesProduct[] | undefined> {
@@ -146,7 +147,8 @@ function hashProductOffers(productOffers: WebservicesProduct[]): string {
             lock: offer.lock,
             backgroundStyle: offer.backgroundStyle,
             productImageLink: offer.productImageLink,
-            shortName: offer.shortName
+            shortName: offer.shortName,
+            name: offer.name
         };
     });
 

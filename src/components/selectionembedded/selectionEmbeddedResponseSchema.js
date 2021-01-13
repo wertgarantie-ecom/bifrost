@@ -89,7 +89,10 @@ exports.selectionEmbeddedResponseSchema = {
                             "primary",
                             "secondary"
                         ]
-                    }
+                    },
+                    "title": {
+                        "type": "string",
+                    },
                 }
             }
         }

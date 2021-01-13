@@ -27,7 +27,8 @@ export interface WebservicesProductConfig {
     risks: string[],
     productImageLink: string,
     backgroundStyle: BackgroundStyle,
-    lock: Lock
+    lock: Lock,
+    title: string
 }
 
 
@@ -139,7 +140,10 @@ export const productOffersConfigSchema = {
                     "secondary"
                 ]
             },
-            "lock": lockSchema
+            "lock": lockSchema,
+            "title": {
+                "type": "string"
+            }
         }
     }
 };

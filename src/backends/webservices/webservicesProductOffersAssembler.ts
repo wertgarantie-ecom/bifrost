@@ -176,7 +176,8 @@ async function assembleProductOffer(session: string,
         devices: await getDevicePremiums(session, productOfferConfig, webservicesProduct, webservicesClient),
         productImageLink: productOfferConfig.productImageLink,
         backgroundStyle: productOfferConfig.backgroundStyle,
-        lock: productOfferConfig.lock
+        lock: productOfferConfig.lock,
+        title: productOfferConfig.title
     };
 }
 
