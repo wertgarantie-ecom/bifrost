@@ -148,7 +148,8 @@ function hashProductOffers(productOffers: WebservicesProduct[]): string {
             backgroundStyle: offer.backgroundStyle,
             productImageLink: offer.productImageLink,
             shortName: offer.shortName,
-            name: offer.name
+            name: offer.name,
+            title: offer.title
         };
     });
 
