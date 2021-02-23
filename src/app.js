@@ -15,6 +15,10 @@ const useragent = require('express-useragent');
 const resolvedPath = path.resolve(`config/${process.env.NODE_ENV}.env`);
 dotenv.config({path: resolvedPath});
 
+if (!process.env.METRICS_ENABLED) {
+    console.error("could not read config env file");
+}
+
 const adminRoutes = require('./routes/adminRoutes');
 const ecommerceRoutes = require('./routes/ecommerceRoutes');
 const detectBase64EncodedRequestBody = require('./shoppingcart/shoppingCartRequestFilter').detectBase64EncodedRequestBody;
