@@ -135,12 +135,25 @@ exports.findClientForSecret = async function findClientForSecret(secret) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-secret',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
-                INNER JOIN clientsecret cs on c.id = cs.clientid 
-                INNER JOIN clientpublicid cp on c.id = cp.clientid 
-                WHERE c.id = (SELECT clientid from clientsecret
-                                WHERE secret = $1)
-                GROUP BY c.id;`,
+        text: `SELECT c.id,
+                      c.name,
+                      c.email,
+                      c.backends,
+                      c.activepartnernumber,
+                      c.basicauthuser,
+                      c.basicauthpassword,
+                      c.handbook,
+                      c.loaderconfig,
+                      c.conditionsmapping,
+                      ARRAY_AGG(DISTINCT (cs.secret))   secrets,
+                      ARRAY_AGG(DISTINCT (cp.publicid)) publicids
+               FROM client c
+                        INNER JOIN clientsecret cs on c.id = cs.clientid
+                        INNER JOIN clientpublicid cp on c.id = cp.clientid
+               WHERE c.id = (SELECT clientid
+                             from clientsecret
+                             WHERE secret = $1)
+               GROUP BY c.id;`,
         values: [secret]
     });
     if (result.rowCount > 0) {
@@ -154,12 +167,25 @@ exports.findClientForPublicClientId = async function findClientForPublicClientId
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-client-public-id',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
-                INNER JOIN clientsecret cs on c.id = cs.clientid 
-                INNER JOIN clientpublicid cp on c.id = cp.clientid 
-                WHERE c.id = (SELECT clientid from clientpublicid 
-                                WHERE publicid = $1)
-                GROUP BY c.id;`,
+        text: `SELECT c.id,
+                      c.name,
+                      c.email,
+                      c.backends,
+                      c.activepartnernumber,
+                      c.basicauthuser,
+                      c.basicauthpassword,
+                      c.handbook,
+                      c.loaderconfig,
+                      c.conditionsmapping,
+                      ARRAY_AGG(DISTINCT (cs.secret))   secrets,
+                      ARRAY_AGG(DISTINCT (cp.publicid)) publicids
+               FROM client c
+                        INNER JOIN clientsecret cs on c.id = cs.clientid
+                        INNER JOIN clientpublicid cp on c.id = cp.clientid
+               WHERE c.id = (SELECT clientid
+                             from clientpublicid
+                             WHERE publicid = $1)
+               GROUP BY c.id;`,
         values: [clientPublicId]
     });
     if (result.rowCount > 0) {
@@ -173,11 +199,23 @@ async function findClientById(id) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-by-id',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids FROM client c 
-                INNER JOIN clientsecret cs on c.id = cs.clientid
-                INNER JOIN clientpublicid cp on c.id = cp.clientid
-                WHERE c.id = $1
-                GROUP BY c.id;`,
+        text: `SELECT c.id,
+                      c.name,
+                      c.email,
+                      c.backends,
+                      c.activepartnernumber,
+                      c.basicauthuser,
+                      c.basicauthpassword,
+                      c.handbook,
+                      c.loaderconfig,
+                      c.conditionsmapping,
+                      ARRAY_AGG(DISTINCT (cs.secret))   secrets,
+                      ARRAY_AGG(DISTINCT (cp.publicid)) publicids
+               FROM client c
+                        INNER JOIN clientsecret cs on c.id = cs.clientid
+                        INNER JOIN clientpublicid cp on c.id = cp.clientid
+               WHERE c.id = $1
+               GROUP BY c.id;`,
         values: [id]
     });
     if (result.rowCount > 0) {
@@ -203,11 +241,22 @@ exports.findAllClients = async function findAllClients() {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-all-clients',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
-                FROM client c
-                INNER JOIN clientsecret cs on c.id = cs.clientid
-                INNER JOIN clientpublicid cp on c.id = cp.clientid
-                GROUP By c.id`
+        text: `SELECT c.id,
+                      c.name,
+                      c.email,
+                      c.backends,
+                      c.activepartnernumber,
+                      c.basicauthuser,
+                      c.basicauthpassword,
+                      c.handbook,
+                      c.loaderconfig,
+                      c.conditionsmapping,
+                      ARRAY_AGG(DISTINCT (cs.secret))   secrets,
+                      ARRAY_AGG(DISTINCT (cp.publicid)) publicids
+               FROM client c
+                        INNER JOIN clientsecret cs on c.id = cs.clientid
+                        INNER JOIN clientpublicid cp on c.id = cp.clientid
+               GROUP By c.id`
     });
     if (result.rowCount > 0) {
         return toClients(result.rows);
@@ -220,12 +269,23 @@ exports.findByUsername = async function findByUsername(username) {
     const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-all-clients',
-        text: `SELECT c.id, c.name, c.email, c.backends, c.activepartnernumber, c.basicauthuser, c.basicauthpassword, c.handbook, c.loaderconfig, c.conditionsmapping, ARRAY_AGG(DISTINCT(cs.secret)) secrets, ARRAY_AGG(DISTINCT(cp.publicid)) publicids
-                FROM client c
-                INNER JOIN clientsecret cs on c.id = cs.clientid
-                INNER JOIN clientpublicid cp on c.id = cp.clientid
-                where c.basicauthuser = $1
-                GROUP By c.id`,
+        text: `SELECT c.id,
+                      c.name,
+                      c.email,
+                      c.backends,
+                      c.activepartnernumber,
+                      c.basicauthuser,
+                      c.basicauthpassword,
+                      c.handbook,
+                      c.loaderconfig,
+                      c.conditionsmapping,
+                      ARRAY_AGG(DISTINCT (cs.secret))   secrets,
+                      ARRAY_AGG(DISTINCT (cp.publicid)) publicids
+               FROM client c
+                        INNER JOIN clientsecret cs on c.id = cs.clientid
+                        INNER JOIN clientpublicid cp on c.id = cp.clientid
+               where c.basicauthuser = $1
+               GROUP By c.id`,
         values: [username]
     });
     if (result.rowCount > 0) {
