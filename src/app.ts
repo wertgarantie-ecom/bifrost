@@ -43,7 +43,7 @@ app.use(setUpAccessLogger());
 app.use(express.json());
 app.use(localeParser(), localeFilter);
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
 
 // TODO Check

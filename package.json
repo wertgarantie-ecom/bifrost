@@ -5,7 +5,7 @@
   "scripts": {
     "prestart": "npm run migrate-up",
     "start": "node ./build/src/server.js",
-    "prestart-local": "NODE_ENV=local npm run migrate-up && NODE_ENV=local npm run insert-fixtures",
+    "NOTprestart-local": "NODE_ENV=local npm run migrate-up && NODE_ENV=local npm run insert-fixtures",
     "start-local": "NODE_ENV=local nodemon ./src/server.ts",
     "build": "rimraf ./build && tsc",
     "test": "jest",
