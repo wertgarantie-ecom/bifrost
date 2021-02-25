@@ -20,8 +20,7 @@ import shoppingCartResponseFilter from "./shoppingcart/shoppingCartResponseFilte
 import { errorHandling } from "./routes/errorHandling";
 
 // dotenv
-const resolvedPath = path.resolve(`config/${process.env.NODE_ENV}.env`);
-dotenv.config({ path: resolvedPath });
+dotenv.config({ path: path.join(__dirname, '../',`config/${process.env.NODE_ENV}.env`) });
 
 // vars
 const app = express();
@@ -44,7 +43,7 @@ app.use(setUpAccessLogger());
 app.use(express.json());
 app.use(localeParser(), localeFilter);
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors(corsOptions));
 
 // TODO Check

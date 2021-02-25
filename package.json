@@ -5,7 +5,6 @@
   "scripts": {
     "prestart": "npm run migrate-up",
     "start": "node ./build/src/server.js",
-    "prestart-local": "NODE_ENV=local npm run migrate-up && NODE_ENV=local npm run insert-fixtures",
     "start-local": "NODE_ENV=local nodemon ./src/server.ts",
     "build": "rimraf ./build && tsc",
     "test": "jest",
@@ -20,7 +19,7 @@
     "insert-fixtures": "jest --detectOpenHandles --forceExit -c jest.config.fixture.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-logger": "^2.3.0",
     "body-parser": "^1.19.0",
     "cldr": "^5.6.0",
