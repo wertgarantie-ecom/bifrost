@@ -6,7 +6,7 @@ module.exports = async () => {
     console.log("setup integration tests");
     // currently ryuk is really slow to start, let's skip it for now
     process.env.TESTCONTAINERS_RYUK_DISABLED = "true";
-    const container = await new GenericContainer("postgres", "13")
+    const container = await new GenericContainer("postgres:11.6")
         .withEnv('POSTGRES_USER', 'admin')
         .withEnv('POSTGRES_PASSWORD', 'bifrost')
         .withExposedPorts(5432)
