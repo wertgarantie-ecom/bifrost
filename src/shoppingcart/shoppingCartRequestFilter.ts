@@ -61,7 +61,10 @@ type ECommerceRequest = Request & {
 }
 
 
-export function validateShoppingCart(req: ECommerceRequest, res: Response, next: NextFunction, verifyShoppingCart = _verifyShoppingCart) {
+// export function validateShoppingCart(req: ECommerceRequest, res: Response, next: NextFunction, verifyShoppingCart = _verifyShoppingCart) {
+export function validateShoppingCart(eCommReq: Request, res: Response, next: NextFunction, verifyShoppingCart = _verifyShoppingCart) {
+    const req = eCommReq as ECommerceRequest;
+
     if (!(req.body && req.body.signedShoppingCart)) {
         console.log("Empty body and/or shopping cart not available. Nothing to validate.");
         return next();

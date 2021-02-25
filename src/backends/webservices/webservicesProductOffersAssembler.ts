@@ -1,6 +1,6 @@
 import moment from 'moment';
 import _ from 'lodash';
-import {DeviceClassConfig, WebservicesProductConfig} from "./productOffersConfigSchema";
+import { DeviceClassConfig, WebservicesProductConfig } from "./productOffersConfigSchema";
 import {
     Document,
     PriceRangePremiums,
@@ -9,7 +9,7 @@ import {
     SupportedPaymentInterval,
     WebservicesProduct
 } from "./webserviceProductOffersRepository";
-import {notUndefined} from "../../productoffers/productOffersService";
+import { notUndefined } from "../../productoffers/productOffersService";
 import Condition from "../../productoffers/productConditions";
 
 const _webservicesClient = require('./webservicesClient');
@@ -152,12 +152,12 @@ async function assembleAllProductOffersForClient(clientConfig: ClientConfig, uui
 
 
 async function assembleProductOffer(session: string,
-                                    productOfferConfig: WebservicesProductConfig,
-                                    clientId: string,
-                                    allWebservicesProductsForClient: WebservicesAgentDataProduct[],
-                                    uuid = _uuid,
-                                    webservicesClient = _webservicesClient,
-                                    documentRepository = _documentRespository): Promise<WebservicesProduct | undefined> {
+    productOfferConfig: WebservicesProductConfig,
+    clientId: string,
+    allWebservicesProductsForClient: WebservicesAgentDataProduct[],
+    uuid = _uuid,
+    webservicesClient = _webservicesClient,
+    documentRepository = _documentRespository): Promise<WebservicesProduct | undefined> {
     const webservicesProduct = await findProductFor(productOfferConfig, allWebservicesProductsForClient);
     if (!webservicesProduct) {
         return undefined;
@@ -188,7 +188,7 @@ function findProductFor(productOfferConfig: WebservicesProductConfig, allWebserv
 
 
 async function getDocuments(session: string, productOfferConfig: WebservicesProductConfig, webservicesClient = _webservicesClient, documentRepository = _documentRespository): Promise<Document[]> {
-    const documents = [];
+    const documents:Document[] = [];
     documents.push(...await getLegalDocuments(session, productOfferConfig, webservicesClient, documentRepository));
     return documents;
 }
@@ -211,13 +211,13 @@ type PriceRange = Range & {
 }
 
 export async function getIntervalPremiumsForPriceRanges(session: string,
-                                                        webservicesProduct: WebservicesAgentDataProduct,
-                                                        deviceClassConfig: DeviceClassConfig,
-                                                        priceRanges: PriceRange[],
-                                                        applicationCode: string,
-                                                        productType: string,
-                                                        riskTypes: string[],
-                                                        webservicesClient = _webservicesClient): Promise<SupportedPaymentInterval[]> {
+    webservicesProduct: WebservicesAgentDataProduct,
+    deviceClassConfig: DeviceClassConfig,
+    priceRanges: PriceRange[],
+    applicationCode: string,
+    productType: string,
+    riskTypes: string[],
+    webservicesClient = _webservicesClient): Promise<SupportedPaymentInterval[]> {
     return await Promise.all(webservicesProduct.PAYMENTINTERVALS.INTERVAL.map(async interval => {
         const intervalData: SupportedPaymentInterval = {
             intervalCode: interval.VALUE,
@@ -281,9 +281,9 @@ interface WebservicesDocument {
 }
 
 async function getLegalDocuments(session: string,
-                                 productOfferConfig: WebservicesProductConfig,
-                                 webservicesClient = _webservicesClient,
-                                 documentRespository = _documentRespository): Promise<Document[]> {
+    productOfferConfig: WebservicesProductConfig,
+    webservicesClient = _webservicesClient,
+    documentRespository = _documentRespository): Promise<Document[]> {
 
     async function persistWebservicesDocument(document: WebservicesDocument, type: string): Promise<string> {
         return documentRespository.persist({
@@ -293,7 +293,7 @@ async function getLegalDocuments(session: string,
         });
     }
 
-    async function extractAndPersistSupportedDocuments(allWebserviceLegalDocumentResponses: WebservicesLegalDocumentResponse): Promise<Document []> {
+    async function extractAndPersistSupportedDocuments(allWebserviceLegalDocumentResponses: WebservicesLegalDocumentResponse): Promise<Document[]> {
         const allSupportedDocuments = await Promise.all(productOfferConfig.documents.legalDocuments.map(async supportedType => {
             const document = _.find(allWebserviceLegalDocumentResponses.RESULT.DOCUMENT, (document: WebservicesDocument) => document.DOCUMENT_TYPE === supportedType);
             if (!document) {
@@ -314,6 +314,17 @@ async function getLegalDocuments(session: string,
     return extractAndPersistSupportedDocuments(response);
 }
 
+// export {
+//     selectRelevantWebservicesProducts,
+//     assembleAllProductOffersForClient,
+//     findProductFor,
+//     assembleProductOffer,
+//     getDocuments,
+//     findMaxPriceForDeviceClass,
+//     getDevicePremiums,
+//     getLegalDocuments,
+//     updateAllProductOffersForClient
+// }
 
 exports.updateProductOffersForAllClients = updateProductOffersForAllClients;
 exports.selectRelevantWebservicesProducts = selectRelevantWebservicesProducts;
