@@ -20,6 +20,7 @@ import { detectBase64EncodedRequestBody, checkSessionIdCheckout, validateShoppin
 import shoppingCartResponseFilter from "./shoppingcart/shoppingCartResponseFilter";
 import { errorService } from "./services/error.service";
 import { herokuService } from './services/heroku.service';
+import testService from "./services/admin/adminUI.service";
 
 // dotenv
 dotenv.config({ path: path.join(__dirname, '../', `config/${process.env.NODE_ENV}.env`) });
@@ -38,6 +39,9 @@ const corsOptions: object = {
     ]
 };
 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 // middlewares
 app.use(useragent.express());
 app.use(bodyParser.json())
@@ -47,6 +51,7 @@ app.use(localeParser(), localeFilter);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
+
 
 // TODO Check 
 //@ts-ignore
@@ -69,11 +74,15 @@ app.use('/wertgarantie/ecommerce/', ecommerceRoutes);
 app.use('/admin/', basicAuth({ users: basicAuthUsers, challenge: true }));
 app.use('/admin/', adminUIRoutes);
 
+// TODO Delete
+app.get('/test', testService.getAllClients)
+
 // catch 404 and forward to error handler
 app.use('*', (req: Request, res: Response, next: NextFunction) => next(createError(404, "Page not available")));
 
 // error handling | route comes last
 app.use(errorService);
+
 
 
 export default app;
