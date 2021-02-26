@@ -1,3 +1,5 @@
+// TODO Move to services / controllers folder
+
 export const errorHandling = (err, req, res, next) => {
 
     switch (err.name) {

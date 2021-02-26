@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import localeParser from 'express-locale';
 import useragent from 'express-useragent';
 import basicAuth from 'express-basic-auth';
+
 import localeFilter from './framework/localeRequestFilter'
 import setUpAccessLogger from "./middlewares/accessLogger";
 
@@ -18,6 +19,7 @@ import ecommerceRoutes from './routes/ecommerceRoutes';
 import { detectBase64EncodedRequestBody, checkSessionIdCheckout, validateShoppingCart } from "./shoppingcart/shoppingCartRequestFilter";
 import shoppingCartResponseFilter from "./shoppingcart/shoppingCartResponseFilter";
 import { errorHandling } from "./routes/errorHandling";
+import herokuController from './services/heroku.service';
 
 // dotenv
 dotenv.config({ path: path.join(__dirname, '../',`config/${process.env.NODE_ENV}.env`) });
@@ -55,7 +57,8 @@ app.use(shoppingCartResponseFilter);
 
 // routes
 app.use('/healthcheck', require('express-healthcheck')());
-app.use('/heroku', require('./heroku/herokuController'));
+app.use('/heroku', herokuController);
+
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', checkSessionIdCheckout);
 app.use('/wertgarantie/', validateShoppingCart);

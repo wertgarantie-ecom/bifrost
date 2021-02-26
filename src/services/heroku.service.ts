@@ -1,7 +1,8 @@
-const express = require('express');
+import express, { NextFunction, Request, Response } from 'express';
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    
     try {
         res.send({
             HEROKU_APP_ID: process.env.HEROKU_APP_ID,
@@ -17,4 +18,4 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;
