@@ -1,7 +1,6 @@
-import express, { NextFunction, Request, Response } from 'express';
-const router = express.Router();
+import { NextFunction, Request, Response } from 'express';
 
-router.get('/', (req: Request, res: Response, next: NextFunction) => {
+export const herokuService = (req: Request, res: Response, next: NextFunction) => {
     
     try {
         res.send({
@@ -16,6 +15,4 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
     } catch (e) {
         next(e);
     }
-});
-
-export default router;
+};

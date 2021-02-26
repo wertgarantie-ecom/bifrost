@@ -18,11 +18,11 @@ import adminUIRoutes from './routes/adminUIRoutes';
 import ecommerceRoutes from './routes/ecommerceRoutes';
 import { detectBase64EncodedRequestBody, checkSessionIdCheckout, validateShoppingCart } from "./shoppingcart/shoppingCartRequestFilter";
 import shoppingCartResponseFilter from "./shoppingcart/shoppingCartResponseFilter";
-import { errorHandling } from "./routes/errorHandling";
-import herokuController from './services/heroku.service';
+import { errorService } from "./services/error.service";
+import { herokuService } from './services/heroku.service';
 
 // dotenv
-dotenv.config({ path: path.join(__dirname, '../',`config/${process.env.NODE_ENV}.env`) });
+dotenv.config({ path: path.join(__dirname, '../', `config/${process.env.NODE_ENV}.env`) });
 
 // vars
 const app = express();
@@ -57,7 +57,7 @@ app.use(shoppingCartResponseFilter);
 
 // routes
 app.use('/healthcheck', require('express-healthcheck')());
-app.use('/heroku', herokuController);
+app.use('/heroku', herokuService);
 
 app.use('/wertgarantie/', detectBase64EncodedRequestBody);
 app.use('/wertgarantie/', checkSessionIdCheckout);
@@ -72,7 +72,7 @@ app.use('/admin/', adminUIRoutes);
 app.use('*', (req: Request, res: Response, next: NextFunction) => next(createError(404, "Page not available")));
 
 // error handling | route comes last
-app.use(errorHandling);
+app.use(errorService);
 
 
 export default app;

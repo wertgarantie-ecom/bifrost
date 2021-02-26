@@ -1,6 +1,6 @@
-// TODO Move to services / controllers folder
+import { NextFunction, Request, Response } from "express";
 
-export const errorHandling = (err, req, res, next) => {
+export const errorService = (err, req: Request, res: Response, next: NextFunction) => {
 
     switch (err.name) {
         case "JsonSchemaValidation":
