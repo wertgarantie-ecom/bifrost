@@ -46,7 +46,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
 
-// TODO Check
+// TODO Check 
 //@ts-ignore
 app.options('*', cors(corsOptions));
 
