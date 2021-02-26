@@ -13,9 +13,9 @@ import localeFilter from './framework/localeRequestFilter'
 import setUpAccessLogger from "./middlewares/accessLogger";
 
 // Import routes
-import adminRoutes from './routes/adminRoutes';
-import adminUIRoutes from './routes/adminUIRoutes';
-import ecommerceRoutes from './routes/ecommerceRoutes';
+import adminRoutes from './routes/admin.routes';
+import adminUIRoutes from './routes/adminUI.routes';
+import ecommerceRoutes from './routes/ecommerce.routes';
 import { detectBase64EncodedRequestBody, checkSessionIdCheckout, validateShoppingCart } from "./shoppingcart/shoppingCartRequestFilter";
 import shoppingCartResponseFilter from "./shoppingcart/shoppingCartResponseFilter";
 import { errorService } from "./services/error.service";
@@ -65,6 +65,7 @@ app.use('/wertgarantie/', validateShoppingCart);
 app.use('/wertgarantie/', adminRoutes);
 app.use('/wertgarantie/ecommerce/', ecommerceRoutes);
 
+// UI routes
 app.use('/admin/', basicAuth({ users: basicAuthUsers, challenge: true }));
 app.use('/admin/', adminUIRoutes);
 

@@ -7,7 +7,7 @@ import clientComponentTextController from '../clientconfig/clientComponentTextCo
 import webservicesController from '../backends/webservices/webservicesController';
 import documentsController from '../documents/documentsController';
 import handbookController from '../handbook/handbookController';
-import basicAuthByClientId from './basicAuthByClientIdFilter';
+import basicAuthByClientId from '../middlewares/basicAuthByClientIdFilter';
 
 const router = express.Router();
 
