@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const clientBaseConfigController = require('../adminUI/client/baseConfig/clientBaseConfigController');
-const componentTextsController = require('../adminUI/client/componentTexts/componentTextsController');
+import express from 'express';
+import clientBaseConfigController from '../adminUI/client/baseConfig/clientBaseConfigController';
+import componentTextsController from '../adminUI/client/componentTexts/componentTextsController';
 
+const router = express.Router();
 
 router.get("/", clientBaseConfigController.showAllClients);
 router.post("/", clientBaseConfigController.addNewClient);
@@ -15,4 +15,4 @@ router.post("/:clientId/component-texts", componentTextsController.saveComponent
 router.post("/:clientId/component-texts/delete", componentTextsController.deleteComponentText);
 router.post("/:clientId/component-texts/new-attribute", componentTextsController.saveNewTextAttribute);
 
-module.exports = router;
+export default router;
