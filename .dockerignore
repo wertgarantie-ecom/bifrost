@@ -1,2 +1,6 @@
 node_modules
 npm-debug.log
+.git
+Dockerfile
+
+# What else can be ignored by the copy command?
