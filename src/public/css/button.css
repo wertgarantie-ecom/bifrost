@@ -1,12 +1,21 @@
-@import "./_vars.css";
-
 .button {
   padding: 0.5rem;
   border: none;
   box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.26);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button:hover {
+  cursor: pointer;
 }
 
 .button--primary {
     color: white;
     background: var(--primaryColor);
+}
+
+.button--primary:hover {
+  background: var(--primaryColorDarker);
 }

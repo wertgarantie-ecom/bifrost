@@ -1,3 +1,5 @@
+@import "./_vars.css";
+
 * {
   box-sizing: border-box;
 }
@@ -8,6 +10,76 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-p {
-    color: blueviolet;
+/* BACKDROP */
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 5;
+  display: none;
+}
+
+/* NAVBAR */
+
+.header {
+  background: var(--primaryColor);
+  position: sticky;
+  color: white;
+  top: 0;
+  width: 100%;
+  height: 3.5rem;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.header .nav {
+  height: 100%;
+  align-items: center;
+}
+
+.header .nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.header .nav-list .nav-list__item {
+  margin: 0 1rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.header .nav-list .nav-list__item a {
+  text-decoration: none;
+  color: white;
+}
+
+.header .nav-list .nav-list__item a:hover,
+.header .nav-list .nav-list__item a:active,
+.header .nav-list .nav-list__item a.active {
+  /* color: #ffeb3b; */
+  font-weight: bold;
+}
+
+
+/* Layout */
+.content {
+  padding: 0 10rem;
+}
+
+.content .content__heading {
+  border-bottom: 1px solid black;
+}
+
+h1 {
+  font-weight: lighter;
+  margin: 2rem 0 1rem 0;
 }

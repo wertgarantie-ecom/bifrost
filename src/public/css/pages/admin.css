@@ -1,0 +1,22 @@
+.content__actions {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: flex-end;
+}
+
+.content__actions .content__actions__search {
+    max-width: 20rem;
+}
+
+.content__actions .content__actions__search div,
+.content__actions .content__actions__search input {
+    margin-bottom: 0;
+}
+
+.content__actions .content__actions__search input {
+    background: lightgray;
+}
+
+.content__actions .content__actions__new {
+    justify-self: flex-end;
+}

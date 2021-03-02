@@ -59,7 +59,6 @@
     "morgan": "~1.9.1",
     "node-cache": "^5.0.0",
     "pg": "^8.5.1",
-    "pug": "^2.0.4",
     "redis": "^2.8.0",
     "request": "^2.88.0",
     "testcontainers": "^7.4.0",
