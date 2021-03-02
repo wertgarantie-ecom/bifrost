@@ -90,7 +90,7 @@ exports.showAllClients = async function showAllClients(req, res) {
                     </div>
                 </div>
                 <div class="new-client-input">
-                    <button type="submit" class="submit-button">Neue Shop-Config anlegen</button>
+                    <button type="submit" class="submit-button">Neuen Shop anlegen</button>
                 </div>
             </div>
         </form>
