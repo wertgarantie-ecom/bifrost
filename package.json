@@ -18,7 +18,7 @@
     "migrate-create": "db-migrate create",
     "migrate-up": "dotenv -e ./config/${NODE_ENV}.env db-migrate up",
     "migrate-down": "dotenv -e ./config/${NODE_ENV}.env db-migrate down",
-    "insert-fixtures": "dotenv -e ./config/${NODE_ENV}.env jest --detectOpenHandles --forceExit -c jest.config.fixture.js"
+    "insert-fixtures": "jest --detectOpenHandles --forceExit -c jest.config.fixture.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -6,6 +6,9 @@ import { NextFunction, Request, Response } from "express";
 async function basicAuthByClientId(req: Request, res: Response, next: NextFunction, clientRepository = _clientRepository, basicAuth = _basicAuth, env = process.env) {
     const clientId: string = req.params.clientId;
 
+    console.log("clientId");
+    console.log(clientId, req.params.clientId);
+
     if (!isUUID.anyNonNil(clientId)) return res.sendStatus(400);
 
     const options = { users: {}, challenge: true };

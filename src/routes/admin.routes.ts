@@ -10,15 +10,15 @@ import handbookController from '../handbook/handbookController';
 import basicAuthByClientId from '../middlewares/basicAuthByClientIdFilter';
 
 const router = express.Router();
-
-// purchases
-router.get("/checkouts", checkoutController.findAllCheckouts);
-router.get("/checkouts/:sessionId", checkoutController.findPurchaseById);
-
 const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;
 const basicAuthUsers = { users: {} };
 if (user?.length) basicAuthUsers.users[user] = password;
+
+
+// purchases
+router.get("/checkouts", checkoutController.findAllCheckouts);
+router.get("/checkouts/:sessionId", checkoutController.findPurchaseById);
 
 
 // client settings
