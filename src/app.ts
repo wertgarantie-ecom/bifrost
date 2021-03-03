@@ -1,6 +1,5 @@
 import createError from 'http-errors';
 import "express-async-errors";
-// require('express-async-errors');
 import express, { NextFunction, Request, Response } from 'express';
 import path from 'path';
 import cors from 'cors';
@@ -10,6 +9,9 @@ import bodyParser from 'body-parser';
 import localeParser from 'express-locale';
 import useragent from 'express-useragent';
 import basicAuth from 'express-basic-auth';
+
+// dotenv | declare before other imports
+dotenv.config({ path: path.join(__dirname, '../', `config/${process.env.NODE_ENV}.env`) });
 
 import localeFilter from './framework/localeRequestFilter'
 import setUpAccessLogger from "./middlewares/accessLogger";
@@ -24,10 +26,6 @@ import { errorService } from "./services/error.service";
 import { herokuService } from './services/heroku.service';
 import testService from "./services/admin/adminUI.service";
 
-// dotenv
-const resolvedPath = path.resolve(`config/${process.env.NODE_ENV}.env`);
-dotenv.config({path: resolvedPath});
-// dotenv.config({ path: path.join(__dirname, '../', `config/${process.env.NODE_ENV}.env`) });
 
 // vars
 const app = express();
@@ -35,6 +33,7 @@ const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;
 const basicAuthUsers = {};
 if (user?.length) basicAuthUsers[user] = password;
+
 const corsOptions: object = {
     origin: true,
     credentials: true,
