@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../src/app').default;
 const testhelper = require('../helper/fixtureHelper');
 const uuid = require('uuid');
 const webservicesProductOffersAssembler = require('../../src/backends/webservices/webservicesProductOffersAssembler');

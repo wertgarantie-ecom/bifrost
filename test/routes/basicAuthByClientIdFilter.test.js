@@ -1,4 +1,4 @@
-const filter = require('../../src/middlewares/basicAuthByClientIdFilter');
+const filter = require('../../src/middlewares/basicAuthByClientIdFilter').default;
 
 test('should accept request if correct client credentials are provided', async () => {
     const req = {

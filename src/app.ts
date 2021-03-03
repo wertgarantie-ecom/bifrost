@@ -83,7 +83,4 @@ app.use('*', (req: Request, res: Response, next: NextFunction) => next(createErr
 // error handling | route comes last
 app.use(errorService);
 
-
-
 export default app;
-// module.exports = app;

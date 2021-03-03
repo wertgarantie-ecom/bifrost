@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../src/app').default;
 const fixtureHelper = require('../helper/fixtureHelper');
 
 describe("should persist, retrieve and alter component texts for client", () => {

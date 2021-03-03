@@ -1,6 +1,6 @@
 const documentTypes = require('../src/documents/documentTypes').documentTypes;
 const request = require('supertest');
-const app = require('../src/app');
+const app = require('../src/app').default;
 const features = require('../src/handbook/features');
 
 const phoneClientId = "433295ef-ec5d-45d2-8701-d530e44fcf88";
@@ -223,6 +223,8 @@ describe('add phone test shop client config', () => {
             .auth(process.env.BASIC_AUTH_USER, process.env.BASIC_AUTH_PASSWORD)
             .set('Accept', 'application/json')
             .send(validData);
+
+        console.log(response.status)
 
         if (response.status !== 200) {
             await request(app)

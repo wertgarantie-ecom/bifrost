@@ -1,4 +1,4 @@
-const filter = require('../../src/framework/localeRequestFilter');
+const filter = require('../../src/framework/localeRequestFilter').default;
 
 
 test('should replace unsupported language with de', () => {

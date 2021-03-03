@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../../src/app');
+const app = require('../../../src/app').default;
 const testHelper = require('../../helper/fixtureHelper');
 const nockHelper = require('../../helper/nockHelper');
 const webservicesProductOfferAssembler = require('../../../src/backends/webservices/webservicesProductOffersAssembler');

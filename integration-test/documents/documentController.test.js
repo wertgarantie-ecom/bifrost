@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../src/app').default;
 const documentRepository = require('../../src/documents/documentRepository');
 
 describe("should get document when controller is called", () => {

@@ -1,10 +1,13 @@
 require('iconv-lite/encodings');
+const { defaults: tsjPreset } = require('ts-jest/presets');
+
 process.env.NODE_ENV = 'test';
 process.env.SIGN_SECRET = "irgendwas";
 process.env.JEST_JUNIT_OUTPUT_DIR = "reports/junit/bifrost-unit-test-results.xml";
 process.env.BASE_URI = "http://localhost:3000";
 
 module.exports = {
+    transform: tsjPreset.transform,
     testEnvironment: 'node',
     testPathIgnorePatterns: ["<rootDir>/build/", "<rootDir>/node_modules/", "<rootDir>/integration-test/"],
     reporters: ["default", "jest-junit", ["jest-html-reporters", {

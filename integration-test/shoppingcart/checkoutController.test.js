@@ -2,7 +2,7 @@ const checkoutRepository = require('../../src/shoppingcart/checkoutRepository');
 const fixtureHelper = require('../helper/fixtureHelper');
 const uuid = require('uuid');
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../src/app').default;
 
 describe("should retrieve all checkouts via controller", () => {
     const sessionId1 = uuid();
