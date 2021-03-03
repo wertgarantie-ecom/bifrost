@@ -1,4 +1,12 @@
 :root {
     --primaryColor: #0064af;
     --primaryColorDarker: #004f8b;
+
+    --secondaryColor: #05b5dc;
+    --secondaryColorDarker: #0498b9;
+
+    --highlightColor: #d9e4f5;
+
+    --dangerColor: #a30707;
+    --dangerColorDarker: #850303;
 }

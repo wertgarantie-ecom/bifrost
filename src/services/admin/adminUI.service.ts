@@ -12,7 +12,7 @@ const getAllClients = async (req: Request, res: Response, next: NextFunction) =>
     // render
     res.render('admin/start', {
         pageTitle: "AdminTest",
-        path: '/test',
+        // path: '/test',
         clients: clients
     })
 }

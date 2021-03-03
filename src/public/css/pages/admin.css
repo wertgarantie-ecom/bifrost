@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 3fr 1fr;
     align-items: flex-end;
+    margin-bottom: 1rem;
 }
 
 .content__actions .content__actions__search {
@@ -15,8 +16,13 @@
 
 .content__actions .content__actions__search input {
     background: lightgray;
+    cursor: not-allowed;
 }
 
 .content__actions .content__actions__new {
     justify-self: flex-end;
+}
+
+.start__container {
+    max-width: 60rem;
 }

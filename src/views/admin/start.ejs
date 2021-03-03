@@ -13,38 +13,33 @@
 
     <style>
         .card__container {
-            display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-            /* grid-template-columns: auto;
-            grid-template-rows: auto; */
-            column-gap: .5rem;
-            row-gap: .5rem;
-            flex-direction: row;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 3rem;
         }
 
         .card {
             background: white;
             border: none;
             border-radius: 0;
+            text-align: left;
             box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.26);
-            /* margin-bottom: .5rem; */
-            height: 10rem;
-            width: 10rem;
+            margin-bottom: .35rem;
         }
 
         .card:hover {
-            background: rgb(229, 249, 255);
+            background: var(--highlightColor);
         }
         
         .card__link {
             display: flex;
             align-items: center;
-            justify-content: center;
             text-decoration: none;
             padding: 1rem;
             color: black;
             height: 100%;
             width: 100%;
+            justify-content: space-between;
         }
 
         .card__title {
@@ -52,9 +47,13 @@
             font-size: 1rem;
             margin: 0;
         }
+
     </style>
 
-        <main class="content">
+    <main class="content">
+
+        <div class="start__container">
+            
             <h1 class="content__heading">Übersicht Clients</h1>
 
             <!-- Action bar -->
@@ -63,7 +62,7 @@
                     <form class="form">
                         <div class="form-control">
                             <label for="search">Suchen</label>
-                            <input type="text" name="search" id="search">
+                            <input disabled type="text" name="search" id="search">
                         </div>
                     </form>
                 </div>
@@ -73,20 +72,22 @@
             </div>
 
             <!-- Client table -->
-            <p>TODO Client table</p>
             <div class="card__container">
                 <% for (let client of clients) { %>
                     <article class="card">
-                        <a class="card__link" href="/admin/<%= client.id %>">
-                            <header class="card__header">
-                                <h1 class="card__title">
-                                    <%= client.name %>
-                                </h1>
-                            </header>
+                        <a class="card__link" href="/admin/<%= client.id %>" rel="noopener nofollow">
+                            <h1 class="card__title">
+                                <%= client.name %>
+                            </h1>
+                            <form action="/admin/delete" method="post">
+                                <input type="hidden" value="<%= client.id %>" name="clientId">
+                                <button type="submit" class="button button--danger">Client löschen</button>
+                            </form>
                         </a>
-                        </article>
+                    </article>
                 <% } %>
-        </div>
-
-        </main>
+            </div>
+        </div> 
+    </main>
+    
 <%- include('../includes/end.ejs') %>

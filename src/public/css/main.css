@@ -65,18 +65,18 @@ body {
 .header .nav-list .nav-list__item a:hover,
 .header .nav-list .nav-list__item a:active,
 .header .nav-list .nav-list__item a.active {
-  /* color: #ffeb3b; */
-  font-weight: bold;
+  color: #ffeb3b;
 }
-
 
 /* Layout */
 .content {
   padding: 0 10rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .content .content__heading {
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 }
 
 h1 {

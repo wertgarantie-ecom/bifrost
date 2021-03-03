@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  outline: none;
 }
 
 .button:hover {
@@ -18,4 +19,22 @@
 
 .button--primary:hover {
   background: var(--primaryColorDarker);
+}
+
+.button--secondary {
+    color: white;
+    background: var(--secondaryColor);
+}
+
+.button--secondary:hover {
+  background: var(--secondaryColorDarker);
+}
+
+.button--danger {
+  color: white;
+  background: var(--dangerColor);
+}
+
+.button--danger:hover {
+  background: var(--dangerColorDarker);
 }
