@@ -1,4 +1,6 @@
 import createError from 'http-errors';
+import "express-async-errors";
+// require('express-async-errors');
 import express, { NextFunction, Request, Response } from 'express';
 import path from 'path';
 import cors from 'cors';
@@ -23,7 +25,9 @@ import { herokuService } from './services/heroku.service';
 import testService from "./services/admin/adminUI.service";
 
 // dotenv
-dotenv.config({ path: path.join(__dirname, '../', `config/${process.env.NODE_ENV}.env`) });
+const resolvedPath = path.resolve(`config/${process.env.NODE_ENV}.env`);
+dotenv.config({path: resolvedPath});
+// dotenv.config({ path: path.join(__dirname, '../', `config/${process.env.NODE_ENV}.env`) });
 
 // vars
 const app = express();
