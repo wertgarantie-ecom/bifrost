@@ -30,7 +30,7 @@ const app = express();
 const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;
 const basicAuthUsers = {};
-if (user) basicAuthUsers[user] = password;
+if (user?.length) basicAuthUsers[user] = password;
 const corsOptions: object = {
     origin: true,
     credentials: true,

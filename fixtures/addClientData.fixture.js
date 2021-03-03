@@ -224,8 +224,6 @@ describe('add phone test shop client config', () => {
             .set('Accept', 'application/json')
             .send(validData);
 
-        console.log(response.status)
-
         if (response.status !== 200) {
             await request(app)
                 .post("/wertgarantie/clients")

@@ -18,8 +18,9 @@ router.get("/checkouts/:sessionId", checkoutController.findPurchaseById);
 const user = process.env.BASIC_AUTH_USER;
 const password = process.env.BASIC_AUTH_PASSWORD;
 const basicAuthUsers = { users: {} };
-if (user) basicAuthUsers.users[user] = password;
+if (user?.length) basicAuthUsers.users[user] = password;
 
+console.log(process.env)
 
 // client settings
 router.post("/clients", basicAuth(basicAuthUsers), clientController.addNewClient);
