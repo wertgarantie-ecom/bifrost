@@ -15,7 +15,7 @@ workflows:
             - build
       - deploy-prod:
           requires:
-            - deploy-staging
+            - build
 jobs:
   build:
     machine: true
@@ -61,5 +61,5 @@ jobs:
       - checkout
       - heroku/install
       - heroku/deploy-via-git:
-          only-branch: master
+          only-branch: production
           app-name: wertgarantie-bifrost-prod
