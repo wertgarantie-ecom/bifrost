@@ -73,13 +73,13 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
 
         getIncludedTaxFormatted(locale = "de-DE", currency = "EUR") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const formattedTax = new Intl.NumberFormat(locale, {style: 'currency', currency}).format(intervalPrice.taxAmount / 100);
+            const formattedTax = new Intl.NumberFormat(locale, {style: 'currency', currency: currency}).format(intervalPrice.taxAmount / 100);
             return format(componentTexts.productTexts.taxInformation, formattedTax);
         },
 
         getPriceFormatted(locale = "de-DE", currency = "EUR") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            return new Intl.NumberFormat(locale, {style: 'currency', currency}).format(intervalPrice.netAmount / 100);
+            return new Intl.NumberFormat(locale, {style: 'currency', currency: currency}).format(intervalPrice.netAmount / 100);
         },
 
         getDocument(documentType) {
@@ -100,5 +100,5 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
 };
 
 exports.formatPrice = function formatPrice(price, locale = "de-DE", currency = "EUR") {
-    return new Intl.NumberFormat(locale, {style: 'currency', currency}).format(price.netAmount / 100);
+    return new Intl.NumberFormat(locale, {style: 'currency', currency: currency}).format(price.netAmount / 100);
 }
