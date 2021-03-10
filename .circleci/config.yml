@@ -22,8 +22,8 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: 12.13.1
-          npm-version: 6.13.6
+          node-version: 14.16.0
+          npm-version: 7.5.3
           install-yarn: false
       - node/with-cache:
           steps:
