@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const Globalize = require('../framework/globalize').Globalize;
 const format = require('util').format;
 
 exports.fromProductOffer = function fromProductOffer(productOffer, componentTexts) {
@@ -72,15 +71,15 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
             }
         },
 
-        getIncludedTaxFormatted(locale = "de") {
+        getIncludedTaxFormatted(locale = "de-DE", currency = "EUR") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            const formattedTax = Globalize(locale).currencyFormatter(intervalPrice.currency, {style: "accounting"})(intervalPrice.taxAmount / 100);
+            const formattedTax = new Intl.NumberFormat(locale, {style: 'currency', currency}).format(intervalPrice.taxAmount / 100);
             return format(componentTexts.productTexts.taxInformation, formattedTax);
         },
 
-        getPriceFormatted(locale = "de") {
+        getPriceFormatted(locale = "de-DE", currency = "EUR") {
             const intervalPrice = productOffer.prices[productOffer.defaultPaymentInterval];
-            return Globalize(locale).currencyFormatter(intervalPrice.currency, {style: "accounting"})(intervalPrice.netAmount / 100);
+            return new Intl.NumberFormat(locale, {style: 'currency', currency}).format(intervalPrice.netAmount / 100);
         },
 
         getDocument(documentType) {
@@ -100,6 +99,6 @@ exports.fromProductOffer = function fromProductOffer(productOffer, componentText
     }
 };
 
-exports.formatPrice = function formatPrice(price, locale = "de", currency = "EUR") {
-    return Globalize(locale).currencyFormatter(currency, {style: "accounting"})(price / 100);
+exports.formatPrice = function formatPrice(price, locale = "de-DE", currency = "EUR") {
+    return new Intl.NumberFormat(locale, {style: 'currency', currency}).format(price.netAmount / 100);
 }
