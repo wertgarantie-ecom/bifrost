@@ -2,7 +2,7 @@ import { Pool as PoolInstance } from "pg";
 
 const options = process.env.NODE_ENV === 'test' ? 
     { connectionString: process.env.DATABASE_URL } : 
-    { connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: true }
+    { connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false }
 }
 
 export const Pool = (function () {
