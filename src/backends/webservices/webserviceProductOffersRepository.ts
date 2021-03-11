@@ -65,17 +65,22 @@ export interface WebservicesProduct {
 }
 
 export async function persist(productOffers: WebservicesProduct[]): Promise<WebservicesProduct[] | undefined> {
+
     if (!productOffers || productOffers.length === 0) {
         return [];
     }
+
     const pool = Pool.getInstance();
     const client = await pool.connect();
+    
     try {
         await client.query('BEGIN');
         const hash = hashProductOffers(productOffers);
-        if (await productOffersExists(productOffers[0].clientId, hash, client)) {
+
+        if (await productOffersExists(productOffers[0].clientId, hash)) {
             return productOffers;
         }
+
         const query = {
             name: 'insert-product-offers',
             text: `INSERT INTO productoffers (clientid, hash, productoffers) VALUES ($1 , $2, $3)
@@ -87,12 +92,16 @@ export async function persist(productOffers: WebservicesProduct[]): Promise<Webs
                 JSON.stringify(productOffers)
             ]
         };
+
         await client.query(query);
         await client.query('COMMIT');
+
         return await findByClientId(productOffers[0].clientId);
+
     } catch (error) {
         await client.query('ROLLBACK');
         throw error;
+
     } finally {
         client.release();
     }
@@ -127,7 +136,8 @@ export async function findById(productOfferId: string): Promise<WebservicesProdu
     }
 }
 
-async function productOffersExists(clientId: string, hash: string, pool = Pool.getInstance()): Promise<boolean> {
+async function productOffersExists(clientId: string, hash: string): Promise<boolean> {
+    const pool = Pool.getInstance();
     const result = await pool.query({
         name: 'find-product-offers-by-client-id-and-hash',
         text: `SELECT productoffers FROM productoffers  
